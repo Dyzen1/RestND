@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="MVVM\Model\Employee.cs~RF817a11ad.TMP" />
+    <None Remove="MVVM\Model\Employee.cs~RF81fe0314.TMP" />
+    <None Remove="MVVM\Model\Manager.cs~RF823cd693.TMP" />
+    <None Remove="MVVM\Model\ShiftManager.cs~RF82408c97.TMP" />
+    <None Remove="MVVM\Model\Validator.cs~RF81e0c7ce.TMP" />
+    <None Remove="MVVM\Model\Validator.cs~RF81f8a9d1.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="MVVM\ViewModel\" />
+    <Folder Include="MVVM\View\" />
+    <Folder Include="Styles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+  </ItemGroup>
+
+</Project>
