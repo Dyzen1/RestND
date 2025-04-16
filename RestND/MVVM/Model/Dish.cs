@@ -81,18 +81,38 @@ namespace RestND.MVVM.Model
 
         #endregion
 
+        #region Dish counter
+        private static int _DishCount = 0;
+
+        public static int DishCount
+        {
+            get { return _DishCount; }
+        }
+        #endregion
+
+        #region Dish Type
+        private DishType _Dish_Type;
+        public DishType Dish_Type
+        {
+            get { return _Dish_Type; }
+            set { _Dish_Type = value; }
+        }
+        #endregion
+
         #region constructor
 
 
 
 
-        public Dish(int dish_Id, string dishName, string allergenNotes,bool availabilityStatus , List<Product> productUsage) 
+        public Dish(int dish_Id, string dishName, string allergenNotes,bool availabilityStatus , List<Product> productUsage,DishType type) 
         {
+            Dish_Type = type;
             Dish_ID = dish_Id;
             Dish_Name = dishName;
             Allergen_Notes = allergenNotes;
             Availability_Status = availabilityStatus;
             ProductUsage = productUsage;
+            _DishCount++;
         }
         #endregion
 
@@ -100,7 +120,7 @@ namespace RestND.MVVM.Model
 
         public Dish()
         {
-            
+            _DishCount++;
         }
 
         #endregion

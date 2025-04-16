@@ -28,9 +28,9 @@ namespace RestND.MVVM.Model
         
 
        
-        public Employee _AssignedEmployee;
+        private Employee _AssignedEmployee;
 
-        private Employee assignedEmployee
+        public Employee assignedEmployee
         {
             get { return _AssignedEmployee; }
             set { _AssignedEmployee = value; }
@@ -74,25 +74,68 @@ namespace RestND.MVVM.Model
 
 
         #endregion
-        // ?? need to resolve the question of is a discount type a class or not then add it here
+
+        #region Discount
+        private Discount _Discount;
+        public Discount Discount
+        {
+            get { return _Discount; }
+            set { _Discount = value; }
+        }
+        #endregion
+
+        #region Order count
+        private static int _OrderCount = 0;
+
+        public static int OrderCount
+        {
+            get { return _OrderCount; }
+        }
+        #endregion
+
+        #region Table 
+        private Table _Table;
+        public Table Table
+        {
+            get { return _Table; }
+            set { _Table = value; }
+        }
+        #endregion
 
         #region constructor
 
-        public Order(int orderId, Employee assignedEmployee, Dish dish, int dishAmount)
+        public Order( Employee AssignedEmployee, Dish dish, int dishAmount,Table table)
         {
-            Order_ID = orderId;
-            _AssignedEmployee = assignedEmployee;
+            Order_ID = _OrderCount++;
+            assignedEmployee = AssignedEmployee;
             Dish = dish;
             Dish_Amount = dishAmount;
             Order_Date = DateTime.Now;
+            Table = table;
+            Table.Table_Status = false;
+        }
+        #endregion
+
+        #region Constructor that takes discount
+
+        public Order(Employee AssignedEmployee, Dish dish, int dishAmount,Discount discountType, Table table)
+        {
+            Order_ID = _OrderCount++;
+            assignedEmployee = AssignedEmployee;
+            Dish = dish;
+            Dish_Amount = dishAmount;
+            Order_Date = DateTime.Now;
+            Discount = discountType;
+            Table = table;
+            Table.Table_Status = false;
         }
         #endregion
 
         #region Default Constructor
 
-        
 
-   
+
+
         public Order()
         {
             

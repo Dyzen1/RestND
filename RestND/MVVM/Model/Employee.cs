@@ -56,7 +56,16 @@ namespace RestND.MVVM.Model
             }
         }
         #endregion
-        //public AuthorizationStatus AuthoStatus { get; set; } 
+
+        #region Authorization Status
+        private AuthorizationStatus _AuthoStatus;
+        public AuthorizationStatus AuthoStatus
+        {
+            get { return _AuthoStatus; }
+            set { _AuthoStatus = value; }
+        }
+        #endregion
+
         #region constructor        
         public Employee(string Employee_ID, string Employee_Name,string Employee_Pos /*AuthorizationStatus authoStatus*/)
         {
@@ -74,7 +83,7 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Copy Constructor
+        #region Default Constructor
         public Employee() { }
         #endregion
 

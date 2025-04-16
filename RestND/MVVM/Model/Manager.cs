@@ -10,20 +10,50 @@ namespace RestND.MVVM.Model
 {
     public class Manager : Employee
     {
+        #region Email
 
-        public string _Email { get; set; }
-        public string _Password { get; private set; }
-        public Manager(string Employee_ID, string Employee_Name, string Employee_Pos, string email, string Password)
+        private string _Email;
+
+        public string Email
+        {
+            get { return _Email; }
+            set
+            {
+                this._Email = value;
+            }
+        }
+
+
+
+        #endregion
+
+        #region Password
+
+        private string _Password;
+        public string Password
+        {
+            get { return _Password; }
+            set
+            {
+                this._Password = value;
+            }
+        }
+        #endregion
+
+        #region constructor
+        public Manager(string Employee_ID, string Employee_Name, string Employee_Pos, string email, string pass)
            : base(Employee_ID, Employee_Name, Employee_Pos)
 
         {
 
 
-            _Email =email;
-            _Password = Password;
+            Email =email;
+            Password = pass;
 
         }
+        #endregion
 
+        #region Equals
 
         public override bool Equals(object obj)
         {
@@ -33,12 +63,8 @@ namespace RestND.MVVM.Model
             return false;
 
         }
-        public override string ToString()
-        {
-            return "Employee ID :" + _Employee_ID + " Employee Name: " + _Employee_Name + " Employee Position: " + _Employee_Pos;
-        }
-
-
+        #endregion
+ 
 
 
     }  
