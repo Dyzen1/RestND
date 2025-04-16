@@ -74,7 +74,7 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Copy Constructor
+        #region Default Constructor
         public Employee() { }
         #endregion
 

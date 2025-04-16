@@ -28,9 +28,9 @@ namespace RestND.MVVM.Model
         
 
        
-        public Employee _AssignedEmployee;
+        private Employee _AssignedEmployee;
 
-        private Employee assignedEmployee
+        public Employee assignedEmployee
         {
             get { return _AssignedEmployee; }
             set { _AssignedEmployee = value; }
@@ -74,7 +74,15 @@ namespace RestND.MVVM.Model
 
 
         #endregion
-        // ?? need to resolve the question of is a discount type a class or not then add it here
+
+        #region Discount
+        private Discount _Discount;
+        public Discount Discount
+        {
+            get { return _Discount; }
+            set { _Discount = value; }
+        }
+        #endregion
 
         #region constructor
 
