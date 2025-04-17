@@ -4,9 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RestND"
+        xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="600" Width="1200">
+
     <Grid>
-        
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <!-- Auto width for expander -->
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar Expander -->
+        <Expander x:Name="expSideBar" ExpandDirection="Right" IsExpanded="True">
+            <uc:SideBar x:Name="MenuPanel" Width="200"/>
+        </Expander>
+
+        <!-- Main Content -->
+        <Grid Grid.Column="1">
+            <!-- Your main frame or content here -->
+            <TextBlock Text="Main Content Area" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+
     </Grid>
 </Window>
