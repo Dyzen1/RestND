@@ -85,8 +85,23 @@ namespace RestND.MVVM.Model
         #endregion
 
 
+        #region Order count
+        private static int _OrderCount = 0;
+
+        public static int OrderCount
+        {
+            get { return _OrderCount; }
+        }
         #endregion
-        // ?? need to resolve the question of is a discount type a class or not then add it here
+
+        #region Table 
+        private Table _Table;
+        public Table Table
+        {
+            get { return _Table; }
+            set { _Table = value; }
+        }
+        #endregion
 
         #region constructor
 
