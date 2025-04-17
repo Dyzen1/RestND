@@ -20,4 +20,10 @@
     <PackageReference Include="MahApps.Metro" Version="2.4.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="MVVM\ViewModel\" />
+    <Folder Include="MVVM\View\" />
+    <Folder Include="Styles\" />
+  </ItemGroup>
+
 </Project>
