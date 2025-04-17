@@ -4,14 +4,37 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RestND.MVVM.View.UserControls"
+             xmlns:fa="http://schemas.fontawesome.com/icons/svg"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="200">
     <Grid>
-        <StackPanel x:Name="menuePanel" Background="Gray">
-            <Button Content="Inventory"/>
-            <Button Content="Employees"/>
-            <Button Content="Dishes"/>
-            <Button Content="Reports"/>
-        </StackPanel>       
+        
+        <StackPanel x:Name="menuePanel">
+            <Button Style="{DynamicResource SideBarBtn}">
+                <StackPanel>
+                    <fa:SvgAwesome Icon="Solid_TruckFast" Width="15" PrimaryColor="{DynamicResource LightText}"/>
+                    <TextBlock Text="Inventory"/>
+                </StackPanel>
+            </Button>
+            <Button Style="{DynamicResource SideBarBtn}">
+                <StackPanel>
+                    <fa:SvgAwesome Icon="Solid_Users" Width="15" PrimaryColor="{DynamicResource LightText}"/>
+                    <TextBlock Text="Employees"/>
+                </StackPanel>
+            </Button>
+            <Button Style="{DynamicResource SideBarBtn}">
+                <StackPanel>
+                    <fa:SvgAwesome Icon="Solid_BowlFood" Width="15" PrimaryColor="{DynamicResource LightText}"/>
+                    <TextBlock Text="Dishes"/>
+                </StackPanel>
+            </Button>
+            <Button Style="{DynamicResource SideBarBtn}">
+                <StackPanel>
+                    <fa:SvgAwesome Icon="Solid_FileExport" Width="15" PrimaryColor="{DynamicResource LightText}"/>
+                    <TextBlock Text="Reports"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>   
+        
     </Grid>
 </UserControl>
