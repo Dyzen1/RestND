@@ -18,19 +18,19 @@
             </Button>
             <Button Style="{DynamicResource SideBarBtn}">
                 <StackPanel>
-                    <fa:SvgAwesome Icon="Solid_Users" Width="15" PrimaryColor="{DynamicResource LightText}"/>
+                    <fa:SvgAwesome Icon="Solid_Users" Style="{DynamicResource SideBarIcon}"/>
                     <TextBlock Text="Employees"/>
                 </StackPanel>
             </Button>
             <Button Style="{DynamicResource SideBarBtn}">
                 <StackPanel>
-                    <fa:SvgAwesome Icon="Solid_BowlFood" Width="15" PrimaryColor="{DynamicResource LightText}"/>
+                    <fa:SvgAwesome Icon="Solid_BowlFood" Style="{DynamicResource SideBarIcon}"/>
                     <TextBlock Text="Dishes"/>
                 </StackPanel>
             </Button>
             <Button Style="{DynamicResource SideBarBtn}">
                 <StackPanel>
-                    <fa:SvgAwesome Icon="Solid_FileExport" Width="15" PrimaryColor="{DynamicResource LightText}"/>
+                    <fa:SvgAwesome Icon="Solid_FileExport" Style="{DynamicResource SideBarIcon}"/>
                     <TextBlock Text="Reports"/>
                 </StackPanel>
             </Button>
