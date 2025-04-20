@@ -14,6 +14,7 @@
     <None Remove="MVVM\Model\ShiftManager.cs~RF82408c97.TMP" />
     <None Remove="MVVM\Model\Validator.cs~RF81e0c7ce.TMP" />
     <None Remove="MVVM\Model\Validator.cs~RF81f8a9d1.TMP" />
+    <None Remove="Styles\Assets\edit_icon.png" />
     <None Remove="Styles\Assets\table.png" />
   </ItemGroup>
 
@@ -30,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Styles\Assets\edit_icon.png" />
     <Resource Include="Styles\Assets\table.png" />
   </ItemGroup>
 

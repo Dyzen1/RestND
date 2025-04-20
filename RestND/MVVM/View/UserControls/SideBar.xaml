@@ -9,7 +9,7 @@
              d:DesignHeight="250" d:DesignWidth="200">
     <Grid>
         
-        <StackPanel x:Name="menuePanel">
+        <StackPanel>
             <Button Style="{DynamicResource SideBarBtn}">
                 <StackPanel>
                     <fa:SvgAwesome Icon="Solid_TruckFast" Width="15" PrimaryColor="{DynamicResource LightText}"/>
