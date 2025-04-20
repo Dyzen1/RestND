@@ -1,0 +1,51 @@
+﻿<Window x:Class="RestND.MVVM.View.ProductWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:RestND.MVVM.ViewModel"
+        mc:Ignorable="d"
+        Title="Product Manager" Height="450" Width="800">
+
+    <!-- Optional: You can remove this and set DataContext in code-behind -->
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- New Product Form -->
+        <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+            <TextBox Width="200" Margin="0 0 10 0" 
+                     Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.ToolTip>Product Name</TextBox.ToolTip>
+            </TextBox>
+
+            <TextBox Width="100" Margin="0 0 10 0" 
+                     Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox.ToolTip>Quantity Available</TextBox.ToolTip>
+            </TextBox>
+
+            <Button Content="Add Product" 
+                    Command="{Binding AddProductCommand}" />
+        </StackPanel>
+
+        <!-- Product List -->
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding Products}"
+                  SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
+                  AutoGenerateColumns="True"
+                  Margin="0 0 0 10" />
+
+        <!-- Update/Delete Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Update" 
+                    Command="{Binding UpdateProductCommand}" 
+                    Margin="0 0 10 0" />
+            <Button Content="Delete" 
+                    Command="{Binding DeleteProductCommand}" />
+        </StackPanel>
+    </Grid>
+</Window>

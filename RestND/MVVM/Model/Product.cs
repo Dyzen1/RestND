@@ -63,16 +63,6 @@ namespace RestND.MVVM.Model
 
         #endregion
 
-        #region Equals Method override
-        public override bool Equals(object obj)
-        {
-            if (obj is Product other)
-                return _Product_ID == other._Product_ID;
-
-            return false;
-
-        }
-        #endregion
 
 
     }
