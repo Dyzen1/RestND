@@ -8,20 +8,6 @@ namespace RestND.MVVM.Model
 {
     public class Order
     {
-        #region Order ID
-
-        private int _Order_ID;
-
-        public int Order_ID
-        {
-            get { return _Order_ID; }
-            set
-            {
-                _Order_ID = value;
-            }
-        }
-
-        #endregion
 
         #region Employee
 
@@ -51,18 +37,6 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Order Date
-
-        private DateTime _Order_Date;
-
-        public DateTime Order_Date
-        {
-            get { return _Order_Date; }
-            set { _Order_Date = value; }
-        }
-
-        #endregion
-
         #region Dish
         private Dish _Dish;
 
@@ -83,7 +57,6 @@ namespace RestND.MVVM.Model
             set { _Discount = value; }
         }
         #endregion
-
 
         #region Order count
         private static int _OrderCount = 0;
@@ -107,13 +80,13 @@ namespace RestND.MVVM.Model
 
         public Order( Employee AssignedEmployee, Dish dish, int dishAmount,Table table)
         {
-            Order_ID = _OrderCount++;
+  
             assignedEmployee = AssignedEmployee;
             Dish = dish;
             Dish_Amount = dishAmount;
-            Order_Date = DateTime.Now;
             Table = table;
             Table.Table_Status = false;
+            _OrderCount++;
         }
         #endregion
 
@@ -121,11 +94,10 @@ namespace RestND.MVVM.Model
 
         public Order(Employee AssignedEmployee, Dish dish, int dishAmount,Discount discountType, Table table)
         {
-            Order_ID = _OrderCount++;
+             _OrderCount++;
             assignedEmployee = AssignedEmployee;
             Dish = dish;
             Dish_Amount = dishAmount;
-            Order_Date = DateTime.Now;
             Discount = discountType;
             Table = table;
             Table.Table_Status = false;
