@@ -30,16 +30,22 @@
     </Style>
 
     <Style x:Key="tableBtn" TargetType="Image">
-        <Setter Property="Source" Value="/Styles/Assets/table.png"/>
-        <Setter Property="Width" Value="55"/>
+        <Setter Property="Source" Value="C:\Users\nomis\source\repos\RestND\RestND\Styles\Assets\table.png"/>
     </Style>
 
-    <Style x:Key="editTables" TargetType="Button">
+    <Style x:Key="addTables" TargetType="Button">
         <Setter Property="Margin" Value="10"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <Style x:Key="tableNumber" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="Bold"/>
     </Style>
 
 </ResourceDictionary>

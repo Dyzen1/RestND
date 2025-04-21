@@ -10,7 +10,7 @@
         Title="MainWindow" Height="500" Width="800">
 
     <Grid>
-        <Image Source="/Styles/Assets/pink_drink.jpg" Stretch="UniformToFill"/>
+        <Image Style="{DynamicResource BG_image}"/>
         <!-- Sidebar Expander -->
         <Expander ExpandDirection="Left"
                   IsExpanded="False" BorderThickness="0" 
@@ -40,51 +40,91 @@
             
             <!--buttons for each table-->
             <Button x:Name="table1" Background="Transparent" Grid.Row="0" Grid.Column="0" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="25" Style="{DynamicResource tableNumber}"/>
+                </Grid>        
             </Button>
             <Button x:Name="table2" Background="Transparent" Grid.Row="0" Grid.Column="2" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="43" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
             <Button x:Name="table3" Background="Transparent" Grid.Row="0" Grid.Column="4" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="20" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
             <Button x:Name="table4" Background="Transparent" Grid.Row="1" Grid.Column="1" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="34" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
             <Button x:Name="table5" Background="Transparent" Grid.Row="1" Grid.Column="3" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="21" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
             <Button x:Name="table6" Background="Transparent" Grid.Row="2" Grid.Column="0" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="32" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
             <Button x:Name="table7" Background="Transparent" Grid.Row="2" Grid.Column="2" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="12" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
             <Button x:Name="table8" Background="Transparent" Grid.Row="2" Grid.Column="4" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="15" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
             <Button x:Name="table9" Background="Transparent" Grid.Row="3" Grid.Column="1" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="23" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
             <Button x:Name="table10" Background="Transparent" Grid.Row="3" Grid.Column="3" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="11" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
             <Button x:Name="table11" Background="Transparent" Grid.Row="4" Grid.Column="0" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="8" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
             <Button x:Name="table12" Background="Transparent" Grid.Row="4" Grid.Column="2" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="10" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
             <Button x:Name="table13" Background="Transparent" Grid.Row="4" Grid.Column="4" BorderThickness="0">
-                <Image Style="{DynamicResource tableBtn}"/>
+                <Grid>
+                    <Image Style="{DynamicResource tableBtn}"/>
+                    <TextBlock Text="5" Style="{DynamicResource tableNumber}"/>
+                </Grid>
             </Button>
         </Grid>
 
-        <Button x:Name="addTable" 
-                Style="{DynamicResource editTables}">
+        <Button x:Name="addTables" 
+                Style="{DynamicResource addTables}">
             <StackPanel Orientation="Horizontal">
-                <Image Source="/Styles/Assets/edit_icon.png" Width="20"/>
-                <TextBlock Text="Edit Tables" FontSize="10" FontWeight="Bold" TextAlignment="Center" Foreground="RosyBrown" Margin="3"/>
+                <!--<Image Source="/Styles/Assets/edit_icon.png" Width="20"/>-->
+                <fa:SvgAwesome Icon="Solid_CirclePlus" PrimaryColor="{DynamicResource LightText}" Width="15"/>
+                <TextBlock Text="Add Table" FontSize="10" TextAlignment="Center" Foreground="{DynamicResource LightText}" Margin="4"/>
             </StackPanel>
         </Button>
                
