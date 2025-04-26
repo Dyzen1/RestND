@@ -1,29 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace RestND.MVVM.Model
 {
     public class Dish
     {
-        #region Dish ID
-
+        #region Dish_ID
         private int _Dish_ID;
 
         public int Dish_ID
         {
-            // need to add validation logic here 
             get { return _Dish_ID; }
             set { _Dish_ID = value; }
         }
-
-
         #endregion
 
-        #region Dish name
-
+        #region Dish_Name
         private string _Dish_Name;
 
         public string Dish_Name
@@ -31,11 +22,9 @@ namespace RestND.MVVM.Model
             get { return _Dish_Name; }
             set { _Dish_Name = value; }
         }
-
         #endregion
 
-        #region _Dish_Price
-
+        #region Dish_Price
         private int _Dish_Price;
 
         public int Dish_Price
@@ -43,11 +32,9 @@ namespace RestND.MVVM.Model
             get { return _Dish_Price; }
             set { _Dish_Price = value; }
         }
-
         #endregion
 
         #region Allergen_Notes
-
         private string _Allergen_Notes;
 
         public string Allergen_Notes
@@ -55,10 +42,9 @@ namespace RestND.MVVM.Model
             get { return _Allergen_Notes; }
             set { _Allergen_Notes = value; }
         }
-
         #endregion
 
-        #region _Availability_Status
+        #region Availability_Status
         private bool _Availability_Status;
 
         public bool Availability_Status
@@ -66,32 +52,21 @@ namespace RestND.MVVM.Model
             get { return _Availability_Status; }
             set { _Availability_Status = value; }
         }
-
         #endregion
 
-        #region Amount Products Usage
+        #region ProductUsage
+        private List<ProductUsageInDish> _ProductUsage = new();
 
-        private List<Product> _ProductUsage;
-
-        public List<Product> ProductUsage
+        public List<ProductUsageInDish> ProductUsage
         {
             get { return _ProductUsage; }
             set { _ProductUsage = value; }
         }
-
         #endregion
 
-        #region Dish counter
-        private static int _DishCount = 0;
-
-        public static int DishCount
-        {
-            get { return _DishCount; }
-        }
-        #endregion
-
-        #region Dish Type
+        #region Dish_Type
         private DishType _Dish_Type;
+
         public DishType Dish_Type
         {
             get { return _Dish_Type; }
@@ -99,42 +74,23 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region constructor
+        #region Constructors
 
-
-
-
-        public Dish(int dish_Id, string dishName, string allergenNotes,bool availabilityStatus , List<Product> productUsage,DishType type) 
+        public Dish(string dishName, int dishPrice, string allergenNotes, bool availabilityStatus, List<ProductUsageInDish> productUsage, DishType type)
         {
-            Dish_Type = type;
-            Dish_ID = dish_Id;
             Dish_Name = dishName;
+            Dish_Price = dishPrice;
             Allergen_Notes = allergenNotes;
             Availability_Status = availabilityStatus;
             ProductUsage = productUsage;
-            _DishCount++;
+            Dish_Type = type;
         }
-        #endregion
-
-        #region Default Constructor
 
         public Dish()
         {
-            _DishCount++;
+            // Default constructor
         }
 
         #endregion
-
-        #region Equals Method override
-        public override bool Equals(object obj)
-        {
-            if (obj is Dish other)
-                return _Dish_ID == other._Dish_ID;
-
-            return false;
-
-        }
-        #endregion
-
     }
 }

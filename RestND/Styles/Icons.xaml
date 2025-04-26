@@ -1,18 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-<<<<<<< HEAD
                     xmlns:fa="http://schemas.fontawesome.com/icons/svg"
                     xmlns:svg="http://sharpvectors.codeplex.com/svgc">
-=======
-                    xmlns:fa6="http://schemas.fontawesome.com/icons/svg">
->>>>>>> 20d2f166c4aa30696ab85c763d94a7bdd5a40b07
 
-    <Style x:Key="SideBarIcon" TargetType="fa6:SvgAwesome">
+    <Style x:Key="SideBarIcon" TargetType="fa:SvgAwesome">
         <Setter Property="Width" Value="15"/>
-<<<<<<< HEAD
         <Setter Property="PrimaryColor" Value="{DynamicResource LightText}"/>
-=======
->>>>>>> 20d2f166c4aa30696ab85c763d94a7bdd5a40b07
     </Style>
 
 </ResourceDictionary>

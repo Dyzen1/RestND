@@ -10,8 +10,8 @@
     <SolidColorBrush x:Key="ErrorMsg" Color="#C62828"/> <!--for error text messages-->
     <SolidColorBrush x:Key="Hover" Color="LightGoldenrodYellow"/> <!--for mouse hover bg-->
 
-    <Style x:Key="BG_image" TargetType="Image">
-        <Setter Property="Source" Value="C:\Users\nomis\source\repos\RestND\RestND\Styles/Assets/newBG.jpg"/>
+    <Style x:Key="Bg" TargetType="Image">
+        <Setter Property="Source" Value="C:\Users\floem\Desktop\RestND\RestND\Styles\Assets\BG_image.jpg"/>
         <Setter Property="Stretch" Value="UniformToFill"/>
     </Style>
 

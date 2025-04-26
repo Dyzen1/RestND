@@ -10,7 +10,7 @@
         Title="MainWindow" Height="500" Width="800">
 
     <Grid>
-        <Image Style="{DynamicResource BG_image}"/>
+        <Image Style="{DynamicResource Bg}"/>
         <!-- Sidebar Expander -->
         <Expander ExpandDirection="Left"
                   IsExpanded="False" BorderThickness="0" 
@@ -105,7 +105,7 @@
                     <TextBlock Text="8" Style="{DynamicResource tableNumber}"/>
                 </Grid>
             </Button>
-            <Button x:Name="table12" Background="Transparent" Grid.Row="4" Grid.Column="2" BorderThickness="0">
+            <Button x:Name="table12" Background="Transparent" Grid.Row="4" Grid.Column="2" BorderThickness="0" >
                 <Grid>
                     <Image Style="{DynamicResource tableBtn}"/>
                     <TextBlock Text="10" Style="{DynamicResource tableNumber}"/>

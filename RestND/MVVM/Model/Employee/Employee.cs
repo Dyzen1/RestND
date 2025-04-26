@@ -88,23 +88,7 @@ namespace RestND.MVVM.Model
         #endregion
 
 
-        #region Equals Method override
-        public override bool Equals(object obj)
-        {
-           if(obj is  Employee other) 
-                return _Employee_ID == other._Employee_ID;
-
-           return false;
-
-        }
-        #endregion
-
-        #region To String
-        public override string ToString()
-        {
-            return "Employee ID :" + _Employee_ID +" Employee Name: "+_Employee_Name +" Employee Position: " + _Employee_Pos;
-        }
-        #endregion
+        
 
 
 

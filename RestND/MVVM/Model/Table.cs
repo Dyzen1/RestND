@@ -12,12 +12,34 @@ namespace RestND.MVVM.Model
 
         private int _Table_ID;
 
-        private int Table_ID
+        public int Table_ID
         {
             get { return _Table_ID; }
             set { _Table_ID = value; }
         }
 
+        #endregion
+
+        #region X cordinates
+
+        private double _X;
+
+        public double X
+        {
+            get { return X; }
+            set { _X = value; }
+        }
+
+
+        #endregion
+
+        #region Y cordinates
+        private double _Y;
+        public double Y
+        {
+            get { return Y; }
+            set { _Y = value; }
+        }
         #endregion
 
         #region Table Status
@@ -51,15 +73,6 @@ namespace RestND.MVVM.Model
 
         #endregion
 
-        #region Equals Method override
-        public override bool Equals(object obj)
-        {
-            if (obj is Table other)
-                return _Table_ID == other._Table_ID;
 
-            return false;
-
-        }
-        #endregion
     }
 }

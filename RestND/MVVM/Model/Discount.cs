@@ -50,14 +50,6 @@ namespace RestND.MVVM.Model
         #endregion
 
 
-        #region Equals
-        public override bool Equals(object obj)
-        {
-            if (obj is Discount other)
-                return _Discount_Name == other._Discount_Name;
-            return false;
-        }
-        #endregion
 
     }
 }
