@@ -53,17 +53,7 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Equals
 
-        public override bool Equals(object obj)
-        {
-            if (obj is Manager other)
-                return _Employee_ID == other._Employee_ID;
-
-            return false;
-
-        }
-        #endregion
  
 
 

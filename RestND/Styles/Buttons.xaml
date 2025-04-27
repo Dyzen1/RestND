@@ -30,7 +30,7 @@
     </Style>
 
     <Style x:Key="tableBtn" TargetType="Image">
-        <Setter Property="Source" Value="C:\Users\nomis\source\repos\RestND\RestND\Styles\Assets\table.png"/>
+        <Setter Property="Source" Value="\Styles\Assets\table.png"/>
     </Style>
 
     <Style x:Key="addBtn" TargetType="Button">

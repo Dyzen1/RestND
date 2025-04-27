@@ -35,14 +35,7 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Equals
-        public override bool Equals(object obj)
-        {
-            if (obj is Role other)
-                return _Role_Name == other._Role_Name;
-            return false;
-        }
-        #endregion
+
 
     }
 }

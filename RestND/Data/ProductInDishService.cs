@@ -1,0 +1,43 @@
+﻿using MySql.Data.MySqlClient;
+using RestND.MVVM.Model;
+using System.Collections.Generic;
+
+namespace RestND.Data
+{
+    // Service to handle inserting the products used in a dish into the 'product_in_dish' table
+    public class ProductInDishService
+    {
+        private readonly DatabaseOperations _db;
+
+        public ProductInDishService()
+        {
+            // Initialize the database connection
+            _db = new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!");
+        }
+
+        // Adds a list of products to a specific dish in the database
+        public bool AddProductsToDish(int dishId, List<ProductUsageInDish> productUsages)
+        {
+            bool success = true;
+
+            foreach (var usage in productUsages)
+            {
+                string query = "INSERT INTO product_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
+
+                int affectedRows = _db.ExecuteNonQuery(query,
+                    new MySqlParameter("@dishId", dishId),
+                    new MySqlParameter("@productId", usage.Product_ID),
+                    new MySqlParameter("@amount", usage.Amount_Usage)
+                );
+
+                if (affectedRows <= 0)
+                {
+                    success = false;
+                    break; // Stop if any insert fails
+                }
+            }
+
+            return success;
+        }
+    }
+}

@@ -26,7 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <Folder Include="MVVM\ViewModel\" />
+=======
+    <Resource Include="Styles\Assets\edit_icon.png" />
+>>>>>>> ad249a476882123d02c03aee047057cb2c8a3b80
   </ItemGroup>
 
 </Project>

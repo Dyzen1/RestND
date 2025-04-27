@@ -12,6 +12,7 @@
         WindowState="Maximized">
 
     <Grid>
+<<<<<<< HEAD
         <Image Style="{DynamicResource BG_image}"/>
 
         <!--upper menu for minimalize maximize and close-->
@@ -45,6 +46,11 @@
 
                 <!-- Sidebar Expander -->
             <Expander ExpandDirection="Left"
+=======
+        <Image Style="{DynamicResource Bg}"/>
+        <!-- Sidebar Expander -->
+        <Expander ExpandDirection="Left"
+>>>>>>> ad249a476882123d02c03aee047057cb2c8a3b80
                   IsExpanded="False" BorderThickness="0" 
                   Foreground="{DynamicResource LightText}" HorizontalAlignment="Right"
                   VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
@@ -145,7 +151,7 @@
                     <TextBlock Text="8" Style="{DynamicResource tableNumber}"/>
                 </Grid>
             </Button>
-            <Button x:Name="table12" Background="Transparent" Grid.Row="4" Grid.Column="2" BorderThickness="0">
+            <Button x:Name="table12" Background="Transparent" Grid.Row="4" Grid.Column="2" BorderThickness="0" >
                 <Grid>
                     <Image Style="{DynamicResource tableBtn}"/>
                     <TextBlock Text="10" Style="{DynamicResource tableNumber}"/>

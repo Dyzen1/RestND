@@ -9,17 +9,14 @@ namespace RestND.MVVM.ViewModel
     public partial class ProductViewModel : ObservableObject
     {
         #region Service
-        // Service that handles database logic for products
         private readonly ProductService _productService;
         #endregion
 
         #region Observable Properties
 
-        // A list of products bound to the UI
         [ObservableProperty]
         private ObservableCollection<Product> products = new();
 
-        // The product selected in the UI
         [ObservableProperty]
         private Product selectedProduct;
 
@@ -29,7 +26,6 @@ namespace RestND.MVVM.ViewModel
             UpdateProductCommand.NotifyCanExecuteChanged();
         }
 
-        // New product to be added — bound to the UI
         [ObservableProperty]
         private Product newProduct = new();
 
@@ -39,25 +35,24 @@ namespace RestND.MVVM.ViewModel
 
         public ProductViewModel()
         {
-            _productService = new ProductService(); // Create the service
-            LoadProducts(); // Load all products on startup
+            _productService = new ProductService();
+            LoadProducts();
         }
 
         #endregion
 
         #region Load Products
 
-        // Loads products from the database and displays them in the UI
         [RelayCommand]
         private void LoadProducts()
         {
-            Products.Clear(); // Clear existing items
+            Products.Clear();
 
-            var dbProducts = _productService.GetProducts(); // Fetch from DB
+            var dbProducts = _productService.GetAll(); // updated GetProducts -> GetAll
 
             foreach (var product in dbProducts)
             {
-                Products.Add(product); // Add each one to the list
+                Products.Add(product);
             }
         }
 
@@ -65,19 +60,17 @@ namespace RestND.MVVM.ViewModel
 
         #region Add Product
 
-        // Adds a new product to the database and refreshes the product list
         [RelayCommand]
         private void AddProduct()
         {
-            // Check if the new product has valid data
-            if (!string.IsNullOrWhiteSpace(newProduct.Product_Name) && newProduct.Quantity_Available >= 0)
+            if (!string.IsNullOrWhiteSpace(NewProduct.Product_Name) && NewProduct.Quantity_Available >= 0)
             {
-                bool success = _productService.AddProduct(newProduct);
+                bool success = _productService.Add(NewProduct); //  updated AddProduct -> Add
 
                 if (success)
                 {
-                    LoadProducts(); // Refresh the list
-                    newProduct = new Product(); // Clear the input fields
+                    LoadProducts();
+                    NewProduct = new Product(); //  call the setter so UI refreshes
                 }
             }
         }
@@ -86,20 +79,16 @@ namespace RestND.MVVM.ViewModel
 
         #region Delete Product
 
-        // Deletes the selected product from the DB and removes it from the list
-        // canExecute is used to check if a product is selected the method CanModifyProduct will return true or false
-        // the nameof operator is used to get the name of the method as a string , so if we rename the method, it updates automatically
         [RelayCommand(CanExecute = nameof(CanModifyProduct))]
         private void DeleteProduct()
         {
-            // Always double-check that a product is selected
             if (SelectedProduct != null)
             {
-                bool success = _productService.DeleteProduct(SelectedProduct.Product_ID);
+                bool success = _productService.Delete(SelectedProduct.Product_ID); //  updated DeleteProduct -> Delete
 
                 if (success)
                 {
-                    Products.Remove(SelectedProduct); // Remove from UI
+                    Products.Remove(SelectedProduct);
                 }
             }
         }
@@ -108,17 +97,15 @@ namespace RestND.MVVM.ViewModel
 
         #region Update Product
 
-        // Updates the selected product's info in the DB
         [RelayCommand(CanExecute = nameof(CanModifyProduct))]
         private void UpdateProduct()
         {
             if (SelectedProduct != null)
             {
-                bool success = _productService.UpdateProduct(SelectedProduct);
+                bool success = _productService.Update(SelectedProduct); //  updated UpdateProduct -> Update
 
                 if (success)
                 {
-                    // Replace it in the UI list
                     var index = Products.IndexOf(SelectedProduct);
                     if (index >= 0)
                         Products[index] = SelectedProduct;
@@ -130,7 +117,6 @@ namespace RestND.MVVM.ViewModel
 
         #region CanExecute Helpers
 
-        // Checks if a product is selected (used to enable/disable buttons)
         private bool CanModifyProduct()
         {
             return SelectedProduct != null;

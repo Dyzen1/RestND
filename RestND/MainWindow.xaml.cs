@@ -62,5 +62,6 @@ namespace RestND
             inventoryWindow.ShowDialog();
             this.Close();
         }
+
     }
 }

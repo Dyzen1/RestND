@@ -2,7 +2,11 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:RestND"
+<<<<<<< HEAD
              StartupUri="MainWindow.xaml">
+=======
+             StartupUri="/MVVM/View/DishView.xaml">
+>>>>>>> ad249a476882123d02c03aee047057cb2c8a3b80
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
