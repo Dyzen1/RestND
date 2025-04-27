@@ -14,6 +14,8 @@
     <None Remove="MVVM\Model\ShiftManager.cs~RF82408c97.TMP" />
     <None Remove="MVVM\Model\Validator.cs~RF81e0c7ce.TMP" />
     <None Remove="MVVM\Model\Validator.cs~RF81f8a9d1.TMP" />
+    <None Remove="Styles\Assets\bg_image.jpg" />
+    <None Remove="Styles\Assets\table.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,11 +28,13 @@
   </ItemGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
+
     <Folder Include="MVVM\ViewModel\" />
-=======
-    <Resource Include="Styles\Assets\edit_icon.png" />
->>>>>>> ad249a476882123d02c03aee047057cb2c8a3b80
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Styles\Assets\bg_image.jpg" />
+    <Resource Include="Styles\Assets\table.png" />
   </ItemGroup>
 
 </Project>

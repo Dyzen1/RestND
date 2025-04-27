@@ -29,10 +29,6 @@
         <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
     </Style>
 
-    <Style x:Key="tableBtn" TargetType="Image">
-        <Setter Property="Source" Value="\Styles\Assets\table.png"/>
-    </Style>
-
     <Style x:Key="addBtn" TargetType="Button">
         <Setter Property="Margin" Value="10"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
@@ -41,9 +37,24 @@
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
 
-    <Style x:Key="updateBtn" TargetType="Button">
+    <Style x:Key="editBtn" TargetType="Button">
         <Setter Property="Margin" Value="0 0 10 0"/>
-        <Setter Property="Content" Value="Update"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Width" Value="25"/>
+    </Style>
+
+    <Style x:Key="returnBtn" TargetType="Button">
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Width" Value="30"/>
+    </Style>
+
+    <Style x:Key="deleteBtn" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Width" Value="25"/>
     </Style>
 
     <Style x:Key="tableNumber" TargetType="TextBlock">
