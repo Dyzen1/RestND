@@ -1,4 +1,7 @@
-using RestND.MVVM.Model;
+using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.Input;
+using RestND.MVVM.Model.Orders;
 
 public partial class DiscountViewModel : ObservableObject
 {
@@ -20,8 +23,8 @@ public partial class DiscountViewModel : ObservableObject
 
          partial void OnSelectedDiscountChanged(Discount value)
         {
-            DeleteDiscountCommand.NotifyCanExecuteChanged();
-            UpdateDiscountCommand.NotifyCanExecuteChanged();
+            DeleteProductCommand.NotifyCanExecuteChanged();
+            UpdateProductCommand.NotifyCanExecuteChanged();
         } 
 
 
@@ -82,5 +85,12 @@ public partial class DiscountViewModel : ObservableObject
     }
     #endregion
 
+    #region CanExecute Helpers
 
+    private bool CanModifyProduct()
+    {
+        return SelectedDiscount != null;
+    }
+
+    #endregion
 }

@@ -67,28 +67,20 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region constructor        
-        public Employee(string Employee_ID, string Employee_Name,string Employee_Pos /*AuthorizationStatus authoStatus*/)
+        public Employee(string Employee_ID, string Employee_Name,string Employee_Pos)
         {
-
-     
-    
-
 
             this.Employee_ID = Employee_ID;
             this.Employee_Name = Employee_Name;
             this.Employee_Pos = Employee_Pos;
-            //AuthoStatus = authoStatus;
-
 
         }
         #endregion
 
-        #region Default Constructor
-        public Employee() { }
-        #endregion
 
 
-        
+
+
 
 
 

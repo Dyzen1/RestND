@@ -45,7 +45,7 @@ namespace RestND.MVVM.Model
 
         #region Constructor
 
-        public Product(int productId, string? productName, int quantityAvailable)
+        public Product(int productId, string productName, int quantityAvailable)
         {
             Product_ID = productId;
             Product_Name = productName;
@@ -54,14 +54,6 @@ namespace RestND.MVVM.Model
 
         #endregion
 
-        #region Default Constructor
-
-        public Product()
-        {
-            
-        }
-
-        #endregion
 
 
 

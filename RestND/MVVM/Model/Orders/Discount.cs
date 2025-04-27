@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestND.MVVM.Model
+namespace RestND.MVVM.Model.Orders
 {
     public class Discount
     {
@@ -52,14 +52,7 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Default Constructor
-
-        public Discount()
-        {
-            
-        }
-
-        #endregion
+ 
 
 
 

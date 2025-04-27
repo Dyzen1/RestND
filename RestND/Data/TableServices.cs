@@ -1,5 +1,6 @@
 using MySql.Data.MySqlClient;
 using RestND.MVVM.Model;
+using RestND.MVVM.Model.Tables;
 using System;
 using System.Collections.Generic;
 
@@ -65,6 +66,7 @@ namespace RestND.Data
 
         #region Delete Table
         public override bool Delete(int tableId){
+
             string query = "DELETE FROM table WHERE Table_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", tableId)) > 0;
         }

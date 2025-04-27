@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RestND"
         xmlns:fa="http://schemas.fontawesome.com/icons/svg"
+        xmlns:fa6="http://schemas.fontawesome.com/icons/svg"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800" 
@@ -12,8 +13,7 @@
         WindowState="Maximized">
 
     <Grid>
-<<<<<<< HEAD
-        <Image Style="{DynamicResource BG_image}"/>
+        <Image Style="{DynamicResource bg}"/>
 
         <!--upper menu for minimalize maximize and close-->
         <Grid>
@@ -44,19 +44,14 @@
                         Click="CloseBtn_Click" Foreground="{DynamicResource LightText}"/>
             </StackPanel>
 
-                <!-- Sidebar Expander -->
-            <Expander ExpandDirection="Left"
-=======
-        <Image Style="{DynamicResource Bg}"/>
         <!-- Sidebar Expander -->
         <Expander ExpandDirection="Left"
->>>>>>> ad249a476882123d02c03aee047057cb2c8a3b80
                   IsExpanded="False" BorderThickness="0" 
                   Foreground="{DynamicResource LightText}" HorizontalAlignment="Right"
                   VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
                   Grid.Row="1" Grid.Column="2" Margin="5">
                 <uc:SideBar x:Name="sideBar" Width="100"/>
-            </Expander>
+        </Expander>
 
             <Button x:Name="addTables" Style="{DynamicResource addBtn}" Grid.Row="1" Grid.Column="0">
                 <StackPanel Orientation="Horizontal">

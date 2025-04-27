@@ -8,6 +8,7 @@ namespace RestND.Data
 {
     public interface CrudServices<T>
     {
+        //T = dynamic type
         List<T> GetAll();
         bool Add(T item);
         bool Update(T item);

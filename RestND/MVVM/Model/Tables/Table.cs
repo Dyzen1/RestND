@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestND.MVVM.Model
+namespace RestND.MVVM.Model.Tables
 {
     public class Table
     {
@@ -72,7 +72,7 @@ namespace RestND.MVVM.Model
         public Table(int Table_Num)
 
         {
-            this.Table_Number = Table_Num;
+            Table_Number = Table_Num;
             Table_Status = true;
         }
         #endregion

@@ -1,3 +1,10 @@
+using MySql.Data.MySqlClient;
+using RestND.Data;
+using RestND.MVVM.Model;
+using RestND.MVVM.Model.Orders;
+using System;
+using System.Collections.Generic;
+
 public class DiscountService : BaseService<Discount>
 {
     #region Constructor
@@ -29,6 +36,7 @@ public class DiscountService : BaseService<Discount>
     #region Add Discount
     public override bool Add (Discount d){
         string query = "INSERT INTO discount (Discount_Name, Discount_Percentage) VALUES (@name, @percentage)";
+        
         return _db.ExecuteNonQuery(query,
             new MySqlParameter("@name", d.Discount_Name),
             new MySqlParameter("@percentage", d.Discount_Percentage)) > 0;  

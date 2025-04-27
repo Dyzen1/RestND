@@ -1,14 +1,14 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RestND.Data;
-using RestND.MVVM.Model;
+using RestND.MVVM.Model.Tables;
 using System.Collections.ObjectModel;
 
 namespace RestND.MVVM.ViewModel{
 
 public partial class TableViewModel : ObservableObject{
     #region Services
-    private readonly TableService _tableService;
+    private readonly TableServices _tableService;
     #endregion
 
     #region Fields
