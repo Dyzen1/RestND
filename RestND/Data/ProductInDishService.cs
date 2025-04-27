@@ -36,5 +36,37 @@ namespace RestND.Data
 
             return affectedRows > 0;
         }
+
+
+
+        // Delete a specific product from a specific dish
+        public bool DeleteProductFromDish(int dishId, int productId)
+        {
+            string query = "DELETE FROM product_in_dish WHERE Dish_ID = @dishId AND Product_ID = @productId";
+
+            int affectedRows = _db.ExecuteNonQuery(query,
+                new MySqlParameter("@dishId", dishId),
+                new MySqlParameter("@productId", productId)
+            );
+
+            return affectedRows > 0;
+        }
+
+
+        // Update a product usage in a dish
+        public bool UpdateProductInDish(int dishId, int productId, double newAmountUsage)
+        {
+            string query = "UPDATE product_in_dish " +
+                           "SET Amount_Usage = @amount " +
+                           "WHERE Dish_ID = @dishId AND Product_ID = @productId";
+
+            int affectedRows = _db.ExecuteNonQuery(query,
+                new MySqlParameter("@amount", newAmountUsage),
+                new MySqlParameter("@dishId", dishId),
+                new MySqlParameter("@productId", productId)
+            );
+
+            return affectedRows > 0;
+        }
     }
 }

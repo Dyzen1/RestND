@@ -54,6 +54,14 @@ namespace RestND.MVVM.Model
 
         #endregion
 
+        #region Default Constructor
+
+
+        public Product()
+        {
+        }
+        #endregion
+
 
 
 

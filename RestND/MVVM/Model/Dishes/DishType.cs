@@ -6,14 +6,50 @@ using System.Threading.Tasks;
 
 namespace RestND.MVVM.Model
 {
-    public enum DishType
+    public class DishType
     {
+        #region DIsh ID
 
-        Appetizer,
-        MainCourse,
-        Dessert,
-        Beverage,
-        Salad,
-        Soup
+        private int _DishType_ID;
+
+        public int DishType_ID
+        {
+            get { return _DishType_ID; }
+            set { _DishType_ID = value; }
+        }
+
+        #endregion
+
+        #region Dish Type Name
+
+        private string _DishType_Name;
+
+        public string DishType_Name
+        {
+            get { return DishType_Name; }
+            set { _DishType_Name = value; }
+        }
+
+        #endregion
+
+        #region Constructor
+
+        public DishType( string dishType_Name)
+        {
+            
+            _DishType_Name = dishType_Name;
+        }
+
+        #endregion
+
+        #region Default Constructor
+
+        public DishType()
+        {
+
+        }
+
+        #endregion
+
     }
 }

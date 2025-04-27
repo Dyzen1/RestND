@@ -8,6 +8,30 @@ namespace RestND.MVVM.Model
 {
     public class Role
     {
+
+        #region Email
+
+        private string _Email;
+        public string Email
+        {
+            get { return _Email; }
+            set { _Email = value; }
+        }
+
+
+        #endregion
+
+        #region Password
+        private string _Password;
+        public string Password
+        {
+            get { return _Password; }
+            set { _Password = value; }
+        }
+
+
+        #endregion
+
         #region Role Name
         private string _Role_Name;
         public string Role_Name
@@ -34,6 +58,17 @@ namespace RestND.MVVM.Model
             Role_Authorization = roleAuthorization;
         }
         #endregion
+
+        #region constructor for email and password
+        public Role(string roleName, AuthorizationStatus roleAuthorization,string pass,string email)
+        {
+            Email = email;
+            Password = pass;
+            Role_Name = roleName;
+            Role_Authorization = roleAuthorization;
+        }
+        #endregion
+
 
 
 

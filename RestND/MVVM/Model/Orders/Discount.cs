@@ -52,7 +52,14 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
- 
+        #region Default Constructor
+
+
+        public Discount()
+        {
+
+        }
+        #endregion
 
 
 
