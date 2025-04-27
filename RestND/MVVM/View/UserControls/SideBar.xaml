@@ -10,7 +10,7 @@
     <Grid>
         
         <StackPanel>
-            <Button Style="{DynamicResource SideBarBtn}">
+            <Button Style="{DynamicResource SideBarBtn}" Click="InventoryBtn_Click">
                 <StackPanel>
                     <fa:SvgAwesome Icon="Solid_TruckFast" Width="15" PrimaryColor="{DynamicResource LightText}"/>
                     <TextBlock Text="Inventory"/>

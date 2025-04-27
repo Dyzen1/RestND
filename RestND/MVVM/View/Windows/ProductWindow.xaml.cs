@@ -25,5 +25,15 @@ namespace RestND.MVVM.View
             InitializeComponent();
             this.DataContext = new ProductViewModel();
         }
+
+        private void return_Click(object sender, RoutedEventArgs e)
+        {
+            var mainWindow = new MainWindow();
+            {
+                WindowState = WindowState.Maximized;
+            }
+            mainWindow.ShowDialog();
+            this.Close();
+        }
     }
 }

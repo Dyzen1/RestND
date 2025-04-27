@@ -14,23 +14,19 @@
     <None Remove="MVVM\Model\ShiftManager.cs~RF82408c97.TMP" />
     <None Remove="MVVM\Model\Validator.cs~RF81e0c7ce.TMP" />
     <None Remove="MVVM\Model\Validator.cs~RF81f8a9d1.TMP" />
-    <None Remove="Styles\Assets\edit_icon.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
     <PackageReference Include="FontAwesome6.Svg" Version="2.5.1" />
     <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+    <PackageReference Include="MySql.Data" Version="9.3.0" />
     <PackageReference Include="SharpVectors.Wpf" Version="1.8.4.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="MVVM\ViewModel\" />
-    <Folder Include="MVVM\View\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Styles\Assets\edit_icon.png" />
   </ItemGroup>
 
 </Project>

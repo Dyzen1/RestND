@@ -15,14 +15,17 @@ using System.Windows.Shapes;
 
 namespace RestND.MVVM.View.UserControls
 {
-    /// <summary>
-    /// Interaction logic for SideBar.xaml
-    /// </summary>
     public partial class SideBar : UserControl
     {
+        public event Action ButtonClicked;
         public SideBar()
         {
             InitializeComponent();
+        }
+
+        private void InventoryBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonClicked?.Invoke();
         }
     }
 }
