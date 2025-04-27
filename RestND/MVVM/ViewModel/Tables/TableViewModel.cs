@@ -27,8 +27,8 @@ public partial class TableViewModel : ObservableObject{
 
       partial void OnSelectedTableChanged(Table value)
         {
-            DeleteProductCommand.NotifyCanExecuteChanged();
-            UpdateProductCommand.NotifyCanExecuteChanged();
+            DeleteTableCommand.NotifyCanExecuteChanged();
+            UpdateTableCommand.NotifyCanExecuteChanged();
         }
         #endregion
 
