@@ -28,13 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-
-    <Folder Include="MVVM\ViewModel\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Styles\Assets\bg_image.jpg" />
     <Resource Include="Styles\Assets\table.png" />
+    <Resource Include="Styles\Assets\edit_icon.png" />
   </ItemGroup>
 
 </Project>

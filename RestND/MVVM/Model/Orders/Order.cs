@@ -1,10 +1,11 @@
-﻿using System;
+﻿using RestND.MVVM.Model.Tables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestND.MVVM.Model
+namespace RestND.MVVM.Model.Orders
 {
     public class Order
     {
@@ -20,20 +21,6 @@ namespace RestND.MVVM.Model
         {
             get { return _AssignedEmployee; }
             set { _AssignedEmployee = value; }
-        }
-        #endregion
-
-        #region Dish Amount
-
-        
-
-        
-        private int _Dish_Amount;
-
-        public int Dish_Amount
-        {
-            get { return _Dish_Amount; }
-            set { _Dish_Amount =value; }
         }
         #endregion
 
@@ -78,12 +65,11 @@ namespace RestND.MVVM.Model
 
         #region constructor
 
-        public Order( Employee AssignedEmployee, Dish dish, int dishAmount,Table table)
+        public Order( Employee AssignedEmployee, Dish dish, Table table)
         {
   
             assignedEmployee = AssignedEmployee;
             Dish = dish;
-            Dish_Amount = dishAmount;
             Table = table;
             Table.Table_Status = false;
             _OrderCount++;
@@ -92,27 +78,17 @@ namespace RestND.MVVM.Model
 
         #region Constructor that takes discount
 
-        public Order(Employee AssignedEmployee, Dish dish, int dishAmount,Discount discountType, Table table)
+        public Order(Employee AssignedEmployee, Dish dish, Discount discountType, Table table)
         {
-             _OrderCount++;
+            _OrderCount++;
             assignedEmployee = AssignedEmployee;
             Dish = dish;
-            Dish_Amount = dishAmount;
             Discount = discountType;
             Table = table;
             Table.Table_Status = false;
         }
         #endregion
 
-        #region Default Constructor
-
-
-
-
-        public Order()
-        {
-            
-        }
-    #endregion
+  
     }
 }

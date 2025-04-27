@@ -4,10 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestND.MVVM.Model
+namespace RestND.MVVM.Model.Orders
 {
     public class Discount
     {
+        #region Discount ID
+
+
+        private int _Discount_ID;
+
+        public int Discount_ID
+        {
+            get { return _Discount_ID; }
+            set { _Discount_ID = value; }
+        }
+
+        #endregion
+
         #region Discount Name
 
         private string _Discount_Name;
@@ -19,7 +32,6 @@ namespace RestND.MVVM.Model
         }
 
         #endregion
-
 
         #region Discount Percentage
         private double _Discount_Percentage;
@@ -40,14 +52,7 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Default Constructor
-
-        public Discount()
-        {
-            
-        }
-
-        #endregion
+ 
 
 
 

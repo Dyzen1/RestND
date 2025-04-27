@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestND.MVVM.Model
+namespace RestND.MVVM.Model.Tables
 {
     public class Table
     {
-        #region Table Number
+        #region Table ID
 
         private int _Table_ID;
 
@@ -16,6 +16,19 @@ namespace RestND.MVVM.Model
         {
             get { return _Table_ID; }
             set { _Table_ID = value; }
+        }
+
+        #endregion
+
+        
+        #region Table Number
+
+        private int _Table_Number;
+
+        public int Table_Number
+        {
+             get { return _Table_Number; }
+            set { _Table_Number = value; }
         }
 
         #endregion
@@ -59,7 +72,7 @@ namespace RestND.MVVM.Model
         public Table(int Table_Num)
 
         {
-            this.Table_ID = Table_Num;
+            Table_Number = Table_Num;
             Table_Status = true;
         }
         #endregion

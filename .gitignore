@@ -361,3 +361,39 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+
+
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore VSCode settings (optional)
+.vscode/
+
+# Ignore temporary files
+*.log
+*.tmp
+
+# Ignore Publish output
+publish/
+
+# Ignore NuGet packages folder (optional, if you don't want to commit packages)
+packages/
+
+# Ignore compiled files
+*.dll
+*.exe
+*.pdb
+
+# Ignore other common unnecessary files
+*.cache
+*.dbmdl
+*.bak
+*.backup

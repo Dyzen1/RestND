@@ -18,26 +18,23 @@ namespace RestND.Data
         // Adds a list of products to a specific dish in the database
         public bool AddProductsToDish(int dishId, List<ProductUsageInDish> productUsages)
         {
-            bool success = true;
+            int affectedRows = 0;
 
+
+            string query = "INSERT INTO product_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
             foreach (var usage in productUsages)
             {
-                string query = "INSERT INTO product_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
+                
 
-                int affectedRows = _db.ExecuteNonQuery(query,
+                affectedRows = _db.ExecuteNonQuery(query,
                     new MySqlParameter("@dishId", dishId),
                     new MySqlParameter("@productId", usage.Product_ID),
                     new MySqlParameter("@amount", usage.Amount_Usage)
                 );
 
-                if (affectedRows <= 0)
-                {
-                    success = false;
-                    break; // Stop if any insert fails
-                }
             }
 
-            return success;
+            return affectedRows > 0;
         }
     }
 }
