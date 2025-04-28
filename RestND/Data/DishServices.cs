@@ -8,6 +8,7 @@ namespace RestND.Data
 {
     public class DishService : BaseService<Dish>
     {
+        private readonly Transaction _transaction = new Transaction(_db);
         public DishService() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
 
         public override List<Dish> GetAll()
@@ -39,32 +40,15 @@ namespace RestND.Data
 
         public override bool Add(Dish d)
         {
-            string query = "INSERT INTO dish (Dish_Name, Dish_Price, Allergen_Notes, Availability_Status, Dish_Type) " +
-                           "VALUES (@name, @price, @notes, @status, @type)";
-
-            bool dishAdded = _db.ExecuteNonQuery(query,
-                new MySqlParameter("@name", d.Dish_Name),
-                new MySqlParameter("@price", d.Dish_Price),
-                new MySqlParameter("@notes", d.Allergen_Notes),
-                new MySqlParameter("@status", d.Availability_Status),
-                new MySqlParameter("@type", d.Dish_Type.DishType_Name) // Save DishType 
-            ) > 0;
-
-            if (!dishAdded)
-                return false;
-
-            int newDishId = Convert.ToInt32(_db.ExecuteReader("SELECT LAST_INSERT_ID();")[0].Values.First());
-
-            if (d.ProductUsage != null && d.ProductUsage.Count > 0)
-            {
-                var productInDishService = new ProductInDishService();
-                bool productsAdded = productInDishService.AddProductsToDish(newDishId, d.ProductUsage);
-
-                return productsAdded;
-            }
-
-            return true;
+            return _transaction.Add(d);
         }
+
+         public override bool Delete(int dishId)
+        { 
+          return _transaction.Delete(dishId);
+
+        }
+
 
         public override bool Update(Dish d)
         {
@@ -80,11 +64,8 @@ namespace RestND.Data
                 new MySqlParameter("@id", d.Dish_ID)
             ) > 0;
         }
+       
 
-        public override bool Delete(int dishId)
-        {
-            string query = "DELETE FROM dish WHERE Dish_ID = @id";
-            return _db.ExecuteNonQuery(query, new MySqlParameter("@id", dishId)) > 0;
-        }
+     
     }
 }
