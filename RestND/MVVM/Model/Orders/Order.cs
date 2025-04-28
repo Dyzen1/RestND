@@ -36,15 +36,6 @@ namespace RestND.MVVM.Model.Orders
 
         #endregion
 
-        #region Discount
-        private Discount _Discount;
-        public Discount Discount
-        {
-            get { return _Discount; }
-            set { _Discount = value; }
-        }
-        #endregion
-
         #region Order count
         private static int _OrderCount = 0;
 
@@ -76,18 +67,7 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region Constructor that takes discount
-
-        public Order(Employee AssignedEmployee, Dish dish, Discount discountType, Table table)
-        {
-            _OrderCount++;
-            assignedEmployee = AssignedEmployee;
-            Dish = dish;
-            Discount = discountType;
-            Table = table;
-            Table.Table_Status = false;
-        }
-        #endregion
+        
 
   
     }
