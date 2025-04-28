@@ -1,4 +1,4 @@
-public partial class Role: ObservableObject{
+public partial class RoleViewModel: ObservableObject{
     #region Services
     // Service for handling Role database operations
     private readonly RoleService _roleService;
@@ -22,7 +22,7 @@ public partial class Role: ObservableObject{
 
     #region Constructor
     // Constructor: initializes the RoleService and loads roles
-    public Role()
+    public RoleViewModel()
     {
         _roleService = new RoleService();
         LoadRoles();
