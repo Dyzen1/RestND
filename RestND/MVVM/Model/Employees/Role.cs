@@ -8,6 +8,14 @@ namespace RestND.MVVM.Model
 {
     public class Role
     {
+        #region Id
+        private int _Role_ID;
+        public int Role_ID
+        {
+            get { return _Role_ID; }
+            set { _Role_ID = value; }
+        }
+        #endregion
 
         #region Email
 
@@ -69,8 +77,12 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-
-
+        #region Default Constructor
+        public Role()
+        {
+            //default constructor
+        }
+        #endregion
 
     }
 }

@@ -7,8 +7,11 @@ namespace RestND.Data
 {
     public class ProductService : BaseService<Product>
     {
+        #region Constructor
         public ProductService() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
+        #endregion
 
+        #region Get All Products
         public override List<Product> GetAll()
         {
             var products = new List<Product>();
@@ -27,7 +30,9 @@ namespace RestND.Data
 
             return products;
         }
+        #endregion
 
+        #region Add Product
         public override bool Add(Product p)
         {
             string query = "INSERT INTO product (Product_Name, Quantity_Available) VALUES (@name, @qty)";
@@ -35,7 +40,9 @@ namespace RestND.Data
                 new MySqlParameter("@name", p.Product_Name),
                 new MySqlParameter("@qty", p.Quantity_Available)) > 0;
         }
+        #endregion
 
+        #region Update Product
         public override bool Update(Product p)
         {
             string query = "UPDATE product SET Product_Name = @name, Quantity_Available = @qty WHERE Product_ID = @id";
@@ -44,12 +51,15 @@ namespace RestND.Data
                 new MySqlParameter("@qty", p.Quantity_Available),
                 new MySqlParameter("@id", p.Product_ID)) > 0;
         }
+        #endregion
 
+        #region Delete Product
         public override bool Delete(int productId)
         {
             string query = "DELETE FROM product WHERE Product_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", productId)) > 0;
         }
+        #endregion
     }
 
 }
