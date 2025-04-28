@@ -1,7 +1,13 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using RestND.Data;
+using RestND.MVVM.Model;
+using System.Collections.ObjectModel;
+
 public partial class RoleViewModel: ObservableObject{
     #region Services
     // Service for handling Role database operations
-    private readonly RoleService _roleService;
+    private readonly RoleServices _roleService;
     #endregion
 
     #region Observable Properties
@@ -24,7 +30,7 @@ public partial class RoleViewModel: ObservableObject{
     // Constructor: initializes the RoleService and loads roles
     public RoleViewModel()
     {
-        _roleService = new RoleService();
+        _roleService = new RoleServices();
         LoadRoles();
     }
     #endregion

@@ -1,11 +1,15 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using RestND.Data;
+using RestND.MVVM.Model;
+using CommunityToolkit.Mvvm.Input;
+using System.Collections.ObjectModel;
+
 public partial class DishTypeViewModel : ObservableObject
 {
     #region Services
     // Service for handling DishType database operations
-    private readonly DishTypeService _dishTypeService;
+    private readonly DishTypeServices _dishTypeService;
     #endregion
-
-
 
     #region Observable Properties
     // List of dish types displayed in the UI
@@ -23,7 +27,7 @@ public partial class DishTypeViewModel : ObservableObject
     #endregion
 
     #region Load Method
-   public DishTypeViewModel(DishTypeService dishTypeService)
+   public DishTypeViewModel(DishTypeServices dishTypeService)
     {
         _dishTypeService = dishTypeService;
         LoadDishTypes();
@@ -39,7 +43,6 @@ public partial class DishTypeViewModel : ObservableObject
     }
     #endregion
     
-
     #region Delete
     // Command for deleting the selected dish type
     [RelayCommand(CanExecute = nameof(CanModifyDishType))]
@@ -47,7 +50,7 @@ public partial class DishTypeViewModel : ObservableObject
     {
         if (SelectedDishType != null)
         {
-            bool success = _dishTypeService.Delete(SelectedDishType.Dish_Type_ID);
+            bool success = _dishTypeService.Delete(SelectedDishType.DishType_ID);
 
             if (success)
             {
@@ -73,7 +76,6 @@ public partial class DishTypeViewModel : ObservableObject
         }
     }
     #endregion
-
     
     #region Add
     // Command for adding a new dish type
@@ -92,7 +94,6 @@ public partial class DishTypeViewModel : ObservableObject
         }
     }
     #endregion
-
 
     #region Helper Methods
     // Helper method: checks if a dish type is selected (used for button enabling)

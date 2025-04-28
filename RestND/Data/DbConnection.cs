@@ -7,7 +7,7 @@ namespace RestND.Data
 {
     public class DbConnection
     {
-        protected MySqlConnection Connection;
+        public MySqlConnection Connection;
 
         public DbConnection(string server, string database, string userId, string password)
         {

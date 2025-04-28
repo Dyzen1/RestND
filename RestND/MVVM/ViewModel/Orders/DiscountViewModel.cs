@@ -23,8 +23,8 @@ public partial class DiscountViewModel : ObservableObject
 
          partial void OnSelectedDiscountChanged(Discount value)
         {
-                DeleteDiscountCommand.NotifyCanExecuteChanged();
-             UpdateDiscountCommand.NotifyCanExecuteChanged();
+            DeleteDiscountCommand.NotifyCanExecuteChanged();
+            UpdateDiscountCommand.NotifyCanExecuteChanged();
         } 
 
 

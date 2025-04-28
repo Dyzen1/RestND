@@ -1,11 +1,16 @@
+using MySql.Data.MySqlClient;
+using RestND.Data;
+using RestND.MVVM.Model;
+using System;
+
 public class Transaction{
-readonly DbConnection _db;
-public Transaction(DbConnection db)
+readonly DatabaseOperations _db;
+public Transaction(DatabaseOperations db)
 {
     _db = db;
 }
 #region Delete and Add Dish
-public override bool Delete(int dishId)
+public  bool Delete(int dishId)
 {
     _db.OpenConnection();
     using var transaction = _db.Connection.BeginTransaction();
@@ -45,7 +50,7 @@ public override bool Delete(int dishId)
 
 
 
-public override bool Add(Dish d)
+public bool Add(Dish d)
 {
     _db.OpenConnection();
     using var transaction = _db.Connection.BeginTransaction();
@@ -76,7 +81,7 @@ public override bool Add(Dish d)
 
         // 3. Insert ProductUsage (always required)
         var productInDishService = new ProductInDishService();
-        bool productsAdded = productInDishService.AddProductsToDish(newDishId, d.ProductUsage, _db.Connection, transaction);
+        bool productsAdded = productInDishService.AddProductsToDish(newDishId, d.ProductUsage);
 
         if (!productsAdded)
         {
