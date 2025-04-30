@@ -7,17 +7,14 @@ using System.Collections.Generic;
 namespace RestND.Data
 {
 
-    public class TableServices : BaseService<Table>
-    {   
-        #region Constructor
-        public TableServices() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
-        #endregion
-        
-         #region Get All Tables
+    public class TableServices() : BaseService<Table>(DatabaseOperations.Instance)
+    {
+
+        #region Get All Tables
         public override List<Table> GetAll()
         {
             List<Table> tables = new List<Table>();
-            string query = "SELECT * FROM table";
+            string query = "SELECT * FROM 'table'";
 
             var rows = _db.ExecuteReader(query);
 

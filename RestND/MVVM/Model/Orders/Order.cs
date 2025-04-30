@@ -11,10 +11,6 @@ namespace RestND.MVVM.Model.Orders
     {
 
         #region Employee
-
-        
-
-       
         private Employee _AssignedEmployee;
 
         public Employee assignedEmployee
@@ -67,7 +63,7 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        
+
 
   
     }

@@ -61,7 +61,7 @@ namespace RestND.MVVM.Model.Orders
         #region Constructor with discount
         public Bill(Order order, double price,Discount discount)
         {
-            discount = discount;
+            Discount = discount;
             Order = order;
             Price = price;
 

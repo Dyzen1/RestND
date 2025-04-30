@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace RestND.Helpers
 {
-    public class Validator
+    public class EmployeeValidator
     {
 
         public static bool isNameValid(string name)

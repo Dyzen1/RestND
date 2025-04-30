@@ -56,15 +56,12 @@ public partial class TableViewModel : ObservableObject{
         [RelayCommand]
         private void AddTable()
         {
-            if(!string.IsNullOrWhiteSpace(newTable.Table_Number.ToString()) && newTable.Table_Number >= 0)
-            {
-                bool success = _tableService.Add(newTable);
+            if (string.IsNullOrWhiteSpace(newTable.Table_Number.ToString()) || newTable.Table_Number < 0) return;
+            var success = _tableService.Add(newTable);
 
-                if(success){
-                    LoadTables();
-                    newTable = new Table();
-                }
-            }
+            if (!success) return;
+            LoadTables();
+            newTable = new Table();
         }
         #endregion
 
@@ -90,14 +87,10 @@ public partial class TableViewModel : ObservableObject{
         [RelayCommand(CanExecute = nameof(CanModifyProduct))]
         private void UpdateTable()
         {
-            if(selectedTable != null)
-            {
-                bool success = _tableService.Update(selectedTable);
-                if(success)
-                {
-                    LoadTables();
-                }
-            }
+            if (selectedTable == null) return;
+            bool success = _tableService.Update(selectedTable);
+            if (!success) return;
+            LoadTables();
         }
         #endregion
 
