@@ -19,7 +19,6 @@ namespace RestND.MVVM.Model.Tables
         }
 
         #endregion
-
         
         #region Table Number
 
@@ -33,7 +32,7 @@ namespace RestND.MVVM.Model.Tables
 
         #endregion
 
-        #region X cordinates
+        #region X coordinates
 
         private double _X;
 
@@ -46,7 +45,7 @@ namespace RestND.MVVM.Model.Tables
 
         #endregion
 
-        #region Y cordinates
+        #region Y coordinates
         private double _Y;
         public double Y
         {

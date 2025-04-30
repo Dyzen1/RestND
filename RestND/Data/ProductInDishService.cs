@@ -24,8 +24,6 @@ namespace RestND.Data
             string query = "INSERT INTO product_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
             foreach (var usage in productUsages)
             {
-                
-
                 affectedRows = _db.ExecuteNonQuery(query,
                     new MySqlParameter("@dishId", dishId),
                     new MySqlParameter("@productId", usage.Product_ID),

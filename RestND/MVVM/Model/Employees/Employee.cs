@@ -10,8 +10,8 @@ namespace RestND.MVVM.Model
     public class Employee
     {
         #region Employee Id
-        private string _Employee_ID;
-        public string Employee_ID
+        private int _Employee_ID;
+        public int Employee_ID
         {
             get { return _Employee_ID; }
             set { _Employee_ID = value; }
@@ -37,7 +37,7 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Constructor
-        public Employee(string employeeId, string employeeName, Role employeeRole)
+        public Employee(int employeeId, string employeeName, Role employeeRole)
         {
             Employee_ID = employeeId;
             Employee_Name = employeeName;

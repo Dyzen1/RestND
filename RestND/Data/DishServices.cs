@@ -9,8 +9,12 @@ namespace RestND.Data
     public class DishService : BaseService<Dish>
     {
         private readonly Transaction _transaction = new Transaction(_db);
-        public DishService() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
 
+        #region Constructor
+        public DishService() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
+        #endregion
+
+        #region Get All Dishes
         public override List<Dish> GetAll()
         {
             var dishes = new List<Dish>();
@@ -26,8 +30,6 @@ namespace RestND.Data
                     Dish_Price = Convert.ToInt32(row["Dish_Price"]),
                     Allergen_Notes = row["Allergen_Notes"].ToString(),
                     Availability_Status = Convert.ToBoolean(row["Availability_Status"]),
-
-                   
                     Dish_Type = new DishType
                     {
                         DishType_Name = row["Dish_Type"].ToString()
@@ -37,19 +39,24 @@ namespace RestND.Data
 
             return dishes;
         }
+        #endregion
 
+        #region Add Dish
         public override bool Add(Dish d)
         {
             return _transaction.Add(d);
         }
+        #endregion
 
-         public override bool Delete(int dishId)
+        #region Delete Dish
+        public override bool Delete(int dishId)
         { 
           return _transaction.Delete(dishId);
 
         }
+        #endregion
 
-
+        #region Update Dish
         public override bool Update(Dish d)
         {
             string query = "UPDATE dish SET Dish_Name = @name, Dish_Price = @price, Allergen_Notes = @notes, " +
@@ -64,8 +71,8 @@ namespace RestND.Data
                 new MySqlParameter("@id", d.Dish_ID)
             ) > 0;
         }
-       
+        #endregion
 
-     
+
     }
 }

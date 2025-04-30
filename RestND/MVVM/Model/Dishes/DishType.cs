@@ -8,7 +8,7 @@ namespace RestND.MVVM.Model
 {
     public class DishType
     {
-        #region DIsh ID
+        #region Dish ID
 
         private int _DishType_ID;
 
