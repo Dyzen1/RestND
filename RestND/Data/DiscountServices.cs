@@ -5,12 +5,9 @@ using RestND.MVVM.Model.Orders;
 using System;
 using System.Collections.Generic;
 
-public class DiscountService : BaseService<Discount>
+public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instance)
 {
-    #region Constructor
-    public DiscountService() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
-    #endregion
-
+ 
     #region Get All Discounts
 
     public override List <Discount> GetAll()

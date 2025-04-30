@@ -63,13 +63,7 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region Default Constructor
 
-        public Order()
-        {
-            _OrderCount++;
-        }
-        #endregion
 
   
     }

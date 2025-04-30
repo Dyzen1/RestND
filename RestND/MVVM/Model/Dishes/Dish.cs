@@ -15,9 +15,9 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Dish_Name
-        private string _Dish_Name;
+        private string? _Dish_Name;
 
-        public string Dish_Name
+        public string? Dish_Name
         {
             get { return _Dish_Name; }
             set { _Dish_Name = value; }
@@ -35,9 +35,9 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Allergen_Notes
-        private string _Allergen_Notes;
+        private string? _Allergen_Notes;
 
-        public string Allergen_Notes
+        public string? Allergen_Notes
         {
             get { return _Allergen_Notes; }
             set { _Allergen_Notes = value; }
@@ -65,9 +65,9 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Dish_Type
-        private DishType _Dish_Type;
+        private DishType? _Dish_Type;
 
-        public DishType Dish_Type
+        public DishType? Dish_Type
         {
             get { return _Dish_Type; }
             set { _Dish_Type = value; }
@@ -76,7 +76,7 @@ namespace RestND.MVVM.Model
 
         #region Constructors
 
-        public Dish(string dishName, int dishPrice, string allergenNotes, bool availabilityStatus, List<ProductUsageInDish> productUsage, DishType type)
+        public Dish(string? dishName, int dishPrice, string? allergenNotes, bool availabilityStatus, List<ProductUsageInDish> productUsage, DishType? type)
         {
             Dish_Name = dishName;
             Dish_Price = dishPrice;
@@ -88,7 +88,6 @@ namespace RestND.MVVM.Model
 
         public Dish()
         {
-            // Default constructor
         }
 
         #endregion

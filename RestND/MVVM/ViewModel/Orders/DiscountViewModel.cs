@@ -56,10 +56,9 @@ public partial class DiscountViewModel : ObservableObject
     [RelayCommand]
     public void AddDiscount(){
         bool success = _discountService.Add(newDiscount);
-        if(success){
-            LoadDiscounts();
-            newDiscount = new Discount();
-        }
+        if (!success) return;
+        LoadDiscounts();
+        newDiscount = new Discount();
     }
     #endregion
 

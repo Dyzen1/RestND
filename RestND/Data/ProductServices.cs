@@ -5,12 +5,8 @@ using System.Collections.Generic;
 
 namespace RestND.Data
 {
-    public class ProductService : BaseService<Product>
+    public class ProductService() : BaseService<Product>(DatabaseOperations.Instance)
     {
-        #region Constructor
-        public ProductService() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
-        #endregion
-
         #region Get All Products
         public override List<Product> GetAll()
         {

@@ -7,21 +7,15 @@ namespace RestND.Data
     // Service to handle inserting the products used in a dish into the 'product_in_dish' table
     public class ProductInDishService
     {
-        private readonly DatabaseOperations _db;
+        private readonly DatabaseOperations _db = DatabaseOperations.Instance;
 
-        public ProductInDishService()
-        {
-            // Initialize the database connection
-            _db = new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!");
-        }
-
-        // Adds a list of products to a specific dish in the database
+        
         public bool AddProductsToDish(int dishId, List<ProductUsageInDish> productUsages)
         {
-            int affectedRows = 0;
+            var affectedRows = 0;
 
 
-            string query = "INSERT INTO product_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
+            var query = "INSERT INTO product_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
             foreach (var usage in productUsages)
             {
                 affectedRows = _db.ExecuteNonQuery(query,
@@ -40,9 +34,9 @@ namespace RestND.Data
         // Delete a specific product from a specific dish
         public bool DeleteProductFromDish(int dishId, int productId)
         {
-            string query = "DELETE FROM product_in_dish WHERE Dish_ID = @dishId AND Product_ID = @productId";
+            var query = "DELETE FROM product_in_dish WHERE Dish_ID = @dishId AND Product_ID = @productId";
 
-            int affectedRows = _db.ExecuteNonQuery(query,
+            var affectedRows = _db.ExecuteNonQuery(query,
                 new MySqlParameter("@dishId", dishId),
                 new MySqlParameter("@productId", productId)
             );
@@ -54,11 +48,11 @@ namespace RestND.Data
         // Update a product usage in a dish
         public bool UpdateProductInDish(int dishId, int productId, double newAmountUsage)
         {
-            string query = "UPDATE product_in_dish " +
-                           "SET Amount_Usage = @amount " +
-                           "WHERE Dish_ID = @dishId AND Product_ID = @productId";
+            var query = "UPDATE product_in_dish " +
+                        "SET Amount_Usage = @amount " +
+                        "WHERE Dish_ID = @dishId AND Product_ID = @productId";
 
-            int affectedRows = _db.ExecuteNonQuery(query,
+            var affectedRows = _db.ExecuteNonQuery(query,
                 new MySqlParameter("@amount", newAmountUsage),
                 new MySqlParameter("@dishId", dishId),
                 new MySqlParameter("@productId", productId)

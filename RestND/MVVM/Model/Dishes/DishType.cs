@@ -22,11 +22,11 @@ namespace RestND.MVVM.Model
 
         #region Dish Type Name
 
-        private string _DishType_Name;
+        private string? _DishType_Name;
 
-        public string DishType_Name
+        public string? DishType_Name
         {
-            get { return DishType_Name; }
+            get { return _DishType_Name; }
             set { _DishType_Name = value; }
         }
 
@@ -34,7 +34,7 @@ namespace RestND.MVVM.Model
 
         #region Constructor
 
-        public DishType( string dishType_Name)
+        public DishType( string? dishType_Name)
         {
             
             _DishType_Name = dishType_Name;

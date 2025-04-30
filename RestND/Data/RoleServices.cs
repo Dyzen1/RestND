@@ -8,17 +8,13 @@ using System.Threading.Tasks;
 
 namespace RestND.Data
 {
-    public class RoleServices : BaseService<Role>
+    public class RoleServices() : BaseService<Role>(DatabaseOperations.Instance)
     {
-        #region Constructor
-        public RoleServices() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
-        #endregion
-
         #region Get All Roles
         public override List<Role> GetAll()
         {
             List<Role> roles = new List<Role>();
-            string query = "SELECT * FROM Role";
+            var query = "SELECT * FROM Role";
 
             var rows = _db.ExecuteReader(query);
 
@@ -58,7 +54,8 @@ namespace RestND.Data
         {
             string query = "UPDATE role SET Email = @Email , Password = @Password , Role_Name = @Role_Name , Role_Authorization = @Role_Authorization WHERE Role_ID = @id";
 
-            return _db.ExecuteNonQuery(query,
+            return _db.ExecuteNonQuery(query, 
+                        new MySqlParameter("@id", r.Role_ID),
                         new MySqlParameter("@Email", r.Email),
                         new MySqlParameter("@Password", r.Password),
                         new MySqlParameter("@Role_Name", r.Role_Name),

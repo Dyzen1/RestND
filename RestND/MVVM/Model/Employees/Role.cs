@@ -19,8 +19,8 @@ namespace RestND.MVVM.Model
 
         #region Email
 
-        private string _Email;
-        public string Email
+        private string? _Email;
+        public string? Email
         {
             get { return _Email; }
             set { _Email = value; }
@@ -30,8 +30,8 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Password
-        private string _Password;
-        public string Password
+        private string? _Password;
+        public string? Password
         {
             get { return _Password; }
             set { _Password = value; }
@@ -41,8 +41,8 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Role Name
-        private string _Role_Name;
-        public string Role_Name
+        private string? _Role_Name;
+        public string? Role_Name
         {
             get { return _Role_Name; }
             set { _Role_Name = value; }
@@ -60,7 +60,7 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region constructor
-        public Role(string roleName, AuthorizationStatus roleAuthorization)
+        public Role(string? roleName, AuthorizationStatus roleAuthorization)
         {
             Role_Name = roleName;
             Role_Authorization = roleAuthorization;
@@ -68,7 +68,7 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region constructor for email and password
-        public Role(string roleName, AuthorizationStatus roleAuthorization,string pass,string email)
+        public Role(string? roleName, AuthorizationStatus roleAuthorization,string? pass,string? email)
         {
             Email = email;
             Password = pass;

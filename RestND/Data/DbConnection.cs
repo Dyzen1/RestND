@@ -26,17 +26,28 @@ namespace RestND.Data
 
         public void CloseConnection()
         {
-            if (Connection.State == System.Data.ConnectionState.Open)
-            {
-                Connection.Close();
-                Console.WriteLine("Database connection closed.");
-            }
+            if (Connection.State != System.Data.ConnectionState.Open) return;
+            Connection.Close();
+            Console.WriteLine("Database connection closed.");
         }
     }
 
     public class DatabaseOperations : DbConnection
     {
-        public DatabaseOperations(string server, string database, string userId, string password)
+        // ---- Singleton Added ----
+        private static DatabaseOperations? _instance;
+
+        public static DatabaseOperations Instance
+        {
+            get
+            {
+                _instance = new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!");
+                return _instance;
+            }
+        }
+        // ---- End of Singleton ----
+
+        private DatabaseOperations(string server, string database, string userId, string password)
             : base(server, database, userId, password) { }
 
         // Regular ExecuteReader (without transaction)
@@ -165,8 +176,8 @@ namespace RestND.Data
             }
         }
 
-        // NEW: ExecuteScalar with transaction support (to get single value like LAST_INSERT_ID)
-        public object ExecuteScalar(string query, MySqlConnection conn, MySqlTransaction transaction, params MySqlParameter[] parameters)
+        // ExecuteScalar with transaction support
+        public object? ExecuteScalar(string query, MySqlConnection conn, MySqlTransaction transaction, params MySqlParameter[] parameters)
         {
             try
             {

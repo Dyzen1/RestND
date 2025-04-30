@@ -23,9 +23,9 @@ namespace RestND.MVVM.Model.Orders
 
         #region Discount Name
 
-        private string _Discount_Name;
+        private string? _Discount_Name;
 
-        public string Discount_Name
+        public string? Discount_Name
         {
             get { return _Discount_Name; }
             set { _Discount_Name = value; }
@@ -44,7 +44,7 @@ namespace RestND.MVVM.Model.Orders
 
         #region constructor
 
-        public Discount(string name , double discountPercentage)
+        public Discount(string? name , double discountPercentage)
         {
             Discount_Name = name;
             Discount_Percentage = discountPercentage;

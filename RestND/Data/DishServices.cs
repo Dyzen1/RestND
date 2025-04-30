@@ -8,7 +8,15 @@ namespace RestND.Data
 {
     public class DishService : BaseService<Dish>
     {
+<<<<<<< HEAD
         private readonly Transaction _transaction = new Transaction(_db);
+=======
+        private readonly Transaction _transaction;
+        public DishService() : base(DatabaseOperations.Instance)
+        {
+            _transaction = new Transaction(_db); 
+        }
+>>>>>>> 5ead172fc20c05b8cefaf649f8c4749d4aebdaca
 
         #region Constructor
         public DishService() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
@@ -67,7 +75,7 @@ namespace RestND.Data
                 new MySqlParameter("@price", d.Dish_Price),
                 new MySqlParameter("@notes", d.Allergen_Notes),
                 new MySqlParameter("@status", d.Availability_Status),
-                new MySqlParameter("@type", d.Dish_Type.DishType_Name), 
+                new MySqlParameter("@type", d.Dish_Type?.DishType_Name), 
                 new MySqlParameter("@id", d.Dish_ID)
             ) > 0;
         }

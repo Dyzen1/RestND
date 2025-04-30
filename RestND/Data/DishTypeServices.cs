@@ -9,18 +9,15 @@ using MySql.Data.MySqlClient;
 
 namespace RestND.Data
 {
-    public class DishTypeServices : BaseService<DishType>
+    public class DishTypeServices() : BaseService<DishType>(DatabaseOperations.Instance)
     {
-        #region Constructor
-        public DishTypeServices() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
-        #endregion
 
         #region Get All Dish Types
 
         public override List<DishType> GetAll()
         {
             var types = new List<DishType>();
-            string query = "SELECT * FROM DishType";
+            var query = "SELECT * FROM DishType";
             var rows = _db.ExecuteReader(query);
 
             foreach (var row in rows)
