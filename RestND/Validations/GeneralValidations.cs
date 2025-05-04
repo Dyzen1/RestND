@@ -32,8 +32,7 @@ namespace RestND.Validations
         }
 
 
-        //only for the id's we accept from user(employee id and product id).
-        public static bool isIdValid(string id, out string errorMessage) 
+         public  static bool isIdValid(string id, out string errorMessage)
         {
             errorMessage = string.Empty;
             if (string.IsNullOrEmpty(id))
@@ -49,5 +48,6 @@ namespace RestND.Validations
             }
             return true;
         }
+     
     }
 }

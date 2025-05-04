@@ -38,7 +38,6 @@ namespace RestND.Data
         #region Add Role
         public override bool Add(Role r)
         {
-            RoleValidator val = new RoleValidator(r);
 
             string query = "INSERT INTO role (Email, Password ,Role_Name , Role_Authorization) VALUES (@Email, @Password ,@Role_Name , @Role_Authorization)";
 

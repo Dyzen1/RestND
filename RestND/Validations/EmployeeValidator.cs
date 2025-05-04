@@ -78,6 +78,7 @@ namespace RestND.Helpers
             return hasUpper && hasLower;
 
         }
+    
 
     }
 }
