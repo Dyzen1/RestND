@@ -6,19 +6,8 @@ using System.Collections.Generic;
 
 namespace RestND.Data
 {
-
-<<<<<<< HEAD
-    public class TableServices : BaseService<Table>
-    {   
-        #region Constructor
-        public TableServices() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
-        #endregion
-        
-=======
     public class TableServices() : BaseService<Table>(DatabaseOperations.Instance)
     {
-
->>>>>>> 5ead172fc20c05b8cefaf649f8c4749d4aebdaca
         #region Get All Tables
         public override List<Table> GetAll()
         {

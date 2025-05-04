@@ -9,9 +9,9 @@ namespace RestND.Data
     {
         public MySqlConnection Connection;
 
-        public DbConnection(string server, string database, string userId, string password)
+        public DbConnection(string server, string database, string userId)
         {
-            string connectionString = $"Server={server};Port=3306;Database={database};User ID={userId};Password={password};";
+            string connectionString = $"Server={server};Port=3306;Database={database};User ID={userId}";
             Connection = new MySqlConnection(connectionString);
         }
 
@@ -41,14 +41,14 @@ namespace RestND.Data
         {
             get
             {
-                _instance = new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!");
+                _instance = new DatabaseOperations("127.0.0.1", "restnd", "root");
                 return _instance;
             }
         }
         // ---- End of Singleton ----
 
-        private DatabaseOperations(string server, string database, string userId, string password)
-            : base(server, database, userId, password) { }
+        private DatabaseOperations(string server, string database, string userId)
+            : base(server, database, userId) { }
 
         // Regular ExecuteReader (without transaction)
         public List<Dictionary<string, object>> ExecuteReader(string query, params MySqlParameter[] parameters)

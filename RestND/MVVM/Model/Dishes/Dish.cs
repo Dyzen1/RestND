@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using RestND.MVVM.Model.Dishes;
+using System.Collections.Generic;
 
 namespace RestND.MVVM.Model
 {
@@ -25,9 +26,9 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Dish_Price
-        private int _Dish_Price;
+        private double _Dish_Price;
 
-        public int Dish_Price
+        public double Dish_Price
         {
             get { return _Dish_Price; }
             set { _Dish_Price = value; }
@@ -35,9 +36,9 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Allergen_Notes
-        private string? _Allergen_Notes;
+        private AllergenNotes _Allergen_Notes;
 
-        public string? Allergen_Notes
+        public AllergenNotes Allergen_Notes
         {
             get { return _Allergen_Notes; }
             set { _Allergen_Notes = value; }
@@ -74,22 +75,38 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Constructors
+        #region Constructor with allergen notes
 
-        public Dish(string? dishName, int dishPrice, string? allergenNotes, bool availabilityStatus, List<ProductUsageInDish> productUsage, DishType? type)
+        public Dish(string? dishName, double dishPrice, AllergenNotes allergenNotes, List<ProductUsageInDish> productUsage, DishType? type)
         {
             Dish_Name = dishName;
             Dish_Price = dishPrice;
             Allergen_Notes = allergenNotes;
-            Availability_Status = availabilityStatus;
+            Availability_Status = true;
             ProductUsage = productUsage;
             Dish_Type = type;
         }
 
-        public Dish()
+        #endregion
+
+        #region Constructor without allergen notes
+
+        public Dish(string? dishName, double dishPrice, List<ProductUsageInDish> productUsage, DishType? type)
         {
+            Dish_Name = dishName;
+            Dish_Price = dishPrice;
+            Availability_Status = true;
+            ProductUsage = productUsage;
+            Dish_Type = type;
         }
 
+        #endregion
+
+        #region Default Constructor
+        public Dish()
+        {
+            // Default constructor
+        }
         #endregion
     }
 }

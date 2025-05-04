@@ -5,22 +5,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestND.MVVM.Model
+namespace RestND.MVVM.Model.Employees
 {
     public class Employee
     {
         #region Employee Id
-<<<<<<< HEAD
         private int _Employee_ID;
         public int Employee_ID
-=======
-        private string? _Employee_ID;
-        public string? Employee_ID
->>>>>>> 5ead172fc20c05b8cefaf649f8c4749d4aebdaca
         {
             get { return _Employee_ID; }
             set { _Employee_ID = value; }
         }
+        #endregion
+
+        #region Email
+
+        private string? _Email;
+        public string? Email
+        {
+            get { return _Email; }
+            set { _Email = value; }
+        }
+
+
+        #endregion
+
+        #region Password
+        private string? _Password;
+        public string? Password
+        {
+            get { return _Password; }
+            set { _Password = value; }
+        }
+
+
         #endregion
 
         #region Employee Name
@@ -41,13 +59,20 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Constructor
-<<<<<<< HEAD
-        public Employee(int employeeId, string employeeName, Role employeeRole)
-=======
-        public Employee(string? employeeId, string? employeeName, Role? employeeRole)
->>>>>>> 5ead172fc20c05b8cefaf649f8c4749d4aebdaca
+        #region Constructor without email and password
+        public Employee(int employeeId, string? employeeName, Role? employeeRole)
         {
+            Employee_ID = employeeId;
+            Employee_Name = employeeName;
+            Employee_Role = employeeRole;
+        }
+        #endregion
+
+        #region Constructor with email and password
+        public Employee(int employeeId, string? employeeName, Role? employeeRole, string email, string password)
+        {
+            Email = email;
+            Password = password;
             Employee_ID = employeeId;
             Employee_Name = employeeName;
             Employee_Role = employeeRole;

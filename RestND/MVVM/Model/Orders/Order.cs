@@ -1,4 +1,5 @@
-﻿using RestND.MVVM.Model.Tables;
+﻿using RestND.MVVM.Model.Employees;
+using RestND.MVVM.Model.Tables;
 using System;
 using System.Collections.Generic;
 using System.Linq;

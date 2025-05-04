@@ -4,64 +4,89 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using RestND.Validations;
+using RestND.MVVM.Model.Employees;
+using RestND.Data;
+using System.Data;
 
 
 
 namespace RestND.Helpers
 {
-    public class EmployeeValidator
+    public class EmployeeValidator : GeneralValidations
     {
-
-        public static bool isNameValid(string name)
+        Employee employee;
+        public EmployeeValidator(Employee employee)
         {
-            if (string.IsNullOrEmpty(name)) return false;
-            string pattern = @"^[A-Za-z]{2,50}$";
-            return Regex.IsMatch(name, pattern);
+            this.employee = employee;
         }
-
-        public static bool isIDValid(string id)
+        public bool employeeID_Validation(out string errorMessage)
         {
-            if (string.IsNullOrEmpty(id)) return false;
+            int id = employee.Employee_ID;
+            errorMessage = string.Empty;
+            if (string.IsNullOrEmpty(employee.Employee_ID.ToString()))
+            {
+                errorMessage = "Insert ID!";
+                return false;
+            }
             string pattern = @"^\d{9}$";
-            return Regex.IsMatch(id, pattern);
+            if(!Regex.IsMatch(employee.Employee_ID.ToString(), pattern))
+            {
+                errorMessage = "Invalid ID!";
+                return false;
+            }
+            EmployeeServices employeeServices = new EmployeeServices();
+            List<Employee> employees = employeeServices.GetAll();
+            if (!employees.Any(employee => employee.Employee_ID == id))
+            {
+                errorMessage = "Employee with this ID already exists!";
+                return false;
+            }
 
+            return true;
         }
-        public static bool isPosValid(string Employee_Pos)
+        public bool employeeEmail_Validation(out string errorMessage)
         {
-            string waiterPos = "waiter";
-            string managerPos = "manager";
-            string shift_Manager = "shift manager ";
-
-
-            return Employee_Pos == waiterPos ||
-                   Employee_Pos == managerPos ||
-                   Employee_Pos == shift_Manager;
-
-
-
-        }
-        public static bool isEmailValid(string email)
-        {
-            if (string.IsNullOrEmpty(email)) return false;
+            errorMessage = string.Empty;
+            string email = employee.Email;
+            if (string.IsNullOrEmpty(employee.Email))
+            {
+                errorMessage = "Insert email!";
+                return false;
+            }
+            EmployeeServices employeeServices = new EmployeeServices();
+            List<Employee> employees = employeeServices.GetAll();
+            if (!employees.Any(employee => employee.Email == email))
+            {
+                errorMessage = "Employee with this email already exists!";
+                return false;
+            }
             string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-            return Regex.IsMatch(email, pattern);
+            if(!Regex.IsMatch(email, pattern))
+            {
+                errorMessage = "Invalid email!";
+                return false;
+            }
+            return true;
         }
 
-        public static bool isPasswordValid(string password)
+        public bool employeePassword_Validation(out string errorMessage)
         {
+            errorMessage = string.Empty;
+            if (string.IsNullOrEmpty(employee.Password))
+            {
+                errorMessage = "Insert password!";
+                return false;
+            }
 
-            if (string.IsNullOrEmpty(password)) return false;
-
-            if (password.Length < 6 || password.Length > 12)
+            if (employee.Password.Length < 6 || employee.Password.Length > 12)
                 return false;
 
-            bool hasUpper = password.Any(char.IsUpper);
-            bool hasLower = password.Any(char.IsLower);
+            bool hasUpper = employee.Password.Any(char.IsUpper);
+            bool hasLower = employee.Password.Any(char.IsLower);
             return hasUpper && hasLower;
 
-
         }
-
 
     }
 }

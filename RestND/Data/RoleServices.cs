@@ -1,10 +1,13 @@
 ﻿using MySql.Data.MySqlClient;
 using RestND.MVVM.Model;
+using RestND.MVVM.Model.Employees;
+using RestND.Validations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace RestND.Data
 {
@@ -24,10 +27,7 @@ namespace RestND.Data
                 {
                     Role_Name = Convert.ToString(row["Role_Name"]),
                     Role_Authorization = (AuthorizationStatus)Enum.Parse(typeof(AuthorizationStatus),
-                        Convert.ToString(row["Role_Authorization"])),
-                    Password = Convert.ToString(row["Password"]),
-                    Email = Convert.ToString(row["Email"])
-               
+                        Convert.ToString(row["Role_Authorization"]))
                 });
             }
 
@@ -38,11 +38,11 @@ namespace RestND.Data
         #region Add Role
         public override bool Add(Role r)
         {
+            RoleValidator val = new RoleValidator(r);
+
             string query = "INSERT INTO role (Email, Password ,Role_Name , Role_Authorization) VALUES (@Email, @Password ,@Role_Name , @Role_Authorization)";
 
             return _db.ExecuteNonQuery(query,
-                        new MySqlParameter("@Email", r.Email),
-                        new MySqlParameter("@Password", r.Password),
                         new MySqlParameter("@Role_Name", r.Role_Name),
                         new MySqlParameter("@Role_Authorization", r.Role_Authorization)) > 0;
 
@@ -56,8 +56,6 @@ namespace RestND.Data
 
             return _db.ExecuteNonQuery(query, 
                         new MySqlParameter("@id", r.Role_ID),
-                        new MySqlParameter("@Email", r.Email),
-                        new MySqlParameter("@Password", r.Password),
                         new MySqlParameter("@Role_Name", r.Role_Name),
                         new MySqlParameter("@Role_Authorization", r.Role_Authorization)) > 0;
 

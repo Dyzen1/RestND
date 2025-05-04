@@ -1,25 +1,22 @@
 ﻿using MySql.Data.MySqlClient;
 using RestND.MVVM.Model;
+using RestND.MVVM.Model.Dishes;
+using RestND.MVVM.Model.Employees;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace RestND.Data
 {
-    public class DishService : BaseService<Dish>
+    public class DishServices : BaseService<Dish>
     {
-<<<<<<< HEAD
-        private readonly Transaction _transaction = new Transaction(_db);
-=======
         private readonly Transaction _transaction;
-        public DishService() : base(DatabaseOperations.Instance)
+
+        #region Constructor
+        public DishServices() : base(DatabaseOperations.Instance)
         {
             _transaction = new Transaction(_db); 
         }
->>>>>>> 5ead172fc20c05b8cefaf649f8c4749d4aebdaca
-
-        #region Constructor
-        public DishService() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
         #endregion
 
         #region Get All Dishes
@@ -36,7 +33,8 @@ namespace RestND.Data
                     Dish_ID = Convert.ToInt32(row["Dish_ID"]),
                     Dish_Name = row["Dish_Name"].ToString(),
                     Dish_Price = Convert.ToInt32(row["Dish_Price"]),
-                    Allergen_Notes = row["Allergen_Notes"].ToString(),
+                    Allergen_Notes = (AllergenNotes)Enum.Parse(typeof(AllergenNotes),
+                        Convert.ToString(row["Allergen_Notes"])),
                     Availability_Status = Convert.ToBoolean(row["Availability_Status"]),
                     Dish_Type = new DishType
                     {

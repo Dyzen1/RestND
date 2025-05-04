@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using RestND.MVVM.Model;
+using RestND.MVVM.Model.Employees;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +9,8 @@ using System.Threading.Tasks;
 
 namespace RestND.Data
 {
-    public class EmployeeServices : BaseService<Employee>
+    public class EmployeeServices() : BaseService<Employee>(DatabaseOperations.Instance)
     {
-        #region Constructor
-        public EmployeeServices() : base(new DatabaseOperations("127.0.0.1", "restnd", "root", "D123456N!")) { }
-        #endregion
-
         #region Get All Employees
         public override List<Employee> GetAll()
         {
@@ -30,7 +27,9 @@ namespace RestND.Data
                     Employee_Role = new Role
                     {
                         Role_Name = row["Role_Name"].ToString()
-                    }
+                    },
+                    Password = Convert.ToString(row["Password"]),
+                    Email = Convert.ToString(row["Email"])
                 });
             }
 

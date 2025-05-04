@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RestND.Data;
 using RestND.MVVM.Model;
+using RestND.MVVM.Model.Employees;
 using System.Collections.ObjectModel;
 
 public partial class RoleViewModel: ObservableObject{

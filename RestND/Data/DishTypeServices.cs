@@ -11,7 +11,6 @@ namespace RestND.Data
 {
     public class DishTypeServices() : BaseService<DishType>(DatabaseOperations.Instance)
     {
-
         #region Get All Dish Types
 
         public override List<DishType> GetAll()

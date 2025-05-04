@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestND", "RestND\RestND.csproj", "{29C86AB7-941C-452F-B13A-223454743BC3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestNDTests", "RestNDTests\RestNDTests.csproj", "{F67F38E5-E5A5-4A16-9EF2-09840D0C5223}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{29C86AB7-941C-452F-B13A-223454743BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29C86AB7-941C-452F-B13A-223454743BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29C86AB7-941C-452F-B13A-223454743BC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F67F38E5-E5A5-4A16-9EF2-09840D0C5223}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F67F38E5-E5A5-4A16-9EF2-09840D0C5223}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F67F38E5-E5A5-4A16-9EF2-09840D0C5223}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F67F38E5-E5A5-4A16-9EF2-09840D0C5223}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

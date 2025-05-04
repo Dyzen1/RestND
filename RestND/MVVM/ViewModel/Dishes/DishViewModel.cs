@@ -14,7 +14,7 @@ namespace RestND.MVVM.ViewModel
         #region Services
 
         // Service for handling Dish database operations
-        private readonly DishService _dishService;
+        private readonly DishServices _dishService;
 
         // Service for handling Product database operations (to load available products)
         private readonly ProductService _productService;
@@ -57,7 +57,7 @@ namespace RestND.MVVM.ViewModel
         // Initializes services and loads data when the ViewModel is created
         public DishViewModel()
         {
-            _dishService = new DishService();
+            _dishService = new DishServices();
             _productService = new ProductService();
 
             LoadDishes();

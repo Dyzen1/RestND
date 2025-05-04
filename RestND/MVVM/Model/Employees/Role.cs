@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestND.MVVM.Model
+namespace RestND.MVVM.Model.Employees
 {
     public class Role
     {
@@ -15,29 +15,6 @@ namespace RestND.MVVM.Model
             get { return _Role_ID; }
             set { _Role_ID = value; }
         }
-        #endregion
-
-        #region Email
-
-        private string? _Email;
-        public string? Email
-        {
-            get { return _Email; }
-            set { _Email = value; }
-        }
-
-
-        #endregion
-
-        #region Password
-        private string? _Password;
-        public string? Password
-        {
-            get { return _Password; }
-            set { _Password = value; }
-        }
-
-
         #endregion
 
         #region Role Name
@@ -62,16 +39,6 @@ namespace RestND.MVVM.Model
         #region constructor
         public Role(string? roleName, AuthorizationStatus roleAuthorization)
         {
-            Role_Name = roleName;
-            Role_Authorization = roleAuthorization;
-        }
-        #endregion
-
-        #region constructor for email and password
-        public Role(string? roleName, AuthorizationStatus roleAuthorization,string? pass,string? email)
-        {
-            Email = email;
-            Password = pass;
             Role_Name = roleName;
             Role_Authorization = roleAuthorization;
         }

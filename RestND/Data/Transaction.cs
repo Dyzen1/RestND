@@ -104,5 +104,4 @@ public Transaction(DatabaseOperations db)
     }
     #endregion
 
-
 }
