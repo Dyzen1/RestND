@@ -30,5 +30,24 @@ namespace RestND.Validations
             }
             return true;
         }
+
+
+        //only for the id's we accept from user(employee id and product id).
+        public static bool isIdValid(string id, out string errorMessage) 
+        {
+            errorMessage = string.Empty;
+            if (string.IsNullOrEmpty(id))
+            {
+                errorMessage = "Pleas insert an ID!";
+                return false;
+            }
+            string pattern = @"^\d{9}$";
+            if (!Regex.IsMatch(id, pattern))
+            {
+                errorMessage = "Invalid ID!";
+                return false;
+            }
+            return true;
+        }
     }
 }

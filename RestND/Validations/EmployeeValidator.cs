@@ -22,19 +22,10 @@ namespace RestND.Helpers
         }
         public bool employeeID_Validation(out string errorMessage)
         {
+            if (!isIdValid(employee.Employee_ID.ToString(), out errorMessage))
+                return false;
+
             int id = employee.Employee_ID;
-            errorMessage = string.Empty;
-            if (string.IsNullOrEmpty(employee.Employee_ID.ToString()))
-            {
-                errorMessage = "Insert ID!";
-                return false;
-            }
-            string pattern = @"^\d{9}$";
-            if(!Regex.IsMatch(employee.Employee_ID.ToString(), pattern))
-            {
-                errorMessage = "Invalid ID!";
-                return false;
-            }
             EmployeeServices employeeServices = new EmployeeServices();
             List<Employee> employees = employeeServices.GetAll();
             if (!employees.Any(employee => employee.Employee_ID == id))
