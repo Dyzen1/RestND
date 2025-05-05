@@ -5,20 +5,20 @@ using System.Collections.Generic;
 
 namespace RestND.Data
 {
-    public class ProductService() : BaseService<Product>(DatabaseOperations.Instance)
+    public class ProductService() : BaseService<Inventory>(DatabaseOperations.Instance)
     {
         #region Get All Products
-        public override List<Product> GetAll()
+        public override List<Inventory> GetAll()
         {
-            var products = new List<Product>();
+            var products = new List<Inventory>();
             string query = "SELECT * FROM product";
             var rows = _db.ExecuteReader(query);
 
             foreach (var row in rows)
             {
-                products.Add(new Product
+                products.Add(new Inventory
                 {
-                    Product_ID = Convert.ToInt32(row["Product_ID"]),
+                    Product_ID = row["Product_ID"].ToString(),      
                     Product_Name = row["Product_Name"].ToString(),
                     Quantity_Available = Convert.ToInt32(row["Quantity_Available"])
                 });
@@ -29,7 +29,7 @@ namespace RestND.Data
         #endregion
 
         #region Add Product
-        public override bool Add(Product p)
+        public override bool Add(Inventory p)
         {
             string query = "INSERT INTO product (Product_Name, Quantity_Available) VALUES (@name, @qty)";
             return _db.ExecuteNonQuery(query,
@@ -39,7 +39,7 @@ namespace RestND.Data
         #endregion
 
         #region Update Product
-        public override bool Update(Product p)
+        public override bool Update(Inventory p)
         {
             string query = "UPDATE product SET Product_Name = @name, Quantity_Available = @qty WHERE Product_ID = @id";
             return _db.ExecuteNonQuery(query,
@@ -50,7 +50,7 @@ namespace RestND.Data
         #endregion
 
         #region Delete Product
-        public override bool Delete(int productId)
+        public override bool Delete(string productId)
         {
             string query = "DELETE FROM product WHERE Product_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", productId)) > 0;

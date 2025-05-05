@@ -10,6 +10,14 @@ namespace RestND.MVVM.Model.Orders
 {
     public class Order
     {
+        #region Order ID
+        private string _Order_ID;
+        public string Order_ID
+        {
+            get { return _Order_ID; }
+            set { _Order_ID = value; }
+        }
+        #endregion
 
         #region Employee
         private Employee _AssignedEmployee;
@@ -21,17 +29,16 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region Dish
-        private Dish _Dish;
+        #region Amount of dish in order
+        private AmountOfDIshesInOrder _AmountOfDIshesInOrder;
 
-        public Dish Dish
+        public AmountOfDIshesInOrder AmountOfDIshesInOrder
         {
-            get { return _Dish; }
-            set { _Dish = value; }
+            get { return _AmountOfDIshesInOrder; }
+            set { _AmountOfDIshesInOrder = value; }
         }
-
-
         #endregion
+
 
         #region Order count
         private static int _OrderCount = 0;
@@ -53,13 +60,13 @@ namespace RestND.MVVM.Model.Orders
 
         #region constructor
 
-        public Order( Employee AssignedEmployee, Dish dish, Table table)
+        public Order( Employee AssignedEmployee,  Table table,AmountOfDIshesInOrder amount)
         {
   
             assignedEmployee = AssignedEmployee;
-            Dish = dish;
             Table = table;
             Table.Table_Status = false;
+            AmountOfDIshesInOrder = amount;
             _OrderCount++;
         }
         #endregion

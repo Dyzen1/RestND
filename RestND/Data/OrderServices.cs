@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RestND.Validations
+namespace RestND.Data
 {
-    internal class ProductValidation
+    public class OrderServices
     {
+
+
+
     }
 }

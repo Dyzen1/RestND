@@ -63,7 +63,7 @@ namespace RestND.Data
         #endregion
 
         #region Delete Role
-        public override bool Delete(int roleId)
+        public override bool Delete(string roleId)
         {
 
             string query = "DELETE FROM role WHERE Role_ID = @id";

@@ -8,9 +8,9 @@ namespace RestND.MVVM.Model.Employees
 {
     public class Role
     {
-        #region Id
-        private int _Role_ID;
-        public int Role_ID
+        #region Role Id
+        private string _Role_ID;
+        public string Role_ID
         {
             get { return _Role_ID; }
             set { _Role_ID = value; }

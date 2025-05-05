@@ -10,9 +10,9 @@ namespace RestND.MVVM.Model.Tables
     {
         #region Table ID
 
-        private int _Table_ID;
+        private string _Table_ID;
 
-        public int Table_ID
+        public string Table_ID
         {
             get { return _Table_ID; }
             set { _Table_ID = value; }
