@@ -20,7 +20,7 @@ namespace RestND.Data
             {
                 tables.Add(new Table
                 {
-                    Table_ID = Convert.ToInt32(row["Table_ID"]),
+                    Table_ID = row["Table_ID"].ToString(),
                     Table_Number = Convert.ToInt32(row["Table_Number"]),
                     Table_Status = Convert.ToBoolean(row["Table_Status"])
                 });
@@ -60,7 +60,7 @@ namespace RestND.Data
         #endregion
 
         #region Delete Table
-        public override bool Delete(int tableId){
+        public override bool Delete(string tableId){
 
             string query = "DELETE FROM table WHERE Table_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", tableId)) > 0;

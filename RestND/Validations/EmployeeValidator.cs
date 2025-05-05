@@ -1,23 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using RestND.Validations;
 using RestND.MVVM.Model.Employees;
 using RestND.Data;
-using System.Data;
 
-
-
-namespace RestND.Helpers
+namespace RestND.Validations
 {
-    public class EmployeeValidator : GeneralValidations
+    public static class EmployeeValidator
     {
-        Employee employee;
-        public EmployeeValidator(Employee employee)
+        public static Dictionary<string, List<string>> ValidateFields(Employee employee, List<Employee> existingEmployees, bool checkEmailExists = true, bool checkIdExists = true)
         {
+<<<<<<< HEAD
             this.employee = employee;
         }
         public bool employeeID_Validation(out string errorMessage)
@@ -32,10 +26,16 @@ namespace RestND.Helpers
             EmployeeServices employeeServices = new EmployeeServices();
             List<Employee> employees = employeeServices.GetAll();
             if (!employees.Any(employee => employee.Employee_ID == id))
+=======
+            var errors = new Dictionary<string, List<string>>();
+
+            // Employee ID validation
+            if (employee.Employee_ID <= 0)
+>>>>>>> 0f9430044a1547d6411c3a65439a5284440b0196
             {
-                errorMessage = "Employee with this ID already exists!";
-                return false;
+                AddError(errors, nameof(employee.Employee_ID), "Employee ID must be greater than 0!");
             }
+<<<<<<< HEAD
             string pattern = @"^\d{9}$";
             if (!Regex.IsMatch(id.ToString(), pattern))
             {
@@ -49,44 +49,62 @@ namespace RestND.Helpers
             errorMessage = string.Empty;
             string email = employee.Email;
             if (string.IsNullOrEmpty(employee.Email))
+=======
+
+            if (checkIdExists && existingEmployees.Any(e => e.Employee_ID == employee.Employee_ID))
+>>>>>>> 0f9430044a1547d6411c3a65439a5284440b0196
             {
-                errorMessage = "Insert email!";
-                return false;
+                AddError(errors, nameof(employee.Employee_ID), "Employee with this ID already exists!");
             }
-            EmployeeServices employeeServices = new EmployeeServices();
-            List<Employee> employees = employeeServices.GetAll();
-            if (!employees.Any(employee => employee.Email == email))
+
+            // Email validation
+            if (string.IsNullOrWhiteSpace(employee.Email))
             {
-                errorMessage = "Employee with this email already exists!";
-                return false;
+                AddError(errors, nameof(employee.Email), "Email is required!");
             }
-            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-            if(!Regex.IsMatch(email, pattern))
+            else
             {
-                errorMessage = "Invalid email!";
-                return false;
+                string emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+                if (!Regex.IsMatch(employee.Email, emailPattern))
+                {
+                    AddError(errors, nameof(employee.Email), "Invalid email format!");
+                }
+
+                if (checkEmailExists && existingEmployees.Any(e => e.Email.Equals(employee.Email, StringComparison.OrdinalIgnoreCase)))
+                {
+                    AddError(errors, nameof(employee.Email), "Employee with this email already exists!");
+                }
             }
-            return true;
+
+            // Password validation
+            if (string.IsNullOrWhiteSpace(employee.Password))
+            {
+                AddError(errors, nameof(employee.Password), "Password is required!");
+            }
+            else
+            {
+                if (employee.Password.Length < 6 || employee.Password.Length > 12)
+                {
+                    AddError(errors, nameof(employee.Password), "Password must be between 6 and 12 characters!");
+                }
+
+                bool hasUpper = employee.Password.Any(char.IsUpper);
+                bool hasLower = employee.Password.Any(char.IsLower);
+                if (!(hasUpper && hasLower))
+                {
+                    AddError(errors, nameof(employee.Password), "Password must contain both uppercase and lowercase letters!");
+                }
+            }
+
+            return errors;
         }
 
-        public bool employeePassword_Validation(out string errorMessage)
+        // Adds an error to the dictionary
+        private static void AddError(Dictionary<string, List<string>> dict, string key, string message)
         {
-            errorMessage = string.Empty;
-            if (string.IsNullOrEmpty(employee.Password))
-            {
-                errorMessage = "Insert password!";
-                return false;
-            }
-
-            if (employee.Password.Length < 6 || employee.Password.Length > 12)
-                return false;
-
-            bool hasUpper = employee.Password.Any(char.IsUpper);
-            bool hasLower = employee.Password.Any(char.IsLower);
-            return hasUpper && hasLower;
-
+            if (!dict.ContainsKey(key))
+                dict[key] = new List<string>();
+            dict[key].Add(message);
         }
-    
-
     }
 }

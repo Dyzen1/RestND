@@ -13,7 +13,7 @@ namespace RestNDTests
         {
             var services = new ProductService();
 
-            var product = new Product
+            var product = new Inventory
             {
                Product_ID = 1,
                 Product_Name = "Test Product",

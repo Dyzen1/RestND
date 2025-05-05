@@ -30,7 +30,7 @@ namespace RestND.Data
             {
                 dishes.Add(new Dish
                 {
-                    Dish_ID = Convert.ToInt32(row["Dish_ID"]),
+                    Dish_ID = row["Dish_ID"].ToString(),
                     Dish_Name = row["Dish_Name"].ToString(),
                     Dish_Price = Convert.ToInt32(row["Dish_Price"]),
                     Allergen_Notes = (AllergenNotes)Enum.Parse(typeof(AllergenNotes),
@@ -55,7 +55,7 @@ namespace RestND.Data
         #endregion
 
         #region Delete Dish
-        public override bool Delete(int dishId)
+        public override bool Delete(string dishId)
         { 
           return _transaction.Delete(dishId);
 

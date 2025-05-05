@@ -15,19 +15,19 @@ namespace RestND.MVVM.ViewModel
         #region Observable Properties
 
         [ObservableProperty]
-        private ObservableCollection<Product> products = new();
+        private ObservableCollection<Inventory> products = new();
 
         [ObservableProperty]
-        private Product selectedProduct;
+        private Inventory selectedProduct;
 
-        partial void OnSelectedProductChanged(Product value)
+        partial void OnSelectedProductChanged(Inventory value)
         {
             DeleteProductCommand.NotifyCanExecuteChanged();
             UpdateProductCommand.NotifyCanExecuteChanged();
         }
 
         [ObservableProperty]
-        private Product newProduct = new();
+        private Inventory newProduct = new();
 
         #endregion
 
@@ -70,7 +70,7 @@ namespace RestND.MVVM.ViewModel
                 if (success)
                 {
                     LoadProducts();
-                    NewProduct = new Product(); //  call the setter so UI refreshes
+                    NewProduct = new Inventory(); //  call the setter so UI refreshes
                 }
             }
         }

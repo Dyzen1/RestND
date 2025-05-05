@@ -10,7 +10,7 @@ public Transaction(DatabaseOperations db)
     _db = db;
 }
     #region Delete and Add Dish
-    public  bool Delete(int dishId)
+    public  bool Delete(string dishId)
     {
         _db.OpenConnection();
         using var transaction = _db.Connection.BeginTransaction();
