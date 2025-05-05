@@ -16,7 +16,7 @@ namespace RestND.Data
         public override List<DishType> GetAll()
         {
             var types = new List<DishType>();
-            var query = "SELECT * FROM DishType";
+            var query = "SELECT * FROM dish_type";
             var rows = _db.ExecuteReader(query);
 
             foreach (var row in rows)

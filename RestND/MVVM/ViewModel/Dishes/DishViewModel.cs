@@ -15,10 +15,15 @@ namespace RestND.MVVM.ViewModel
 
         // Service for handling Dish database operations
         private readonly DishServices _dishService;
+        private readonly DishTypeServices _dishTypeService;
 
         // Service for handling Product database operations (to load available products)
         private readonly ProductService _productService;
 
+      
+
+        [ObservableProperty]
+        private ObservableCollection<DishType> dishTypes = new ();
         #endregion
 
         #region Observable Properties
@@ -56,10 +61,12 @@ namespace RestND.MVVM.ViewModel
 
         // Initializes services and loads data when the ViewModel is created
         public DishViewModel()
+
         {
+            _dishTypeService = new DishTypeServices();
             _dishService = new DishServices();
             _productService = new ProductService();
-
+            dishTypes =new ObservableCollection<DishType>(_dishTypeService.GetAll());
             LoadDishes();
             LoadAvailableProducts();
         }

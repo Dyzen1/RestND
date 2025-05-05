@@ -21,18 +21,6 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region Dish
-        private Dish _Dish;
-
-        public Dish Dish
-        {
-            get { return _Dish; }
-            set { _Dish = value; }
-        }
-
-
-        #endregion
-
         #region Order count
         private static int _OrderCount = 0;
 
@@ -51,13 +39,11 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region constructor
+        #region Constructor
 
-        public Order( Employee AssignedEmployee, Dish dish, Table table)
+        public Order( Employee AssignedEmployee, Table table)
         {
-  
             assignedEmployee = AssignedEmployee;
-            Dish = dish;
             Table = table;
             Table.Table_Status = false;
             _OrderCount++;

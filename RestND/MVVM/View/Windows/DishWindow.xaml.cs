@@ -15,12 +15,12 @@ using System.Windows.Shapes;
 
 namespace RestND.MVVM.View
 {
-    public partial class ProductWindow : Window
+    public partial class DishWindow : Window
     {
-        public ProductWindow()
+        public DishWindow()
         {
             InitializeComponent();
-            this.DataContext = new ProductViewModel();
+            this.DataContext = new DishViewModel();
         }
 
         private void return_Click(object sender, RoutedEventArgs e)

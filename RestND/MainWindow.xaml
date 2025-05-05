@@ -31,7 +31,7 @@
             <Border Grid.Row="1" Grid.ColumnSpan="5" BorderThickness="1" BorderBrush="{DynamicResource LightText}"/>
             <Border Grid.Row="0" Grid.ColumnSpan="5" BorderThickness="1" BorderBrush="{DynamicResource LightText}"/>
             <Border Grid.Row="0" Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource LightText}"/>
-
+            
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="2" >
                 <Button x:Name="MinimizeBtn" Content="_" Width="40" Height="25" 
                         Background="Transparent" BorderBrush="Transparent"

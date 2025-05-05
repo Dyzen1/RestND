@@ -22,10 +22,13 @@ namespace RestND.Helpers
         }
         public bool employeeID_Validation(out string errorMessage)
         {
-            if (!isIdValid(employee.Employee_ID.ToString(), out errorMessage))
-                return false;
-
+            errorMessage = string.Empty;
             int id = employee.Employee_ID;
+            if(string.IsNullOrEmpty(employee.Employee_ID.ToString()))
+            {
+                errorMessage = "Insert ID!";
+                return false;
+            }
             EmployeeServices employeeServices = new EmployeeServices();
             List<Employee> employees = employeeServices.GetAll();
             if (!employees.Any(employee => employee.Employee_ID == id))
@@ -33,7 +36,12 @@ namespace RestND.Helpers
                 errorMessage = "Employee with this ID already exists!";
                 return false;
             }
-
+            string pattern = @"^\d{9}$";
+            if (!Regex.IsMatch(id.ToString(), pattern))
+            {
+                errorMessage = "Invalid ID!";
+                return false;
+            }
             return true;
         }
         public bool employeeEmail_Validation(out string errorMessage)

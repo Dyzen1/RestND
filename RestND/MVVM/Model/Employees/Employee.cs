@@ -79,6 +79,13 @@ namespace RestND.MVVM.Model.Employees
         }
         #endregion
 
+        #region Constructor only w name
+        public Employee(string? employeeName)
+        {
+            Employee_Name = employeeName;
+        }
+        #endregion
+
         #region Default Constructor
         public Employee(){}
         

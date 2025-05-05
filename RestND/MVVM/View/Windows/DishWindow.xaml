@@ -1,4 +1,4 @@
-﻿<Window x:Class="RestND.MVVM.View.DishView"
+﻿<Window x:Class="RestND.MVVM.View.DishWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,21 +7,16 @@
         xmlns:local="clr-namespace:RestND.MVVM.Model"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
+        WindowState="Maximized"
         Title="Manage Dishes" Height="600" Width="900">
 
     <!-- Resources for Enum Binding -->
-    <Window.Resources>
-        <ObjectDataProvider x:Key="DishTypeValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="local:DishType"/>
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-    </Window.Resources>
 
-    <Window.DataContext>
-        <vm:DishViewModel/>
-    </Window.DataContext>
+  
 
+    <Grid>
+        <Image Style="{DynamicResource bg}"/>
+        
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -35,41 +30,42 @@
 
                 <!-- Dish Name -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                    <Label Content="Dish Name:" Width="100"/>
+                    <Label Content="Dish Name:" Width="100" Foreground="{DynamicResource LightText}"/>
                     <TextBox Text="{Binding NewDish.Dish_Name, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
                 </StackPanel>
 
                 <!-- Dish Price -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                    <Label Content="Dish Price:" Width="100"/>
+                        <Label Content="Dish Price:" Width="100" Foreground="{DynamicResource LightText}"/>
                     <TextBox Text="{Binding NewDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
                 </StackPanel>
 
                 <!-- Allergen Notes -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                    <Label Content="Allergen Notes:" Width="100"/>
+                        <Label Content="Allergen Notes:" Width="100" Foreground="{DynamicResource LightText}"/>
                     <TextBox Text="{Binding NewDish.Allergen_Notes, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
                 </StackPanel>
 
                 <!-- Availability Status -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                    <Label Content="Available:" Width="100"/>
+                        <Label Content="Available:" Width="100" Foreground="{DynamicResource LightText}"/>
                     <CheckBox IsChecked="{Binding NewDish.Availability_Status, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <!-- Dish Type -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                    <Label Content="Dish Type:" Width="100"/>
-                    <ComboBox ItemsSource="{Binding Source={StaticResource DishTypeValues}}"
-                              SelectedItem="{Binding NewDish.Dish_Type, UpdateSourceTrigger=PropertyChanged}"
-                              Width="200"/>
-                </StackPanel>
+                        <Label Content="Dish Type:" Width="100" Foreground="{DynamicResource LightText}"/>
+                        <ComboBox ItemsSource="{Binding DishTypes}"
+                            SelectedItem="{Binding NewDish.Dish_Type, UpdateSourceTrigger=PropertyChanged}"
+                                            DisplayMemberPath="DishType_Name"
+                                                 Width="200"/>
+                    </StackPanel>
 
                 <Separator Margin="0,10"/>
 
                 <!-- Select Product to Add -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                    <Label Content="Select Product:" Width="100"/>
+                        <Label Content="Select Product:" Width="100" Foreground="{DynamicResource LightText}"/>
                     <ComboBox ItemsSource="{Binding AvailableProducts}" 
                               SelectedItem="{Binding SelectedAvailableProduct}" 
                               DisplayMemberPath="Product_Name"
@@ -78,7 +74,7 @@
 
                 <!-- Enter Amount Usage -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                    <Label Content="Amount Usage:" Width="100"/>
+                        <Label Content="Amount Usage:" Width="100" Foreground="{DynamicResource LightText}"/>
                     <TextBox Text="{Binding ProductAmountUsage, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
                 </StackPanel>
 
@@ -103,5 +99,6 @@
                      DisplayMemberPath="Dish_Name"/>
         </GroupBox>
 
+    </Grid>
     </Grid>
 </Window>
