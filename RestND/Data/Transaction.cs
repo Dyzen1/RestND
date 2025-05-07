@@ -1,6 +1,7 @@
 using MySql.Data.MySqlClient;
 using RestND.Data;
 using RestND.MVVM.Model;
+using RestND.MVVM.Model.Orders;
 using System;
 
 public class Transaction{
@@ -10,7 +11,7 @@ public Transaction(DatabaseOperations db)
     _db = db;
 }
     #region Delete and Add Dish
-    public  bool Delete(string dishId)
+    public  bool DeleteDish(string dishId)
     {
         _db.OpenConnection();
         using var transaction = _db.Connection.BeginTransaction();
@@ -50,7 +51,7 @@ public Transaction(DatabaseOperations db)
 
 
 
-    public bool Add(Dish d)
+    public bool AddDish(Dish d)
     {
         _db.OpenConnection();
         using var transaction = _db.Connection.BeginTransaction();
@@ -84,6 +85,98 @@ public Transaction(DatabaseOperations db)
             bool productsAdded = productInDishService.AddProductsToDish(newDishId, d.ProductUsage);
 
             if (!productsAdded)
+            {
+                transaction.Rollback();
+                _db.CloseConnection();
+                return false;
+            }
+
+            // 4. Commit transaction if everything succeeded
+            transaction.Commit();
+            _db.CloseConnection();
+            return true;
+        }
+        catch (Exception)
+        {
+            transaction.Rollback();
+            _db.CloseConnection();
+            throw;
+        }
+    }
+    #endregion
+
+    #region Delete and Add Order
+
+    public bool DeleteOrder(string orderId)
+    {
+        _db.OpenConnection();
+        using var transaction = _db.Connection.BeginTransaction();
+
+        try
+        {
+            // 1. Delete from child table first
+            string deleteDishesQuery = "DELETE FROM dish_in_order WHERE Order_ID = @id";
+            _db.ExecuteNonQuery(deleteDishesQuery, _db.Connection, transaction,
+                new MySqlParameter("@id", orderId)
+            );
+
+            // 2. Delete from parent table
+            string deleteOrderQuery = "DELETE FROM order WHERE Order_ID = @id";
+            int rowsAffected = _db.ExecuteNonQuery(deleteOrderQuery, _db.Connection, transaction,
+                new MySqlParameter("@id", orderId)
+            );
+
+            if (rowsAffected == 0)
+            {
+                transaction.Rollback();
+                _db.CloseConnection();
+                return false;
+            }
+
+            transaction.Commit();
+            _db.CloseConnection();
+            return true;
+        }
+        catch (Exception)
+        {
+            transaction.Rollback();
+            _db.CloseConnection();
+            throw;
+        }
+    }
+
+    public bool AddOrder(Order o)
+    {
+        _db.OpenConnection();
+        using var transaction = _db.Connection.BeginTransaction();
+
+        try
+        {
+            // 1. Insert the Order
+            string query = "INSERT INTO order (Employee_Name, Table_Number, Price) " +
+                           "VALUES (@name, @number, @price)";
+
+            bool orderAdded = _db.ExecuteNonQuery(query, _db.Connection, transaction,
+                new MySqlParameter("@name", o.assignedEmployee.Employee_Name),
+                new MySqlParameter("@price", o.Table.Table_Number),
+                new MySqlParameter("@notes", o.Bill.Price)
+            ) > 0;
+
+            if (!orderAdded)
+            {
+                transaction.Rollback();
+                _db.CloseConnection();
+                return false;
+            }
+
+            // 2. Get the new Order ID
+            int newOrderId = Convert.ToInt32(_db.ExecuteScalar("SELECT LAST_INSERT_ID();", _db.Connection, transaction));
+
+            // 3. Insert Dishes 
+            var dishInOrderServices = new DishInOrderServices();
+            bool dishesAdded = dishInOrderServices.AddDishesToOrder(newOrderId, o.DishInOrder);
+
+            if (!dishesAdded)
             {
                 transaction.Rollback();
                 _db.CloseConnection();

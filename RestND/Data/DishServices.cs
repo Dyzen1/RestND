@@ -50,14 +50,14 @@ namespace RestND.Data
         #region Add Dish
         public override bool Add(Dish d)
         {
-            return _transaction.Add(d);
+            return _transaction.AddDish(d);
         }
         #endregion
 
         #region Delete Dish
         public override bool Delete(string dishId)
         { 
-          return _transaction.Delete(dishId);
+          return _transaction.DeleteDish(dishId);
 
         }
         #endregion

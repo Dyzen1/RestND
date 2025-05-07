@@ -29,13 +29,13 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region Amount of dish in order
-        private AmountOfDIshesInOrder _AmountOfDIshesInOrder;
+        #region dishes in order
+        private List<DishInOrder> _DishInOrder = new();
 
-        public AmountOfDIshesInOrder AmountOfDIshesInOrder
+        public List<DishInOrder> DishInOrder 
         {
-            get { return _AmountOfDIshesInOrder; }
-            set { _AmountOfDIshesInOrder = value; }
+            get { return _DishInOrder; }
+            set { _DishInOrder = value; }
         }
         #endregion
 
@@ -57,13 +57,23 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region Constructor
-        public Order( Employee AssignedEmployee,  Table table,AmountOfDIshesInOrder amount)
+        #region Order Bill
+        private Bill _Bill;
+        public Bill Bill
         {
-            assignedEmployee = AssignedEmployee;
-            Table = table;
-            Table.Table_Status = false;
-            AmountOfDIshesInOrder = amount;
+            get { return _Bill; }
+            set { _Bill = value; }
+        }
+        #endregion
+
+        #region Constructor
+        public Order( Employee AssignedEmployee,  Table table, List<DishInOrder> DishInOrder, Bill Bill)
+        {
+            this.Bill = Bill;
+            this.assignedEmployee = AssignedEmployee;
+            this.Table = table;
+            this.Table.Table_Status = false;
+            this.DishInOrder = DishInOrder;
             _OrderCount++;
         }
         #endregion
