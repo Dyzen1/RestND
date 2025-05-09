@@ -9,7 +9,8 @@ namespace RestND.Data
     {
         private readonly DatabaseOperations _db = DatabaseOperations.Instance;
 
-        
+        // Add products to a dish
+        #region Add Products to Dish
         public bool AddProductsToDish(int dishId, List<ProductUsageInDish> productUsages)
         {
             var affectedRows = 0;
@@ -28,10 +29,10 @@ namespace RestND.Data
 
             return affectedRows > 0;
         }
-
-
+        #endregion
 
         // Delete a specific product from a specific dish
+        #region Delete Product from Dish
         public bool DeleteProductFromDish(int dishId, int productId)
         {
             var query = "DELETE FROM product_in_dish WHERE Dish_ID = @dishId AND Product_ID = @productId";
@@ -43,9 +44,10 @@ namespace RestND.Data
 
             return affectedRows > 0;
         }
-
+        #endregion
 
         // Update a product usage in a dish
+        #region Update Product in Dish
         public bool UpdateProductInDish(int dishId, int productId, double newAmountUsage)
         {
             var query = "UPDATE product_in_dish " +
@@ -60,5 +62,6 @@ namespace RestND.Data
 
             return affectedRows > 0;
         }
+        #endregion
     }
 }

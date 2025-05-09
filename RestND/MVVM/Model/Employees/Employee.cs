@@ -1,4 +1,4 @@
-﻿using RestND.Helpers;
+﻿using RestND;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,6 +76,13 @@ namespace RestND.MVVM.Model.Employees
             Employee_ID = employeeId;
             Employee_Name = employeeName;
             Employee_Role = employeeRole;
+        }
+        #endregion
+
+        #region Constructor only w name
+        public Employee(string? employeeName)
+        {
+            Employee_Name = employeeName;
         }
         #endregion
 

@@ -10,8 +10,8 @@ namespace RestND.MVVM.Model.Orders
     {
 
         #region Bill ID
-        private int _Bill_ID;
-        public int Bill_ID
+        private string _Bill_ID;
+        public string Bill_ID
         {
             get { return _Bill_ID; }
             set { _Bill_ID = value; }

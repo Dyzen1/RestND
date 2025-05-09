@@ -60,7 +60,7 @@ namespace RestND.Data
         #endregion
 
         #region Delete Product
-        public override bool Delete(int employeeID)
+        public override bool Delete(string employeeID)
         {
             string query = "DELETE FROM Employee WHERE Employee_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", employeeID)) > 0;

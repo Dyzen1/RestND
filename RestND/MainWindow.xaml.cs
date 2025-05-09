@@ -23,7 +23,7 @@ namespace RestND
         public MainWindow()
         {
             InitializeComponent();
-            sideBar.ButtonClicked += OpenInventory; //inventory window.
+            sideBar.ButtonClicked += OpenInventory;
         }
             
         //method for being able to move the window with the mouse. 
@@ -51,15 +51,13 @@ namespace RestND
             Close();
             //Application.Current.Shutdown(); - if we want the app to totally close. 
         }
-
-        //method for opening inventory window.
-        private void OpenInventory()
+         private void OpenInventory()
         {
             var inventoryWindow = new ProductWindow();
             {
                 WindowState = WindowState.Maximized;
             }
-            inventoryWindow.ShowDialog();
+            inventoryWindow.Show();
             this.Close();
         }
 

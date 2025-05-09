@@ -16,14 +16,14 @@ namespace RestND.Data
         public override List<DishType> GetAll()
         {
             var types = new List<DishType>();
-            var query = "SELECT * FROM DishType";
+            var query = "SELECT * FROM dish_type";
             var rows = _db.ExecuteReader(query);
 
             foreach (var row in rows)
             {
                 types.Add(new DishType
                 {
-                    DishType_ID = Convert.ToInt32(row["DishType_ID"]),
+                    DishType_ID = row["DishType_ID"].ToString(),
                     DishType_Name = row["DishType_Name"].ToString()
                 });
             }
@@ -56,7 +56,7 @@ namespace RestND.Data
         #endregion
 
         #region Delete Discount
-        public override bool Delete(int DishType_ID)
+        public override bool Delete(string DishType_ID)
         {
             string query = "DELETE FROM DishType WHERE DishType_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", DishType_ID)) > 0;

@@ -10,18 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace RestND.MVVM.View
+namespace RestND.MVVM.View.Windows
 {
-    /// <summary>
-    /// Interaction logic for DishView.xaml
-    /// </summary>
-    public partial class DishView : Window
+    public partial class OrderWindow : Window
     {
-        public DishView()
-        {
-            InitializeComponent();
-        }
+        //public OrderWindow()
+        //{
+        //    InitializeComponent();
+        //    this.DataContext = new OrderViewModel();
+        //}
     }
 }

@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace RestND.MVVM.Model
 {
-    public class Product
+    public class Inventory
     {
-        #region Product ID
+        #region Inventroy ID
  
-        private int _Product_ID;
+        private string _Product_ID;
 
-        public int Product_ID
+        public string Product_ID
         {
             get { return _Product_ID; }
             set { _Product_ID = value; }
@@ -20,7 +20,7 @@ namespace RestND.MVVM.Model
 
         #endregion
 
-        #region Product Name
+        #region Inventroy Name
 
         private string? _Product_Name;
 
@@ -45,7 +45,7 @@ namespace RestND.MVVM.Model
 
         #region Constructor
 
-        public Product(int productId, string productName, int quantityAvailable)
+        public Inventory(string productId, string productName, int quantityAvailable)
         {
             Product_ID = productId;
             Product_Name = productName;
@@ -57,12 +57,10 @@ namespace RestND.MVVM.Model
         #region Default Constructor
 
 
-        public Product()
+        public Inventory()
         {
         }
         #endregion
-
-
 
 
     }

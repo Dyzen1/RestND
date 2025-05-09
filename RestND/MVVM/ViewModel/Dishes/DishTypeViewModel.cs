@@ -3,12 +3,27 @@ using RestND.Data;
 using RestND.MVVM.Model;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 public partial class DishTypeViewModel : ObservableObject
 {
+
     #region Services
     // Service for handling DishType database operations
     private readonly DishTypeServices _dishTypeService;
+    #endregion
+
+    #region propery
+    public List<DishType> DishTypeList { get; set; }
+
+    #endregion
+
+    #region Constractor
+    public DishTypeViewModel()
+    {
+        _dishTypeService = new DishTypeServices();
+        DishTypeList = _dishTypeService.GetAll();
+    }
     #endregion
 
     #region Observable Properties

@@ -1,66 +1,53 @@
-﻿using ControlzEx.Standard;
-using RestND.Data;
-using RestND.MVVM.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RestND.MVVM.Model;
+using RestND.Data;
 
 namespace RestND.Validations
 {
-    public class DishValidator : GeneralValidations
+    public static class DishValidator
     {
-        Dish dish;
-
-        public DishValidator(Dish dish)
+        // Method to validate dish fields
+        public static Dictionary<string, List<string>> ValidateFields(Dish dish, List<Dish> existingDishes)
         {
-            this.dish = dish;
+            var errors = new Dictionary<string, List<string>>();
+
+            // Dish Name Validation
+            if (string.IsNullOrWhiteSpace(dish.Dish_Name))
+            {
+                AddError(errors, nameof(dish.Dish_Name), "Dish name is required!");
+            }
+            else if (dish.Dish_Name.Length < 3)
+            {
+                AddError(errors, nameof(dish.Dish_Name), "Dish name must be at least 3 characters long.");
+            }
+            else if (existingDishes.Any(d => d.Dish_Name.Equals(dish.Dish_Name, StringComparison.OrdinalIgnoreCase)))
+            {
+                AddError(errors, nameof(dish.Dish_Name), "Dish already exists!");
+            }
+
+            // Dish Price Validation
+            if (dish.Dish_Price <= 0)
+            {
+                AddError(errors, nameof(dish.Dish_Price), "Price can't be lower than zero.");
+            }
+
+            // Dish Product Usage Validation
+            if (dish.ProductUsage == null || dish.ProductUsage.Count == 0)
+            {
+                AddError(errors, nameof(dish.ProductUsage), "Dish has no products!");
+            }
+
+            return errors;
         }
 
-        public bool checkIfNameExists(out string errorMessage)
+        // Helper method to add errors to dictionary
+        private static void AddError(Dictionary<string, List<string>> dict, string key, string message)
         {
-            errorMessage = string.Empty;
-            string name = this.dish.Dish_Name;
-            DishServices dishServices = new DishServices();
-            List<Dish> dishes = dishServices.GetAll();
-            if(!dishes.Any(dish => dish.Dish_Name==name))
-            {
-                errorMessage = "Dish already exists!";
-                return false;
-            }
-            return true;
+            if (!dict.ContainsKey(key))
+                dict[key] = new List<string>();
+            dict[key].Add(message);
         }
-
-        public bool dishPrice_Validation(out string errorMessage)
-        {
-            errorMessage = string.Empty;
-            if(string.IsNullOrEmpty(this.dish.Dish_Price.ToString()))
-            {
-                errorMessage = "Insert price!";
-                return false;
-            }
-            if (this.dish.Dish_Price <= 0)
-            {
-                errorMessage = "Price can't be lower then zero.";
-                return false;
-            }
-            return true;
-        }
-
-        public bool doesHaveProducts(out string errorMessage)
-        {
-            errorMessage = string.Empty;
-            if (this.dish.ProductUsage.Count == 0)
-            {
-                errorMessage = "Dish has no products!";
-                return false;
-            }
-            return true;
-        }
-
-
-
-
     }
 }

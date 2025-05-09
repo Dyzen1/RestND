@@ -10,9 +10,9 @@ namespace RestND.MVVM.Model
     {
         #region Dish ID
 
-        private int _DishType_ID;
+        private string _DishType_ID;
 
-        public int DishType_ID
+        public string DishType_ID
         {
             get { return _DishType_ID; }
             set { _DishType_ID = value; }

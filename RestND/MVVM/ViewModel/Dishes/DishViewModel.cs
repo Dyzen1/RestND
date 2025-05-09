@@ -15,10 +15,15 @@ namespace RestND.MVVM.ViewModel
 
         // Service for handling Dish database operations
         private readonly DishServices _dishService;
+        private readonly DishTypeServices _dishTypeService;
 
         // Service for handling Product database operations (to load available products)
         private readonly ProductService _productService;
 
+      
+
+        [ObservableProperty]
+        private ObservableCollection<DishType> dishTypes = new ();
         #endregion
 
         #region Observable Properties
@@ -29,7 +34,7 @@ namespace RestND.MVVM.ViewModel
 
         // List of available products that can be added to a dish
         [ObservableProperty]
-        private ObservableCollection<Product> availableProducts = new();
+        private ObservableCollection<Inventory> availableProducts = new();
 
         // List of selected products (with amount) that will be used in the new dish
         [ObservableProperty]
@@ -56,10 +61,12 @@ namespace RestND.MVVM.ViewModel
 
         // Initializes services and loads data when the ViewModel is created
         public DishViewModel()
+
         {
+            _dishTypeService = new DishTypeServices();
             _dishService = new DishServices();
             _productService = new ProductService();
-
+            dishTypes =new ObservableCollection<DishType>(_dishTypeService.GetAll());
             LoadDishes();
             LoadAvailableProducts();
         }
@@ -94,7 +101,7 @@ namespace RestND.MVVM.ViewModel
 
         // Product selected by user from the AvailableProducts list
         [ObservableProperty]
-        private Product selectedAvailableProduct;
+        private Inventory selectedAvailableProduct;
 
         // Amount of product usage entered by the user (in grams or ml)
         [ObservableProperty]
