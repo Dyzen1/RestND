@@ -19,13 +19,13 @@ public Transaction(DatabaseOperations db)
         try
         {
             // 1. Delete from child table first
-            string deleteProductsQuery = "DELETE FROM product_in_dish WHERE Dish_ID = @id";
+            string deleteProductsQuery = "DELETE FROM products_in_dish WHERE Dish_ID = @id";
             _db.ExecuteNonQuery(deleteProductsQuery, _db.Connection, transaction,
                 new MySqlParameter("@id", dishId)
             );
 
             // 2. Delete from parent table
-            string deleteDishQuery = "DELETE FROM dish WHERE Dish_ID = @id";
+            string deleteDishQuery = "DELETE FROM dishes WHERE Dish_ID = @id";
             int rowsAffected = _db.ExecuteNonQuery(deleteDishQuery, _db.Connection, transaction,
                 new MySqlParameter("@id", dishId)
             );
@@ -59,7 +59,7 @@ public Transaction(DatabaseOperations db)
         try
         {
             // 1. Insert the Dish
-            string query = "INSERT INTO dish (Dish_Name, Dish_Price, Allergen_Notes, Availability_Status, Dish_Type) " +
+            string query = "INSERT INTO dishes (Dish_Name, Dish_Price, Allergen_Notes, Availability_Status, Dish_Type) " +
                            "VALUES (@name, @price, @notes, @status, @type)";
 
             bool dishAdded = _db.ExecuteNonQuery(query, _db.Connection, transaction,
@@ -115,13 +115,13 @@ public Transaction(DatabaseOperations db)
         try
         {
             // 1. Delete from child table first
-            string deleteDishesQuery = "DELETE FROM dish_in_order WHERE Order_ID = @id";
+            string deleteDishesQuery = "DELETE FROM dishes_in_order WHERE Order_ID = @id";
             _db.ExecuteNonQuery(deleteDishesQuery, _db.Connection, transaction,
                 new MySqlParameter("@id", orderId)
             );
 
             // 2. Delete from parent table
-            string deleteOrderQuery = "DELETE FROM order WHERE Order_ID = @id";
+            string deleteOrderQuery = "DELETE FROM orders WHERE Order_ID = @id";
             int rowsAffected = _db.ExecuteNonQuery(deleteOrderQuery, _db.Connection, transaction,
                 new MySqlParameter("@id", orderId)
             );
@@ -153,7 +153,7 @@ public Transaction(DatabaseOperations db)
         try
         {
             // 1. Insert the Order
-            string query = "INSERT INTO order (Employee_Name, Table_Number, Price) " +
+            string query = "INSERT INTO orders (Employee_Name, Table_Number, Price) " +
                            "VALUES (@name, @number, @price)";
 
             bool orderAdded = _db.ExecuteNonQuery(query, _db.Connection, transaction,

@@ -16,7 +16,7 @@ namespace RestND.Data
             var affectedRows = 0;
 
 
-            var query = "INSERT INTO product_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
+            var query = "INSERT INTO products_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
             foreach (var usage in productUsages)
             {
                 affectedRows = _db.ExecuteNonQuery(query,
@@ -35,7 +35,7 @@ namespace RestND.Data
         #region Delete Product from Dish
         public bool DeleteProductFromDish(int dishId, int productId)
         {
-            var query = "DELETE FROM product_in_dish WHERE Dish_ID = @dishId AND Product_ID = @productId";
+            var query = "DELETE FROM products_in_dish WHERE Dish_ID = @dishId AND Product_ID = @productId";
 
             var affectedRows = _db.ExecuteNonQuery(query,
                 new MySqlParameter("@dishId", dishId),
@@ -50,7 +50,7 @@ namespace RestND.Data
         #region Update Product in Dish
         public bool UpdateProductInDish(int dishId, int productId, double newAmountUsage)
         {
-            var query = "UPDATE product_in_dish " +
+            var query = "UPDATE products_in_dish " +
                         "SET Amount_Usage = @amount " +
                         "WHERE Dish_ID = @dishId AND Product_ID = @productId";
 

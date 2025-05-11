@@ -10,7 +10,6 @@ namespace RestND.MVVM.Model.Orders
     {
         #region Discount ID
 
-
         private string _Discount_ID;
 
         public string Discount_ID

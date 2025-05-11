@@ -12,7 +12,7 @@ namespace RestND.Data
         public override List<Table> GetAll()
         {
             List<Table> tables = new List<Table>();
-            string query = "SELECT * FROM 'table'";
+            string query = "SELECT * FROM 'tables'";
 
             var rows = _db.ExecuteReader(query);
 
@@ -32,7 +32,7 @@ namespace RestND.Data
 
         #region Add Table
         public  override bool Add(Table t){
-         string query = "INSERT INTO table (Table_ID, Table_Number ,Y , X) VALUES (@id,@tablenum ,@y , @x)";
+         string query = "INSERT INTO tables (Table_ID, Table_Number ,Y , X) VALUES (@id,@tablenum ,@y , @x)";
 
             return _db.ExecuteNonQuery(query,
                         new MySqlParameter("@id", t.Table_ID),
@@ -47,7 +47,7 @@ namespace RestND.Data
         public override bool Update(Table t){
             if(t.Table_Status != true) return false;
 
-            string query = "UPDATE table SET Table_Number =@tablenum , Y = @y , X = @x WHERE Table_ID = @id";
+            string query = "UPDATE tables SET Table_Number =@tablenum , Y = @y , X = @x WHERE Table_ID = @id";
 
             return _db.ExecuteNonQuery(query,
                         new MySqlParameter("@id", t.Table_ID),
@@ -62,7 +62,7 @@ namespace RestND.Data
         #region Delete Table
         public override bool Delete(string tableId){
 
-            string query = "DELETE FROM table WHERE Table_ID = @id";
+            string query = "DELETE FROM tables WHERE Table_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", tableId)) > 0;
         }
         #endregion

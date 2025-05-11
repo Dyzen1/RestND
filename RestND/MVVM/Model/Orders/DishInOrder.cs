@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace RestND.MVVM.Model.Orders
 {
@@ -36,12 +32,12 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region Amount Of Dish
-        private int _Amount;
-        public int Amount
+        #region Quantity Of Dish
+        private int _Quantity;
+        public int Quantity
         {
-            get{return _Amount;}
-            set {_Amount = value; }
+            get{return _Quantity; }
+            set { _Quantity = value; }
         }
         #endregion
 

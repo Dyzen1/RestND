@@ -2,14 +2,9 @@
 using RestND.MVVM.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mysqlx.Crud;
 using MySql.Data.MySqlClient;
-using System.Windows.Documents;
 using RestND.MVVM.Model.Orders;
-using RestND.MVVM.Model.Dishes;
+using RestND.MVVM.Model.Tables;
 
 namespace RestND.Data
 {
@@ -28,7 +23,7 @@ namespace RestND.Data
         public override List<Order> GetAll()
         {
             var orders = new List<Order>();
-            string query = "SELECT * FROM order";
+            string query = "SELECT * FROM orders";
             var rows = _db.ExecuteReader(query);
 
             foreach (var row in rows)
@@ -36,13 +31,13 @@ namespace RestND.Data
                 orders.Add(new Order
                 {
                     Order_ID = row["Order_ID"].ToString(),
-                    Employee_Name = new Employee
+                    assignedEmployee = new Employee
                     {
                         Employee_Name = row["Employee_Name"].ToString()
                     },
-                    Table_Number = new Table
+                    Table = new Table
                     {
-                        Table_Number = row["Table_Number"].ToString()
+                        Table_Number = Convert.ToInt32(row["Table_Number"])
                     },
                     Bill = new Bill
                     {
@@ -56,9 +51,9 @@ namespace RestND.Data
         #endregion
 
         #region Add Order
-        public bool Add(Order o)
+        public override bool Add(Order item)
         {
-            return _transaction.AddOrder(o);
+            return _transaction.AddOrder(item);
         }
         #endregion
 
@@ -72,7 +67,7 @@ namespace RestND.Data
         #region Update Order
         public override bool Update(Order o)
         {
-            string query = "UPDATE order SET Order_ID = @id, Employee_Name = @name, Table_Number = @number, Bill_Price = @price" +
+            string query = "UPDATE orders SET Order_ID = @id, Employee_Name = @name, Table_Number = @number, Bill_Price = @price" +
                            "WHERE Dish_ID = @id";
 
             return _db.ExecuteNonQuery(query,

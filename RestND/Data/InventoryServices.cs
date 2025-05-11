@@ -11,7 +11,7 @@ namespace RestND.Data
         public override List<Inventory> GetAll()
         {
             var products = new List<Inventory>();
-            string query = "SELECT * FROM product";
+            string query = "SELECT * FROM inventory";
             var rows = _db.ExecuteReader(query);
 
             foreach (var row in rows)
@@ -31,7 +31,7 @@ namespace RestND.Data
         #region Add Product
         public override bool Add(Inventory p)
         {
-            string query = "INSERT INTO product (Product_Name, Quantity_Available) VALUES (@name, @qty)";
+            string query = "INSERT INTO inventory (Product_Name, Quantity_Available) VALUES (@name, @qty)";
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@name", p.Product_Name),
                 new MySqlParameter("@qty", p.Quantity_Available)) > 0;
@@ -41,7 +41,7 @@ namespace RestND.Data
         #region Update Product
         public override bool Update(Inventory p)
         {
-            string query = "UPDATE product SET Product_Name = @name, Quantity_Available = @qty WHERE Product_ID = @id";
+            string query = "UPDATE inventory SET Product_Name = @name, Quantity_Available = @qty WHERE Product_ID = @id";
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@name", p.Product_Name),
                 new MySqlParameter("@qty", p.Quantity_Available),
@@ -52,7 +52,7 @@ namespace RestND.Data
         #region Delete Product
         public override bool Delete(string productId)
         {
-            string query = "DELETE FROM product WHERE Product_ID = @id";
+            string query = "DELETE FROM inventory WHERE Product_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", productId)) > 0;
         }
         #endregion

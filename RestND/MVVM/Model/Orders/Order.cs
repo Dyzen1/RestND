@@ -66,7 +66,7 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region Constructor
+        #region Constructor with Dishes
         public Order( Employee AssignedEmployee,  Table table, List<DishInOrder> DishInOrder, Bill Bill)
         {
             this.Bill = Bill;
@@ -78,6 +78,22 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
+        #region Constructor without Dishes
+        public Order(Employee AssignedEmployee, Table table, Bill Bill)
+        {
+            this.Bill = Bill;
+            this.assignedEmployee = AssignedEmployee;
+            this.Table = table;
+            this.Table.Table_Status = false;
+            _OrderCount++;
+        }
+        #endregion
 
+        #region Default constructor
+        public Order()
+        {
+            _OrderCount++;
+        }
+        #endregion
     }
 }

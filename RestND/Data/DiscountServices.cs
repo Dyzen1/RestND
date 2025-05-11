@@ -16,7 +16,7 @@ public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instan
     public override List <Discount> GetAll()
     {
         var discounts = new List<Discount>();
-        string query = "SELECT * FROM discount";
+        string query = "SELECT * FROM discounts";
         var rows = _db.ExecuteReader(query);
 
         foreach (var row in rows)
@@ -37,7 +37,7 @@ public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instan
     public override bool Add (Discount d){
 
 
-        string query = "INSERT INTO discount (Discount_Name, Discount_Percentage) VALUES (@name, @percentage)";
+        string query = "INSERT INTO discounst (Discount_Name, Discount_Percentage) VALUES (@name, @percentage)";
         
         return _db.ExecuteNonQuery(query,
             new MySqlParameter("@name", d.Discount_Name),
@@ -48,7 +48,7 @@ public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instan
 
     #region Update Discount
     public override bool Update (Discount d){
-        string query = "UPDATE discount SET Discount_Name = @name, Discount_Percentage = @percentage WHERE Discount_ID = @id";
+        string query = "UPDATE discounts SET Discount_Name = @name, Discount_Percentage = @percentage WHERE Discount_ID = @id";
         return _db.ExecuteNonQuery(query,
             new MySqlParameter("@name", d.Discount_Name),
             new MySqlParameter("@percentage", d.Discount_Percentage),
@@ -60,7 +60,7 @@ public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instan
     #region Delete Discount
     public override bool Delete (string discountId){
         if (string.IsNullOrEmpty(discountId)) return false;
-        string query = "DELETE FROM discount WHERE Discount_ID = @id";
+        string query = "DELETE FROM discounts WHERE Discount_ID = @id";
         return _db.ExecuteNonQuery(query, new MySqlParameter("@id", discountId)) > 0;
     }
     #endregion

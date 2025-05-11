@@ -17,7 +17,7 @@ namespace RestND.Data
         public override List<Role> GetAll()
         {
             List<Role> roles = new List<Role>();
-            var query = "SELECT * FROM Role";
+            var query = "SELECT * FROM roles";
 
             var rows = _db.ExecuteReader(query);
 
@@ -39,7 +39,7 @@ namespace RestND.Data
         public override bool Add(Role r)
         {
 
-            string query = "INSERT INTO role (Email, Password ,Role_Name , Role_Authorization) VALUES (@Email, @Password ,@Role_Name , @Role_Authorization)";
+            string query = "INSERT INTO roles (Email, Password ,Role_Name , Role_Authorization) VALUES (@Email, @Password ,@Role_Name , @Role_Authorization)";
 
             return _db.ExecuteNonQuery(query,
                         new MySqlParameter("@Role_Name", r.Role_Name),
@@ -51,7 +51,7 @@ namespace RestND.Data
         #region Update Role
         public override bool Update(Role r)
         {
-            string query = "UPDATE role SET Email = @Email , Password = @Password , Role_Name = @Role_Name , Role_Authorization = @Role_Authorization WHERE Role_ID = @id";
+            string query = "UPDATE roles SET Email = @Email , Password = @Password , Role_Name = @Role_Name , Role_Authorization = @Role_Authorization WHERE Role_ID = @id";
 
             return _db.ExecuteNonQuery(query, 
                         new MySqlParameter("@id", r.Role_ID),
@@ -66,7 +66,7 @@ namespace RestND.Data
         public override bool Delete(string roleId)
         {
 
-            string query = "DELETE FROM role WHERE Role_ID = @id";
+            string query = "DELETE FROM roles WHERE Role_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", roleId)) > 0;
         }
         #endregion

@@ -23,7 +23,7 @@ namespace RestND.Data
         public override List<Dish> GetAll()
         {
             var dishes = new List<Dish>();
-            string query = "SELECT * FROM dish";
+            string query = "SELECT * FROM dishes";
             var rows = _db.ExecuteReader(query);
 
             foreach (var row in rows)
@@ -65,7 +65,7 @@ namespace RestND.Data
         #region Update Dish
         public override bool Update(Dish d)
         {
-            string query = "UPDATE dish SET Dish_Name = @name, Dish_Price = @price, Allergen_Notes = @notes, " +
+            string query = "UPDATE dishes SET Dish_Name = @name, Dish_Price = @price, Allergen_Notes = @notes, " +
                            "Availability_Status = @status, Dish_Type = @type WHERE Dish_ID = @id";
 
             return _db.ExecuteNonQuery(query,
