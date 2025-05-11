@@ -47,9 +47,9 @@ namespace RestND.MVVM.Model
 
         public Inventory(string productId, string productName, int quantityAvailable)
         {
-            Product_ID = productId;
-            Product_Name = productName;
-            Quantity_Available = quantityAvailable;
+            this.Product_ID = productId;
+            this.Product_Name = productName;
+            this.Quantity_Available = quantityAvailable;
         }
 
         #endregion

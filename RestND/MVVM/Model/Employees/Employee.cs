@@ -62,20 +62,20 @@ namespace RestND.MVVM.Model.Employees
         #region Constructor without email and password
         public Employee(string employeeId, string? employeeName, Role? employeeRole)
         {
-            Employee_ID = employeeId;
-            Employee_Name = employeeName;
-            Employee_Role = employeeRole;
+            this.Employee_ID = employeeId;
+            this.Employee_Name = employeeName;
+            this.Employee_Role = employeeRole;
         }
         #endregion
 
         #region Constructor with email and password
         public Employee(string employeeId, string? employeeName, Role? employeeRole, string email, string password)
         {
-            Email = email;
-            Password = password;
-            Employee_ID = employeeId;
-            Employee_Name = employeeName;
-            Employee_Role = employeeRole;
+            this.Email = email;
+            this.Password = password;
+            this.Employee_ID = employeeId;
+            this.Employee_Name = employeeName;
+            this.Employee_Role = employeeRole;
         }
         #endregion
 

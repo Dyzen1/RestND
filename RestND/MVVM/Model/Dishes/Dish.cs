@@ -79,12 +79,12 @@ namespace RestND.MVVM.Model
 
         public Dish(string? dishName, double dishPrice, AllergenNotes allergenNotes, List<ProductUsageInDish> productUsage, DishType? type)
         {
-            Dish_Name = dishName;
-            Dish_Price = dishPrice;
-            Allergen_Notes = allergenNotes;
-            Availability_Status = true;
-            ProductUsage = productUsage;
-            Dish_Type = type;
+            this.Dish_Name = dishName;
+            this.Dish_Price = dishPrice;
+            this.Allergen_Notes = allergenNotes;
+            this.Availability_Status = true;
+            this.ProductUsage = productUsage;
+            this.Dish_Type = type;
         }
 
         #endregion
@@ -93,11 +93,11 @@ namespace RestND.MVVM.Model
 
         public Dish(string? dishName, double dishPrice, List<ProductUsageInDish> productUsage, DishType? type)
         {
-            Dish_Name = dishName;
-            Dish_Price = dishPrice;
-            Availability_Status = true;
-            ProductUsage = productUsage;
-            Dish_Type = type;
+            this.Dish_Name = dishName;
+            this.Dish_Price = dishPrice;
+            this.Availability_Status = true;
+            this.ProductUsage = productUsage;
+            this.Dish_Type = type;
         }
 
         #endregion

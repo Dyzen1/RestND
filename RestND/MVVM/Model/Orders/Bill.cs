@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestND.MVVM.Model.Orders
 {
     public class Bill
     {
-
         #region Bill ID
         private string _Bill_ID;
         public string Bill_ID
@@ -19,25 +14,21 @@ namespace RestND.MVVM.Model.Orders
         #endregion
 
         #region Order Property
-
         private Order _Order;
         public Order Order
         {
             get { return _Order; }
             set { _Order = value; }
         }
-
         #endregion
 
         #region Price
-
         private double _Price;
         public double Price
         {
             get { return _Price; }
             set { _Price = value; }
         }
-
         #endregion
 
         #region Discount
@@ -49,33 +40,42 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region constructor
+        #region Bill Date
+        private DateTime _Bill_Date;
+        public DateTime Bill_Date
+        {
+            get { return _Bill_Date; }
+            set { _Bill_Date = value; }
+        }
+        #endregion
+
+        #region Constructor without Discount
+
         public Bill(Order order, double price)
         {
-            Order = order;
-            Price = price;
-            
+            this.Order = order;
+            this.Price = price;
+            this.Bill_Date = DateTime.Now;
         }
+
+
         #endregion
 
-        #region Constructor with discount
-        public Bill(Order order, double price,Discount discount)
+        #region Constructor with Discount
+
+        public Bill(Order order, double price, Discount discount)
         {
-            Discount = discount;
-            Order = order;
-            Price = price;
-
+            this.Order = order;
+            this.Price = price;
+            this.Discount = discount;
+            this.Bill_Date = DateTime.Now;
         }
         #endregion
 
-        #region Default Constructor
-        public Bill()
-        {
+        #region Default constructor
 
-        }
-        #endregion
-
-
+        public Bill() { }
+         #endregion
 
     }
 }

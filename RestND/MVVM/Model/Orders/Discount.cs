@@ -43,10 +43,10 @@ namespace RestND.MVVM.Model.Orders
 
         #region constructor
 
-        public Discount(string? name , double discountPercentage)
+        public Discount(string name , double discountPercentage)
         {
-            Discount_Name = name;
-            Discount_Percentage = discountPercentage;
+            this.Discount_Name = name;
+            this.Discount_Percentage = discountPercentage;
 
         }
         #endregion

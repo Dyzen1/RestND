@@ -68,11 +68,13 @@ namespace RestND.MVVM.Model.Tables
 
         #region Constructor
 
-        public Table(int Table_Num)
+        public Table(int Table_Num,double x, double y)
 
         {
-            Table_Number = Table_Num;
-            Table_Status = true;
+            this.X = x;
+            this.Y = y;
+            this.Table_Number = Table_Num;
+            this.Table_Status = true;
         }
         #endregion
 

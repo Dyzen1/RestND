@@ -36,8 +36,8 @@ namespace RestND.MVVM.Model
 
         public DishType( string? dishType_Name)
         {
-            
-            _DishType_Name = dishType_Name;
+
+            this.DishType_Name = dishType_Name;
         }
 
         #endregion

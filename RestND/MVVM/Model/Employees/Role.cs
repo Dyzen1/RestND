@@ -39,8 +39,8 @@ namespace RestND.MVVM.Model.Employees
         #region constructor
         public Role(string? roleName, AuthorizationStatus roleAuthorization)
         {
-            Role_Name = roleName;
-            Role_Authorization = roleAuthorization;
+            this.Role_Name = roleName;
+            this.Role_Authorization = roleAuthorization;
         }
         #endregion
 
