@@ -1,4 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
+using RestND.MVVM.Model.Employees;
+using RestND.MVVM.Model;
 using RestND.MVVM.Model.Orders;
 using System.Collections.Generic;
 
@@ -19,7 +21,7 @@ namespace RestND.Data
                 affectedRows = _db.ExecuteNonQuery(query,
                     new MySqlParameter("@order_id", orderId),
                     new MySqlParameter("@quantity", dish.Quantity),
-                    new MySqlParameter("@dish_id", dish.Dish_ID)
+                    new MySqlParameter("@dish_id", dish.Dish.Dish_ID)
                 );
 
             }

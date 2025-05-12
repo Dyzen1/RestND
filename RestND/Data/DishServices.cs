@@ -25,7 +25,7 @@ namespace RestND.Data
             var dishes = new List<Dish>();
             string query = "SELECT * FROM dishes";
             var rows = _db.ExecuteReader(query);
-
+          
             foreach (var row in rows)
             {
                 dishes.Add(new Dish
@@ -34,7 +34,7 @@ namespace RestND.Data
                     Dish_Name = row["Dish_Name"].ToString(),
                     Dish_Price = Convert.ToInt32(row["Dish_Price"]),
                     Allergen_Notes = (AllergenNotes)Enum.Parse(typeof(AllergenNotes),
-                        Convert.ToString(row["Allergen_Notes"])),
+                       Convert.ToString(row["Allergen_Notes"])),
                     Availability_Status = Convert.ToBoolean(row["Availability_Status"]),
                     Dish_Type = new DishType
                     {

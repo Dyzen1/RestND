@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using RestND.MVVM.Model;
+using RestND.MVVM.Model.Employees;
 using RestND.MVVM.Model.Orders;
 
 namespace RestND.Data
 {
-    public class BillServices : BaseService<Bill>
+    public class BillServices() : BaseService<Bill>(DatabaseOperations.Instance)
     {
-        #region Constructor
-
-        public BillServices() : base(DatabaseOperations.Instance) { }
-
-        #endregion
 
         #region Get All Bills
         public override List<Bill> GetAll()
@@ -83,47 +79,6 @@ namespace RestND.Data
         }
         #endregion
         
-        #region Generate Bill From Order
-        public bool GenerateBillForOrder(Order order, Discount? discount = null)
-        {
-            double total = 0;
-            var dishService = new DishServices();
-            var allDishes = dishService.GetAll();
-
-            for (int i = 0; i < order.DishInOrder.Count; i++)
-            {
-                var item = order.DishInOrder[i];
-
-                Dish matchedDish = null;
-                for (int j = 0; j < allDishes.Count; j++)
-                {
-                    if (allDishes[j].Dish_ID == item.Dish_ID.ToString())
-                    {
-                        matchedDish = allDishes[j];
-                        break;
-                    }
-                }
-
-                if (matchedDish != null)
-                {
-                    total += matchedDish.Dish_Price * item.Quantity;
-                }
-            }
-
-            if (discount != null)
-            {
-                total -= total * (discount.Discount_Percentage / 100.0);
-            }
-
-            var bill = new Bill();
-            bill.Order = order;
-            bill.Discount = discount;
-            bill.Price = total;
-            //bill.Bill_Date = DateTime.Now;
-            bill.Order.assignedEmployee.Employee_Name = order.assignedEmployee.Employee_Name;
-
-            return Add(bill);
-        }
-        #endregion
+ 
     }
 }

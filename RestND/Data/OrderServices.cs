@@ -41,7 +41,7 @@ namespace RestND.Data
                     },
                     Bill = new Bill
                     {
-                        Price = Convert.ToDouble(row["Price"])
+                        Price = Convert.ToDouble(row["Price"] )
                     }
                 });
             }

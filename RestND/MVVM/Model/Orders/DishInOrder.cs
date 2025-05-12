@@ -4,31 +4,16 @@ namespace RestND.MVVM.Model.Orders
 {
     public class DishInOrder
     {
-        #region Dish_ID
-        private string _Dish_ID;
-
-        public string Dish_ID
-        { 
-           get { return _Dish_ID; }
-           set { _Dish_ID = value; }
-        }
-        #endregion
-
-        #region Order_ID
-        private string _Order_ID;
-        public string Order_ID
+        #region Dish
+        private Dish _Dish;
+        public Dish Dish
         {
-            get { return _Order_ID; }
-            set { _Order_ID = value; }
-        }
-        #endregion
-
-        #region Dish_Name
-        private string _Dish_Name;
-        public string Dish_Name
-        {
-            get { return _Dish_Name; }
-            set { _Dish_Name = value; }
+            get { return _Dish; }
+            set
+            {
+                if (_Dish != null)
+                    _Dish = value;
+            }
         }
         #endregion
 
@@ -37,7 +22,15 @@ namespace RestND.MVVM.Model.Orders
         public int Quantity
         {
             get{return _Quantity; }
-            set { _Quantity = value; }
+            set 
+            { 
+                if(_Quantity> 0)
+                _Quantity = value;
+                else
+                {
+                    _Quantity = 0;
+                }
+            }
         }
         #endregion
 
