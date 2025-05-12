@@ -1,221 +1,136 @@
-﻿//using CommunityToolkit.Mvvm.ComponentModel;
-//using CommunityToolkit.Mvvm.Input;
-//using RestND.Data;
-//using RestND.MVVM.Model.Dishes;
-//using RestND.MVVM.Model;
-//using System;
-//using System.Collections.Generic;
-//using System.Collections.ObjectModel;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using RestND.Data;
+using RestND.MVVM.Model.Employees;
+using RestND.Validations;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
-//namespace RestND.MVVM.ViewModel.Employees
-//{
-//    public class EmployeeViewModel
-//    {
-//        #region Services
+namespace RestND.MVVM.ViewModel
+{
+    // ViewModel for managing employees
+    public partial class EmployeeViewModel : ObservableObject
+    {
+        #region Services
+        private readonly EmployeeServices _employeeService;
+        #endregion
 
-//        // Service for handling Dish database operations
-//        private readonly DishServices _dishService;
-//        private readonly DishTypeServices _dishTypeService;
+        #region Constructor
+        public EmployeeViewModel()
+        {
+            _employeeService = new EmployeeServices();
+            employees = new ObservableCollection<Employee>(_employeeService.GetAll());
+        }
+        #endregion
 
-//        // Service for handling Product database operations (to load available products)
-//        private readonly ProductService _productService;
-//        private readonly ObservableCollection<AllergenNotes> _allergenNotes;
+        #region Observable Properties
 
+        [ObservableProperty]
+        private ObservableCollection<Employee> employees = new();
 
-//        [ObservableProperty]
-//        private ObservableCollection<DishType> dishTypes = new();
-//        #endregion
+        [ObservableProperty]
+        private Employee newEmployee = new();
 
-//        #region Observable Properties
+        [ObservableProperty]
+        private Employee selectedEmployee;
 
-//        // List of dishes displayed in the UI
-//        [ObservableProperty]
-//        private ObservableCollection<Dish> dishes = new();
+        [ObservableProperty]
+        private Dictionary<string, List<string>> employeeValidationErrors = new();
 
-//        // List of available products that can be added to a dish
-//        [ObservableProperty]
-//        private ObservableCollection<Inventory> availableProducts = new();
+        #endregion
 
-//        // List of selected products (with amount) that will be used in the new dish
-//        [ObservableProperty]
-//        private ObservableCollection<ProductUsageInDish> selectedProducts = new();
+        #region Commands
 
-//        // The dish that is currently being created
-//        [ObservableProperty]
-//        private Dish newDish = new();
+        [RelayCommand(CanExecute = nameof(CanAddEmployee))]
+        private void AddEmployee()
+        {
+            employeeValidationErrors = EmployeeValidator.ValidateFields(newEmployee, employees.ToList());
 
-//        // The dish currently selected in the UI
-//        [ObservableProperty]
-//        private Dish selectedDish;
+            if (employeeValidationErrors.Any())
+                return;
 
-//        // Called automatically when SelectedDish changes
-//        partial void OnSelectedDishChanged(Dish value)
-//        {
-//            DeleteDishCommand.NotifyCanExecuteChanged();
-//            UpdateDishCommand.NotifyCanExecuteChanged();
-//        }
+            bool success = _employeeService.Add(newEmployee);
+            if (success)
+            {
+                employees.Add(newEmployee);
+                newEmployee = new Employee();
+                employeeValidationErrors.Clear();
+            }
+        }
 
-//        #endregion
+        private bool CanAddEmployee()
+        {
+            var errors = EmployeeValidator.ValidateFields(newEmployee, employees.ToList());
+            return !errors.Any();
+        }
 
-//        #region Constructor
+        [RelayCommand(CanExecute = nameof(CanModifyEmployee))]
+        private void UpdateEmployee()
+        {
+            if (selectedEmployee == null)
+                return;
 
-//        // Initializes services and loads data when the ViewModel is created
-//        public DishViewModel()
+            var errors = EmployeeValidator.ValidateFields(selectedEmployee, employees.Where(e => e.Employee_ID != selectedEmployee.Employee_ID).ToList());
 
-//        {
-//            _dishTypeService = new DishTypeServices();
-//            _dishService = new DishServices();
-//            _productService = new ProductService();
-//            dishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
-//            _allergenNotes = new ObservableCollection<AllergenNotes>(
-//                Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>());
-//            LoadDishes();
-//            LoadAvailableProducts();
-//        }
+            if (errors.Any())
+            {
+                employeeValidationErrors = errors;
+                return;
+            }
 
-//        #endregion
+            bool success = _employeeService.Update(selectedEmployee);
+            if (success)
+            {
+                LoadEmployees();
+                employeeValidationErrors.Clear();
+            }
+        }
 
-//        #region Load Methods
+        private bool CanModifyEmployee()
+        {
+            if (selectedEmployee == null)
+                return false;
 
-//        // Loads all dishes from the database
-//        [RelayCommand]
-//        private void LoadDishes()
-//        {
-//            Dishes.Clear();
-//            var dbDishes = _dishService.GetAll();
-//            foreach (var dish in dbDishes)
-//                Dishes.Add(dish);
-//        }
+            var errors = EmployeeValidator.ValidateFields(selectedEmployee, employees.Where(e => e.Employee_ID != selectedEmployee.Employee_ID).ToList());
+            return !errors.Any();
+        }
 
-//        // Loads all available products from the database
-//        [RelayCommand]
-//        private void LoadAvailableProducts()
-//        {
-//            AvailableProducts.Clear();
-//            var dbProducts = _productService.GetAll();
-//            foreach (var product in dbProducts)
-//                AvailableProducts.Add(product);
-//        }
+        [RelayCommand(CanExecute = nameof(CanModifyEmployee))]
+        private void DeleteEmployee()
+        {
+            if (selectedEmployee != null)
+            {
+                bool success = _employeeService.Delete(selectedEmployee.Employee_ID);
+                if (success)
+                {
+                    employees.Remove(selectedEmployee);
+                    selectedEmployee = null;
+                }
+            }
+        }
 
-//        #endregion
+        [RelayCommand]
+        private void LoadEmployees()
+        {
+            employees = new ObservableCollection<Employee>(_employeeService.GetAll());
+        }
 
-//        #region Product Selection for Dish
+        #endregion
 
-//        // Product selected by user from the AvailableProducts list
-//        [ObservableProperty]
-//        private Inventory selectedAvailableProduct;
+        #region Notify CanExecute
 
-//        // Amount of product usage entered by the user (in grams or ml)
-//        [ObservableProperty]
-//        private int productAmountUsage;
+        partial void OnNewEmployeeChanged(Employee value)
+        {
+            AddEmployeeCommand.NotifyCanExecuteChanged();
+        }
 
-//        // Adds the selected product and entered amount to the SelectedProducts list
-//        [RelayCommand]
-//        private void AddProductToDish()
-//        {
-//            if (SelectedAvailableProduct == null || ProductAmountUsage <= 0)
-//                return;
+        partial void OnSelectedEmployeeChanged(Employee value)
+        {
+            UpdateEmployeeCommand.NotifyCanExecuteChanged();
+            DeleteEmployeeCommand.NotifyCanExecuteChanged();
+        }
 
-//            var usage = new ProductUsageInDish
-//            {
-//                Product_ID = SelectedAvailableProduct.Product_ID,
-//                Product_Name = SelectedAvailableProduct.Product_Name,
-//                Amount_Usage = ProductAmountUsage
-//            };
-
-//            SelectedProducts.Add(usage);
-
-//            // Reset selection for next product
-//            SelectedAvailableProduct = null;
-//            ProductAmountUsage = 0;
-//        }
-
-//        #endregion
-
-//        #region Add Allergen Note To Dish
-
-//        //[ObservableProperty]
-//        //private AllergenNotes selectedAllergenNote;
-
-//        //[RelayCommand]
-//        //private void AddAllergenNoteToDish()
-//        //{
-//        //    if (string.IsNullOrWhiteSpace(NewDish.Allergen_Notes.ToString()) == null)
-//        //        return;
-
-//        //}
-
-//        #endregion
-
-//        #region Add Dish
-
-//        // Adds the new dish (and its selected products) to the database
-//        [RelayCommand]
-//        private void AddDish()
-//        {
-//            if (string.IsNullOrWhiteSpace(NewDish.Dish_Name) || NewDish.Dish_Price <= 0)
-//                return;
-
-//            // Attach the selected products to the NewDish
-//            NewDish.ProductUsage = new List<ProductUsageInDish>(SelectedProducts);
-
-//            bool success = _dishService.Add(NewDish);
-
-//            if (success)
-//            {
-//                LoadDishes();
-//                NewDish = new Dish();
-//                SelectedProducts.Clear();
-//            }
-//        }
-
-//        #endregion
-
-//        #region Delete Dish
-
-//        // Deletes the selected dish
-//        [RelayCommand(CanExecute = nameof(CanModifyDish))]
-//        private void DeleteDish()
-//        {
-//            if (SelectedDish != null)
-//            {
-//                bool success = _dishService.Delete(SelectedDish.Dish_ID);
-
-//                if (success)
-//                {
-//                    Dishes.Remove(SelectedDish);
-//                }
-//            }
-//        }
-
-//        // Helper method: checks if a dish is selected (used for button enabling)
-//        private bool CanModifyDish()
-//        {
-//            return SelectedDish != null;
-//        }
-
-//        #endregion
-
-//        #region Update Dish (optional)
-
-//        // Updates the selected dish information (without updating product usage)
-//        [RelayCommand(CanExecute = nameof(CanModifyDish))]
-//        private void UpdateDish()
-//        {
-//            if (SelectedDish != null)
-//            {
-//                bool success = _dishService.Update(SelectedDish);
-
-//                if (success)
-//                {
-//                    LoadDishes();
-//                }
-//            }
-//        }
-
-//        #endregion
-//    }
-//}
+        #endregion
+    }
+}

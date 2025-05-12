@@ -4,6 +4,7 @@ using RestND.Data;
 using RestND.MVVM.Model;
 using RestND.MVVM.Model.Dishes;
 using System;
+using RestND.Validations;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -49,10 +50,13 @@ namespace RestND.MVVM.ViewModel
         private Dish selectedDish;
 
         [ObservableProperty]
-        private ObservableCollection<AllergenNotes> _allergenNotes = new();
+        private ObservableCollection<AllergenNotes> allergenNotes = new();
 
         [ObservableProperty]
-        private ObservableCollection<AllergenNotes> selectedAllergenNotes;
+        private ObservableCollection<AllergenNotes> selectedAllergenNotes = new ();
+
+        [ObservableProperty]
+        private Dictionary<string, List<string>> dishValidationErrors = new();
 
         // Called automatically when SelectedDish changes
         partial void OnSelectedDishChanged(Dish value)
@@ -106,8 +110,8 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private void LoadNotes()
         {
-            _allergenNotes = new ObservableCollection<AllergenNotes>(
-                            Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>());
+            AllergenNotes = new ObservableCollection<AllergenNotes>(
+                Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>());
         }
 
         #endregion
@@ -123,40 +127,18 @@ namespace RestND.MVVM.ViewModel
         private int productAmountUsage;
 
         // Adds the selected product and entered amount to the SelectedProducts list
-        [RelayCommand]
-        private void AddProductToDish()
-        {
-            if (SelectedAvailableProduct == null || ProductAmountUsage <= 0)
-                return;
-
-            var usage = new ProductUsageInDish
-            {
-                Product_ID = SelectedAvailableProduct.Product_ID,
-                Product_Name = SelectedAvailableProduct.Product_Name,
-                Amount_Usage = ProductAmountUsage
-            };
-
-            SelectedProducts.Add(usage);
-
-            // Reset selection for next product
-            SelectedAvailableProduct = null;
-            ProductAmountUsage = 0;
-        }
-
-        #endregion
-
-        #region Add Dish
-
-        // Adds the new dish (and its selected products) to the database
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanAddDish))]
         private void AddDish()
         {
-            if (string.IsNullOrWhiteSpace(NewDish.Dish_Name) || NewDish.Dish_Price <= 0)
-                return;
-
-            // Attach the selected products to the NewDish
             NewDish.ProductUsage = new List<ProductUsageInDish>(SelectedProducts);
-            NewDish.Allergen_Notes = selectedAllergenNotes.ToList();
+            NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
+
+            // Run validation
+            dishValidationErrors = DishValidator.ValidateFields(NewDish, Dishes.ToList());
+
+            // If any errors, return and display them
+            if (dishValidationErrors.Any())
+                return;
 
             bool success = _dishService.Add(NewDish);
 
@@ -165,8 +147,10 @@ namespace RestND.MVVM.ViewModel
                 LoadDishes();
                 NewDish = new Dish();
                 SelectedProducts.Clear();
+                dishValidationErrors.Clear();
             }
         }
+
 
         #endregion
 
@@ -187,18 +171,37 @@ namespace RestND.MVVM.ViewModel
             }
         }
 
-        // Helper method: checks if a dish is selected (used for button enabling)
+        // Helpers method: checks if a dish is selected (used for button enabling)
         private bool CanModifyDish()
         {
             return SelectedDish != null;
         }
+
+        private bool CanAddDish()
+        {
+            NewDish.ProductUsage = new List<ProductUsageInDish>(SelectedProducts);
+            NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
+
+            var errors = DishValidator.ValidateFields(NewDish, Dishes.ToList());
+            return !errors.Any();
+        }
+
+        private bool CanUpdateDish()
+        {
+            if (SelectedDish == null)
+                return false;
+
+            var errors = DishValidator.ValidateFields(SelectedDish, Dishes.Where(d => d.Dish_ID != SelectedDish.Dish_ID).ToList());
+            return !errors.Any();
+        }
+
 
         #endregion
 
         #region Update Dish (optional)
 
         // Updates the selected dish information (without updating product usage)
-        [RelayCommand(CanExecute = nameof(CanModifyDish))]
+        [RelayCommand(CanExecute = nameof(CanUpdateDish))]
         private void UpdateDish()
         {
             if (SelectedDish != null)
