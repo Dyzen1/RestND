@@ -16,6 +16,7 @@
     <None Remove="MVVM\Model\Validator.cs~RF81f8a9d1.TMP" />
     <None Remove="Styles\Assets\bg_image.jpg" />
     <None Remove="Styles\Assets\table.png" />
+    <None Remove="Styles\Assets\table1.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,7 @@
   <ItemGroup>
     <Resource Include="Styles\Assets\bg_image.jpg" />
     <Resource Include="Styles\Assets\table.png" />
+    <Resource Include="Styles\Assets\table1.png" />
   </ItemGroup>
 
 </Project>

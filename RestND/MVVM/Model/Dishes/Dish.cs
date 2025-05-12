@@ -11,7 +11,6 @@ namespace RestND.MVVM.Model
         public string Dish_ID
         {
             get { return _Dish_ID; }
-            set { _Dish_ID = value; }
         }
         #endregion
 
@@ -21,7 +20,11 @@ namespace RestND.MVVM.Model
         public string? Dish_Name
         {
             get { return _Dish_Name; }
-            set { _Dish_Name = value; }
+            set 
+            {
+                if (!string.IsNullOrEmpty(_Dish_Name))
+                    _Dish_Name = value;
+            }
         }
         #endregion
 
@@ -31,7 +34,11 @@ namespace RestND.MVVM.Model
         public double Dish_Price
         {
             get { return _Dish_Price; }
-            set { _Dish_Price = value; }
+            set 
+            {
+                if (_Dish_Price >= 0)
+                    _Dish_Price = value;
+            }
         }
         #endregion
 

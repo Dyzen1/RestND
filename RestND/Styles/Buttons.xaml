@@ -58,10 +58,22 @@
     </Style>
 
     <Style x:Key="tableNumber" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="loginBtn" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource DarkText}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Margin" Value="0,0,2,0"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Background" Value="{DynamicResource LightText}"/>
+        <Setter Property="Content" Value="Admin Login"/>
     </Style>
     
 </ResourceDictionary>

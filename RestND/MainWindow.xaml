@@ -10,10 +10,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="800" 
         WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown"
-        WindowState="Maximized">
+        WindowState="Maximized" Background="{DynamicResource DarkText}">
+
+    <Border BorderBrush="{DynamicResource LightText}"
+            BorderThickness="3"
+            CornerRadius="10"
+            Padding="2,6,0,0">
 
     <Grid>
-        <Image Style="{DynamicResource bg}"/>
+        <!--<Image Style="{DynamicResource bg}"/>-->
 
         <!--upper menu for minimalize maximize and close-->
         <Grid>
@@ -21,17 +26,14 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="120"/>
             </Grid.ColumnDefinitions>
-            <!--borders to the page-->
-            <Border Grid.Row="1" Grid.ColumnSpan="5" BorderThickness="1" BorderBrush="{DynamicResource LightText}"/>
-            <Border Grid.Row="0" Grid.ColumnSpan="5" BorderThickness="1" BorderBrush="{DynamicResource LightText}"/>
-            <Border Grid.Row="0" Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource LightText}"/>
-            
+
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="2" >
                 <Button x:Name="MinimizeBtn" Content="_" Width="40" Height="25" 
                         Background="Transparent" BorderBrush="Transparent"
@@ -44,19 +46,33 @@
                         Click="CloseBtn_Click" Foreground="{DynamicResource LightText}"/>
             </StackPanel>
 
-        <!-- Sidebar Expander -->
-        <Expander ExpandDirection="Left"
-                  IsExpanded="False" BorderThickness="0" 
-                  Foreground="{DynamicResource LightText}" HorizontalAlignment="Right"
-                  VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
-                  Grid.Row="1" Grid.Column="2" Margin="5">
-                <uc:SideBar x:Name="sideBar" Width="100"/>
-        </Expander>
+            <!-- Sidebar Expander -->
+                <Expander ExpandDirection="Left"
+                      IsExpanded="False" BorderThickness="0" 
+                      Foreground="{DynamicResource LightText}" HorizontalAlignment="Right"
+                      VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
+                      Grid.Row="1" Grid.Column="2" Margin="5">
+                    <uc:SideBar x:Name="sideBar" Width="100"/>
+                </Expander>
 
-            <Button x:Name="addTables" Style="{DynamicResource addBtn}" Grid.Row="1" Grid.Column="0">
+                <Button Name="AdminLogin" Style="{DynamicResource loginBtn}" Grid.Row="0" Grid.Column="0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border CornerRadius="10"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    Background="{TemplateBinding Background}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            
+            
+            <Button x:Name="addTables" Style="{DynamicResource addBtn}" Grid.Row="2" Grid.Column="0">
                 <StackPanel Orientation="Horizontal">
                     <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
-                    <TextBlock Text="Add Table" FontSize="10" TextAlignment="Center" Foreground="{DynamicResource LightText}" Margin="4"/>
+                    <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center" Foreground="{DynamicResource LightText}" Margin="4"/>
                 </StackPanel>
             </Button>
 
@@ -161,4 +177,5 @@
         </Grid>
 
     </Grid>
+    </Border>
 </Window>
