@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using RestND.Data;
 using RestND.MVVM.Model;
+using RestND.MVVM.Model.Dishes;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -19,8 +21,6 @@ namespace RestND.MVVM.ViewModel
 
         // Service for handling Product database operations (to load available products)
         private readonly ProductService _productService;
-
-      
 
         [ObservableProperty]
         private ObservableCollection<DishType> dishTypes = new ();
@@ -48,6 +48,12 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty]
         private Dish selectedDish;
 
+        [ObservableProperty]
+        private ObservableCollection<AllergenNotes> _allergenNotes = new();
+
+        [ObservableProperty]
+        private ObservableCollection<AllergenNotes> selectedAllergenNotes;
+
         // Called automatically when SelectedDish changes
         partial void OnSelectedDishChanged(Dish value)
         {
@@ -67,6 +73,7 @@ namespace RestND.MVVM.ViewModel
             _dishService = new DishServices();
             _productService = new ProductService();
             dishTypes =new ObservableCollection<DishType>(_dishTypeService.GetAll());
+            LoadNotes();
             LoadDishes();
             LoadAvailableProducts();
         }
@@ -93,6 +100,14 @@ namespace RestND.MVVM.ViewModel
             var dbProducts = _productService.GetAll();
             foreach (var product in dbProducts)
                 AvailableProducts.Add(product);
+        }
+
+        // Loads allergen notes from the database
+        [RelayCommand]
+        private void LoadNotes()
+        {
+            _allergenNotes = new ObservableCollection<AllergenNotes>(
+                            Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>());
         }
 
         #endregion
@@ -141,6 +156,7 @@ namespace RestND.MVVM.ViewModel
 
             // Attach the selected products to the NewDish
             NewDish.ProductUsage = new List<ProductUsageInDish>(SelectedProducts);
+            NewDish.Allergen_Notes = selectedAllergenNotes.ToList();
 
             bool success = _dishService.Add(NewDish);
 

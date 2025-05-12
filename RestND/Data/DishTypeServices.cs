@@ -44,7 +44,7 @@ namespace RestND.Data
         }
         #endregion
 
-        #region Update Discount
+        #region Update DishType
         public override bool Update(DishType d)
         {
             string query = "UPDATE dish_types SET DishType_Name = @name, DishType_ID = @id WHERE DishType_ID = @id";
@@ -55,7 +55,7 @@ namespace RestND.Data
         }
         #endregion
 
-        #region Delete Discount
+        #region Delete DishType
         public override bool Delete(string DishType_ID)
         {
             string query = "DELETE FROM dish_type WHERE DishType_ID = @id";
