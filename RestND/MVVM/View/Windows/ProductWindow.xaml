@@ -66,12 +66,12 @@
                 </Button>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{DynamicResource editBtn}">
-                        <!-- Command="{Binding UpdateProductCommand}" -->
+                    <Button Style="{DynamicResource editBtn}"
+                            Command="{Binding UpdateProductCommand}"> 
                         <fa:SvgAwesome Style="{DynamicResource editBtnIcon}"/>
                     </Button>
-                    <Button Style="{DynamicResource deleteBtn}" Margin="5,0,0,0">
-                        <!-- Command="{Binding DeleteProductCommand}" -->
+                    <Button Style="{DynamicResource deleteBtn}" Margin="5,0,0,0"
+                            Command="{Binding DeleteProductCommand}" >
                         <fa:SvgAwesome Style="{DynamicResource deleteBtnIcon}"/>
                     </Button>
                 </StackPanel>

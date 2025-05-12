@@ -11,6 +11,7 @@ namespace RestND.MVVM.Model
         public string Dish_ID
         {
             get { return _Dish_ID; }
+            set { _Dish_ID = value; }
         }
         #endregion
 

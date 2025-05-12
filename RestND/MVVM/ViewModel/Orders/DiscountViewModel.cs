@@ -6,7 +6,6 @@ using RestND.MVVM.Model.Orders;
 public partial class DiscountViewModel : ObservableObject
 {
     #region Services
-
     private readonly DiscountService _discountService;
     #endregion
     

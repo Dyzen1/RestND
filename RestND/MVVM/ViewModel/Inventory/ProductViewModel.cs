@@ -32,7 +32,6 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Constructor
-
         public ProductViewModel()
         {
             _productService = new ProductService();
