@@ -34,6 +34,12 @@
                     <TextBlock Text="Reports"/>
                 </StackPanel>
             </Button>
+            <Button Style="{DynamicResource SideBarBtn}">
+                <StackPanel>
+                    <fa:SvgAwesome Icon="Solid_ListCheck" Style="{DynamicResource SideBarIcon}"/>
+                    <TextBlock Text="Orders"/>
+                </StackPanel>
+            </Button>
         </StackPanel>   
         
     </Grid>

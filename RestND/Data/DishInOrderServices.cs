@@ -11,7 +11,7 @@ namespace RestND.Data
         private readonly DatabaseOperations _db = DatabaseOperations.Instance;
 
         // Add dishes to order
-        #region Add Dishes to order
+        #region Add Dish to order
         public bool AddDishToOrder(string orderId, DishInOrder dishInOrder)
         {
             var affectedRows = 0;
@@ -41,7 +41,7 @@ namespace RestND.Data
         }
         #endregion
 
-        // Update a dish amount of a dish
+        // Update amounts of a dish
         #region Update Dish in amount
         public bool UpdateProductInDish(int dishId, int orderId, int newDishAmount)
         {

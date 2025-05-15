@@ -8,16 +8,16 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         WindowState="Maximized"
-        Title="Manage Dishes" Height="600" Width="900">
+        Title="Manage Dishes" Height="600" Width="900"
+        Background="{DynamicResource DarkText}" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
     <!-- Resources for Enum Binding -->
 
-  
+
 
     <Grid>
-        <Image Style="{DynamicResource bg}"/>
-        
-    <Grid Margin="10">
+
+        <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="5"/>

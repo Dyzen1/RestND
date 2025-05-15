@@ -174,13 +174,15 @@ public Transaction(DatabaseOperations db)
 
             // 3. Insert Dishes 
             var dishInOrderServices = new DishInOrderServices();
-            bool dishesAdded = dishInOrderServices.AddDishesToOrder(newOrderId, o.DishInOrder);
-
-            if (!dishesAdded)
+            foreach(var dish in o.DishInOrder)
             {
-                transaction.Rollback();
-                _db.CloseConnection();
-                return false;
+                bool dishesAdded = dishInOrderServices.AddDishToOrder(newOrderId.ToString(), dish);
+                if (!dishesAdded)
+                {
+                    transaction.Rollback();
+                    _db.CloseConnection();
+                    return false;
+                }
             }
 
             // 4. Commit transaction if everything succeeded

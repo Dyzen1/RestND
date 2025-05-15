@@ -1,19 +1,6 @@
 ﻿using RestND.MVVM.View;
-using RestND.MVVM.View.UserControls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RestND
 {
@@ -24,6 +11,9 @@ namespace RestND
         {
             InitializeComponent();
             sideBar.ButtonClicked += OpenInventory;
+            sideBar.ButtonClicked += OpenOrders;
+            sideBar.ButtonClicked += OpenDishes;
+
         }
             
         //method for being able to move the window with the mouse. 
@@ -51,13 +41,31 @@ namespace RestND
             Close();
             //Application.Current.Shutdown(); - if we want the app to totally close. 
         }
-         private void OpenInventory()
+        private void OpenInventory()
         {
             var inventoryWindow = new ProductWindow();
             {
                 WindowState = WindowState.Maximized;
             }
             inventoryWindow.Show();
+            this.Close();
+        }
+        private void OpenOrders()
+        {
+            var ordersWindow = new OrderWindow();
+            {
+                WindowState = WindowState.Maximized;
+            }
+            ordersWindow.Show();
+            this.Close();
+        }
+        private void OpenDishes()
+        {
+            var dishesWindow = new DishWindow();
+            {
+                WindowState = WindowState.Maximized;
+            }
+            dishesWindow.Show();
             this.Close();
         }
 

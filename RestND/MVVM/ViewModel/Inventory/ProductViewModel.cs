@@ -15,10 +15,10 @@ namespace RestND.MVVM.ViewModel
         #region Observable Properties
 
         [ObservableProperty]
-        private ObservableCollection<Inventory> products = new();
+        public ObservableCollection<Inventory> products = new();
 
         [ObservableProperty]
-        private Inventory selectedProduct;
+        public Inventory selectedProduct;
 
         partial void OnSelectedProductChanged(Inventory value)
         {
@@ -27,7 +27,7 @@ namespace RestND.MVVM.ViewModel
         }
 
         [ObservableProperty]
-        private Inventory newProduct = new();
+        public Inventory newProduct = new();
 
         #endregion
 

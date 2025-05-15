@@ -8,74 +8,112 @@
       mc:Ignorable="d"
       d:DesignHeight="600" d:DesignWidth="900"
       WindowState="Maximized"
-      d:DataContext="{d:DesignInstance Type=viewModel:ProductViewModel, IsDesignTimeCreatable=True}">
+      d:DataContext="{d:DesignInstance Type=viewModel:ProductViewModel, IsDesignTimeCreatable=True}"
+      Background="{DynamicResource DarkText}" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
-    <Grid>
-        <!-- Background Image -->
-        <Image Style="{DynamicResource bg}" />
+    <Border BorderBrush="{DynamicResource LightText}"
+        BorderThickness="3"
+        CornerRadius="10"
+        Padding="2,6,0,0">
 
-        <Grid Margin="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <Grid>
 
-            <Grid Grid.Row="0" Margin="0 0 0 10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="480"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
 
-                <TextBox Grid.Column="0" Height="24" Background="{DynamicResource CardBG}"
-                         Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged}">
-                    <TextBox.ToolTip>Product Name</TextBox.ToolTip>
-                </TextBox>
+                <Grid Grid.Row="0" Margin="0 0 0 10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Column="1" Margin="10,0,0,0" Height="24" Background="{DynamicResource CardBG}"
-                         Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged}">
-                    <TextBox.ToolTip>Quantity Available</TextBox.ToolTip>
-                </TextBox>
+                    <TextBox Grid.Column="0" Height="24" Background="Transparent" 
+                             Foreground="{DynamicResource LightText}" 
+                             BorderBrush="{DynamicResource LightText}"
+                             Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.ToolTip>Product Name</TextBox.ToolTip>
+                    </TextBox>
 
-                <Button Grid.Column="2" Margin="10,0,0,0" Command="{Binding AddProductCommand}" Style="{DynamicResource addBtn}">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
-                        <TextBlock Text="Add Product" FontSize="13" Foreground="{DynamicResource LightText}" Margin="4,0,0,0"/>
-                    </StackPanel>
-                </Button>
-            </Grid>
 
-            <DataGrid Grid.Row="1"
+                    <TextBox Grid.Column="1" Margin="10,0,0,0" Height="24" Background="Transparent"
+                             Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged}"
+                             Foreground="{DynamicResource LightText}" BorderBrush="{DynamicResource LightText}">
+                        <TextBox.ToolTip>Quantity Available</TextBox.ToolTip>
+                    </TextBox>
+
+                    <Button Grid.Column="2" Margin="10,0,0,0" Command="{Binding AddProductCommand}" Style="{DynamicResource addBtn}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
+                            <TextBlock Text="Add Product" FontSize="13" Foreground="{DynamicResource LightText}" Margin="4,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+                <Border BorderBrush="{DynamicResource LightText}"
+                        BorderThickness="1"
+                        Padding="2,6,0,0" Grid.Row="1"
+                        CornerRadius="10">
+
+                <DataGrid Grid.Row="1"
                       ItemsSource="{Binding Products}"
                       SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
                       AutoGenerateColumns="True"
-                      Margin="0 0 0 10"
-                      Background="{DynamicResource CardBG}"/>
+                      Background="Transparent"
+                      Foreground="{DynamicResource LightText}"
+                      BorderBrush="Transparent"
+                      HeadersVisibility="Column">
+                    
+                        <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+                            <Setter Property="BorderThickness" Value="1,0,0,1"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                </DataGrid>
 
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                </Border>
 
-                <Button x:Name="return" Grid.Column="0"
+                <Grid Grid.Row="2">
+
+                    <Button x:Name="return" Grid.Column="0"
                         Style="{DynamicResource returnBtn}" Click="return_Click"
                         HorizontalAlignment="Left">
-                    <fa:SvgAwesome Style="{DynamicResource returnBtnIcon}"/>
-                </Button>
+                        <fa:SvgAwesome Style="{DynamicResource returnBtnIcon}"/>
+                    </Button>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{DynamicResource editBtn}"
-                            Command="{Binding UpdateProductCommand}"> 
-                        <fa:SvgAwesome Style="{DynamicResource editBtnIcon}"/>
-                    </Button>
-                    <Button Style="{DynamicResource deleteBtn}" Margin="5,0,0,0"
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                                Margin="0,10,20,0">
+                        <Button Style="{DynamicResource editBtn}"
+                                Command="{Binding UpdateProductCommand}">
+                            <fa:SvgAwesome Style="{DynamicResource editBtnIcon}"/>
+                        </Button>
+                        <Button Style="{DynamicResource deleteBtn}" Margin="0,0,0,0"
                             Command="{Binding DeleteProductCommand}" >
-                        <fa:SvgAwesome Style="{DynamicResource deleteBtnIcon}"/>
-                    </Button>
-                </StackPanel>
+                            <fa:SvgAwesome Style="{DynamicResource deleteBtnIcon}"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </Grid>
-    </Grid>
+    </Border>
 </Window>
