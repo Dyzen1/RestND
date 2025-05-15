@@ -30,8 +30,8 @@ namespace RestND.MVVM.ViewModel.Orders
             if (discount != null)
             {
                 totalPrice -= totalPrice * (discount.Discount_Percentage / 100.0);
-                
-                 bill = new Bill(order,totalPrice,discount);
+
+                bill = new Bill(order, discount, totalPrice);
                
             }
             else

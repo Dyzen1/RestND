@@ -66,15 +66,23 @@ namespace RestND.MVVM.Model.Tables
 
         #endregion
 
-        #region Constructor
+        #region Constructor for a new table
 
         public Table(int Table_Num,double x, double y)
-
         {
             this.X = x;
             this.Y = y;
             this.Table_Number = Table_Num;
             this.Table_Status = true;
+        }
+        #endregion
+
+        #region Constructor for a new order (status false)
+
+        public Table(int Table_Num)
+        {
+            this.Table_Number = Table_Num;
+            this.Table_Status = false;
         }
         #endregion
 

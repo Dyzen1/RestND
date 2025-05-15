@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using RestND.MVVM.Model;
+using System;
 using System.Collections.Generic;
 
 namespace RestND.Data
@@ -9,9 +10,31 @@ namespace RestND.Data
     {
         private readonly DatabaseOperations _db = DatabaseOperations.Instance;
 
+        #region Get All Products in Dish
+        public List<ProductInDish> GetAll()
+        {
+            var products = new List<ProductInDish>();
+            var query = "SELECT * FROM products_in_dish";
+            var rows = _db.ExecuteReader(query);
+
+            foreach(var row in rows)
+            {
+                products.Add(new ProductInDish
+                {
+                    Product_ID = row["Product_ID"].ToString(),
+                    Dish_ID = row["Dish_ID"].ToString(),
+                    Product_Name = row["Product_Name"].ToString(),
+                    Amount_Usage = Convert.ToDouble(row["Amount_Usage"])
+                });
+            }
+            return products;
+        }
+
+        #endregion
+
         // Add products to a dish
         #region Add Products to Dish
-        public bool AddProductsToDish(int dishId, List<ProductUsageInDish> productUsages)
+        public bool AddProductsToDish(int dishId, List<ProductInDish> productUsages)
         {
             var affectedRows = 0;
 

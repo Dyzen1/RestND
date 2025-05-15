@@ -11,20 +11,16 @@ namespace RestND.Data
         private readonly DatabaseOperations _db = DatabaseOperations.Instance;
 
         // Add dishes to order
-        #region Add dishes to order
-        public bool AddDishesToOrder(int orderId, List<DishInOrder> dishesInOrder)
+        #region Add Dishes to order
+        public bool AddDishToOrder(string orderId, DishInOrder dishInOrder)
         {
             var affectedRows = 0;
             var query = "INSERT INTO dishes_in_order(Order_ID, Dish_ID, Quantity) VALUES (@order_id, @dish_id, @quantity)";
-            foreach (var dish in dishesInOrder)
-            {
-                affectedRows = _db.ExecuteNonQuery(query,
-                    new MySqlParameter("@order_id", orderId),
-                    new MySqlParameter("@quantity", dish.Quantity),
-                    new MySqlParameter("@dish_id", dish.Dish.Dish_ID)
-                );
 
-            }
+            affectedRows = _db.ExecuteNonQuery(query,
+                new MySqlParameter("@order_id", orderId),
+                new MySqlParameter("@quantity", dishInOrder.Quantity),
+                new MySqlParameter("@dish_id", dishInOrder.Dish.Dish_ID));
 
             return affectedRows > 0;
         }

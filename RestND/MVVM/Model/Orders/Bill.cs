@@ -51,7 +51,7 @@ namespace RestND.MVVM.Model.Orders
 
         #region Constructor without Discount
 
-        public Bill(Order order, double price)
+        public Bill(Order order,double price)
         {
             this.Order = order;
             this.Price = price;
@@ -62,8 +62,7 @@ namespace RestND.MVVM.Model.Orders
         #endregion
 
         #region Constructor with Discount
-
-        public Bill(Order order, double price, Discount discount)
+        public Bill(Order order, Discount discount,double price)
         {
             this.Order = order;
             this.Price = price;
@@ -72,10 +71,10 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region Default constructor
 
-        public Bill() { }
-         #endregion
+        #region Default constructor
+        public Bill() { this.Price = 0; }
+        #endregion
 
     }
 }

@@ -39,7 +39,7 @@ namespace RestND.MVVM.ViewModel
 
         // List of selected products (with amount) that will be used in the new dish
         [ObservableProperty]
-        private ObservableCollection<ProductUsageInDish> selectedProducts = new();
+        private ObservableCollection<ProductInDish> selectedProducts = new();
 
         // The dish that is currently being created
         [ObservableProperty]
@@ -130,7 +130,7 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand(CanExecute = nameof(CanAddDish))]
         private void AddDish()
         {
-            NewDish.ProductUsage = new List<ProductUsageInDish>(SelectedProducts);
+            NewDish.ProductUsage = new List<ProductInDish>(SelectedProducts);
             NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
 
             // Run validation
@@ -179,7 +179,7 @@ namespace RestND.MVVM.ViewModel
 
         private bool CanAddDish()
         {
-            NewDish.ProductUsage = new List<ProductUsageInDish>(SelectedProducts);
+            NewDish.ProductUsage = new List<ProductInDish>(SelectedProducts);
             NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
 
             var errors = DishValidator.ValidateFields(NewDish, Dishes.ToList());

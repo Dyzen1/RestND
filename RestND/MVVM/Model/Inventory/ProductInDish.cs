@@ -1,7 +1,7 @@
 ﻿namespace RestND.MVVM.Model
 {
     // Represents a product used in a specific dish and how much of it is used
-    public class ProductUsageInDish
+    public class ProductInDish
     {
         #region Product_ID
         // The ID of the product (linked from the 'product' table)
@@ -27,12 +27,40 @@
 
         #region Amount_Usage
         // How much of the product is used in the dish (e.g., 150 grams, 200 ml)
-        private int _Amount_Usage;
+        private double _Amount_Usage;
 
-        public int Amount_Usage
+        public double Amount_Usage
         {
             get { return _Amount_Usage; }
             set { _Amount_Usage = value; }
+        }
+        #endregion
+
+        #region Dish_ID
+        private string _Dish_ID;
+
+        public string Dish_ID
+        {
+            get { return _Dish_ID; }
+            set { _Dish_ID = value; }
+        }
+        #endregion
+
+        #region Constructor
+
+        public ProductInDish(string Product_Name, double amount_Usage)
+        {
+            this.Product_Name = Product_Name;
+            this.Amount_Usage = Amount_Usage;
+        }
+
+        #endregion
+
+        #region Default Constructor
+
+        public ProductInDish()
+        {
+            
         }
         #endregion
     }

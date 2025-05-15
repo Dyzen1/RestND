@@ -25,7 +25,7 @@ namespace RestND.Data
             var dishes = new List<Dish>();
             string query = "SELECT * FROM dishes";
             var rows = _db.ExecuteReader(query);
-          
+
             foreach (var row in rows)
             {
                 dishes.Add(new Dish
@@ -33,9 +33,12 @@ namespace RestND.Data
                     Dish_ID = row["Dish_ID"].ToString(),
                     Dish_Name = row["Dish_Name"].ToString(),
                     Dish_Price = Convert.ToInt32(row["Dish_Price"]),
-                    Allergen_Notes = (AllergenNotes)Enum.Parse(typeof(AllergenNotes),
-                       Convert.ToString(row["Allergen_Notes"])),
+                    Allergen_Notes = row["Allergen_Notes"].ToString()
+                        .Split(',')
+                        .Select(note => (AllergenNotes)Enum.Parse(typeof(AllergenNotes), note.Trim()))
+                        .ToList(),
                     Availability_Status = Convert.ToBoolean(row["Availability_Status"]),
+                    Tolerance = Convert.ToDouble(row["Tolerance"]),
                     Dish_Type = new DishType
                     {
                         DishType_Name = row["Dish_Type"].ToString()
@@ -79,6 +82,24 @@ namespace RestND.Data
         }
         #endregion
 
+        #region Update Dish Availability Status
+        public void UpdateDishesAvailibility()
+        {
+            string query = @"
+                UPDATE dishes d
+                SET d.Availability_Status = 0
+                WHERE EXISTS (
+                    SELECT 1
+                    FROM products_in_dish pid
+                    JOIN products p ON pid.Product_ID = p.Product_ID
+                    WHERE pid.Dish_ID = d.Dish_ID
+                      AND (p.Quantity_Available < pid.Amount_Usage OR p.Quantity_Available <= d.Tolerance)
+                );
+            ";
 
+            _db.ExecuteNonQuery(query);
+        }
+
+        #endregion
     }
 }
