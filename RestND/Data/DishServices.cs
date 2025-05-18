@@ -30,7 +30,7 @@ namespace RestND.Data
             {
                 dishes.Add(new Dish
                 {
-                    Dish_ID = row["Dish_ID"].ToString(),
+                    Dish_ID = Convert.ToInt32(row["Dish_ID"]),
                     Dish_Name = row["Dish_Name"].ToString(),
                     Dish_Price = Convert.ToInt32(row["Dish_Price"]),
                     Allergen_Notes = row["Allergen_Notes"].ToString()
@@ -58,29 +58,22 @@ namespace RestND.Data
         #endregion
 
         #region Delete Dish
-        public override bool Delete(string dishId)
+        public override bool Delete(int dishId)
         { 
           return _transaction.DeleteDish(dishId);
 
         }
         #endregion
 
-        #region Update Dish
+        #region fullUpdate Dish
         public override bool Update(Dish d)
         {
-            string query = "UPDATE dishes SET Dish_Name = @name, Dish_Price = @price, Allergen_Notes = @notes, " +
-                           "Availability_Status = @status, Dish_Type = @type WHERE Dish_ID = @id";
-
-            return _db.ExecuteNonQuery(query,
-                new MySqlParameter("@name", d.Dish_Name),
-                new MySqlParameter("@price", d.Dish_Price),
-                new MySqlParameter("@notes", d.Allergen_Notes),
-                new MySqlParameter("@status", d.Availability_Status),
-                new MySqlParameter("@type", d.Dish_Type?.DishType_Name), 
-                new MySqlParameter("@id", d.Dish_ID)
-            ) > 0;
+                
+         return _transaction.UpdateDish(d);
         }
         #endregion
+
+   
 
         #region Update Dish Availability Status
         public void UpdateDishesAvailibility()

@@ -4,6 +4,17 @@ namespace RestND.MVVM.Model.Reports
 {
     public class Report
     {
+        #region Report id
+        private int _Report_ID;
+        public int Report_ID
+        {
+            get { return _Report_ID; }
+            set { _Report_ID = value; }
+        }
+
+
+        #endregion
+
         #region Dish Name
 
         private string _DishName;

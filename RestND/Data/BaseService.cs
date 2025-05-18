@@ -24,7 +24,7 @@ namespace RestND.MVVM.Model
         public abstract List<T> GetAll();
         public abstract bool Add(T item);
         public abstract bool Update(T item);
-        public abstract bool Delete(string id);
+        public abstract bool Delete(int id);
         
 
     }

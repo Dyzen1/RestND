@@ -6,9 +6,9 @@ namespace RestND.MVVM.Model
     public class Dish
     {
         #region Dish_ID
-        private string _Dish_ID;
+        private int _Dish_ID;
 
-        public string Dish_ID
+        public int Dish_ID
         {
             get { return _Dish_ID; }
             set { _Dish_ID = value; }

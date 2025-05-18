@@ -10,9 +10,9 @@ namespace RestND.MVVM.Model.Orders
     {
         #region Discount ID
 
-        private string _Discount_ID;
+        private int _Discount_ID;
 
-        public string Discount_ID
+        public int Discount_ID
         {
             get { return _Discount_ID; }
             set { _Discount_ID = value; }

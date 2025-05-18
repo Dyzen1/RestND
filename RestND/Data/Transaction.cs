@@ -10,8 +10,8 @@ public Transaction(DatabaseOperations db)
 {
     _db = db;
 }
-    #region Delete and Add Dish
-    public  bool DeleteDish(string dishId)
+    #region Delete and Add Dish or Update Dish and Update Product in Dish
+    public bool DeleteDish(int dishId)
     {
         _db.OpenConnection();
         using var transaction = _db.Connection.BeginTransaction();
@@ -103,11 +103,112 @@ public Transaction(DatabaseOperations db)
             throw;
         }
     }
+
+
+
+
+    public bool UpdateDish(Dish dish)
+    {
+        _db.OpenConnection();
+        using var transaction = _db.Connection.BeginTransaction();
+
+        try
+        {
+            // Update dish core info
+            string query = @"
+            UPDATE dishes 
+            SET Dish_Name = @name, Dish_Price = @price, Allergen_Notes = @notes, 
+                Availability_Status = @status, Dish_Type = @type, Tolerance = @tolerance
+            WHERE Dish_ID = @id";
+
+            _db.ExecuteNonQuery(query, _db.Connection, transaction,
+                new MySqlParameter("@name", dish.Dish_Name),
+                new MySqlParameter("@price", dish.Dish_Price),
+                new MySqlParameter("@notes", string.Join(",", dish.Allergen_Notes)),
+                new MySqlParameter("@status", dish.Availability_Status),
+                new MySqlParameter("@type", dish.Dish_Type?.DishType_Name),
+                new MySqlParameter("@tolerance", dish.Tolerance),
+                new MySqlParameter("@id", dish.Dish_ID)
+            );
+
+            // Delete and re-insert products
+            string deleteQuery = "DELETE FROM products_in_dish WHERE Dish_ID = @id";
+            _db.ExecuteNonQuery(deleteQuery, _db.Connection, transaction,
+                new MySqlParameter("@id", dish.Dish_ID)
+            );
+
+            foreach (var usage in dish.ProductUsage)
+            {
+                string insertQuery = "INSERT INTO products_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
+                _db.ExecuteNonQuery(insertQuery, _db.Connection, transaction,
+                    new MySqlParameter("@dishId", dish.Dish_ID),
+                    new MySqlParameter("@productId", usage.Product_ID),
+                    new MySqlParameter("@amount", usage.Amount_Usage)
+                );
+            }
+
+            transaction.Commit();
+            _db.CloseConnection();
+            return true;
+        }
+        catch
+        {
+            transaction.Rollback();
+            _db.CloseConnection();
+            throw;
+        }
+    }
+
+
+
+    public bool UpdateProductsOnly(Dish dish)
+    {
+        try
+        {
+            // Remove all current product associations for the dish
+            string deleteQuery = "DELETE FROM products_in_dish WHERE Dish_ID = @dishId";
+            _db.ExecuteNonQuery(deleteQuery,
+                new MySqlParameter("@dishId", dish.Dish_ID)
+            );
+
+            // Add the new/updated product usages
+            foreach (var usage in dish.ProductUsage)
+            {
+                string insertQuery = @"
+                INSERT INTO products_in_dish (Dish_ID, Product_ID, Amount_Usage) 
+                VALUES (@dishId, @productId, @amount)";
+                _db.ExecuteNonQuery(insertQuery,
+                    new MySqlParameter("@dishId", dish.Dish_ID),
+                    new MySqlParameter("@productId", usage.Product_ID),
+                    new MySqlParameter("@amount", usage.Amount_Usage)
+                );
+            }
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+
+
+
+
+
+
     #endregion
+
+
+
+
+
+
 
     #region Delete and Add Order
 
-    public bool DeleteOrder(string orderId)
+    public bool DeleteOrder(int orderId)
     {
         _db.OpenConnection();
         using var transaction = _db.Connection.BeginTransaction();

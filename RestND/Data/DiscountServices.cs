@@ -58,8 +58,8 @@ public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instan
     #endregion
 
     #region Delete Discount
-    public override bool Delete (string discountId){
-        if (string.IsNullOrEmpty(discountId)) return false;
+    public override bool Delete (int discountId){
+        if (discountId <= 0) return false;
         string query = "DELETE FROM discounts WHERE Discount_ID = @id";
         return _db.ExecuteNonQuery(query, new MySqlParameter("@id", discountId)) > 0;
     }

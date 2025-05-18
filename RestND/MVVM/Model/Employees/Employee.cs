@@ -10,8 +10,8 @@ namespace RestND.MVVM.Model.Employees
     public class Employee
     {
         #region Employee Id
-        private string _Employee_ID;
-        public string Employee_ID
+        private int _Employee_ID;
+        public int Employee_ID
         {
             get { return _Employee_ID; }
             set { _Employee_ID = value; }
@@ -60,7 +60,7 @@ namespace RestND.MVVM.Model.Employees
         #endregion
 
         #region Constructor without email and password
-        public Employee(string employeeId, string? employeeName, Role? employeeRole)
+        public Employee(int employeeId, string? employeeName, Role? employeeRole)
         {
             this.Employee_ID = employeeId;
             this.Employee_Name = employeeName;
@@ -69,7 +69,7 @@ namespace RestND.MVVM.Model.Employees
         #endregion
 
         #region Constructor with email and password
-        public Employee(string employeeId, string? employeeName, Role? employeeRole, string email, string password)
+        public Employee(int employeeId, string? employeeName, Role? employeeRole, string email, string password)
         {
             this.Email = email;
             this.Password = password;

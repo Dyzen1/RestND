@@ -43,6 +43,15 @@ namespace RestND.MVVM.Model
 
         #endregion
 
+        #region Product Date
+        private DateTime _Product_Date;
+        public DateTime Product_Date
+        {
+            get { return _Product_Date; }
+            set { _Product_Date = value; }
+        }
+        #endregion
+
         #region Constructor
 
         public Inventory(string productId, string productName, int quantityAvailable)
@@ -50,6 +59,7 @@ namespace RestND.MVVM.Model
             this.Product_ID = productId;
             this.Product_Name = productName;
             this.Quantity_Available = quantityAvailable;
+            this.Product_Date = DateTime.Now;
         }
 
         #endregion

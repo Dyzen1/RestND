@@ -72,7 +72,7 @@ namespace RestND.Data
         #endregion
 
         #region Delete Bill
-        public override bool Delete(string billId)
+        public override bool Delete(int billId)
         {
             string query = "DELETE FROM bill WHERE Bill_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", billId)) > 0;

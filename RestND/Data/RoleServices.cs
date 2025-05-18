@@ -63,8 +63,9 @@ namespace RestND.Data
         #endregion
 
         #region Delete Role
-        public override bool Delete(string roleId)
+        public override bool Delete(int roleId)
         {
+            if (roleId <= 0) return false;
 
             string query = "DELETE FROM roles WHERE Role_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", roleId)) > 0;

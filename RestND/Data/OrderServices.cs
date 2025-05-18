@@ -58,8 +58,10 @@ namespace RestND.Data
         #endregion
 
         #region Delete Order
-        public override bool Delete(string orderID)
+        public override bool Delete(int orderID)
         {
+            if(orderID <= 0)
+                return false;
             return _transaction.DeleteOrder(orderID);
         }
         #endregion

@@ -50,12 +50,20 @@ namespace RestND.Data
         #endregion
 
         #region Delete Product
-        public override bool Delete(string productId)
-        {
+        public override bool Delete(int productId)
+        { 
             string query = "DELETE FROM inventory WHERE Product_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", productId)) > 0;
         }
         #endregion
+
+        public bool Delete(string productId)
+        {
+            if(string.IsNullOrEmpty(productId))
+                return false;
+            string query = "DELETE FROM inventory WHERE Product_ID = @id";
+            return _db.ExecuteNonQuery(query, new MySqlParameter("@id", productId)) > 0;
+        }
     }
 
 }

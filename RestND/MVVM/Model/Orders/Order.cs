@@ -8,8 +8,8 @@ namespace RestND.MVVM.Model.Orders
     public class Order
     {
         #region Order ID
-        private string _Order_ID;
-        public string Order_ID
+        private int _Order_ID;
+        public int Order_ID
         {
             get { return _Order_ID; }
             set { _Order_ID = value; }

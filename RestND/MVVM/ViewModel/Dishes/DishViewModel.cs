@@ -3,49 +3,41 @@ using CommunityToolkit.Mvvm.Input;
 using RestND.Data;
 using RestND.MVVM.Model;
 using RestND.MVVM.Model.Dishes;
-using System;
 using RestND.Validations;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace RestND.MVVM.ViewModel
 {
-    // ViewModel for managing Dishes (used in the UI)
     public partial class DishViewModel : ObservableObject
     {
         #region Services
 
-        // Service for handling Dish database operations
         private readonly DishServices _dishService;
         private readonly DishTypeServices _dishTypeService;
-
-        // Service for handling Product database operations (to load available products)
         private readonly ProductService _productService;
 
         [ObservableProperty]
-        private ObservableCollection<DishType> dishTypes = new ();
+        private ObservableCollection<DishType> dishTypes = new();
+
         #endregion
 
         #region Observable Properties
 
-        // List of dishes displayed in the UI
         [ObservableProperty]
         private ObservableCollection<Dish> dishes = new();
 
-        // List of available products that can be added to a dish
         [ObservableProperty]
         private ObservableCollection<Inventory> availableProducts = new();
 
-        // List of selected products (with amount) that will be used in the new dish
         [ObservableProperty]
         private ObservableCollection<ProductInDish> selectedProducts = new();
 
-        // The dish that is currently being created
         [ObservableProperty]
         private Dish newDish = new();
 
-        // The dish currently selected in the UI
         [ObservableProperty]
         private Dish selectedDish;
 
@@ -53,30 +45,38 @@ namespace RestND.MVVM.ViewModel
         private ObservableCollection<AllergenNotes> allergenNotes = new();
 
         [ObservableProperty]
-        private ObservableCollection<AllergenNotes> selectedAllergenNotes = new ();
+        private ObservableCollection<AllergenNotes> selectedAllergenNotes = new();
 
         [ObservableProperty]
         private Dictionary<string, List<string>> dishValidationErrors = new();
 
-        // Called automatically when SelectedDish changes
+        [ObservableProperty]
+        private Inventory selectedAvailableProduct;
+
+        [ObservableProperty]
+        private int productAmountUsage;
+
         partial void OnSelectedDishChanged(Dish value)
         {
-            DeleteDishCommand.NotifyCanExecuteChanged();
-            UpdateDishCommand.NotifyCanExecuteChanged();
+            //DeleteDishCommand.NotifyCanExecuteChanged();
+            //UpdateDishCommand.NotifyCanExecuteChanged();
+            //UpdateDishOnlyCommand.NotifyCanExecuteChanged();
+            //UpdateProductsOnlyCommand.NotifyCanExecuteChanged();
+            //UpdateDishTypeOnlyCommand.NotifyCanExecuteChanged();
+            //UpdateAllDishDataCommand.NotifyCanExecuteChanged();
         }
 
         #endregion
 
         #region Constructor
 
-        // Initializes services and loads data when the ViewModel is created
         public DishViewModel()
-
         {
             _dishTypeService = new DishTypeServices();
             _dishService = new DishServices();
             _productService = new ProductService();
-            dishTypes =new ObservableCollection<DishType>(_dishTypeService.GetAll());
+
+            DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
             LoadNotes();
             LoadDishes();
             LoadAvailableProducts();
@@ -86,7 +86,6 @@ namespace RestND.MVVM.ViewModel
 
         #region Load Methods
 
-        // Loads all dishes from the database
         [RelayCommand]
         private void LoadDishes()
         {
@@ -96,7 +95,6 @@ namespace RestND.MVVM.ViewModel
                 Dishes.Add(dish);
         }
 
-        // Loads all available products from the database
         [RelayCommand]
         private void LoadAvailableProducts()
         {
@@ -106,7 +104,6 @@ namespace RestND.MVVM.ViewModel
                 AvailableProducts.Add(product);
         }
 
-        // Loads allergen notes from the database
         [RelayCommand]
         private void LoadNotes()
         {
@@ -116,27 +113,16 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
-        #region Product Selection for Dish
+        #region Dish Creation
 
-        // Product selected by user from the AvailableProducts list
-        [ObservableProperty]
-        private Inventory selectedAvailableProduct;
-
-        // Amount of product usage entered by the user (in grams or ml)
-        [ObservableProperty]
-        private int productAmountUsage;
-
-        // Adds the selected product and entered amount to the SelectedProducts list
         [RelayCommand(CanExecute = nameof(CanAddDish))]
         private void AddDish()
         {
             NewDish.ProductUsage = new List<ProductInDish>(SelectedProducts);
             NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
 
-            // Run validation
             dishValidationErrors = DishValidator.ValidateFields(NewDish, Dishes.ToList());
 
-            // If any errors, return and display them
             if (dishValidationErrors.Any())
                 return;
 
@@ -151,37 +137,33 @@ namespace RestND.MVVM.ViewModel
             }
         }
 
-
         #endregion
 
         #region Delete Dish
 
-        // Deletes the selected dish
         [RelayCommand(CanExecute = nameof(CanModifyDish))]
         private void DeleteDish()
         {
             if (SelectedDish != null)
             {
                 bool success = _dishService.Delete(SelectedDish.Dish_ID);
-
                 if (success)
                 {
                     Dishes.Remove(SelectedDish);
                 }
             }
         }
+        #endregion
 
-        // Helpers method: checks if a dish is selected (used for button enabling)
-        private bool CanModifyDish()
-        {
-            return SelectedDish != null;
-        }
+        #region Can Execute Methods
+
+
+        private bool CanModifyDish() => SelectedDish != null;
 
         private bool CanAddDish()
         {
             NewDish.ProductUsage = new List<ProductInDish>(SelectedProducts);
             NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
-
             var errors = DishValidator.ValidateFields(NewDish, Dishes.ToList());
             return !errors.Any();
         }
@@ -195,25 +177,18 @@ namespace RestND.MVVM.ViewModel
             return !errors.Any();
         }
 
-
         #endregion
 
-        #region Update Dish (optional)
+        #region Update Options
 
-        // Updates the selected dish information (without updating product usage)
         [RelayCommand(CanExecute = nameof(CanUpdateDish))]
         private void UpdateDish()
         {
-            if (SelectedDish != null)
-            {
-                bool success = _dishService.Update(SelectedDish);
-
-                if (success)
-                {
-                    LoadDishes();
-                }
-            }
+            if (SelectedDish != null && _dishService.Update(SelectedDish))
+                LoadDishes();
         }
+
+
 
         #endregion
     }

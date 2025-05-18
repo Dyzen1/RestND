@@ -40,27 +40,39 @@ namespace RestND.Data
         #region Add Employee
         public override bool Add(Employee e)
         {
-            string query = "INSERT INTO employees (Employee_ID, Employee_Name, Employee_Role) VALUES (@id, @name, @role)";
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(e.Password);
+
+            string query = "INSERT INTO employees (Employee_ID, Employee_Name, Employee_Role, Password, Email) VALUES (@id, @name, @role, @password, @mail)";
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@id", e.Employee_ID),
-                new MySqlParameter("@role", e.Employee_Role),
-                new MySqlParameter("@name", e.Employee_Name)) > 0;
+                new MySqlParameter("@name", e.Employee_Name),
+                new MySqlParameter("@role", e.Employee_Role?.Role_Name),
+                new MySqlParameter("@password", hashedPassword),
+                new MySqlParameter("@mail", e.Email)
+            ) > 0;
         }
+
         #endregion
 
-        #region Update Product
+        #region Update Employee
         public override bool Update(Employee e)
         {
-            string query = "UPDATE employees SET Employee_Name = @name, Employee_ID = @id, Employee_Role = @role WHERE Employee_ID = @id";
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(e.Password);
+
+            string query = "UPDATE employees SET Employee_Name = @name, Employee_Role = @role, Password = @password, Email = @mail WHERE Employee_ID = @id";
             return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@id", e.Employee_ID),
                 new MySqlParameter("@name", e.Employee_Name),
-                new MySqlParameter("@role", e.Employee_Role),
-                new MySqlParameter("@id", e.Employee_ID)) > 0;
+                new MySqlParameter("@role", e.Employee_Role?.Role_Name),
+                new MySqlParameter("@password", hashedPassword),
+                new MySqlParameter("@mail", e.Email)
+            ) > 0;
         }
+
         #endregion
 
-        #region Delete Product
-        public override bool Delete(string employeeID)
+        #region Delete Employee
+        public override bool Delete(int  employeeID)
         {
             string query = "DELETE FROM employees WHERE Employee_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", employeeID)) > 0;

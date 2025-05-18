@@ -5,9 +5,9 @@
     {
         #region Product_ID
         // The ID of the product (linked from the 'product' table)
-        private string _Product_ID;
+        private int _Product_ID;
 
-        public string Product_ID
+        public int Product_ID
         {
             get { return _Product_ID; }
             set { _Product_ID = value; }

@@ -56,7 +56,7 @@ namespace RestND.Data
         #endregion
 
         #region Delete DishType
-        public override bool Delete(string DishType_ID)
+        public override bool Delete(int DishType_ID)
         {
             string query = "DELETE FROM dish_type WHERE DishType_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", DishType_ID)) > 0;

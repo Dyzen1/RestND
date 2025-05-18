@@ -12,7 +12,7 @@ namespace RestND.Data
         List<T> GetAll();
         bool Add(T item);
         bool Update(T item);
-        bool Delete(string id);
+        bool Delete(int id);
 
 
     }
