@@ -43,19 +43,6 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Tolerance
-        private double _Tolerance;
-
-        public double Tolerance
-        {
-            get { return _Tolerance; }
-            set 
-            { 
-                if(this.Tolerance >= 0)
-                    _Tolerance = value; 
-            }
-        }
-        #endregion
 
         #region Allergen_Notes
         private List< AllergenNotes > _Allergen_Notes;
@@ -99,7 +86,7 @@ namespace RestND.MVVM.Model
 
         #region Constructor with allergen notes
 
-        public Dish(string? dishName, double dishPrice, List<AllergenNotes> allergenNotes, List<ProductInDish> productUsage, DishType? type, double Tolerance)
+        public Dish(string? dishName, double dishPrice, List<AllergenNotes> allergenNotes, List<ProductInDish> productUsage, DishType? type)
         {
             this.Dish_Name = dishName;
             this.Dish_Price = dishPrice;
@@ -107,21 +94,19 @@ namespace RestND.MVVM.Model
             this.Availability_Status = true;
             this.ProductUsage = productUsage;
             this.Dish_Type = type;
-            this.Tolerance = Tolerance;
         }
 
         #endregion
 
         #region Constructor without allergen notes
 
-        public Dish(string? dishName, double dishPrice, List<ProductInDish> productUsage, DishType? type, double Tolerance)
+        public Dish(string? dishName, double dishPrice, List<ProductInDish> productUsage, DishType? type)
         {
             this.Dish_Name = dishName;
             this.Dish_Price = dishPrice;
             this.Availability_Status = true;
             this.ProductUsage = productUsage;
             this.Dish_Type = type;
-            this.Tolerance = Tolerance;
         }
 
         #endregion

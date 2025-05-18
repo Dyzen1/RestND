@@ -20,6 +20,7 @@ namespace RestND.Data
                 {
                     Product_ID = row["Product_ID"].ToString(),      
                     Product_Name = row["Product_Name"].ToString(),
+                    Tolerance = Convert.ToDouble(row["Tolerance"]),
                     Quantity_Available = Convert.ToInt32(row["Quantity_Available"])
                 });
             }
@@ -31,20 +32,56 @@ namespace RestND.Data
         #region Add Product
         public override bool Add(Inventory p)
         {
-            string query = "INSERT INTO inventory (Product_Name, Quantity_Available) VALUES (@name, @qty)";
+            string query = "INSERT INTO inventory (Product_Name, Tolerance ,Quantity_Available) VALUES (@name, @tolerance,@qty)";
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@name", p.Product_Name),
+                new MySqlParameter("@tolerance", p.Tolerance),
                 new MySqlParameter("@qty", p.Quantity_Available)) > 0;
         }
+        #endregion
+
+        #region Create a dictionary of products where key is the product ID and value is the quantity
+        public Dictionary<string, double> GetProductDictionary()
+        {
+            var productDictionary = new Dictionary<string, double>();
+            string query = "SELECT Product_ID, Quantity_Available FROM inventory";
+            var rows = _db.ExecuteReader(query);
+
+            foreach (var row in rows)
+            {
+                string productId = row["Product_ID"].ToString();
+                double quantity = Convert.ToDouble(row["Quantity_Available"]);
+
+                if (!productDictionary.ContainsKey(productId))
+                {
+                    productDictionary.Add(productId, quantity);
+                }
+                
+            }
+
+            return productDictionary;
+        }
+        #endregion
+
+        #region Update Product Quantity 
+        public bool UpdateProductQuantity(string productId, double newQuantity)
+        {
+            string query = "UPDATE inventory SET Quantity_Available = @quantity WHERE Product_ID = @id";
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@quantity", newQuantity),
+                new MySqlParameter("@id", productId)) > 0;
+        }
+
         #endregion
 
         #region Update Product
         public override bool Update(Inventory p)
         {
-            string query = "UPDATE inventory SET Product_Name = @name, Quantity_Available = @qty WHERE Product_ID = @id";
+            string query = "UPDATE inventory SET Product_Name = @name, Quantity_Available = @qty,Tolerance = @tolerance WHERE Product_ID = @id";
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@name", p.Product_Name),
                 new MySqlParameter("@qty", p.Quantity_Available),
+                new MySqlParameter("@tolerance", p.Tolerance),
                 new MySqlParameter("@id", p.Product_ID)) > 0;
         }
         #endregion

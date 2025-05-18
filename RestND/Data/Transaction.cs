@@ -127,7 +127,6 @@ public Transaction(DatabaseOperations db)
                 new MySqlParameter("@notes", string.Join(",", dish.Allergen_Notes)),
                 new MySqlParameter("@status", dish.Availability_Status),
                 new MySqlParameter("@type", dish.Dish_Type?.DishType_Name),
-                new MySqlParameter("@tolerance", dish.Tolerance),
                 new MySqlParameter("@id", dish.Dish_ID)
             );
 

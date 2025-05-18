@@ -13,12 +13,27 @@ namespace RestND.Data
 
         #region Get Password based on user's id
 
-        public int GetPassword(int id)
+        public string? GetPassword(int employeeId)
         {
-            var query = "SELECT Password FROM employees WHERE ID = @id";
-            int result = Convert.ToInt32(_db.ExecuteReader(query, new MySqlParameter("@id", id)));
-            
-            return result;
+            string query = "SELECT Password FROM employees WHERE Employee_ID = @id";
+            var rows = _db.ExecuteReader(query, new MySqlParameter("@id", employeeId));
+
+            if (rows.Count == 0) return null;
+
+            return rows[0]["Password"]?.ToString();
+        }
+
+
+        #endregion
+
+        #region check stored password 
+
+        public bool ValidateLogin(int employeeId, string plainPassword)
+        {
+            var storedHash = GetPassword(employeeId);
+            if (string.IsNullOrEmpty(storedHash)) return false;
+
+            return BCrypt.Net.BCrypt.Verify(plainPassword, storedHash);
         }
 
         #endregion

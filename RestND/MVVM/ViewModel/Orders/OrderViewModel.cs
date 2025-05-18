@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using RestND.MVVM.Model.Orders;
 using RestND.Data;
 using RestND.MVVM.Model;
+using System.Collections.Generic;
 
 namespace RestND.MVVM.ViewModel.Orders
 {
@@ -13,9 +14,11 @@ namespace RestND.MVVM.ViewModel.Orders
         private readonly OrderServices _orderService;
         private readonly DishInOrderServices _dishInOrderServices;
         private readonly DishServices _dishServices;
+        private readonly ProductService _inventoryServices;
         #endregion
 
         #region Fields
+        private Dictionary<string, double> _productInventory = new();
 
         [ObservableProperty]
         public ObservableCollection<Order> orders = new ObservableCollection<Order>();
@@ -49,7 +52,9 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             _dishInOrderServices = new DishInOrderServices();
             _orderService = new OrderServices();
-            _dishServices = new DishServices();  
+            _dishServices = new DishServices();
+            _inventoryServices = new ProductService();
+            LoadProductInventory();
         }
 
         #endregion
@@ -138,6 +143,20 @@ namespace RestND.MVVM.ViewModel.Orders
             {
                 DishesInCurrentOrder.Add(dishInOrder);
                 updateBillSum();
+
+                foreach (var product in dishInOrder.Dish.ProductUsage)
+                {
+                    string productId = product.Product_ID;
+                    double totalToSubtract = product.Amount_Usage * dishInOrder.Quantity;
+
+                    if (_productInventory.ContainsKey(productId))
+                    {
+                        _productInventory[productId] -= totalToSubtract;
+                        _inventoryServices.UpdateProductQuantity(productId, _productInventory[productId]);
+                    }
+                }
+
+
             }
         }
 
@@ -155,6 +174,20 @@ namespace RestND.MVVM.ViewModel.Orders
                 {
                     DishesInCurrentOrder.Remove(dishInOrder);
                     updateBillSum();
+
+                    foreach (var product in dishInOrder.Dish.ProductUsage)
+                    {
+                        string productId = product.Product_ID;
+                        double totalToRestore = product.Amount_Usage * dishInOrder.Quantity;
+
+                        if (_productInventory.ContainsKey(productId))
+                        {
+                            _productInventory[productId] += totalToRestore;
+                            _inventoryServices.UpdateProductQuantity(productId, _productInventory[productId]);
+                        }
+                    }
+
+
                 }
             }
         }
@@ -180,6 +213,13 @@ namespace RestND.MVVM.ViewModel.Orders
             _dishServices.UpdateDishesAvailibility(); //a different method.
         }
 
+        #endregion
+
+        #region A method to load the product inventory into a dictionary
+        private void LoadProductInventory()
+        {
+            _productInventory = _inventoryServices.GetProductDictionary();
+        }
         #endregion
 
         #region CanExecute 

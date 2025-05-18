@@ -32,13 +32,16 @@ namespace RestND.MVVM.ViewModel.Employees
         [ObservableProperty]
         private Employee employee;
 
+        [ObservableProperty]
+        private bool success;
+
         #endregion
 
         #region On Change
 
         //partial void OnSelectedLoginChanged(Employee value)
         //{
-            
+
         //}
 
         #endregion
@@ -48,7 +51,10 @@ namespace RestND.MVVM.ViewModel.Employees
         [RelayCommand]
         private void GetUserPassword()
         {
-           var userDBpassword = _loginServices.GetPassword(id);
+
+            Success = _loginServices.ValidateLogin(id, password);
+
+
         }
 
         #endregion

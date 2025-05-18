@@ -99,6 +99,7 @@ namespace RestND.MVVM.ViewModel
 
         private bool CanAddEmployee()
         {
+       
             var errors = EmployeeValidator.ValidateFields(NewEmployee, Employees.ToList());
             return !errors.Any();
         }
@@ -107,7 +108,7 @@ namespace RestND.MVVM.ViewModel
             if (SelectedEmployee == null)
                 return false;
 
-            var errors = EmployeeValidator.ValidateFields(SelectedEmployee, Employees.Where(e => e.Employee_ID != selectedEmployee.Employee_ID).ToList());
+            var errors = EmployeeValidator.ValidateFields(SelectedEmployee, Employees.Where(e => e.Employee_ID != SelectedEmployee.Employee_ID).ToList());
             return !errors.Any();
         }
 

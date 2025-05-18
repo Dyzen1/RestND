@@ -31,6 +31,20 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
+        #region Tolerance
+        private double _Tolerance;
+
+        public double Tolerance
+        {
+            get { return _Tolerance; }
+            set
+            {
+                if (this.Tolerance >= 0)
+                    _Tolerance = value;
+            }
+        }
+        #endregion
+
         #region Quantity Available
 
         private int _Quantity_Available;
@@ -54,11 +68,12 @@ namespace RestND.MVVM.Model
 
         #region Constructor
 
-        public Inventory(string productId, string productName, int quantityAvailable)
+        public Inventory(string productId, string productName, int quantityAvailable,double Tolerance)
         {
             this.Product_ID = productId;
             this.Product_Name = productName;
             this.Quantity_Available = quantityAvailable;
+            this.Tolerance = Tolerance;
             this.Product_Date = DateTime.Now;
         }
 

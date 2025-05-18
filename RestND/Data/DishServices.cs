@@ -38,7 +38,6 @@ namespace RestND.Data
                         .Select(note => (AllergenNotes)Enum.Parse(typeof(AllergenNotes), note.Trim()))
                         .ToList(),
                     Availability_Status = Convert.ToBoolean(row["Availability_Status"]),
-                    Tolerance = Convert.ToDouble(row["Tolerance"]),
                     Dish_Type = new DishType
                     {
                         DishType_Name = row["Dish_Type"].ToString()
@@ -72,8 +71,6 @@ namespace RestND.Data
          return _transaction.UpdateDish(d);
         }
         #endregion
-
-   
 
         #region Update Dish Availability Status
         public void UpdateDishesAvailibility()
