@@ -56,15 +56,16 @@
                 </Grid>
 
                 <Border BorderBrush="{DynamicResource LightText}"
-                        BorderThickness="1"
-                        Padding="2,6,0,0" Grid.Row="1"
+                        BorderThickness="3"
+                        Padding="1"
+                        Grid.Row="1"
                         CornerRadius="10">
 
                 <DataGrid Grid.Row="1"
-                      ItemsSource="{Binding Products}"
+                      ItemsSource="{Binding Products}" RowBackground="Transparent"
                       SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
-                      AutoGenerateColumns="True"
-                      Background="{DynamicResource LightText}"
+                      AutoGenerateColumns="True" GridLinesVisibility="None"
+                      Background="{DynamicResource CardBG}" BorderThickness="0"
                       Foreground="{DynamicResource DarkText}"
                       BorderBrush="Transparent"
                       HeadersVisibility="Column">
@@ -74,21 +75,29 @@
                             <Setter Property="FontSize" Value="14"/>
                             <Setter Property="FontWeight" Value="Bold"/>
                             <Setter Property="Foreground" Value="{DynamicResource DarkText}"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource DarkText}"/>
-                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+                            <Setter Property="BorderThickness" Value="1,1,0,1"/>
                         </Style>
                         </DataGrid.RowStyle>
+                    
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+                                <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                            </Style>
+                        </DataGrid.CellStyle>
+                    
                         <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Background" Value="#eeeeee"/>
-                            <Setter Property="Padding" Value="5"/>
+                            <Setter Property="Background" Value="{DynamicResource DataGridHeader}"/>
+                            <Setter Property="Padding" Value="4"/>
                             <Setter Property="Foreground" Value="{DynamicResource DarkText}"/>
                             <Setter Property="FontWeight" Value="Bold"/>
                             <Setter Property="FontSize" Value="14"/>
                             <Setter Property="BorderBrush" Value="{DynamicResource DarkText}"/>
                             <Setter Property="BorderThickness" Value="1,0,0,1"/>
                         </Style>
-                    </DataGrid.ColumnHeaderStyle>
+                        </DataGrid.ColumnHeaderStyle>
                 </DataGrid>
 
                 </Border>
