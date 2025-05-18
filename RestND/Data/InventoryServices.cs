@@ -26,6 +26,7 @@ namespace RestND.Data
 
             return products;
         }
+
         #endregion
 
         #region Add Product

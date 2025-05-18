@@ -3,8 +3,8 @@
 
     <SolidColorBrush x:Key="DarkText" Color="#131d23"/> <!--a dark color-->
     <SolidColorBrush x:Key="LightText" Color="#d5f5e3"/> <!--most of the text in the pages-->
-    <SolidColorBrush x:Key="Divider" Color="#ffe599"/> <!--a section divider in the page-->
-    <SolidColorBrush x:Key="CardBG" Color="#fff2cc"/> <!--background for cards & inputs in the page-->
+    <SolidColorBrush x:Key="DataGridHeader" Color="#eeeeee"/> <!--a section divider in the page-->
+    <SolidColorBrush x:Key="CardBG" Color="#2a332e"/> <!--background for cards & inputs in the page-->
     <SolidColorBrush x:Key="ErrorMsg" Color="#C62828"/> <!--for error text messages-->
     <SolidColorBrush x:Key="Hover" Color="LightGoldenrodYellow"/> <!--for mouse hover bg-->
 
