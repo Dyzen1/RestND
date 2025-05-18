@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="RestND.MVVM.View.UserControls.ReturnBtn"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RestND.MVVM.View.UserControls" 
+             xmlns:fa="http://schemas.fontawesome.com/icons/svg"
+             mc:Ignorable="d" 
+             Height="Auto" Width="Auto" Name="returnBtn">
+    <Grid>
+
+        <Button Click="return_Click"
+                Style="{DynamicResource returnBtn}"
+                HorizontalAlignment="Left">
+            <fa:SvgAwesome Style="{DynamicResource returnBtnIcon}"/>
+        </Button>
+
+    </Grid>
+</UserControl>

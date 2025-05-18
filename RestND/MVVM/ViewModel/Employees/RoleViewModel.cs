@@ -26,7 +26,6 @@ public partial class RoleViewModel: ObservableObject{
     }
     #endregion
 
-
     #region Constructor
     // Constructor: initializes the RoleService and loads roles
     public RoleViewModel()
@@ -35,7 +34,6 @@ public partial class RoleViewModel: ObservableObject{
         LoadRoles();
     }
     #endregion
-
 
     #region Load Method
     // Loads all roles from the database

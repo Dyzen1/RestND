@@ -5,27 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:local="clr-namespace:RestND.MVVM.Model"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         mc:Ignorable="d"
         WindowState="Maximized"
-        Title="Manage Dishes" Height="600" Width="900"
+        Height="600" Width="900"
         Background="{DynamicResource DarkText}" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown">
-
-    <!-- Resources for Enum Binding -->
-
-
 
     <Grid>
 
         <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
         <!-- Add New Dish Section -->
-        <GroupBox Header="Create New Dish" Margin="0,0,0,10" Padding="10">
+        <GroupBox Padding="10">
             <StackPanel Orientation="Vertical" Margin="5">
 
                 <!-- Dish Name -->
@@ -48,8 +44,8 @@
 
                 <!-- Availability Status -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Available:" Width="100" Foreground="{DynamicResource LightText}"/>
-                    <CheckBox IsChecked="{Binding NewDish.Availability_Status, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Content="Available:" Width="100" Foreground="{DynamicResource LightText}" VerticalAlignment="Center"/>
+                        <CheckBox IsChecked="{Binding NewDish.Availability_Status, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
                 </StackPanel>
 
                 <!-- Dish Type -->
@@ -57,9 +53,8 @@
                         <Label Content="Dish Type:" Width="100" Foreground="{DynamicResource LightText}"/>
                         <ComboBox ItemsSource="{Binding DishTypes}"
                             SelectedItem="{Binding NewDish.Dish_Type, UpdateSourceTrigger=PropertyChanged}"
-                                            DisplayMemberPath="DishType_Name"
-                                                 Width="200"/>
-                    </StackPanel>
+                            DisplayMemberPath="DishType_Name" Width="200"/>
+                </StackPanel>
 
                 <Separator Margin="0,10"/>
 
@@ -93,12 +88,14 @@
         </GroupBox>
 
         <!-- Existing Dishes List -->
-        <GroupBox Header="Existing Dishes" Grid.Row="2" Padding="10">
+        <GroupBox Header="Existing Dishes" Grid.Column="1" Padding="5">
             <ListBox ItemsSource="{Binding Dishes}" 
                      SelectedItem="{Binding SelectedDish}"
                      DisplayMemberPath="Dish_Name"/>
         </GroupBox>
 
-    </Grid>
+            <uc:ReturnBtn x:Name="returnBtn" Grid.Column="0" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+
+        </Grid>
     </Grid>
 </Window>

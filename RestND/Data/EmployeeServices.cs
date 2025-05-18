@@ -3,9 +3,6 @@ using RestND.MVVM.Model;
 using RestND.MVVM.Model.Employees;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestND.Data
 {
@@ -22,7 +19,7 @@ namespace RestND.Data
             {
                 employees.Add(new Employee
                 {
-                    Employee_ID = row["Employee_ID"].ToString(),
+                    Employee_ID = Convert.ToInt32(row["Employee_ID"]),
                     Employee_Name = row["Employee_Name"].ToString(),
                     Employee_Role = new Role
                     {

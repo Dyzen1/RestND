@@ -3,12 +3,13 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:viewModel="clr-namespace:RestND.MVVM.ViewModel"
+      xmlns:products="clr-namespace:RestND.MVVM.ViewModel"
+      xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
       xmlns:fa="http://schemas.fontawesome.com/icons/svg"
       mc:Ignorable="d"
       d:DesignHeight="600" d:DesignWidth="900"
       WindowState="Maximized"
-      d:DataContext="{d:DesignInstance Type=viewModel:ProductViewModel, IsDesignTimeCreatable=True}"
+      d:DataContext="{d:DesignInstance Type=products:ProductViewModel, IsDesignTimeCreatable=True}"
       Background="{DynamicResource DarkText}" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
     <Border BorderBrush="{DynamicResource LightText}"
@@ -63,8 +64,8 @@
                       ItemsSource="{Binding Products}"
                       SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
                       AutoGenerateColumns="True"
-                      Background="Transparent"
-                      Foreground="{DynamicResource LightText}"
+                      Background="{DynamicResource LightText}"
+                      Foreground="{DynamicResource DarkText}"
                       BorderBrush="Transparent"
                       HeadersVisibility="Column">
                     
@@ -72,19 +73,19 @@
                         <Style TargetType="DataGridRow">
                             <Setter Property="FontSize" Value="14"/>
                             <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource DarkText}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource DarkText}"/>
                             <Setter Property="BorderThickness" Value="0,0,0,1"/>
                         </Style>
-                    </DataGrid.RowStyle>
-                    <DataGrid.ColumnHeaderStyle>
+                        </DataGrid.RowStyle>
+                        <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+                            <Setter Property="Background" Value="#eeeeee"/>
+                            <Setter Property="Padding" Value="5"/>
+                            <Setter Property="Foreground" Value="{DynamicResource DarkText}"/>
                             <Setter Property="FontWeight" Value="Bold"/>
                             <Setter Property="FontSize" Value="14"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource DarkText}"/>
                             <Setter Property="BorderThickness" Value="1,0,0,1"/>
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
@@ -94,11 +95,7 @@
 
                 <Grid Grid.Row="2">
 
-                    <Button x:Name="return" Grid.Column="0"
-                        Style="{DynamicResource returnBtn}" Click="return_Click"
-                        HorizontalAlignment="Left">
-                        <fa:SvgAwesome Style="{DynamicResource returnBtnIcon}"/>
-                    </Button>
+                    <uc:ReturnBtn x:Name="returnBtn" />
 
                     <StackPanel Orientation="Horizontal" 
                                 HorizontalAlignment="Right" VerticalAlignment="Bottom"

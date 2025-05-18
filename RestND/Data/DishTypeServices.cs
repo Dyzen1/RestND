@@ -23,7 +23,7 @@ namespace RestND.Data
             {
                 types.Add(new DishType
                 {
-                    DishType_ID = row["DishType_ID"].ToString(),
+                    DishType_ID = Convert.ToInt32(row["DishType_ID"]),
                     DishType_Name = row["DishType_Name"].ToString()
                 });
             }

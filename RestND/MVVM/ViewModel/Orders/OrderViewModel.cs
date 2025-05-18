@@ -3,21 +3,16 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using RestND.MVVM.Model.Orders;
 using RestND.Data;
-using System;
 using RestND.MVVM.Model;
-using RestND.MVVM.Model.Employees;
-using RestND.MVVM.Model.Tables;
 
 namespace RestND.MVVM.ViewModel.Orders
 {
     public partial class OrderViewModel : ObservableObject
     {
         #region Services
-
         private readonly OrderServices _orderService;
         private readonly DishInOrderServices _dishInOrderServices;
         private readonly DishServices _dishServices;
-
         #endregion
 
         #region Fields
@@ -112,6 +107,7 @@ namespace RestND.MVVM.ViewModel.Orders
         #endregion
 
         #region Update Order
+
         [RelayCommand(CanExecute = nameof(CanModifyOrder))]
         private void UpdateOrder()
         {
@@ -123,6 +119,7 @@ namespace RestND.MVVM.ViewModel.Orders
                     Orders[index] = SelectedOrder;
             }
         }
+
         #endregion
 
         #region Add Dish to Order
@@ -153,7 +150,7 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             if (SelectedOrder != null && dishInOrder != null)
             {
-                bool success = _dishInOrderServices.DeleteDishFromOrder(int.Parse(dishInOrder.Dish.Dish_ID), int.Parse(SelectedOrder.Order_ID));
+                bool success = _dishInOrderServices.DeleteDishFromOrder(dishInOrder.Dish.Dish_ID, SelectedOrder.Order_ID);
                 if (success)
                 {
                     DishesInCurrentOrder.Remove(dishInOrder);
@@ -165,7 +162,6 @@ namespace RestND.MVVM.ViewModel.Orders
         #endregion
 
         #region UpdateBill
-
         private void updateBillSum()
         {
             double sum = 0;
@@ -179,7 +175,6 @@ namespace RestND.MVVM.ViewModel.Orders
         #endregion
 
         #region Dishes checks!
-
         private void UpdateDishesAvailibility()
         {
             _dishServices.UpdateDishesAvailibility(); //a different method.
@@ -187,8 +182,7 @@ namespace RestND.MVVM.ViewModel.Orders
 
         #endregion
 
-        #region CanExecute Helpers
-
+        #region CanExecute 
         private bool CanModifyOrder()
         {
             return SelectedOrder != null;

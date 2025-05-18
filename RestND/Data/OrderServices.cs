@@ -30,7 +30,7 @@ namespace RestND.Data
             {
                 orders.Add(new Order
                 {
-                    Order_ID = row["Order_ID"].ToString(),
+                    Order_ID = Convert.ToInt32(row["Order_ID"]),
                     assignedEmployee = new Employee
                     {
                         Employee_Name = row["Employee_Name"].ToString()

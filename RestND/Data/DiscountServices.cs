@@ -23,7 +23,7 @@ public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instan
         {
             discounts.Add(new Discount
             {
-                Discount_ID = row["Discount_ID"].ToString(),
+                Discount_ID = Convert.ToInt32(row["Discount_ID"]),
                 Discount_Name = row["Discount_Name"].ToString(),
                 Discount_Percentage = Convert.ToDouble(row["Discount_Percentage"])
             });

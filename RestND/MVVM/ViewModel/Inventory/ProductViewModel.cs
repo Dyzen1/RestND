@@ -20,12 +20,6 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty]
         public Inventory selectedProduct;
 
-        partial void OnSelectedProductChanged(Inventory value)
-        {
-            DeleteProductCommand.NotifyCanExecuteChanged();
-            UpdateProductCommand.NotifyCanExecuteChanged();
-        }
-
         [ObservableProperty]
         public Inventory newProduct = new();
 
@@ -36,6 +30,15 @@ namespace RestND.MVVM.ViewModel
         {
             _productService = new ProductService();
             LoadProducts();
+        }
+
+        #endregion
+
+        #region On Change
+        partial void OnSelectedProductChanged(Inventory value)
+        {
+            DeleteProductCommand.NotifyCanExecuteChanged();
+            UpdateProductCommand.NotifyCanExecuteChanged();
         }
 
         #endregion

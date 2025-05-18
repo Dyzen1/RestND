@@ -27,6 +27,9 @@ public partial class DiscountViewModel : ObservableObject
     [ObservableProperty]
     public Dictionary<string, List<string>> discountValidationErrors = new();
 
+    #endregion
+
+    #region On Change
     partial void OnSelectedDiscountChanged(Discount value)
     {
         DeleteDiscountCommand.NotifyCanExecuteChanged();
@@ -46,9 +49,11 @@ public partial class DiscountViewModel : ObservableObject
         _discountService = new DiscountService();
         LoadDiscounts();
     }
+
     #endregion
 
     #region Load
+
     [RelayCommand]
     public void LoadDiscounts()
     {
@@ -57,9 +62,11 @@ public partial class DiscountViewModel : ObservableObject
         foreach (var discount in dbDiscounts)
             Discounts.Add(discount);
     }
+
     #endregion
 
     #region Add
+
     [RelayCommand(CanExecute = nameof(CanAddDiscount))]
     public void AddDiscount()
     {
@@ -68,12 +75,13 @@ public partial class DiscountViewModel : ObservableObject
 
         LoadDiscounts();
         NewDiscount = new Discount();
-        discountValidationErrors.Clear();
+        DiscountValidationErrors.Clear();
     }
 
     #endregion
 
     #region Update
+
     [RelayCommand(CanExecute = nameof(CanModifyDiscount))]
     public void UpdateDiscount()
     {
@@ -81,12 +89,14 @@ public partial class DiscountViewModel : ObservableObject
         if (success)
         {
             LoadDiscounts();
-            discountValidationErrors.Clear();
+            DiscountValidationErrors.Clear();
         }
     }
+
     #endregion
 
     #region Delete
+
     [RelayCommand(CanExecute = nameof(CanModifyDiscount))]
     public void DeleteDiscount()
     {
@@ -96,23 +106,25 @@ public partial class DiscountViewModel : ObservableObject
             LoadDiscounts();
         }
     }
+
     #endregion
 
     #region CanExecute
     private bool CanModifyDiscount()
     {
         if (SelectedDiscount == null) return false;
-        discountValidationErrors = DiscountValidator.ValidateFields(
+        DiscountValidationErrors = DiscountValidator.ValidateFields(
             SelectedDiscount,
             Discounts.Where(d => d.Discount_ID != SelectedDiscount.Discount_ID).ToList());
-        return !discountValidationErrors.Any();
+        return !DiscountValidationErrors.Any();
     }
 
     private bool CanAddDiscount()
     {
         if (NewDiscount == null) return false;
-        discountValidationErrors = DiscountValidator.ValidateFields(NewDiscount, Discounts.ToList());
-        return !discountValidationErrors.Any();
+        DiscountValidationErrors = DiscountValidator.ValidateFields(NewDiscount, Discounts.ToList());
+        return !DiscountValidationErrors.Any();
     }
+
     #endregion
 }

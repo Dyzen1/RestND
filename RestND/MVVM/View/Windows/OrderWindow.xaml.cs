@@ -2,23 +2,21 @@
 using System.Windows;
 using System.Windows.Input;
 
-namespace RestND.MVVM.View
+namespace RestND.MVVM.View.Windows
 {
     public partial class OrderWindow : Window
     {
         public OrderWindow()
         {
-            //InitializeComponent();
+            InitializeComponent();
             this.DataContext = new OrderViewModel();
         }
 
         private void return_Click(object sender, RoutedEventArgs e)
         {
             var mainWindow = new MainWindow();
-            {
-                mainWindow.WindowState = WindowState.Maximized;
-            }
-            mainWindow.ShowDialog();
+            mainWindow.WindowState = WindowState.Maximized;
+            mainWindow.Show();
             this.Close();
         }
 
@@ -47,7 +45,6 @@ namespace RestND.MVVM.View
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
-            //Application.Current.Shutdown(); - if we want the app to totally close. 
         }
     }
 }

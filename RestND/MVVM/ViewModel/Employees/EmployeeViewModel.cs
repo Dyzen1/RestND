@@ -16,14 +16,6 @@ namespace RestND.MVVM.ViewModel
         private readonly EmployeeServices _employeeService;
         #endregion
 
-        #region Constructor
-        public EmployeeViewModel()
-        {
-            _employeeService = new EmployeeServices();
-            employees = new ObservableCollection<Employee>(_employeeService.GetAll());
-        }
-        #endregion
-
         #region Observable Properties
 
         [ObservableProperty]
@@ -40,95 +32,83 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
-        #region Commands
+        #region Constructor
+        public EmployeeViewModel()
+        {
+            _employeeService = new EmployeeServices();
+        }
+
+        #endregion
+
+        #region On Change
+        partial void OnSelectedEmployeeChanged(Employee value)
+        {
+            UpdateEmployeeCommand.NotifyCanExecuteChanged();
+            DeleteEmployeeCommand.NotifyCanExecuteChanged();
+            AddEmployeeCommand.NotifyCanExecuteChanged();
+        }
+
+        #endregion
+
+        #region Relay Commands
 
         [RelayCommand(CanExecute = nameof(CanAddEmployee))]
         private void AddEmployee()
         {
-            employeeValidationErrors = EmployeeValidator.ValidateFields(newEmployee, employees.ToList());
-
-            if (employeeValidationErrors.Any())
-                return;
-
-            bool success = _employeeService.Add(newEmployee);
+            bool success = _employeeService.Add(NewEmployee);
             if (success)
             {
-                employees.Add(newEmployee);
-                newEmployee = new Employee();
-                employeeValidationErrors.Clear();
+                Employees.Add(NewEmployee);
+                NewEmployee = new Employee();
+                EmployeeValidationErrors.Clear();
             }
-        }
-
-        private bool CanAddEmployee()
-        {
-            var errors = EmployeeValidator.ValidateFields(newEmployee, employees.ToList());
-            return !errors.Any();
         }
 
         [RelayCommand(CanExecute = nameof(CanModifyEmployee))]
         private void UpdateEmployee()
         {
-            if (selectedEmployee == null)
-                return;
-
-            var errors = EmployeeValidator.ValidateFields(selectedEmployee, employees.Where(e => e.Employee_ID != selectedEmployee.Employee_ID).ToList());
-
-            if (errors.Any())
-            {
-                employeeValidationErrors = errors;
-                return;
-            }
-
-            bool success = _employeeService.Update(selectedEmployee);
+            bool success = _employeeService.Update(SelectedEmployee);
             if (success)
             {
                 LoadEmployees();
-                employeeValidationErrors.Clear();
+                EmployeeValidationErrors.Clear();
             }
-        }
-
-        private bool CanModifyEmployee()
-        {
-            if (selectedEmployee == null)
-                return false;
-
-            var errors = EmployeeValidator.ValidateFields(selectedEmployee, employees.Where(e => e.Employee_ID != selectedEmployee.Employee_ID).ToList());
-            return !errors.Any();
         }
 
         [RelayCommand(CanExecute = nameof(CanModifyEmployee))]
         private void DeleteEmployee()
         {
-            if (selectedEmployee != null)
+            bool success = _employeeService.Delete(SelectedEmployee.Employee_ID);
+            if (success)
             {
-                bool success = _employeeService.Delete(selectedEmployee.Employee_ID);
-                if (success)
-                {
-                    employees.Remove(selectedEmployee);
-                    selectedEmployee = null;
-                }
+                Employees.Remove(SelectedEmployee);
+                SelectedEmployee = null;
+                LoadEmployees();
             }
         }
 
         [RelayCommand]
         private void LoadEmployees()
         {
-            employees = new ObservableCollection<Employee>(_employeeService.GetAll());
+            Employees = new ObservableCollection<Employee>(_employeeService.GetAll());
         }
 
         #endregion
 
         #region Notify CanExecute
 
-        partial void OnNewEmployeeChanged(Employee value)
+        private bool CanAddEmployee()
         {
-            AddEmployeeCommand.NotifyCanExecuteChanged();
+            var errors = EmployeeValidator.ValidateFields(NewEmployee, Employees.ToList());
+            return !errors.Any();
         }
-
-        partial void OnSelectedEmployeeChanged(Employee value)
+        private bool CanModifyEmployee()
         {
-            UpdateEmployeeCommand.NotifyCanExecuteChanged();
-            DeleteEmployeeCommand.NotifyCanExecuteChanged();
+            if (SelectedEmployee == null)
+                return false;
+
+            var errors = EmployeeValidator.ValidateFields(SelectedEmployee, Employees.Where(e => e.Employee_ID != selectedEmployee.Employee_ID).ToList());
+            return !errors.Any();
         }
 
         #endregion

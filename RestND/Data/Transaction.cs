@@ -200,12 +200,6 @@ public Transaction(DatabaseOperations db)
 
     #endregion
 
-
-
-
-
-
-
     #region Delete and Add Order
 
     public bool DeleteOrder(int orderId)
@@ -277,7 +271,7 @@ public Transaction(DatabaseOperations db)
             var dishInOrderServices = new DishInOrderServices();
             foreach(var dish in o.DishInOrder)
             {
-                bool dishesAdded = dishInOrderServices.AddDishToOrder(newOrderId.ToString(), dish);
+                bool dishesAdded = dishInOrderServices.AddDishToOrder(newOrderId, dish);
                 if (!dishesAdded)
                 {
                     transaction.Rollback();

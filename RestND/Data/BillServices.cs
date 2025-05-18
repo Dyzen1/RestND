@@ -22,17 +22,17 @@ namespace RestND.Data
                 var row = rows[i];
                 var bill = new Bill();
 
-                bill.Bill_ID = row["Bill_ID"].ToString();
+                bill.Bill_ID = Convert.ToInt32(row["Bill_ID"]);
                 bill.Price = Convert.ToDouble(row["Price"]);
                 //bill.Bill_Date = Convert.ToDateTime(row["Bill_Date"]);
                 bill.Order.assignedEmployee.Employee_Name = row["Employee_Name"].ToString();
 
                 var discount = new Discount();
-                discount.Discount_ID = row["Discount_ID"]?.ToString() ?? "";
+                discount.Discount_ID = Convert.ToInt32(row["Discount_ID"]?? "");
                 bill.Discount = discount;
 
                 var order = new Order();
-                order.Order_ID = row["Order_ID"].ToString();
+                order.Order_ID = Convert.ToInt32(row["Order_ID"]);
                 bill.Order = order;
 
                 bills.Add(bill);

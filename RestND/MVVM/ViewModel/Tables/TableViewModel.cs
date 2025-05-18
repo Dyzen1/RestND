@@ -6,99 +6,105 @@ using System.Collections.ObjectModel;
 
 namespace RestND.MVVM.ViewModel{
 
-public partial class TableViewModel : ObservableObject{
-    #region Services
-    private readonly TableServices _tableService;
-    #endregion
+    public partial class TableViewModel : ObservableObject
+    {
+        #region Services
+        private readonly TableServices _tableService;
+        #endregion
 
-    #region Fields
+        #region Fields
     
-    [ObservableProperty]
-    public ObservableCollection<Table> tables = new ObservableCollection<Table>();
+        [ObservableProperty]
+        public ObservableCollection<Table> tables = new ObservableCollection<Table>();
 
-    [ObservableProperty]
-    public Table selectedTable;
+        [ObservableProperty]
+        public Table selectedTable;
 
- 
+        [ObservableProperty]
+        private Table newTable = new Table();
 
-    [ObservableProperty]
-    private Table newTable = new Table();
+        #endregion
 
-
-      partial void OnSelectedTableChanged(Table value)
+        #region On Change
+        partial void OnSelectedTableChanged(Table value)
         {
             DeleteTableCommand.NotifyCanExecuteChanged();
             UpdateTableCommand.NotifyCanExecuteChanged();
         }
+
         #endregion
 
-    #region Constructor
+        #region Constructor
         public TableViewModel()
         {
             _tableService = new TableServices();
             LoadTables();
         }
+
         #endregion
 
-    #region LoadTables
+        #region Load Tables
 
         [RelayCommand]
         private void LoadTables()
         {
-            tables.Clear();
+            Tables.Clear();
             var dbTables = _tableService.GetAll();
             foreach (var table in dbTables)
-                tables.Add(table);
+                Tables.Add(table);
         }
+
         #endregion
     
-    #region AddTable
+        #region AddTable
+
         [RelayCommand]
         private void AddTable()
         {
-            if (string.IsNullOrWhiteSpace(newTable.Table_Number.ToString()) || newTable.Table_Number < 0) return;
-            var success = _tableService.Add(newTable);
+            if (string.IsNullOrWhiteSpace(NewTable.Table_Number.ToString()) || NewTable.Table_Number < 0) return;
+            var success = _tableService.Add(NewTable);
 
             if (!success) return;
             LoadTables();
-            newTable = new Table();
+            NewTable = new Table();
         }
+
         #endregion
 
-    #region DeleteTable
+        #region Delete Table
 
         [RelayCommand(CanExecute = nameof(CanModifyProduct))]
         private void DeleteTable()
         {
-            if(selectedTable != null)
+            if(SelectedTable != null)
             {
-                bool success = _tableService.Delete(selectedTable.Table_ID);
+                bool success = _tableService.Delete(SelectedTable.Table_ID);
                 if(success)
                 {
-                    tables.Remove(selectedTable);
+                    Tables.Remove(SelectedTable);
                 }
             }
         }
+
         #endregion
 
-    #region UpdateTable
-
+        #region Update Table
 
         [RelayCommand(CanExecute = nameof(CanModifyProduct))]
         private void UpdateTable()
         {
-            if (selectedTable == null) return;
-            bool success = _tableService.Update(selectedTable);
+            if (SelectedTable == null) return;
+            bool success = _tableService.Update(SelectedTable);
             if (!success) return;
             LoadTables();
         }
+
         #endregion
 
-    #region CanExecute Helpers
-
+        #region CanExecute Helpers
         private bool CanModifyProduct()
         {
-            return selectedTable != null;
+            return SelectedTable != null;
         }
 
         #endregion

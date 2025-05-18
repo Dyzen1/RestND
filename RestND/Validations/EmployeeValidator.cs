@@ -8,12 +8,13 @@ namespace RestND.Validations
 {
     public static class EmployeeValidator
     {
+        #region feilds validator
         public static Dictionary<string, List<string>> ValidateFields(Employee employee, List<Employee> existingEmployees, bool checkEmailExists = true, bool checkIdExists = true)
         {
             var errors = new Dictionary<string, List<string>>();
 
             // Employee ID validation
-            if (!int.TryParse(employee.Employee_ID, out int parsedId) || parsedId <= 0)
+            if (employee.Employee_ID <= 0)
             {
                 AddError(errors, nameof(employee.Employee_ID), "Employee ID must be a valid number greater than 0!");
             }
@@ -74,12 +75,16 @@ namespace RestND.Validations
             return errors;
         }
 
-        // Helper to add an error
+        #endregion
+
+        #region Helper to add an error
         private static void AddError(Dictionary<string, List<string>> dict, string key, string message)
         {
             if (!dict.ContainsKey(key))
                 dict[key] = new List<string>();
             dict[key].Add(message);
         }
+
+        #endregion
     }
 }

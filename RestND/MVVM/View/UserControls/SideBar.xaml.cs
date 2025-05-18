@@ -17,7 +17,7 @@ namespace RestND.MVVM.View.UserControls
 {
     public partial class SideBar : UserControl
     {
-        public event Action ButtonClicked;
+        public event Action<string> ButtonClicked;
         public SideBar()
         {
             InitializeComponent();
@@ -25,7 +25,28 @@ namespace RestND.MVVM.View.UserControls
 
         private void InventoryBtn_Click(object sender, RoutedEventArgs e)
         {
-            ButtonClicked?.Invoke();
+            ButtonClicked?.Invoke("Inventory");
         }
+
+        private void OrdersBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonClicked?.Invoke("Orders");
+        }
+
+
+        private void DishesBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonClicked?.Invoke("Dishes");
+        }
+
+        //private void ReportsBtn_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ButtonClicked?.Invoke();
+        //}
+
+        //private void EmployeesBtn_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ButtonClicked?.Invoke();
+        //}
     }
 }

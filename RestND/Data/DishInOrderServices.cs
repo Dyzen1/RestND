@@ -12,7 +12,7 @@ namespace RestND.Data
 
         // Add dishes to order
         #region Add Dish to order
-        public bool AddDishToOrder(string orderId, DishInOrder dishInOrder)
+        public bool AddDishToOrder(int orderId, DishInOrder dishInOrder)
         {
             var affectedRows = 0;
             var query = "INSERT INTO dishes_in_order(Order_ID, Dish_ID, Quantity) VALUES (@order_id, @dish_id, @quantity)";

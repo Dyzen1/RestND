@@ -20,7 +20,7 @@ namespace RestND.Data
             {
                 tables.Add(new Table
                 {
-                    Table_ID = row["Table_ID"].ToString(),
+                    Table_ID = Convert.ToInt32(row["Table_ID"]),
                     Table_Number = Convert.ToInt32(row["Table_Number"]),
                     Table_Status = Convert.ToBoolean(row["Table_Status"])
                 });

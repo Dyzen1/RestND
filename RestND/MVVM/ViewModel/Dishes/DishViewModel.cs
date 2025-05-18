@@ -56,16 +56,6 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty]
         private int productAmountUsage;
 
-        partial void OnSelectedDishChanged(Dish value)
-        {
-            //DeleteDishCommand.NotifyCanExecuteChanged();
-            //UpdateDishCommand.NotifyCanExecuteChanged();
-            //UpdateDishOnlyCommand.NotifyCanExecuteChanged();
-            //UpdateProductsOnlyCommand.NotifyCanExecuteChanged();
-            //UpdateDishTypeOnlyCommand.NotifyCanExecuteChanged();
-            //UpdateAllDishDataCommand.NotifyCanExecuteChanged();
-        }
-
         #endregion
 
         #region Constructor
@@ -80,6 +70,17 @@ namespace RestND.MVVM.ViewModel
             LoadNotes();
             LoadDishes();
             LoadAvailableProducts();
+        }
+
+        #endregion
+
+        #region On Change
+
+        partial void OnSelectedDishChanged(Dish value)
+        {
+            UpdateDishCommand.NotifyCanExecuteChanged();
+            DeleteDishCommand.NotifyCanExecuteChanged();
+            AddDishCommand.NotifyCanExecuteChanged();
         }
 
         #endregion
@@ -113,19 +114,14 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
-        #region Dish Creation
+        #region Add Dish
 
         [RelayCommand(CanExecute = nameof(CanAddDish))]
         private void AddDish()
         {
             NewDish.ProductUsage = new List<ProductInDish>(SelectedProducts);
             NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
-
-            dishValidationErrors = DishValidator.ValidateFields(NewDish, Dishes.ToList());
-
-            if (dishValidationErrors.Any())
-                return;
-
+            
             bool success = _dishService.Add(NewDish);
 
             if (success)
@@ -133,7 +129,6 @@ namespace RestND.MVVM.ViewModel
                 LoadDishes();
                 NewDish = new Dish();
                 SelectedProducts.Clear();
-                dishValidationErrors.Clear();
             }
         }
 
@@ -156,8 +151,6 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Can Execute Methods
-
-
         private bool CanModifyDish() => SelectedDish != null;
 
         private bool CanAddDish()
@@ -187,8 +180,6 @@ namespace RestND.MVVM.ViewModel
             if (SelectedDish != null && _dishService.Update(SelectedDish))
                 LoadDishes();
         }
-
-
 
         #endregion
     }

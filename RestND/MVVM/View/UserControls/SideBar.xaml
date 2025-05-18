@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:RestND.MVVM.View.UserControls"
              xmlns:fa="http://schemas.fontawesome.com/icons/svg"
              mc:Ignorable="d" 
+             Name="sideBar"
              d:DesignHeight="250" d:DesignWidth="200">
     <Grid>
         
@@ -22,7 +23,7 @@
                     <TextBlock Text="Employees"/>
                 </StackPanel>
             </Button>
-            <Button Style="{DynamicResource SideBarBtn}">
+            <Button Style="{DynamicResource SideBarBtn}" Click="DishesBtn_Click">
                 <StackPanel>
                     <fa:SvgAwesome Icon="Solid_BowlFood" Style="{DynamicResource SideBarIcon}"/>
                     <TextBlock Text="Dishes"/>
@@ -34,7 +35,7 @@
                     <TextBlock Text="Reports"/>
                 </StackPanel>
             </Button>
-            <Button Style="{DynamicResource SideBarBtn}">
+            <Button Style="{DynamicResource SideBarBtn}" Click="OrdersBtn_Click">
                 <StackPanel>
                     <fa:SvgAwesome Icon="Solid_ListCheck" Style="{DynamicResource SideBarIcon}"/>
                     <TextBlock Text="Orders"/>

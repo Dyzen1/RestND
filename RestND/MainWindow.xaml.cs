@@ -1,21 +1,37 @@
 ﻿using RestND.MVVM.View;
+using RestND.MVVM.View.UserControls;
+using RestND.MVVM.View.Windows;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
 namespace RestND
 {
-   
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-            sideBar.ButtonClicked += OpenInventory;
-            sideBar.ButtonClicked += OpenOrders;
-            sideBar.ButtonClicked += OpenDishes;
+            sideBar.ButtonClicked += SideBar_ButtonClicked;
 
         }
-            
+
+        private void SideBar_ButtonClicked(string destination)
+        {
+            switch (destination)
+            {
+                case "Inventory":
+                    OpenInventory();
+                    break;
+                case "Orders":
+                    OpenOrders();
+                    break;
+                case "Dishes":
+                    OpenDishes();
+                    break;
+            }
+        }
+
         //method for being able to move the window with the mouse. 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -39,7 +55,6 @@ namespace RestND
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
-            //Application.Current.Shutdown(); - if we want the app to totally close. 
         }
         private void OpenInventory()
         {
@@ -68,6 +83,24 @@ namespace RestND
             dishesWindow.Show();
             this.Close();
         }
+        //private void OpenReports()
+        //{
+        //    var dishesWindow = new DishWindow();
+        //    {
+        //        WindowState = WindowState.Maximized;
+        //    }
+        //    dishesWindow.Show();
+        //    this.Close();
+        //}
+        //private void OpenEmployees()
+        //{
+        //    var dishesWindow = new DishWindow();
+        //    {
+        //        WindowState = WindowState.Maximized;
+        //    }
+        //    dishesWindow.Show();
+        //    this.Close();
+        //}
 
     }
 }
