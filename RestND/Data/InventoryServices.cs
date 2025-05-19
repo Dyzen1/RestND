@@ -18,10 +18,11 @@ namespace RestND.Data
             {
                 products.Add(new Inventory
                 {
-                    Product_ID = row["Product_ID"].ToString(),      
+                    Product_ID = row["Product_ID"].ToString(),
                     Product_Name = row["Product_Name"].ToString(),
                     Tolerance = Convert.ToDouble(row["Tolerance"]),
-                    Quantity_Available = Convert.ToInt32(row["Quantity_Available"])
+                    Quantity_Available = Convert.ToInt32(row["Quantity_Available"]),
+                    Created_At = row["Created_At"].ToString().Split(' ')[0]
                 });
             }
 

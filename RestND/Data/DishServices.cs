@@ -40,7 +40,7 @@ namespace RestND.Data
                     Availability_Status = Convert.ToBoolean(row["Availability_Status"]),
                     Dish_Type = new DishType
                     {
-                        DishType_Name = row["Dish_Type"].ToString()
+                        DishType_Name = row["DishType_Name"].ToString()
                     }
                 });
             }

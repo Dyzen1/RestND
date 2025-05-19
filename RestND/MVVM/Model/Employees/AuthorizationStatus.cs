@@ -12,7 +12,6 @@ namespace RestND.MVVM.Model.Employees
         B, 
         C,
         D,
-        E,
-        F  
+        E
     }
 }

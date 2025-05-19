@@ -15,7 +15,7 @@ namespace RestND.MVVM.ViewModel
         #region Observable Properties
 
         [ObservableProperty]
-        public ObservableCollection<Inventory> products = new();
+        public ObservableCollection<Inventory> products = new ObservableCollection<Inventory>();
 
         [ObservableProperty]
         public Inventory selectedProduct;
@@ -35,10 +35,11 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region On Change
+
         partial void OnSelectedProductChanged(Inventory value)
         {
-            DeleteProductCommand.NotifyCanExecuteChanged();
             UpdateProductCommand.NotifyCanExecuteChanged();
+            DeleteProductCommand.NotifyCanExecuteChanged();
         }
 
         #endregion
@@ -50,7 +51,7 @@ namespace RestND.MVVM.ViewModel
         {
             Products.Clear();
 
-            var dbProducts = _productService.GetAll(); // updated GetProducts -> GetAll
+            var dbProducts = _productService.GetAll(); 
 
             foreach (var product in dbProducts)
             {
@@ -81,10 +82,10 @@ namespace RestND.MVVM.ViewModel
 
         #region Delete Product
 
-        [RelayCommand(CanExecute = nameof(CanModifyProduct))]
+        [RelayCommand]
         private void DeleteProduct()
         {
-            if (SelectedProduct != null)
+            if(CanModifyProduct())
             {
                 bool success = _productService.Delete(SelectedProduct.Product_ID); //  updated DeleteProduct -> Delete
 
@@ -99,12 +100,12 @@ namespace RestND.MVVM.ViewModel
 
         #region Update Product
 
-        [RelayCommand(CanExecute = nameof(CanModifyProduct))]
+        [RelayCommand]
         private void UpdateProduct()
         {
-            if (SelectedProduct != null)
+            if(CanModifyProduct())
             {
-                bool success = _productService.Update(SelectedProduct); //  updated UpdateProduct -> Update
+                bool success = _productService.Update(SelectedProduct); 
 
                 if (success)
                 {
@@ -113,6 +114,7 @@ namespace RestND.MVVM.ViewModel
                         Products[index] = SelectedProduct;
                 }
             }
+            
         }
 
         #endregion

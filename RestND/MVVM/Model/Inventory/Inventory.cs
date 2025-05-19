@@ -8,7 +8,7 @@ namespace RestND.MVVM.Model
 {
     public class Inventory
     {
-        #region Inventroy ID
+        #region Product ID
  
         private string _Product_ID;
 
@@ -20,7 +20,7 @@ namespace RestND.MVVM.Model
 
         #endregion
 
-        #region Inventroy Name
+        #region Product Name
 
         private string? _Product_Name;
 
@@ -57,24 +57,24 @@ namespace RestND.MVVM.Model
 
         #endregion
 
-        #region Product Date
-        private DateTime _Product_Date;
-        public DateTime Product_Date
+        #region Created At
+        private string _Created_At;
+        public string Created_At
         {
-            get { return _Product_Date; }
-            set { _Product_Date = value; }
+            get { return _Created_At; }
+            set { _Created_At = value; }
         }
         #endregion
 
         #region Constructor
 
-        public Inventory(string productId, string productName, int quantityAvailable,double Tolerance)
+        public Inventory(string productId, string productName, int quantityAvailable,double Tolerance, string date)
         {
             this.Product_ID = productId;
             this.Product_Name = productName;
             this.Quantity_Available = quantityAvailable;
             this.Tolerance = Tolerance;
-            this.Product_Date = DateTime.Now;
+            this.Created_At = date;
         }
 
         #endregion
