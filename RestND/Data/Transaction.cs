@@ -18,13 +18,13 @@ public Transaction(DatabaseOperations db)
 
         try
         {
-            // 1. Delete from child table first
+          
             string deleteProductsQuery = "DELETE FROM products_in_dish WHERE Dish_ID = @id";
             _db.ExecuteNonQuery(deleteProductsQuery, _db.Connection, transaction,
                 new MySqlParameter("@id", dishId)
             );
 
-            // 2. Delete from parent table
+            
             string deleteDishQuery = "DELETE FROM dishes WHERE Dish_ID = @id";
             int rowsAffected = _db.ExecuteNonQuery(deleteDishQuery, _db.Connection, transaction,
                 new MySqlParameter("@id", dishId)
@@ -58,7 +58,7 @@ public Transaction(DatabaseOperations db)
 
         try
         {
-            // 1. Insert the Dish
+           
             string query = "INSERT INTO dishes (Dish_Name, Dish_Price, Allergen_Notes, Availability_Status, Dish_Type) " +
                            "VALUES (@name, @price, @notes, @status, @type)";
 
@@ -77,10 +77,10 @@ public Transaction(DatabaseOperations db)
                 return false;
             }
 
-            // 2. Get the new Dish ID
+        
             int newDishId = Convert.ToInt32(_db.ExecuteScalar("SELECT LAST_INSERT_ID();", _db.Connection, transaction));
 
-            // 3. Insert ProductUsage (always required)
+           
             var productInDishService = new ProductInDishService();
             bool productsAdded = productInDishService.AddProductsToDish(newDishId, d.ProductUsage);
 
@@ -91,7 +91,7 @@ public Transaction(DatabaseOperations db)
                 return false;
             }
 
-            // 4. Commit transaction if everything succeeded
+            
             transaction.Commit();
             _db.CloseConnection();
             return true;
@@ -157,43 +157,6 @@ public Transaction(DatabaseOperations db)
             throw;
         }
     }
-
-
-
-    public bool UpdateProductsOnly(Dish dish)
-    {
-        try
-        {
-            // Remove all current product associations for the dish
-            string deleteQuery = "DELETE FROM products_in_dish WHERE Dish_ID = @dishId";
-            _db.ExecuteNonQuery(deleteQuery,
-                new MySqlParameter("@dishId", dish.Dish_ID)
-            );
-
-            // Add the new/updated product usages
-            foreach (var usage in dish.ProductUsage)
-            {
-                string insertQuery = @"
-                INSERT INTO products_in_dish (Dish_ID, Product_ID, Amount_Usage) 
-                VALUES (@dishId, @productId, @amount)";
-                _db.ExecuteNonQuery(insertQuery,
-                    new MySqlParameter("@dishId", dish.Dish_ID),
-                    new MySqlParameter("@productId", usage.Product_ID),
-                    new MySqlParameter("@amount", usage.Amount_Usage)
-                );
-            }
-
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-
-
-
 
 
 

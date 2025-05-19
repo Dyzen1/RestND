@@ -29,7 +29,7 @@
                     <TextBlock Text="Dishes"/>
                 </StackPanel>
             </Button>
-            <Button Style="{DynamicResource SideBarBtn}">
+            <Button Style="{DynamicResource SideBarBtn}" Click="ReportsBtn_Click">
                 <StackPanel>
                     <fa:SvgAwesome Icon="Solid_FileExport" Style="{DynamicResource SideBarIcon}"/>
                     <TextBlock Text="Reports"/>

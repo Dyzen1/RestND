@@ -39,10 +39,10 @@ namespace RestND.MVVM.View.UserControls
             ButtonClicked?.Invoke("Dishes");
         }
 
-        //private void ReportsBtn_Click(object sender, RoutedEventArgs e)
-        //{
-        //    ButtonClicked?.Invoke();
-        //}
+        private void ReportsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonClicked?.Invoke("Reports");
+        }
 
         //private void EmployeesBtn_Click(object sender, RoutedEventArgs e)
         //{

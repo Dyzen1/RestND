@@ -29,6 +29,9 @@ namespace RestND
                 case "Dishes":
                     OpenDishes();
                     break;
+                case "Reports":
+                    OpenReports();
+                    break;
             }
         }
 
@@ -83,15 +86,16 @@ namespace RestND
             dishesWindow.Show();
             this.Close();
         }
-        //private void OpenReports()
-        //{
-        //    var dishesWindow = new DishWindow();
-        //    {
-        //        WindowState = WindowState.Maximized;
-        //    }
-        //    dishesWindow.Show();
-        //    this.Close();
-        //}
+        private void OpenReports()
+        {
+            var reportWindow = new ReportWindow
+            {
+                WindowState = WindowState.Maximized
+            };
+            reportWindow.Show();
+            this.Close();
+        }
+
         //private void OpenEmployees()
         //{
         //    var dishesWindow = new DishWindow();

@@ -1,0 +1,48 @@
+﻿<Window x:Class="RestND.MVVM.View.Windows.ReportWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+      xmlns:viewModel="clr-namespace:RestND.MVVM.ViewModel.Windows"
+      mc:Ignorable="d"
+      Title="ReportWindow">
+
+
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Filter Controls -->
+        <StackPanel Orientation="Horizontal" Margin="0 0 0 10" HorizontalAlignment="Left">
+            <Label Content="From:" Margin="0,0,10,0" VerticalAlignment="Center"/>
+            <DatePicker SelectedDate="{Binding FromDate}" Margin="0,0,10,0" />
+
+            <Label Content="To:" Margin="0,0,10,0" VerticalAlignment="Center"/>
+            <DatePicker SelectedDate="{Binding ToDate}" Margin="0,0,10,0" />
+
+            <ComboBox Width="150"
+                      ItemsSource="{Binding FilterOptions}"
+                      SelectedItem="{Binding SelectedFilter}"
+                      Margin="0,0,10,0" />
+
+            <Button Content="Load Report"
+                    Command="{Binding LoadChartDataCommand}" />
+        </StackPanel>
+
+        <!-- Chart -->
+        <lvc:CartesianChart Grid.Row="1"
+                            Series="{Binding SeriesCollection}"
+                            LegendLocation="Right">
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Title="Dishes" Labels="{Binding Labels}" />
+            </lvc:CartesianChart.AxisX>
+            <lvc:CartesianChart.AxisY>
+                <lvc:Axis Title="Quantity Sold" />
+            </lvc:CartesianChart.AxisY>
+        </lvc:CartesianChart>
+    </Grid>
+</Window>

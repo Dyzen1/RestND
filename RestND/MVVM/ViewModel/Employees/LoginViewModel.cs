@@ -52,7 +52,7 @@ namespace RestND.MVVM.ViewModel.Employees
         private void GetUserPassword()
         {
 
-            Success = _loginServices.ValidateLogin(id, password);
+            Success = _loginServices.ValidateLogin(Id, Password);
 
 
         }
