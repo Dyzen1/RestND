@@ -6,7 +6,7 @@
       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       xmlns:viewModel="clr-namespace:RestND.MVVM.ViewModel.Windows"
       mc:Ignorable="d"
-      Title="ReportWindow">
+      WindowState="Maximized" WindowStyle="None" Background="{DynamicResource DarkText}">
 
 
 
@@ -18,18 +18,18 @@
 
         <!-- Filter Controls -->
         <StackPanel Orientation="Horizontal" Margin="0 0 0 10" HorizontalAlignment="Left">
-            <Label Content="From:" Margin="0,0,10,0" VerticalAlignment="Center"/>
-            <DatePicker SelectedDate="{Binding FromDate}" Margin="0,0,10,0" />
+            <Label Content="From:" Margin="0,0,10,0" VerticalAlignment="Center" Foreground="{DynamicResource LightText}"/>
+            <DatePicker SelectedDate="{Binding FromDate}" Margin="0,0,10,0"/>
 
-            <Label Content="To:" Margin="0,0,10,0" VerticalAlignment="Center"/>
-            <DatePicker SelectedDate="{Binding ToDate}" Margin="0,0,10,0" />
+            <Label Content="To:" Margin="0,0,10,0" VerticalAlignment="Center" Foreground="{DynamicResource LightText}"/>
+            <DatePicker SelectedDate="{Binding ToDate}" Margin="0,0,15,0" />
 
             <ComboBox Width="150"
                       ItemsSource="{Binding FilterOptions}"
                       SelectedItem="{Binding SelectedFilter}"
-                      Margin="0,0,10,0" />
+                      Margin="0,0,15,0" />
 
-            <Button Content="Load Report"
+            <Button Content="Load Report" Style="{DynamicResource loginBtn}"
                     Command="{Binding LoadChartDataCommand}" />
         </StackPanel>
 

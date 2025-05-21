@@ -9,7 +9,6 @@ using System.ComponentModel.DataAnnotations;
 
 public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instance)
 {
-    
 
     #region Get All Discounts
 
