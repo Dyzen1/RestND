@@ -8,49 +8,81 @@
       xmlns:fa="http://schemas.fontawesome.com/icons/svg"
       mc:Ignorable="d"
       d:DesignHeight="600" d:DesignWidth="900"
-      WindowState="Maximized"
+      Style="{StaticResource windowStyle}"
       d:DataContext="{d:DesignInstance Type=products:ProductViewModel, IsDesignTimeCreatable=True}"
-      Background="{DynamicResource DarkText}" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+      MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
-    <Border BorderBrush="{DynamicResource LightText}"
-        BorderThickness="3"
-        CornerRadius="10"
-        Padding="2,6,0,0">
+    <Border Style="{DynamicResource windowBorder}">
 
         <Grid Margin="20 5 20 10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-                <Grid Grid.Row="0" Margin="0 0 0 10">
+            <Grid Grid.Row="0" Margin="0 0 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="New Product Name:" Foreground="{DynamicResource LightText}" VerticalAlignment="Center"/>
-                    <TextBox Width="150" Background="Transparent" VerticalAlignment="Center"
+                <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0 0 10 0">
+                    <Label Content="Serial Number" Foreground="{DynamicResource LightText}" 
+                           VerticalAlignment="Center" FontSize="13"/>
+                    <TextBox Background="Transparent"
+                             Text="{Binding NewProduct.Product_ID, UpdateSourceTrigger=PropertyChanged}"
+                             Foreground="{DynamicResource LightText}" HorizontalAlignment="Stretch" Height="20"
+                             BorderBrush="{DynamicResource LightText}">
+                        <TextBox.ToolTip>Tolerance</TextBox.ToolTip>
+                    </TextBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0 0 10 0">
+                    <Label Content="Product Name" Foreground="{DynamicResource LightText}" 
+                           VerticalAlignment="Center" FontSize="13"/>
+                    <TextBox HorizontalAlignment="Stretch" Background="Transparent" 
                              Foreground="{DynamicResource LightText}" Height="20"
                              BorderBrush="{DynamicResource LightText}"
                              Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged}">
                         <TextBox.ToolTip>Product Name</TextBox.ToolTip>
                     </TextBox>
+                </StackPanel>
 
-                    <Label Content="Quantity In Stock:" Foreground="{DynamicResource LightText}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0 0 10 0">
+                    <Label Content="Quantity" Foreground="{DynamicResource LightText}" 
+                           VerticalAlignment="Center" FontSize="13"/>
                     <TextBox Background="Transparent"
                              Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged}"
-                             Foreground="{DynamicResource LightText}" Width="150" Height="20"
-                             BorderBrush="{DynamicResource LightText}" VerticalAlignment="Center">
+                             Foreground="{DynamicResource LightText}" HorizontalAlignment="Stretch" Height="20"
+                             BorderBrush="{DynamicResource LightText}">
                         <TextBox.ToolTip>Quantity Available</TextBox.ToolTip>
                     </TextBox>
+                </StackPanel>
 
-                    <Button Margin="50,0,0,0" Command="{Binding AddProductCommand}" Style="{DynamicResource addBtn}" VerticalAlignment="Stretch">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <StackPanel Grid.Column="3" Orientation="Vertical" Margin="0 0 10 0">
+                    <Label Content="Tolerance" Foreground="{DynamicResource LightText}" 
+                           VerticalAlignment="Center" FontSize="13"/>
+                    <TextBox Background="Transparent"
+                             Text="{Binding NewProduct.Tolerance, UpdateSourceTrigger=PropertyChanged}"
+                             Foreground="{DynamicResource LightText}" HorizontalAlignment="Stretch" Height="20"
+                             BorderBrush="{DynamicResource LightText}">
+                        <TextBox.ToolTip>Tolerance</TextBox.ToolTip>
+                    </TextBox>
+                </StackPanel>
+
+                    <Button Grid.Column="3" Command="{Binding AddProductCommand}" Margin="0" 
+                            Style="{DynamicResource addBtn}" HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal">
                             <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
-                            <TextBlock Text="Add Product" FontSize="13" Foreground="{DynamicResource LightText}" Margin="4,0,0,0"/>
+                            <TextBlock Text="Add Product" FontSize="13" Foreground="{DynamicResource LightText}" 
+                                       Margin="4,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    </StackPanel>
-                </Grid>
+                    
+            </Grid>
 
                 <Border BorderBrush="{DynamicResource LightText}"
                         BorderThickness="3"
@@ -67,7 +99,7 @@
                               Background="{DynamicResource CardBG}"
                               Foreground="{DynamicResource DarkText}"
                               BorderBrush="Transparent"
-                              HeadersVisibility="Column"
+                              HeadersVisibility="None"
                               ColumnWidth="*" BorderThickness="0">
 
                         <DataGrid.Columns>
@@ -82,7 +114,7 @@
                                 <Setter Property="FontSize" Value="14"/>
                                 <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
                                 <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
-                                <Setter Property="BorderThickness" Value="1,1,0,1"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
                             </Style>
                         </DataGrid.RowStyle>
 
@@ -93,7 +125,7 @@
                             </Style>
                         </DataGrid.CellStyle>
 
-                        <DataGrid.ColumnHeaderStyle>
+                        <!--<DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="{DynamicResource DataGridHeader}"/>
                                 <Setter Property="Padding" Value="4"/>
@@ -103,7 +135,7 @@
                                 <Setter Property="BorderBrush" Value="{DynamicResource DarkText}"/>
                                 <Setter Property="BorderThickness" Value="1,0,0,0"/>
                             </Style>
-                        </DataGrid.ColumnHeaderStyle>
+                        </DataGrid.ColumnHeaderStyle>-->
 
                     </DataGrid>
 
