@@ -51,10 +51,7 @@ namespace RestND.MVVM.ViewModel.Employees
         [RelayCommand]
         private void GetUserPassword()
         {
-
             Success = _loginServices.ValidateLogin(Id, Password);
-
-
         }
 
         #endregion

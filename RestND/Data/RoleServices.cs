@@ -38,7 +38,6 @@ namespace RestND.Data
         #region Add Role
         public override bool Add(Role r)
         {
-
             string query = "INSERT INTO roles (Email, Password ,Role_Name , Role_Authorization) VALUES (@Email, @Password ,@Role_Name , @Role_Authorization)";
 
             return _db.ExecuteNonQuery(query,

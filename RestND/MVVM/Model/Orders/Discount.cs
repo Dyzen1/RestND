@@ -41,13 +41,21 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region constructor
+        #region Is_Active - a property for knowing wheather the discount has been deleted or not
+        private bool _Is_Active;
+        public bool Is_Active
+        {
+            get { return _Is_Active; }
+            set { _Is_Active = value; }
+        }
+        #endregion
 
+        #region Constructor
         public Discount(string name , double discountPercentage)
         {
             this.Discount_Name = name;
             this.Discount_Percentage = discountPercentage;
-
+            this.Is_Active = true; 
         }
         #endregion
 

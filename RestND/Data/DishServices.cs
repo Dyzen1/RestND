@@ -28,6 +28,8 @@ namespace RestND.Data
 
             foreach (var row in rows)
             {
+                if (row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
+                    continue; // Skip inactive dishes
                 dishes.Add(new Dish
                 {
                     Dish_ID = Convert.ToInt32(row["Dish_ID"]),
@@ -47,6 +49,7 @@ namespace RestND.Data
 
             return dishes;
         }
+
         #endregion
 
         #region Add Dish
@@ -54,22 +57,27 @@ namespace RestND.Data
         {
             return _transaction.AddDish(d);
         }
+
         #endregion
 
-        #region Delete Dish
-        public override bool Delete(int dishId)
-        { 
-          return _transaction.DeleteDish(dishId);
-
-        }
-        #endregion
-
-        #region fullUpdate Dish
-        public override bool Update(Dish d)
+        #region Delete Dish (not really deleting, just marking as inactive)
+        public override bool Delete(Dish d)
         {
-                
-         return _transaction.UpdateDish(d);
+            d.Is_Active = false;
+            string query = "UPDATE dishes SET Is_Active = @active WHERE Dish_ID = @id";
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@active", d.Is_Active),
+                new MySqlParameter("@id", d.Dish_ID)) > 0;
         }
+
+        #endregion
+
+        #region Full Update Dish
+        public override bool Update(Dish d)
+        {   
+            return _transaction.UpdateDish(d);
+        }
+
         #endregion
 
         #region Update Dish Availability Status

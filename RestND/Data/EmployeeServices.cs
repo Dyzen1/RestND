@@ -17,6 +17,8 @@ namespace RestND.Data
 
             foreach (var row in rows)
             {
+                if (row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
+                    continue; // Skip inactive employees
                 employees.Add(new Employee
                 {
                     Employee_ID = Convert.ToInt32(row["Employee_ID"]),
@@ -68,12 +70,16 @@ namespace RestND.Data
 
         #endregion
 
-        #region Delete Employee
-        public override bool Delete(int  employeeID)
+        #region Delete Employee (not really deleting, just marking as inactive)
+        public override bool Delete(Employee d)
         {
-            string query = "DELETE FROM employees WHERE Employee_ID = @id";
-            return _db.ExecuteNonQuery(query, new MySqlParameter("@id", employeeID)) > 0;
+            d.Is_Active = false;
+            string query = "UPDATE employees SET Is_Active = @active WHERE Employee_ID = @id";
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@active", d.Is_Active),
+                new MySqlParameter("@id", d.Employee_ID)) > 0;
         }
+
         #endregion
     }
 }

@@ -32,12 +32,20 @@ namespace RestND.MVVM.Model
 
         #endregion
 
-        #region Constructor
+        #region Is_Active - a property for knowing wheather the dishType has been deleted or not
+        private bool _Is_Active;
+        public bool Is_Active
+        {
+            get { return _Is_Active; }
+            set { _Is_Active = value; }
+        }
+        #endregion
 
+        #region Constructor
         public DishType( string? dishType_Name)
         {
-
             this.DishType_Name = dishType_Name;
+            this.Is_Active = true; 
         }
 
         #endregion

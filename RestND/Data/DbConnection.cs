@@ -41,7 +41,7 @@ namespace RestND.Data
         {
             get
             {
-                _instance = new DatabaseOperations("127.0.0.1", "restnd_db", "root");
+                _instance = new DatabaseOperations("127.0.0.1", "restnd", "root");
                 return _instance;
             }
         }

@@ -21,6 +21,8 @@ namespace RestND.Data
 
             foreach (var row in rows)
             {
+                if (row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
+                    continue; // Skip inactive dishtypes
                 types.Add(new DishType
                 {
                     DishType_ID = Convert.ToInt32(row["DishType_ID"]),
@@ -55,12 +57,16 @@ namespace RestND.Data
         }
         #endregion
 
-        #region Delete DishType
-        public override bool Delete(int DishType_ID)
+        #region Delete DishType (not really deleting, just marking as inactive)
+        public override bool Delete(DishType d)
         {
-            string query = "DELETE FROM dish_type WHERE DishType_ID = @id";
-            return _db.ExecuteNonQuery(query, new MySqlParameter("@id", DishType_ID)) > 0;
+            d.Is_Active = false;
+            string query = "UPDATE dish_types SET Is_Active = @active WHERE DishType_ID = @id";
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@active", d.Is_Active),
+                new MySqlParameter("@id", d.DishType_ID)) > 0;
         }
+
         #endregion
     }
 }
