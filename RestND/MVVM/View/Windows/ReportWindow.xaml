@@ -6,10 +6,9 @@
       xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
       xmlns:viewModel="clr-namespace:RestND.MVVM.ViewModel.Windows"
       mc:Ignorable="d"
-      Title="ReportWindow">
+      Title="ReportWindow" >
 
-
-
+  
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
