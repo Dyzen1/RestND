@@ -63,6 +63,15 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
+        #region Is_Active - a property for knowing wheather the discount has been deleted or not
+        private bool _Is_Active;
+        public bool Is_Active
+        {
+            get { return _Is_Active; }
+            set { _Is_Active = value; }
+        }
+        #endregion
+
         #region Constructor with Dishes
         public Order( Employee AssignedEmployee,  Table table, List<DishInOrder> DishInOrder, Bill Bill)
         {
@@ -70,6 +79,7 @@ namespace RestND.MVVM.Model.Orders
             this.assignedEmployee = AssignedEmployee;
             this.Table = table;
             this.DishInOrder = DishInOrder;
+            this.Is_Active = true;
             _OrderCount++;
         }
         #endregion
@@ -80,6 +90,7 @@ namespace RestND.MVVM.Model.Orders
             this.Bill = Bill;
             this.assignedEmployee = AssignedEmployee;
             this.Table = table;
+            this.Is_Active = true;
             _OrderCount++;
         }
         #endregion

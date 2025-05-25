@@ -36,11 +36,21 @@ namespace RestND.MVVM.Model.Employees
         }
         #endregion
 
+        #region Is_Active - a property for knowing wheather the discount has been deleted or not
+        private bool _Is_Active;
+        public bool Is_Active
+        {
+            get { return _Is_Active; }
+            set { _Is_Active = value; }
+        }
+        #endregion
+
         #region constructor
         public Role(string? roleName, AuthorizationStatus roleAuthorization)
         {
             this.Role_Name = roleName;
             this.Role_Authorization = roleAuthorization;
+            this.Is_Active = true;
         }
         #endregion
 

@@ -100,7 +100,7 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             if (SelectedOrder != null)
             {
-                bool success = _orderService.Delete(SelectedOrder.Order_ID);
+                bool success = _orderService.Delete(SelectedOrder);
 
                 if (success)
                 {

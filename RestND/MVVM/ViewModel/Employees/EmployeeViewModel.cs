@@ -78,7 +78,7 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand(CanExecute = nameof(CanModifyEmployee))]
         private void DeleteEmployee()
         {
-            bool success = _employeeService.Delete(SelectedEmployee.Employee_ID);
+            bool success = _employeeService.Delete(SelectedEmployee);
             if (success)
             {
                 Employees.Remove(SelectedEmployee);

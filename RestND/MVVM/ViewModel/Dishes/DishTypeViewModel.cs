@@ -65,7 +65,7 @@ public partial class DishTypeViewModel : ObservableObject
     {
         if (SelectedDishType != null)
         {
-            bool success = _dishTypeService.Delete(SelectedDishType.DishType_ID);
+            bool success = _dishTypeService.Delete(SelectedDishType);
 
             if (success)
             {

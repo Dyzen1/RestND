@@ -54,7 +54,7 @@ public partial class RoleViewModel: ObservableObject{
     {
         if (SelectedRole != null)
         {
-            bool success = _roleService.Delete(SelectedRole.Role_ID);
+            bool success = _roleService.Delete(SelectedRole);
 
             if (success)
             {

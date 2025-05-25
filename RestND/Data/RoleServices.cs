@@ -23,6 +23,8 @@ namespace RestND.Data
 
             foreach (var row in rows)
             {
+                if (row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
+                    continue; // Skip inactive roles
                 roles.Add(new Role
                 {
                     Role_Name = Convert.ToString(row["Role_Name"]),
@@ -61,13 +63,14 @@ namespace RestND.Data
         }
         #endregion
 
-        #region Delete Role
-        public override bool Delete(int roleId)
+        #region Delete Role (not really deleting, just marking as inactive)
+        public override bool Delete(Role d)
         {
-            if (roleId <= 0) return false;
-
-            string query = "DELETE FROM roles WHERE Role_ID = @id";
-            return _db.ExecuteNonQuery(query, new MySqlParameter("@id", roleId)) > 0;
+            d.Is_Active = false;
+            string query = "UPDATE roles SET Is_Active = @active WHERE Role_ID = @id";
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@active", d.Is_Active),
+                new MySqlParameter("@id", d.Role_ID)) > 0;
         }
         #endregion
     }

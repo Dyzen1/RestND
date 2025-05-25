@@ -6,6 +6,7 @@ using MySql.Data.MySqlClient;
 using RestND.MVVM.Model.Orders;
 using RestND.MVVM.Model.Tables;
 
+
 namespace RestND.Data
 {
     public class OrderServices : BaseService<Order>
@@ -28,6 +29,8 @@ namespace RestND.Data
 
             foreach (var row in rows)
             {
+                if (row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
+                    continue; // Skip inactive orders
                 orders.Add(new Order
                 {
                     Order_ID = Convert.ToInt32(row["Order_ID"]),
@@ -58,11 +61,20 @@ namespace RestND.Data
         #endregion
 
         #region Delete Order
-        public override bool Delete(int orderID)
+        public override bool Delete(Order d)
         {
-            if(orderID <= 0)
+            if(d.Order_ID <= 0)
                 return false;
-            return _transaction.DeleteOrder(orderID);
+            if(d.DishInOrder.Count > 0)
+            {
+                d.Is_Active = false;
+                string query = "UPDATE orders SET Is_Active = @active WHERE Order_ID = @id";
+                return _db.ExecuteNonQuery(query,
+                    new MySqlParameter("@active", d.Is_Active),
+                    new MySqlParameter("@id", d.Order_ID)) > 0;
+            }
+            return _transaction.DeleteOrder(d.Order_ID);
+
         }
         #endregion
 

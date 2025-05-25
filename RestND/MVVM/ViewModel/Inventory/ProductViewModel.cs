@@ -87,7 +87,7 @@ namespace RestND.MVVM.ViewModel
         {
             if(CanModifyProduct())
             {
-                bool success = _productService.Delete(SelectedProduct.Product_ID); //  updated DeleteProduct -> Delete
+                bool success = _productService.Delete(SelectedProduct); //  updated DeleteProduct -> Delete
 
                 if (success)
                 {

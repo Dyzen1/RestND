@@ -94,7 +94,7 @@ namespace RestND.Data
         public override bool Delete(Inventory d)
         {
             d.Is_Active = false;
-            string query = "UPDATE inventory SET Is_Active = @active WHERE Inventory_ID = @id";
+            string query = "UPDATE inventory SET Is_Active = @active WHERE Product_ID = @id";
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@active", d.Is_Active),
                 new MySqlParameter("@id", d.Product_ID)) > 0;

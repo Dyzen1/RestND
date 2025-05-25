@@ -114,14 +114,25 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
+        #region Helpers
+
+        private List<ProductInDish> CloneSelectedProducts() =>
+            SelectedProducts.Select(p => new ProductInDish
+            {
+                Product_ID = p.Product_ID,
+                Amount_Usage = p.Amount_Usage
+            }).ToList();
+
+        #endregion
+
         #region Add Dish
 
         [RelayCommand(CanExecute = nameof(CanAddDish))]
         private void AddDish()
         {
-            NewDish.ProductUsage = new List<ProductInDish>(SelectedProducts);
+            NewDish.ProductUsage = CloneSelectedProducts();
             NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
-            
+
             bool success = _dishService.Add(NewDish);
 
             if (success)
@@ -134,6 +145,31 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
+        #region Add Product To Dish
+
+        [RelayCommand]
+        public void AddProductToDish()
+        {
+            if (SelectedAvailableProduct != null && ProductAmountUsage > 0)
+            {
+                var product = new ProductInDish
+                {
+                    Product_ID = SelectedAvailableProduct.Product_ID,
+                    Amount_Usage = ProductAmountUsage
+                };
+
+                if (!SelectedProducts.Any(p => p.Product_ID == product.Product_ID))
+                {
+                    SelectedProducts.Add(product);
+                }
+
+                SelectedAvailableProduct = null;
+                ProductAmountUsage = 0;
+            }
+        }
+
+        #endregion
+
         #region Delete Dish
 
         [RelayCommand(CanExecute = nameof(CanModifyDish))]
@@ -141,21 +177,23 @@ namespace RestND.MVVM.ViewModel
         {
             if (SelectedDish != null)
             {
-                bool success = _dishService.Delete(SelectedDish.Dish_ID);
+                bool success = _dishService.Delete(SelectedDish);
                 if (success)
                 {
                     Dishes.Remove(SelectedDish);
                 }
             }
         }
+
         #endregion
 
         #region Can Execute Methods
+
         private bool CanModifyDish() => SelectedDish != null;
 
         private bool CanAddDish()
         {
-            NewDish.ProductUsage = new List<ProductInDish>(SelectedProducts);
+            NewDish.ProductUsage = CloneSelectedProducts();
             NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
             var errors = DishValidator.ValidateFields(NewDish, Dishes.ToList());
             return !errors.Any();
@@ -172,7 +210,7 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
-        #region Update Options
+        #region Update Dish
 
         [RelayCommand(CanExecute = nameof(CanUpdateDish))]
         private void UpdateDish()

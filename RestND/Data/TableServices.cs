@@ -60,12 +60,12 @@ namespace RestND.Data
         #endregion
 
         #region Delete Table
-        public override bool Delete(int tableId){
+        public override bool Delete(Table d){
 
-            if(tableId <= 0) return false;
+            if(d.Table_ID <= 0) return false;
 
             string query = "DELETE FROM tables WHERE Table_ID = @id";
-            return _db.ExecuteNonQuery(query, new MySqlParameter("@id", tableId)) > 0;
+            return _db.ExecuteNonQuery(query, new MySqlParameter("@id", d.Table_ID)) > 0;
         }
         #endregion
 

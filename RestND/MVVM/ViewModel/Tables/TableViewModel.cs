@@ -78,7 +78,7 @@ namespace RestND.MVVM.ViewModel{
         {
             if(SelectedTable != null)
             {
-                bool success = _tableService.Delete(SelectedTable.Table_ID);
+                bool success = _tableService.Delete(SelectedTable);
                 if(success)
                 {
                     Tables.Remove(SelectedTable);
