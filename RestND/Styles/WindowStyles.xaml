@@ -23,6 +23,7 @@
         <Setter Property="Foreground" Value="Gray"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0 0 15 15"/>
+        <Setter Property="VerticalAlignment" Value="Bottom"/>
     </Style>
     
 </ResourceDictionary>

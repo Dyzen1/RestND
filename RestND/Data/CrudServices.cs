@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace RestND.Data
 {
@@ -12,8 +8,6 @@ namespace RestND.Data
         List<T> GetAll();
         bool Add(T item);
         bool Update(T item);
-        bool Delete(int id);
-
-
+        bool Delete(T item);
     }
 }

@@ -45,6 +45,15 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
+        #region Is_Active - a property for knowing wheather the product has been deleted or not
+        private bool _Is_Active;
+        public bool Is_Active
+        {
+            get { return _Is_Active; }
+            set { _Is_Active = value; }
+        }
+        #endregion
+
         #region Quantity Available
 
         private int _Quantity_Available;
@@ -67,7 +76,6 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Constructor
-
         public Inventory(string productId, string productName, int quantityAvailable,double Tolerance, string date)
         {
             this.Product_ID = productId;
@@ -75,6 +83,7 @@ namespace RestND.MVVM.Model
             this.Quantity_Available = quantityAvailable;
             this.Tolerance = Tolerance;
             this.Created_At = date;
+            this.Is_Active = true;
         }
 
         #endregion

@@ -10,47 +10,7 @@ public Transaction(DatabaseOperations db)
 {
     _db = db;
 }
-    #region Delete and Add Dish or Update Dish and Update Product in Dish
-    public bool DeleteDish(int dishId)
-    {
-        _db.OpenConnection();
-        using var transaction = _db.Connection.BeginTransaction();
-
-        try
-        {
-          
-            string deleteProductsQuery = "DELETE FROM products_in_dish WHERE Dish_ID = @id";
-            _db.ExecuteNonQuery(deleteProductsQuery, _db.Connection, transaction,
-                new MySqlParameter("@id", dishId)
-            );
-
-            
-            string deleteDishQuery = "DELETE FROM dishes WHERE Dish_ID = @id";
-            int rowsAffected = _db.ExecuteNonQuery(deleteDishQuery, _db.Connection, transaction,
-                new MySqlParameter("@id", dishId)
-            );
-
-            if (rowsAffected == 0)
-            {
-                transaction.Rollback();
-                _db.CloseConnection();
-                return false;
-            }
-
-            transaction.Commit();
-            _db.CloseConnection();
-            return true;
-        }
-        catch (Exception)
-        {
-            transaction.Rollback();
-            _db.CloseConnection();
-            throw;
-        }
-    }
-
-
-
+    #region Add Dish or Update Dish and Update Product in Dish
     public bool AddDish(Dish d)
     {
         _db.OpenConnection();
@@ -58,7 +18,6 @@ public Transaction(DatabaseOperations db)
 
         try
         {
-           
             string query = "INSERT INTO dishes (Dish_Name, Dish_Price, Allergen_Notes, Availability_Status, Dish_Type) " +
                            "VALUES (@name, @price, @notes, @status, @type)";
 
@@ -77,10 +36,8 @@ public Transaction(DatabaseOperations db)
                 return false;
             }
 
-        
             int newDishId = Convert.ToInt32(_db.ExecuteScalar("SELECT LAST_INSERT_ID();", _db.Connection, transaction));
 
-           
             var productInDishService = new ProductInDishService();
             bool productsAdded = productInDishService.AddProductsToDish(newDishId, d.ProductUsage);
 
@@ -90,8 +47,6 @@ public Transaction(DatabaseOperations db)
                 _db.CloseConnection();
                 return false;
             }
-
-            
             transaction.Commit();
             _db.CloseConnection();
             return true;
@@ -163,7 +118,6 @@ public Transaction(DatabaseOperations db)
     #endregion
 
     #region Delete and Add Order
-
     public bool DeleteOrder(int orderId)
     {
         _db.OpenConnection();

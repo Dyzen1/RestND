@@ -16,6 +16,8 @@ namespace RestND.Data
 
             foreach (var row in rows)
             {
+                if (row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
+                    continue; // Skip inactive products
                 products.Add(new Inventory
                 {
                     Product_ID = row["Product_ID"].ToString(),
@@ -89,19 +91,13 @@ namespace RestND.Data
         #endregion
 
         #region Delete Product (accepts int)
-        public override bool Delete(int productId)
-        { 
-            string query = "DELETE FROM inventory WHERE Product_ID = @id";
-            return _db.ExecuteNonQuery(query, new MySqlParameter("@id", productId)) > 0;
-        }
-
-        #endregion
-
-        #region Delete Product (accepts string)
-        public bool Delete(string productId)
+        public override bool Delete(Inventory d)
         {
-            string query = "DELETE FROM inventory WHERE Product_ID = @id";
-            return _db.ExecuteNonQuery(query, new MySqlParameter("@id", productId)) > 0;
+            d.Is_Active = false;
+            string query = "UPDATE inventory SET Is_Active = @active WHERE Inventory_ID = @id";
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@active", d.Is_Active),
+                new MySqlParameter("@id", d.Product_ID)) > 0;
         }
 
         #endregion

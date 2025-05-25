@@ -13,6 +13,15 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
+        #region Is_Active - a property for knowing wheather the bill has been deleted or not
+        private bool _Is_Active;
+        public bool Is_Active
+        {
+            get { return _Is_Active; }
+            set { _Is_Active = value; }
+        }
+        #endregion
+
         #region Order Property
         private Order _Order;
         public Order Order
@@ -28,6 +37,15 @@ namespace RestND.MVVM.Model.Orders
         {
             get { return _Price; }
             set { _Price = value; }
+        }
+        #endregion
+
+        #region IsPaid
+        private bool _Is_Paid;
+        public bool Is_Paid
+        {
+            get { return _Is_Paid; }
+            set { _Is_Paid = value; }
         }
         #endregion
 
@@ -56,6 +74,8 @@ namespace RestND.MVVM.Model.Orders
             this.Order = order;
             this.Price = price;
             this.Bill_Date = DateTime.Now;
+            this.Is_Paid = false;
+            this.Is_Active = true;
         }
 
 
@@ -68,6 +88,8 @@ namespace RestND.MVVM.Model.Orders
             this.Price = price;
             this.Discount = discount;
             this.Bill_Date = DateTime.Now;
+            this.Is_Paid = false;
+            this.Is_Active = true;
         }
         #endregion
 

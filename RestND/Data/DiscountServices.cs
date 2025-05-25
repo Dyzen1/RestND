@@ -5,21 +5,22 @@ using RestND.MVVM.Model.Orders;
 using RestND.Validations;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instance)
 {
 
     #region Get All Discounts
-
     public override List <Discount> GetAll()
     {
         var discounts = new List<Discount>();
         string query = "SELECT * FROM discounts";
         var rows = _db.ExecuteReader(query);
 
+
         foreach (var row in rows)
         {
+            if(row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
+                continue; // Skip inactive discounts
             discounts.Add(new Discount
             {
                 Discount_ID = Convert.ToInt32(row["Discount_ID"]),
@@ -30,12 +31,12 @@ public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instan
 
         return discounts;
     }
+
     #endregion
 
     #region Add Discount
-    public override bool Add (Discount d){
-
-
+    public override bool Add (Discount d)
+    {
         string query = "INSERT INTO discounst (Discount_Name, Discount_Percentage) VALUES (@name, @percentage)";
         
         return _db.ExecuteNonQuery(query,
@@ -56,12 +57,16 @@ public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instan
     }
     #endregion
 
-    #region Delete Discount
-    public override bool Delete (int discountId){
-        if (discountId <= 0) return false;
-        string query = "DELETE FROM discounts WHERE Discount_ID = @id";
-        return _db.ExecuteNonQuery(query, new MySqlParameter("@id", discountId)) > 0;
+    #region Delete Discount (not really deleting, just marking as inactive)
+    public override bool Delete(Discount d)
+    {
+        d.Is_Active = false; 
+        string query = "UPDATE discounts SET Is_Active = @active WHERE Discount_ID = @id";
+        return _db.ExecuteNonQuery(query,
+            new MySqlParameter("@active", d.Is_Active),
+            new MySqlParameter("@id", d.Discount_ID)) > 0;
     }
+
     #endregion
 
 

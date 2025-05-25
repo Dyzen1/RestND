@@ -43,6 +43,14 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
+        #region Is_Active - a property for knowing wheather the dish has been deleted or not
+        private bool _Is_Active;
+        public bool Is_Active
+        {
+            get { return _Is_Active; }
+            set { _Is_Active = value; }
+        }
+        #endregion
 
         #region Allergen_Notes
         private List< AllergenNotes > _Allergen_Notes;
@@ -85,7 +93,6 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Constructor with allergen notes
-
         public Dish(string? dishName, double dishPrice, List<AllergenNotes> allergenNotes, List<ProductInDish> productUsage, DishType? type)
         {
             this.Dish_Name = dishName;
@@ -94,12 +101,12 @@ namespace RestND.MVVM.Model
             this.Availability_Status = true;
             this.ProductUsage = productUsage;
             this.Dish_Type = type;
+            this.Is_Active = true;
         }
 
         #endregion
 
         #region Constructor without allergen notes
-
         public Dish(string? dishName, double dishPrice, List<ProductInDish> productUsage, DishType? type)
         {
             this.Dish_Name = dishName;
@@ -107,6 +114,7 @@ namespace RestND.MVVM.Model
             this.Availability_Status = true;
             this.ProductUsage = productUsage;
             this.Dish_Type = type;
+            this.Is_Active = true;
         }
 
         #endregion

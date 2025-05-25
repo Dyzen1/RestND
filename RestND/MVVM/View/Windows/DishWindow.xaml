@@ -104,8 +104,9 @@
         </GroupBox>
 
             <uc:ReturnBtn x:Name="returnBtn" Grid.Column="0" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+                <TextBlock Style="{DynamicResource copyWrite}"/>
 
-        </Grid>
+            </Grid>
     </Grid>
     </Border>
 </Window>

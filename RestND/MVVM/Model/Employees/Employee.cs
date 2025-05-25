@@ -41,6 +41,15 @@ namespace RestND.MVVM.Model.Employees
 
         #endregion
 
+        #region Is_Active - a property for knowing wheather the employee has been deleted or not
+        private bool _Is_Active;
+        public bool Is_Active
+        {
+            get { return _Is_Active; }
+            set { _Is_Active = value; }
+        }
+        #endregion
+
         #region Employee Name
         private string? _Employee_Name;
         public string? Employee_Name
@@ -65,6 +74,7 @@ namespace RestND.MVVM.Model.Employees
             this.Employee_ID = employeeId;
             this.Employee_Name = employeeName;
             this.Employee_Role = employeeRole;
+            this.Is_Active = true;
         }
         #endregion
 
@@ -76,6 +86,7 @@ namespace RestND.MVVM.Model.Employees
             this.Employee_ID = employeeId;
             this.Employee_Name = employeeName;
             this.Employee_Role = employeeRole;
+            this.Is_Active = true;
         }
         #endregion
 

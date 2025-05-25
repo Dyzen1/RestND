@@ -17,27 +17,30 @@ namespace RestND.Data
             string query = "SELECT * FROM bill";
             var rows = _db.ExecuteReader(query);
 
-            for (int i = 0; i < rows.Count; i++)
+            foreach (var row in rows)
             {
-                var row = rows[i];
-                var bill = new Bill();
-
-                bill.Bill_ID = Convert.ToInt32(row["Bill_ID"]);
-                bill.Price = Convert.ToDouble(row["Price"]);
-                //bill.Bill_Date = Convert.ToDateTime(row["Bill_Date"]);
-                bill.Order.assignedEmployee.Employee_Name = row["Employee_Name"].ToString();
-
-                var discount = new Discount();
-                discount.Discount_ID = Convert.ToInt32(row["Discount_ID"]?? "");
-                bill.Discount = discount;
-
-                var order = new Order();
-                order.Order_ID = Convert.ToInt32(row["Order_ID"]);
-                bill.Order = order;
-
+                if (row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
+                    continue; // Skip inactive bills
+                var bill = new Bill
+                {
+                    Bill_ID = Convert.ToInt32(row["Bill_ID"]),
+                    Price = Convert.ToDouble(row["Price"]),
+                    Bill_Date = Convert.ToDateTime(row["Bill_Date"]),
+                    Order = new Order
+                    {
+                        Order_ID = Convert.ToInt32(row["Order_ID"]),
+                        assignedEmployee = new Employee
+                        {
+                            Employee_Name = row["Employee_Name"].ToString()
+                        }
+                    },
+                    Discount = new Discount
+                    {
+                        Discount_ID = Convert.ToInt32(row["Discount_ID"] ?? "")
+                    }
+                };
                 bills.Add(bill);
             }
-
             return bills;
         }
         #endregion
@@ -71,11 +74,14 @@ namespace RestND.Data
         }
         #endregion
 
-        #region Delete Bill
-        public override bool Delete(int billId)
+        #region Delete Bill (not really deleting, just marking as inactive)
+        public override bool Delete(Bill bill)
         {
-            string query = "DELETE FROM bill WHERE Bill_ID = @id";
-            return _db.ExecuteNonQuery(query, new MySqlParameter("@id", billId)) > 0;
+            bill.Is_Active = false;
+            string query = "UPDATE bill SET Is_Active = @active WHERE Bill_ID = @id";
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@active", bill.Is_Active),
+                new MySqlParameter("@id", bill.Bill_ID)) > 0;
         }
         #endregion
         

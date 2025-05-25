@@ -2,7 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RestND.MVVM.Model.Orders;
 using RestND.Validations;
-using RestND.Data;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +69,7 @@ public partial class DiscountViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanAddDiscount))]
     public void AddDiscount()
     {
+        NewDiscount.Is_Active = true;
         bool success = _discountService.Add(NewDiscount);
         if (!success) return;
 
@@ -100,7 +100,7 @@ public partial class DiscountViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanModifyDiscount))]
     public void DeleteDiscount()
     {
-        bool success = _discountService.Delete(SelectedDiscount.Discount_ID);
+        bool success = _discountService.Delete(SelectedDiscount);
         if (success)
         {
             LoadDiscounts();
