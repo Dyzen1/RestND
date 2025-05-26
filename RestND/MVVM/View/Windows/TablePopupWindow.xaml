@@ -1,0 +1,30 @@
+﻿<Window x:Class="RestND.MVVM.View.Windows.TablePopupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
+        xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
+        xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
+        mc:Ignorable="d" Style="{DynamicResource windowStyle}"
+        Title="TablePopupWindow" Width="300" Height="200"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <Grid>
+        <StackPanel Orientation="Horizontal" Margin="10,15" VerticalAlignment="Top">
+            <Label Content="Table Number:" Foreground="{DynamicResource LightText}"/>
+            <TextBox Text="{Binding NewTable.Table_Number, UpdateSourceTrigger=PropertyChanged}" 
+                     Width="150" Height="60" Background="Transparent" Foreground="{DynamicResource LightText}" 
+                     BorderBrush="{DynamicResource LightText}" ToolTip="Table Number"/>
+        </StackPanel>
+
+        <!-- Save Table Button -->
+        <Button Content="Add Table" Grid.Row="1" 
+                Command="{Binding AddTableCommand}" Style="{DynamicResource SubmitBtn}"
+                Margin="0 60 0 0"/>
+
+        <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+        <TextBlock Style="{DynamicResource copyWrite}"/>
+        
+    </Grid>
+</Window>

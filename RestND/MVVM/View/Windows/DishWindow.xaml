@@ -36,33 +36,34 @@
                 <!-- Dish Name -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <Label Content="Dish Name:" Width="100" Foreground="{DynamicResource LightText}"/>
-                    <TextBox Text="{Binding NewDish.Dish_Name, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                    <TextBox Text="{Binding NewDish.Dish_Name, UpdateSourceTrigger=PropertyChanged}" Width="170"/>
                 </StackPanel>
 
                 <!-- Dish Price -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                         <Label Content="Dish Price:" Width="100" Foreground="{DynamicResource LightText}"/>
-                    <TextBox Text="{Binding NewDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                            <TextBox Text="{Binding NewDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}" Width="170"/>
                 </StackPanel>
 
                 <!-- Allergen Notes -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Allergen Notes:" Width="100" Foreground="{DynamicResource LightText}"/>
-                    <TextBox Text="{Binding NewDish.Allergen_Notes, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                        <Label Content="Allergen Notes:" Foreground="{DynamicResource LightText}"/>
+                        <ComboBox SelectedItem="{Binding NewDish.Allergen_Notes, UpdateSourceTrigger=PropertyChanged}"
+                                  Width="170" ItemsSource="{Binding AllergenNotes}"/>
                 </StackPanel>
 
                 <!-- Availability Status -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Available:" Width="100" Foreground="{DynamicResource LightText}" VerticalAlignment="Center"/>
-                        <CheckBox IsChecked="{Binding NewDish.Availability_Status, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"/>
+                        <Label Content="Available:" Foreground="{DynamicResource LightText}" VerticalAlignment="Center"/>
+                        <CheckBox IsChecked="{Binding NewDish.Availability_Status, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="30 0 0 0"/>
                 </StackPanel>
 
                 <!-- Dish Type -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Dish Type:" Width="100" Foreground="{DynamicResource LightText}"/>
+                        <Label Content="Dish Type:" Foreground="{DynamicResource LightText}"/>
                         <ComboBox ItemsSource="{Binding DishTypes}"
                             SelectedItem="{Binding NewDish.Dish_Type, UpdateSourceTrigger=PropertyChanged}"
-                            DisplayMemberPath="DishType_Name" Width="200"/>
+                            DisplayMemberPath="DishType_Name" Width="170"/>
                 </StackPanel>
 
                 <Separator Margin="0,10"/>
@@ -73,13 +74,13 @@
                     <ComboBox ItemsSource="{Binding AvailableProducts}" 
                               SelectedItem="{Binding SelectedAvailableProduct}" 
                               DisplayMemberPath="Product_Name"
-                              Width="200"/>
+                              Width="180"/>
                 </StackPanel>
 
                 <!-- Enter Amount Usage -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Amount Usage:" Width="100" Foreground="{DynamicResource LightText}"/>
-                    <TextBox Text="{Binding ProductAmountUsage, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                        <Label Content="Amount Usage:" Foreground="{DynamicResource LightText}"/>
+                    <TextBox Text="{Binding ProductAmountUsage, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
                 </StackPanel>
 
                 <!-- Add Product Button -->

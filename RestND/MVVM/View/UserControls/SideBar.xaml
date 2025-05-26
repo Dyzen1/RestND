@@ -35,10 +35,10 @@
                     <TextBlock Text="Reports"/>
                 </StackPanel>
             </Button>
-            <Button Style="{DynamicResource SideBarBtn}" Click="OrdersBtn_Click">
+            <Button Style="{DynamicResource SideBarBtn}" Click="OverViewBtn_Click">
                 <StackPanel>
                     <fa:SvgAwesome Icon="Solid_ListCheck" Style="{DynamicResource SideBarIcon}"/>
-                    <TextBlock Text="Orders"/>
+                    <TextBlock Text="OverView"/>
                 </StackPanel>
             </Button>
         </StackPanel>   

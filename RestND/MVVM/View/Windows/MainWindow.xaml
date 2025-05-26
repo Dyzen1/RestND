@@ -1,9 +1,10 @@
-﻿<Window x:Class="RestND.MainWindow"
+﻿<Window x:Class="RestND.MVVM.View.Windows.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RestND"
+        xmlns:local="clr-namespace:RestND.MVVM.Model"
+        xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:fa="http://schemas.fontawesome.com/icons/svg"
         xmlns:fa6="http://schemas.fontawesome.com/icons/svg"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
@@ -53,24 +54,15 @@
                     <uc:SideBar x:Name="sideBar" Width="100"/>
                 </Expander>
 
-                <Button Name="AdminLogin" Style="{DynamicResource loginBtn}" Grid.Row="0" Grid.Column="0">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border CornerRadius="10"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    Background="{TemplateBinding Background}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            
-            
-            <Button x:Name="addTables" Style="{DynamicResource addBtn}" Grid.Row="2" Grid.Column="0">
+                <Button Name="AdminLogin" Style="{DynamicResource loginBtn}" Grid.Row="0" Grid.Column="0"/>
+
+
+                <Button x:Name="addTables" Style="{DynamicResource addBtn}" 
+                    Grid.Row="2" Grid.Column="0" Click="AddTable_Click">
                 <StackPanel Orientation="Horizontal">
                     <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
-                    <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center" Foreground="{DynamicResource LightText}" Margin="4"/>
+                    <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center" 
+                               Foreground="{DynamicResource LightText}" Margin="4"/>
                 </StackPanel>
             </Button>
 
@@ -97,7 +89,8 @@
                 </Grid.RowDefinitions>
 
                 <!--buttons for each table-->
-                <Button x:Name="table1" Background="Transparent" Grid.Row="0" Grid.Column="0" BorderThickness="0">
+                <Button x:Name="table1" Background="Transparent" Grid.Row="0" Grid.Column="0" 
+                        BorderThickness="0" Click="OrderBtn_Click">
                     <Grid>
                         <Image Style="{DynamicResource tableBtn}"/>
                         <TextBlock Text="25" Style="{DynamicResource tableNumber}"/>

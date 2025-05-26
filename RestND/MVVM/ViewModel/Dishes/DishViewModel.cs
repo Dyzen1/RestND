@@ -59,7 +59,6 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Constructor
-
         public DishViewModel()
         {
             _dishTypeService = new DishTypeServices();
@@ -108,14 +107,17 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private void LoadNotes()
         {
+            //AllergenNotes = new ObservableCollection<AllergenNotes>(
+            //    Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>());
             AllergenNotes = new ObservableCollection<AllergenNotes>(
-                Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>());
+                    Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>()
+  );
+
         }
 
         #endregion
 
         #region Helpers
-
         private List<ProductInDish> CloneSelectedProducts() =>
             SelectedProducts.Select(p => new ProductInDish
             {

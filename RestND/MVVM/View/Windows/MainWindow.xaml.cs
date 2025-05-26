@@ -1,21 +1,21 @@
-﻿using RestND.MVVM.View;
-using RestND.MVVM.View.UserControls;
-using RestND.MVVM.View.Windows;
+﻿
 using System;
 using System.Windows;
 using System.Windows.Input;
 
-namespace RestND
+namespace RestND.MVVM.View.Windows
 {
     public partial class MainWindow : Window
     {
+        public event Action<string> ButtonClicked;
+
         public MainWindow()
         {
             InitializeComponent();
             sideBar.ButtonClicked += SideBar_ButtonClicked;
-
         }
 
+        //// ON CLICK METHODS:
         private void SideBar_ButtonClicked(string destination)
         {
             switch (destination)
@@ -23,8 +23,8 @@ namespace RestND
                 case "Inventory":
                     OpenInventory();
                     break;
-                case "Orders":
-                    OpenOrders();
+                case "OverView":
+                    OpenOverView();
                     break;
                 case "Dishes":
                     OpenDishes();
@@ -59,6 +59,29 @@ namespace RestND
         {
             Close();
         }
+
+        private void OrderBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenOrders();
+        }
+
+        private void AddTable_Click(object sender, RoutedEventArgs e)
+        {
+            OpenPopup();
+        }
+
+
+        ///// METHODS FOR OPENING WINDOWS:
+        private void OpenPopup()
+        {
+            var popupWindow = new TablePopupWindow();
+            {
+                WindowState = WindowState.Maximized;
+            }
+            popupWindow.Show();
+            this.Close();
+        }
+
         private void OpenInventory()
         {
             var inventoryWindow = new ProductWindow();
@@ -68,15 +91,17 @@ namespace RestND
             inventoryWindow.Show();
             this.Close();
         }
-        private void OpenOrders()
+
+        private void OpenOverView()
         {
-            var ordersWindow = new OrderWindow();
+            var overView = new OverView();
             {
                 WindowState = WindowState.Maximized;
             }
-            ordersWindow.Show();
+            overView.Show();
             this.Close();
         }
+
         private void OpenDishes()
         {
             var dishesWindow = new DishWindow();
@@ -86,15 +111,32 @@ namespace RestND
             dishesWindow.Show();
             this.Close();
         }
+
         private void OpenReports()
         {
-            var reportWindow = new ReportWindow
+            var reportWindow = new ReportWindow();
             {
-                WindowState = WindowState.Maximized
+                WindowState = WindowState.Maximized;
             };
             reportWindow.Show();
             this.Close();
         }
+
+        private void OpenOrders()
+        {
+            var ordersWindow = new OrderWindow();
+            {
+                WindowState = WindowState.Maximized;
+            };
+            ordersWindow.Show();
+            this.Close();
+        }
+
+        private void addTables_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
 
         //private void OpenEmployees()
         //{

@@ -35,8 +35,7 @@
                     <TextBox Background="Transparent"
                              Text="{Binding NewProduct.Product_ID, UpdateSourceTrigger=PropertyChanged}"
                              Foreground="{DynamicResource LightText}" HorizontalAlignment="Stretch" Height="20"
-                             BorderBrush="{DynamicResource LightText}">
-                        <TextBox.ToolTip>Tolerance</TextBox.ToolTip>
+                             BorderBrush="{DynamicResource LightText}" ToolTip="Serial Number">
                     </TextBox>
                 </StackPanel>
 
@@ -45,9 +44,8 @@
                            VerticalAlignment="Center" FontSize="13"/>
                     <TextBox HorizontalAlignment="Stretch" Background="Transparent" 
                              Foreground="{DynamicResource LightText}" Height="20"
-                             BorderBrush="{DynamicResource LightText}"
+                             BorderBrush="{DynamicResource LightText}" ToolTip="Product Name"
                              Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged}">
-                        <TextBox.ToolTip>Product Name</TextBox.ToolTip>
                     </TextBox>
                 </StackPanel>
 
@@ -57,8 +55,7 @@
                     <TextBox Background="Transparent"
                              Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged}"
                              Foreground="{DynamicResource LightText}" HorizontalAlignment="Stretch" Height="20"
-                             BorderBrush="{DynamicResource LightText}">
-                        <TextBox.ToolTip>Quantity Available</TextBox.ToolTip>
+                             BorderBrush="{DynamicResource LightText}" ToolTip="Quantity">
                     </TextBox>
                 </StackPanel>
 
@@ -68,8 +65,7 @@
                     <TextBox Background="Transparent"
                              Text="{Binding NewProduct.Tolerance, UpdateSourceTrigger=PropertyChanged}"
                              Foreground="{DynamicResource LightText}" HorizontalAlignment="Stretch" Height="20"
-                             BorderBrush="{DynamicResource LightText}">
-                        <TextBox.ToolTip>Tolerance</TextBox.ToolTip>
+                             BorderBrush="{DynamicResource LightText}" ToolTip="Tolerance">
                     </TextBox>
                 </StackPanel>
 

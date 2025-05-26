@@ -18,14 +18,6 @@ public partial class DishTypeViewModel : ObservableObject
 
     #endregion
 
-    #region Constractor
-    public DishTypeViewModel()
-    {
-        _dishTypeService = new DishTypeServices();
-        DishTypeList = _dishTypeService.GetAll();
-    }
-    #endregion
-
     #region Observable Properties
     // List of dish types displayed in the UI
     [ObservableProperty]
@@ -38,6 +30,14 @@ public partial class DishTypeViewModel : ObservableObject
     {
         DeleteDishTypeCommand.NotifyCanExecuteChanged();
         UpdateDishTypeCommand.NotifyCanExecuteChanged();
+    }
+    #endregion
+
+    #region Constractor
+    public DishTypeViewModel()
+    {
+        _dishTypeService = new DishTypeServices();
+        DishTypeList = _dishTypeService.GetAll();
     }
     #endregion
 

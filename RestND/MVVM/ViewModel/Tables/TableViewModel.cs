@@ -30,6 +30,7 @@ namespace RestND.MVVM.ViewModel{
         {
             DeleteTableCommand.NotifyCanExecuteChanged();
             UpdateTableCommand.NotifyCanExecuteChanged();
+            AddTableCommand.NotifyCanExecuteChanged();
         }
 
         #endregion
@@ -56,7 +57,7 @@ namespace RestND.MVVM.ViewModel{
 
         #endregion
     
-        #region AddTable
+        #region Add Table
 
         [RelayCommand]
         private void AddTable()
@@ -108,7 +109,6 @@ namespace RestND.MVVM.ViewModel{
         }
 
         #endregion
-
 
     }
 
