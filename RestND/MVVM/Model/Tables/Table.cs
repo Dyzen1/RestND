@@ -54,7 +54,7 @@ namespace RestND.MVVM.Model.Tables
         }
         #endregion
 
-        #region Table Status
+        #region Table Status - for tables in order
 
         private bool _Table_Status;
 
@@ -66,24 +66,28 @@ namespace RestND.MVVM.Model.Tables
 
         #endregion
 
-        #region Constructor for a new table
+        #region Is Active - indicates wheather a table had beed added by user 
 
+        private bool _Is_Active;
+
+        public bool Is_Active
+        {
+            get { return _Is_Active; }
+            set { _Is_Active = value; }
+        }
+
+        #endregion
+
+        #region Constructor for a new table
         public Table(int Table_Num,double x, double y)
         {
             this.X = x;
             this.Y = y;
             this.Table_Number = Table_Num;
             this.Table_Status = true;
+            this.Is_Active = false;
         }
-        #endregion
 
-        #region Constructor for a new order (status false)
-
-        public Table(int Table_Num)
-        {
-            this.Table_Number = Table_Num;
-            this.Table_Status = false;
-        }
         #endregion
 
         #region Default Constructor
@@ -94,7 +98,6 @@ namespace RestND.MVVM.Model.Tables
         }
 
         #endregion
-
 
     }
 }
