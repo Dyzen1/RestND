@@ -11,6 +11,7 @@ namespace RestND.MVVM.Model.Orders
             get { return _Bill_ID; }
             set { _Bill_ID = value; }
         }
+
         #endregion
 
         #region Is_Active - a property for knowing wheather the bill has been deleted or not

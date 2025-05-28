@@ -19,7 +19,7 @@ namespace RestND.MVVM.View
             {
                 mainWindow.WindowState = WindowState.Maximized;
             }
-            mainWindow.ShowDialog();
+            mainWindow.Show();
             this.Close();
         }
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

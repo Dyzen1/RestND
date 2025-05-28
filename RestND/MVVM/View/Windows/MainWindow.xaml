@@ -64,7 +64,13 @@
                     <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center" 
                                Foreground="{DynamicResource LightText}" Margin="4"/>
                 </StackPanel>
-            </Button>
+                </Button>
+
+                <Rectangle x:Name="Overlay"
+                           Fill="Black"
+                           Opacity="0.5"
+                           Visibility="Collapsed"
+                           Panel.ZIndex="10"/>
 
                 <TextBlock Style="{DynamicResource copyWrite}"
                            Grid.Row="2" Grid.Column="1"/>

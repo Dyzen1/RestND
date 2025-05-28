@@ -6,25 +6,28 @@
         xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
-        mc:Ignorable="d" Style="{DynamicResource windowStyle}"
-        Title="TablePopupWindow" Width="300" Height="200"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize">
+        mc:Ignorable="d" Background="Transparent"
+        Title="TablePopupWindow" Width="400" Height="300"
+        WindowStartupLocation="CenterOwner" WindowStyle="None"
+        ResizeMode="NoResize" ShowInTaskbar="False">
+    
     <Grid>
-        <StackPanel Orientation="Horizontal" Margin="10,15" VerticalAlignment="Top">
-            <Label Content="Table Number:" Foreground="{DynamicResource LightText}"/>
-            <TextBox Text="{Binding NewTable.Table_Number, UpdateSourceTrigger=PropertyChanged}" 
-                     Width="150" Height="60" Background="Transparent" Foreground="{DynamicResource LightText}" 
-                     BorderBrush="{DynamicResource LightText}" ToolTip="Table Number"/>
-        </StackPanel>
 
-        <!-- Save Table Button -->
-        <Button Content="Add Table" Grid.Row="1" 
-                Command="{Binding AddTableCommand}" Style="{DynamicResource SubmitBtn}"
-                Margin="0 60 0 0"/>
-
-        <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-        <TextBlock Style="{DynamicResource copyWrite}"/>
+        <Border Background="{DynamicResource DarkText}"
+                CornerRadius="10" Padding="20" BorderBrush="{DynamicResource LightText}"
+                BorderThickness="1">
+            <StackPanel HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center">
+                <Label Content="Insert Table Number:" Foreground="{DynamicResource LightText}" HorizontalAlignment="Center"/>
+                <TextBox Text="{Binding NewTable.Table_Number, UpdateSourceTrigger=PropertyChanged}" 
+                         Style="{DynamicResource InputBox}"/>
+                <!-- Save Table Button -->
+                <Button Content="Add Table" Grid.Row="1" Click="AddTableBtn_Click"
+                        Command="{Binding AddTableCommand}" Style="{DynamicResource SubmitBtn}"
+                        Margin="0 40 0 0"/>
+            </StackPanel>
+        </Border>
         
+        <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+                <TextBlock Style="{DynamicResource copyWrite}"/>
     </Grid>
 </Window>

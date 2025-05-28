@@ -67,20 +67,32 @@ namespace RestND.MVVM.View.Windows
 
         private void AddTable_Click(object sender, RoutedEventArgs e)
         {
-            OpenPopup();
+            Overlay.Visibility = Visibility.Visible;
+
+            var popup = new TablePopupWindow();
+            popup.Owner = this;
+            popup.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            popup.Closed += (s, args) =>
+            {
+                Overlay.Visibility = Visibility.Collapsed;
+            };
+
+            popup.Show();
+            //OpenPopup();
         }
 
 
         ///// METHODS FOR OPENING WINDOWS:
-        private void OpenPopup()
-        {
-            var popupWindow = new TablePopupWindow();
-            {
-                WindowState = WindowState.Maximized;
-            }
-            popupWindow.Show();
-            this.Close();
-        }
+        //private void OpenPopup()
+        //{
+        //    var popupWindow = new TablePopupWindow();
+        //    {
+        //        WindowState = WindowState.Maximized;
+        //    }
+        //    popupWindow.Show();
+        //    this.Close();
+        //}
 
         private void OpenInventory()
         {
@@ -130,11 +142,6 @@ namespace RestND.MVVM.View.Windows
             };
             ordersWindow.Show();
             this.Close();
-        }
-
-        private void addTables_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
 

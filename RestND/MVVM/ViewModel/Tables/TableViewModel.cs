@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RestND.Data;
 using RestND.MVVM.Model.Tables;
+using System;
 using System.Collections.ObjectModel;
 
 namespace RestND.MVVM.ViewModel{
@@ -15,10 +16,10 @@ namespace RestND.MVVM.ViewModel{
         #region Fields
     
         [ObservableProperty]
-        public ObservableCollection<Table> tables = new ObservableCollection<Table>();
+        private ObservableCollection<Table> tables = new ObservableCollection<Table>();
 
         [ObservableProperty]
-        public Table selectedTable;
+        private Table selectedTable;
 
         [ObservableProperty]
         private Table newTable = new Table();
@@ -62,7 +63,7 @@ namespace RestND.MVVM.ViewModel{
         [RelayCommand]
         private void AddTable()
         {
-            if (string.IsNullOrWhiteSpace(NewTable.Table_Number.ToString()) || NewTable.Table_Number < 0) return;
+            if (NewTable.Table_Number < 0 || string.IsNullOrWhiteSpace(NewTable.Table_Number.ToString())) return;
             var success = _tableService.Add(NewTable);
 
             if (!success) return;
