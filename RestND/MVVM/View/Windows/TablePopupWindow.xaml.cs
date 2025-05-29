@@ -1,8 +1,5 @@
-﻿using RestND.MVVM.View.Windows;
-using RestND.MVVM.ViewModel;
-using RestND.MVVM.ViewModel.Orders;
+﻿using RestND.MVVM.ViewModel;
 using System.Windows;
-using System.Windows.Input;
 
 namespace RestND.MVVM.View.Windows
 {
@@ -20,7 +17,12 @@ namespace RestND.MVVM.View.Windows
             {
                 mainWindow.WindowState = WindowState.Maximized;
             }
-            mainWindow.ShowDialog();
+            mainWindow.Show();
+            this.Close();
+        }
+
+        private void AddTableBtn_Click(object sender, RoutedEventArgs e)
+        {
             this.Close();
         }
     }

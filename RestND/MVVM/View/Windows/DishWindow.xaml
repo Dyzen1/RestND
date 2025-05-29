@@ -6,6 +6,7 @@
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:local="clr-namespace:RestND.MVVM.Model"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
+        xmlns:fa="http://schemas.fontawesome.com/icons/svg"
         mc:Ignorable="d"
         WindowState="Maximized"
         Height="600" Width="900"
@@ -36,13 +37,13 @@
                 <!-- Dish Name -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <Label Content="Dish Name:" Width="100" Foreground="{DynamicResource LightText}"/>
-                    <TextBox Text="{Binding NewDish.Dish_Name, UpdateSourceTrigger=PropertyChanged}" Width="170"/>
+                    <TextBox Text="{Binding NewDish.Dish_Name, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <!-- Dish Price -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                         <Label Content="Dish Price:" Width="100" Foreground="{DynamicResource LightText}"/>
-                            <TextBox Text="{Binding NewDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}" Width="170"/>
+                            <TextBox Text="{Binding NewDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <!-- Allergen Notes -->
@@ -80,20 +81,22 @@
                 <!-- Enter Amount Usage -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                         <Label Content="Amount Usage:" Foreground="{DynamicResource LightText}"/>
-                    <TextBox Text="{Binding ProductAmountUsage, UpdateSourceTrigger=PropertyChanged}" Width="180"/>
+                    <TextBox Text="{Binding ProductAmountUsage, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <!-- Add Product Button -->
-                <Button Content="Add Product to Dish" 
-                        Command="{Binding AddProductToDishCommand}" 
-                        Margin="0,30,0,0" Width="150"/>
+                <Button Command="{Binding AddProductToDishCommand}" 
+                        Margin="5 15 5 5" Style="{DynamicResource deleteBtn}" 
+                        Width="70" Height="30">
+                     <fa:SvgAwesome Style="{DynamicResource addProductIcon}"/>
+                </Button>
 
-                <Separator Margin="0,20"/>
+                <Separator Margin="0,10"/>
 
                 <!-- Save Dish Button -->
                 <Button Content="Save Dish" Grid.Row="1"
                         Command="{Binding AddDishCommand}" 
-                        Margin="0,10,0,0" Width="150"/>
+                        Margin="0,10,0,0" Style="{DynamicResource SubmitBtn}"/>
             </StackPanel>
         </GroupBox>
 
@@ -101,7 +104,8 @@
         <GroupBox Grid.Column="1" Padding="0,5,0,0" BorderThickness="0">
             <ListBox ItemsSource="{Binding Dishes}" 
                      SelectedItem="{Binding SelectedDish}"
-                     DisplayMemberPath="Dish_Name"/>
+                     DisplayMemberPath="Dish_Name"
+                     Background="{DynamicResource CardBG}"/>
         </GroupBox>
 
             <uc:ReturnBtn x:Name="returnBtn" Grid.Column="0" VerticalAlignment="Bottom" Margin="15,0,0,15"/>

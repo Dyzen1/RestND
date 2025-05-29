@@ -41,6 +41,11 @@
     <Style x:Key="tableBtn" TargetType="Image">
         <Setter Property="Source" Value="\Styles\Assets\table1.png"/>
     </Style>
-    
+
+    <Style x:Key="addProductIcon" TargetType="fa6:SvgAwesome">
+        <Setter Property="Icon" Value="Solid_CartPlus"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="PrimaryColor" Value="{DynamicResource secondaryBtns}"/>
+    </Style>
 
 </ResourceDictionary>

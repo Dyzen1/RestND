@@ -34,16 +34,16 @@
                            VerticalAlignment="Center" FontSize="13"/>
                     <TextBox Background="Transparent"
                              Text="{Binding NewProduct.Product_ID, UpdateSourceTrigger=PropertyChanged}"
-                             Foreground="{DynamicResource LightText}" HorizontalAlignment="Stretch" Height="20"
+                             Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
                              BorderBrush="{DynamicResource LightText}" ToolTip="Serial Number">
                     </TextBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0 0 10 0">
                     <Label Content="Product Name" Foreground="{DynamicResource LightText}" 
-                           VerticalAlignment="Center" FontSize="13"/>
-                    <TextBox HorizontalAlignment="Stretch" Background="Transparent" 
-                             Foreground="{DynamicResource LightText}" Height="20"
+                           FontSize="13"/>
+                    <TextBox HorizontalAlignment="Left" Background="Transparent" 
+                             Foreground="{DynamicResource LightText}" Height="20" 
                              BorderBrush="{DynamicResource LightText}" ToolTip="Product Name"
                              Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged}">
                     </TextBox>
@@ -54,7 +54,7 @@
                            VerticalAlignment="Center" FontSize="13"/>
                     <TextBox Background="Transparent"
                              Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged}"
-                             Foreground="{DynamicResource LightText}" HorizontalAlignment="Stretch" Height="20"
+                             Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
                              BorderBrush="{DynamicResource LightText}" ToolTip="Quantity">
                     </TextBox>
                 </StackPanel>
@@ -64,7 +64,7 @@
                            VerticalAlignment="Center" FontSize="13"/>
                     <TextBox Background="Transparent"
                              Text="{Binding NewProduct.Tolerance, UpdateSourceTrigger=PropertyChanged}"
-                             Foreground="{DynamicResource LightText}" HorizontalAlignment="Stretch" Height="20"
+                             Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
                              BorderBrush="{DynamicResource LightText}" ToolTip="Tolerance">
                     </TextBox>
                 </StackPanel>
@@ -140,6 +140,7 @@
                 <Grid Grid.Row="2">
 
                     <uc:ReturnBtn x:Name="returnBtn" />
+                    <TextBlock Style="{DynamicResource copyWrite}" Margin="5 5"/>
 
                     <StackPanel Orientation="Horizontal" 
                                 HorizontalAlignment="Right" VerticalAlignment="Bottom"

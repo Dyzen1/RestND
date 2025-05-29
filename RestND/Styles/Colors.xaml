@@ -8,8 +8,10 @@
     <SolidColorBrush x:Key="ErrorMsg" Color="#C62828"/> <!--for error text messages-->
     <SolidColorBrush x:Key="Hover" Color="LightGoldenrodYellow"/> <!--for mouse hover bg-->
 
-    <Style x:Key="bg" TargetType="Image">
+    <SolidColorBrush x:Key="secondaryBtns" Color="#8fce00"/> <!--for some of the icons-->
+
+    <!--<Style x:Key="bg" TargetType="Image">
         <Setter Property="Source" Value="\Styles\Assets\bg_image.jpg"/>
         <Setter Property="Stretch" Value="UniformToFill"/>
-    </Style>  
+    </Style>-->  
 </ResourceDictionary>
