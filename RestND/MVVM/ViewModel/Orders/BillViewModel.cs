@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using RestND.MVVM.Model.Orders;
-using RestND.MVVM.Model;
 using RestND.Data;
 
 namespace RestND.MVVM.ViewModel.Orders

@@ -32,13 +32,13 @@ namespace RestND.Data
 
         #region Add Table
         public  override bool Add(Table t){
-         string query = "INSERT INTO `tables` (Table_ID, Table_Number ,Y , X) VALUES (@id,@tablenum ,@y , @x)";
+         string query = "INSERT INTO `tables` (Table_ID, Table_Number ,R , C) VALUES (@id,@tablenum ,@r , @c)";
 
             return _db.ExecuteNonQuery(query,
                         //new MySqlParameter("@id", t.Table_ID),
                         new MySqlParameter("@tablenum", t.Table_Number),
-                        new MySqlParameter("@y", t.Y)  ,
-                        new MySqlParameter("@x", t.X)) > 0;
+                        new MySqlParameter("@r", t.R)  ,
+                        new MySqlParameter("@c", t.C)) > 0;
 
         }
 
@@ -48,13 +48,13 @@ namespace RestND.Data
         public override bool Update(Table t){
             if(t.Table_Status != true) return false;
 
-            string query = "UPDATE `tables` SET Table_Number = @tablenum , Y = @y , X = @x WHERE Table_ID = @id";
+            string query = "UPDATE `tables` SET Table_Number = @tablenum , R = @r , C = @c WHERE Table_ID = @id";
 
             return _db.ExecuteNonQuery(query,
                         new MySqlParameter("@id", t.Table_ID),
                         new MySqlParameter("@tablenum", t.Table_Number),
-                        new MySqlParameter("@y", t.Y),
-                        new MySqlParameter("@x", t.X)) > 0;
+                        new MySqlParameter("@r", t.R),
+                        new MySqlParameter("@c", t.C)) > 0;
 
 
         }

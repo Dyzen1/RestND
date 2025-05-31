@@ -11,6 +11,7 @@
       Style="{StaticResource windowStyle}"
       d:DataContext="{d:DesignInstance Type=products:ProductViewModel, IsDesignTimeCreatable=True}"
       MouseLeftButtonDown="Window_MouseLeftButtonDown">
+    
 
     <Border Style="{DynamicResource windowBorder}">
 
@@ -28,32 +29,31 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                
 
                 <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0 0 10 0">
                     <Label Content="Serial Number" Foreground="{DynamicResource LightText}" 
                            VerticalAlignment="Center" FontSize="13"/>
-                    <TextBox Background="Transparent"
-                             Text="{Binding NewProduct.Product_ID, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding NewProduct.Product_ID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                             Background="Transparent"
                              Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
-                             BorderBrush="{DynamicResource LightText}" ToolTip="Serial Number">
-                    </TextBox>
+                             BorderBrush="{DynamicResource LightText}" ToolTip="Serial Number"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0 0 10 0">
                     <Label Content="Product Name" Foreground="{DynamicResource LightText}" 
                            FontSize="13"/>
-                    <TextBox HorizontalAlignment="Left" Background="Transparent" 
+                    <TextBox Text="{Binding NewProduct.Product_Name , UpdateSourceTrigger=PropertyChanged , Mode=TwoWay}"
+                             HorizontalAlignment="Left" Background="Transparent" 
                              Foreground="{DynamicResource LightText}" Height="20" 
-                             BorderBrush="{DynamicResource LightText}" ToolTip="Product Name"
-                             Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged}">
-                    </TextBox>
+                             BorderBrush="{DynamicResource LightText}" ToolTip="Product Name"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0 0 10 0">
                     <Label Content="Quantity" Foreground="{DynamicResource LightText}" 
                            VerticalAlignment="Center" FontSize="13"/>
                     <TextBox Background="Transparent"
-                             Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
                              BorderBrush="{DynamicResource LightText}" ToolTip="Quantity">
                     </TextBox>
@@ -68,6 +68,8 @@
                              BorderBrush="{DynamicResource LightText}" ToolTip="Tolerance">
                     </TextBox>
                 </StackPanel>
+                
+                
 
                     <Button Grid.Column="3" Command="{Binding AddProductCommand}" Margin="0" 
                             Style="{DynamicResource addBtn}" HorizontalAlignment="Right">
@@ -136,6 +138,7 @@
                     </DataGrid>
 
                 </Border>
+            
 
                 <Grid Grid.Row="2">
 
@@ -156,7 +159,9 @@
                         </Button>
                     </StackPanel>
                     
+                    
                 </Grid>
         </Grid>
+        
     </Border>
 </Window>

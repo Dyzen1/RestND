@@ -22,7 +22,7 @@ namespace RestND.Data
                 {
                     Product_ID = row["Product_ID"].ToString(),
                     Product_Name = row["Product_Name"].ToString(),
-                    Tolerance = Convert.ToDouble(row["Tolerance"]),
+                    Tolerance = row["Tolerance"] != DBNull.Value ? Convert.ToDouble(row["Tolerance"]) : 0.0,
                     Quantity_Available = Convert.ToInt32(row["Quantity_Available"]),
                     Created_At = row["Created_At"].ToString().Split(' ')[0]
                 });

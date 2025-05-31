@@ -2,20 +2,25 @@
 using CommunityToolkit.Mvvm.Input;
 using RestND.Data;
 using RestND.MVVM.Model;
+using RestND.Validations;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace RestND.MVVM.ViewModel
 {
     public partial class ProductViewModel : ObservableObject
     {
-        #region Service
+        #region Fields & Services
+
         private readonly ProductService _productService;
+
         #endregion
 
         #region Observable Properties
 
         [ObservableProperty]
-        public ObservableCollection<Inventory> products = new ObservableCollection<Inventory>();
+        public ObservableCollection<Inventory> products = new();
 
         [ObservableProperty]
         public Inventory selectedProduct;
@@ -26,6 +31,7 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Constructor
+
         public ProductViewModel()
         {
             _productService = new ProductService();
@@ -34,7 +40,7 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
-        #region On Change
+        #region Selected Product Change Hook
 
         partial void OnSelectedProductChanged(Inventory value)
         {
@@ -50,9 +56,7 @@ namespace RestND.MVVM.ViewModel
         private void LoadProducts()
         {
             Products.Clear();
-
-            var dbProducts = _productService.GetAll(); 
-
+            var dbProducts = _productService.GetAll();
             foreach (var product in dbProducts)
             {
                 Products.Add(product);
@@ -66,33 +70,13 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private void AddProduct()
         {
-            if (!string.IsNullOrWhiteSpace(NewProduct.Product_Name) && NewProduct.Quantity_Available >= 0)
+
+
+            bool success = _productService.Add(NewProduct);
+            if (success)
             {
-                bool success = _productService.Add(NewProduct); //  updated AddProduct -> Add
-
-                if (success)
-                {
-                    LoadProducts();
-                    NewProduct = new Inventory(); //  call the setter so UI refreshes
-                }
-            }
-        }
-
-        #endregion
-
-        #region Delete Product
-
-        [RelayCommand]
-        private void DeleteProduct()
-        {
-            if(CanModifyProduct())
-            {
-                bool success = _productService.Delete(SelectedProduct); //  updated DeleteProduct -> Delete
-
-                if (success)
-                {
-                    Products.Remove(SelectedProduct);
-                }
+                LoadProducts();
+                NewProduct = new Inventory(); // reset
             }
         }
 
@@ -103,23 +87,37 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private void UpdateProduct()
         {
-            if(CanModifyProduct())
-            {
-                bool success = _productService.Update(SelectedProduct); 
-
-                if (success)
-                {
-                    var index = Products.IndexOf(SelectedProduct);
-                    if (index >= 0)
-                        Products[index] = SelectedProduct;
-                }
-            }
             
+;
+
+            bool success = _productService.Update(SelectedProduct);
+            if (success)
+            {
+                var index = Products.IndexOf(SelectedProduct);
+                if (index >= 0)
+                    Products[index] = SelectedProduct;
+            }
         }
 
         #endregion
 
-        #region CanExecute Helpers
+        #region Delete Product
+
+        [RelayCommand]
+        private void DeleteProduct()
+        {
+            
+
+            bool success = _productService.Delete(SelectedProduct);
+            if (success)
+            {
+                Products.Remove(SelectedProduct);
+            }
+        }
+
+        #endregion
+
+        #region Helpers
 
         private bool CanModifyProduct()
         {
