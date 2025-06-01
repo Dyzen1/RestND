@@ -1,25 +1,39 @@
-﻿using RestND.MVVM.View.Windows;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+using RestND.MVVM.View.Windows;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace RestND
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+        public static HubConnection HubConnection { get; private set; }
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            // Initialize the main window
+
+            InitializeSignalR().ContinueWith(task =>
+            {
+                if (task.Exception != null)
+                {
+                    MessageBox.Show("Failed to start SignalR: " + task.Exception.InnerException?.Message);
+                }
+            });
+
+            // Show the main window
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
+        }
+
+        private async Task InitializeSignalR()
+        {
+            HubConnection = new HubConnectionBuilder()
+                .WithUrl("http://localhost:5027/inventoryHub")
+                .WithAutomaticReconnect()
+                .Build();
+
+            await HubConnection.StartAsync();
         }
     }
 }

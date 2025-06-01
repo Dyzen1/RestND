@@ -2,18 +2,20 @@
 using CommunityToolkit.Mvvm.Input;
 using RestND.Data;
 using RestND.MVVM.Model;
-using RestND.Validations;
 using System.Collections.ObjectModel;
-using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.SignalR.Client;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace RestND.MVVM.ViewModel
 {
     public partial class ProductViewModel : ObservableObject
     {
-        #region Fields & Services
+        #region Services
 
         private readonly ProductService _productService;
+        private readonly HubConnection _hub;
 
         #endregion
 
@@ -35,6 +37,36 @@ namespace RestND.MVVM.ViewModel
         public ProductViewModel()
         {
             _productService = new ProductService();
+            _hub = App.HubConnection;
+
+            _hub.On<Inventory, string>("ReceiveInventoryUpdate", (product, action) =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var match = Products.FirstOrDefault(p => p.Product_ID == product.Product_ID);
+
+                    switch (action)
+                    {
+                        case "add":
+                            if (match == null)
+                                Products.Add(product);
+                            break;
+                        case "update":
+                            if (match != null)
+                            {
+                                match.Product_Name = product.Product_Name;
+                                match.Quantity_Available = product.Quantity_Available;
+                                match.Tolerance = product.Tolerance;
+                            }
+                            break;
+                        case "delete":
+                            if (match != null)
+                                Products.Remove(match);
+                            break;
+                    }
+                });
+            });
+
             LoadProducts();
         }
 
@@ -68,14 +100,12 @@ namespace RestND.MVVM.ViewModel
         #region Add Product
 
         [RelayCommand]
-        private void AddProduct()
+        private async void AddProduct()
         {
-
-
             bool success = _productService.Add(NewProduct);
             if (success)
             {
-                LoadProducts();
+                await _hub.SendAsync("NotifyInventoryUpdate", NewProduct, "add");
                 NewProduct = new Inventory(); // reset
             }
         }
@@ -85,17 +115,14 @@ namespace RestND.MVVM.ViewModel
         #region Update Product
 
         [RelayCommand]
-        private void UpdateProduct()
+        private async Task UpdateProduct()
         {
-            
-;
+            if (!CanModifyProduct()) return;
 
             bool success = _productService.Update(SelectedProduct);
             if (success)
             {
-                var index = Products.IndexOf(SelectedProduct);
-                if (index >= 0)
-                    Products[index] = SelectedProduct;
+                await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "update");
             }
         }
 
@@ -104,14 +131,14 @@ namespace RestND.MVVM.ViewModel
         #region Delete Product
 
         [RelayCommand]
-        private void DeleteProduct()
+        private async void DeleteProduct()
         {
-            
+            if (!CanModifyProduct()) return;
 
             bool success = _productService.Delete(SelectedProduct);
             if (success)
             {
-                Products.Remove(SelectedProduct);
+                await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "delete");
             }
         }
 

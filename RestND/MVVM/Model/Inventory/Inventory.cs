@@ -47,8 +47,8 @@ namespace RestND.MVVM.Model
         private bool _Is_Active;
         public bool Is_Active
         {
-            get { return _Is_Active; }
-            set { _Is_Active = value; }
+            get  => _Is_Active; 
+            set => SetProperty(ref _Is_Active ,value); 
         }
         #endregion
 
