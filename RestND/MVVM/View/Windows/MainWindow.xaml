@@ -8,14 +8,10 @@
         xmlns:fa="http://schemas.fontawesome.com/icons/svg"
         xmlns:fa6="http://schemas.fontawesome.com/icons/svg"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
-        mc:Ignorable="d" Style="{DynamicResource windowStyle}"
-        Title="MainWindow" Height="500" Width="800" 
-        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        mc:Ignorable="d" Style="{StaticResource windowStyle}"
+        Title="MainWindow" MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
-    <Border BorderBrush="{DynamicResource LightText}"
-            BorderThickness="3"
-            CornerRadius="10"
-            Padding="2,6,0,0">
+    <Border Style="{StaticResource windowBorder}">
 
     <Grid>
 

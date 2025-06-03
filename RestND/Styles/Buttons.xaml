@@ -69,22 +69,15 @@
         <Setter Property="Width" Value="30"/>
     </Style>
 
-    
-    <Style x:Key="deleteBtn" TargetType="Button"> <!--For Btns With Icon-->
+
+    <Style x:Key="deleteBtn" TargetType="Button">
+        <!--For Btns With Icon-->
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Width" Value="25"/>
     </Style>
 
-    
-    <Style x:Key="tableNumber" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-    </Style>
 
-    
     <Style x:Key="loginBtn" TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource DarkText}"/>
         <Setter Property="FontWeight" Value="Bold"/>

@@ -6,16 +6,14 @@
         xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
-        mc:Ignorable="d" Background="Transparent"
+        mc:Ignorable="d" Background="{StaticResource DarkText}"
         Title="TablePopupWindow" Width="400" Height="300"
         WindowStartupLocation="CenterOwner" WindowStyle="None"
         ResizeMode="NoResize" ShowInTaskbar="False">
     
     <Grid>
 
-        <Border Background="{DynamicResource DarkText}"
-                CornerRadius="10" Padding="20" BorderBrush="{DynamicResource LightText}"
-                BorderThickness="1">
+        <Border Style="{StaticResource windowBorder}">
             <StackPanel HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center">
                 <Label Content="Insert Table Number:" Foreground="{DynamicResource LightText}" HorizontalAlignment="Center"/>
                 <TextBox Text="{Binding NewTable.Table_Number, UpdateSourceTrigger=PropertyChanged}" 

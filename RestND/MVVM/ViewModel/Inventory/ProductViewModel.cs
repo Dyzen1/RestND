@@ -1,8 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
 using RestND.MVVM.Model;
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace RestND.MVVM.ViewModel
 {
@@ -13,6 +17,8 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Observable Properties
+
+        private readonly HubConnection _hub;
 
         [ObservableProperty]
         public ObservableCollection<Inventory> products = new ObservableCollection<Inventory>();
@@ -29,13 +35,29 @@ namespace RestND.MVVM.ViewModel
         public ProductViewModel()
         {
             _productService = new ProductService();
+            _hub = App.HubConnection;
+
+            _hub.On<Inventory>("ReceiveInventoryUpdate", (updatedProduct) =>
+            {
+                var match = Products.FirstOrDefault(p => p.Product_ID == updatedProduct.Product_ID);
+                if (match != null)
+                {
+                    match.Product_Name = updatedProduct.Product_Name;
+                    match.Quantity_Available = updatedProduct.Quantity_Available;
+                    match.Tolerance = updatedProduct.Tolerance;
+                }
+                else
+                {
+                    Products.Add(updatedProduct);
+                }
+            });
+
             LoadProducts();
         }
 
         #endregion
 
         #region On Change
-
         partial void OnSelectedProductChanged(Inventory value)
         {
             UpdateProductCommand.NotifyCanExecuteChanged();
@@ -64,17 +86,15 @@ namespace RestND.MVVM.ViewModel
         #region Add Product
 
         [RelayCommand]
-        private void AddProduct()
+        private async void AddProduct()
         {
-            if (!string.IsNullOrWhiteSpace(NewProduct.Product_Name) && NewProduct.Quantity_Available >= 0)
-            {
-                bool success = _productService.Add(NewProduct); //  updated AddProduct -> Add
+            bool success = _productService.Add(NewProduct); 
 
-                if (success)
-                {
-                    LoadProducts();
-                    NewProduct = new Inventory(); //  call the setter so UI refreshes
-                }
+            if (success)
+            {
+                await _hub.SendAsync("NotifyInventoryUpdate", NewProduct);
+                LoadProducts();
+                NewProduct = new Inventory(); //  call the setter so UI refreshes
             }
         }
 
@@ -87,7 +107,7 @@ namespace RestND.MVVM.ViewModel
         {
             if(CanModifyProduct())
             {
-                bool success = _productService.Delete(SelectedProduct); //  updated DeleteProduct -> Delete
+                bool success = _productService.Delete(SelectedProduct); 
 
                 if (success)
                 {
@@ -101,20 +121,19 @@ namespace RestND.MVVM.ViewModel
         #region Update Product
 
         [RelayCommand]
-        private void UpdateProduct()
+        private async void UpdateProduct()
         {
-            if(CanModifyProduct())
-            {
-                bool success = _productService.Update(SelectedProduct); 
+            if (!CanModifyProduct()) return;
 
-                if (success)
-                {
-                    var index = Products.IndexOf(SelectedProduct);
-                    if (index >= 0)
-                        Products[index] = SelectedProduct;
-                }
+            bool success = _productService.Update(SelectedProduct);
+            if (success)
+            {
+                await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct);
+                var index = Products.IndexOf(SelectedProduct);
+                if (index >= 0)
+                    Products[index] = SelectedProduct;
             }
-            
+
         }
 
         #endregion

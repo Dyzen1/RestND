@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:fa6="http://schemas.fontawesome.com/icons/svg"
-                    xmlns:fa="http://schemas.fontawesome.com/icons/svg"
+                    xmlns:fa="clr-namespace:FontAwesome6.Svg;assembly=FontAwesome6.Svg.Net"
                     xmlns:svg="http://sharpvectors.codeplex.com/svgc">
 
     <Style x:Key="SideBarIcon" TargetType="fa:SvgAwesome">
@@ -9,6 +8,7 @@
         <Setter Property="PrimaryColor" Value="{DynamicResource LightText}"/>
     </Style>
 
+    
     <Style x:Key="returnBtnIcon" TargetType="fa:SvgAwesome">
         <Setter Property="Icon" Value="Solid_ArrowLeft"/>
         <Setter Property="Width" Value="30"/>
@@ -18,12 +18,14 @@
         <Setter Property="Height" Value="20"/>
     </Style>
 
+    
     <Style x:Key="addBtnIcon" TargetType="fa:SvgAwesome">
         <Setter Property="Icon" Value="Solid_CirclePlus"/>
         <Setter Property="PrimaryColor" Value="{DynamicResource LightText}"/>
         <Setter Property="Width" Value="15"/>
     </Style>
 
+    
     <Style x:Key="editBtnIcon" TargetType="fa:SvgAwesome">
         <Setter Property="Icon" Value="Regular_PenToSquare"/>
         <Setter Property="PrimaryColor" Value="{DynamicResource LightText}"/>
@@ -31,6 +33,7 @@
         <Setter Property="Height" Value="20"/>
     </Style>
 
+    
     <Style x:Key="deleteBtnIcon" TargetType="fa:SvgAwesome">
         <Setter Property="Icon" Value="Regular_TrashCan"/>
         <Setter Property="PrimaryColor" Value="{DynamicResource LightText}"/>
@@ -38,11 +41,21 @@
         <Setter Property="Height" Value="20"/>
     </Style>
 
+    
     <Style x:Key="tableBtn" TargetType="Image">
         <Setter Property="Source" Value="\Styles\Assets\table1.png"/>
     </Style>
 
-    <Style x:Key="addProductIcon" TargetType="fa6:SvgAwesome">
+
+    <Style x:Key="tableNumber" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+
+    <Style x:Key="addProductIcon" TargetType="fa:SvgAwesome">
         <Setter Property="Icon" Value="Solid_CartPlus"/>
         <Setter Property="Height" Value="25"/>
         <Setter Property="PrimaryColor" Value="{DynamicResource secondaryBtns}"/>

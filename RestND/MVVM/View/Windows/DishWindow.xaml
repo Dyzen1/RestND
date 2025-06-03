@@ -7,14 +7,10 @@
         xmlns:local="clr-namespace:RestND.MVVM.Model"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         xmlns:fa="http://schemas.fontawesome.com/icons/svg"
-        mc:Ignorable="d"
-        WindowState="Maximized"
-        Height="600" Width="900"
-        Background="{DynamicResource DarkText}" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        mc:Ignorable="d" Style="{StaticResource windowStyle}"
+        Title="DishesWindow" MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
-    <Border BorderBrush="{DynamicResource LightText}"
-        BorderThickness="3"
-        CornerRadius="10">
+    <Border Style="{StaticResource windowBorder}">
 
     <Grid>
     
@@ -36,59 +32,58 @@
 
                 <!-- Dish Name -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                    <Label Content="Dish Name:" Width="100" Foreground="{DynamicResource LightText}"/>
+                    <Label Content="Dish Name:" Width="100" Foreground="{StaticResource LightText}"/>
                     <TextBox Text="{Binding NewDish.Dish_Name, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <!-- Dish Price -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Dish Price:" Width="100" Foreground="{DynamicResource LightText}"/>
+                        <Label Content="Dish Price:" Width="100" Foreground="{StaticResource LightText}"/>
                             <TextBox Text="{Binding NewDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <!-- Allergen Notes -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Allergen Notes:" Foreground="{DynamicResource LightText}"/>
+                        <Label Content="Allergen Notes:" Foreground="{StaticResource LightText}"/>
                         <ComboBox SelectedItem="{Binding NewDish.Allergen_Notes, UpdateSourceTrigger=PropertyChanged}"
-                                  Width="170" ItemsSource="{Binding AllergenNotes}"/>
+                                  ItemsSource="{Binding AllergenNotes}"/>
                 </StackPanel>
 
                 <!-- Availability Status -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Available:" Foreground="{DynamicResource LightText}" VerticalAlignment="Center"/>
+                        <Label Content="Available:" Foreground="{StaticResource LightText}" VerticalAlignment="Center"/>
                         <CheckBox IsChecked="{Binding NewDish.Availability_Status, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="30 0 0 0"/>
                 </StackPanel>
 
                 <!-- Dish Type -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Dish Type:" Foreground="{DynamicResource LightText}"/>
+                        <Label Content="Dish Type:" Foreground="{StaticResource LightText}"/>
                         <ComboBox ItemsSource="{Binding DishTypes}"
-                            SelectedItem="{Binding NewDish.Dish_Type, UpdateSourceTrigger=PropertyChanged}"
-                            DisplayMemberPath="DishType_Name" Width="170"/>
+                                SelectedItem="{Binding NewDish.Dish_Type, UpdateSourceTrigger=PropertyChanged}"
+                                DisplayMemberPath="DishType_Name"/>
                 </StackPanel>
 
                 <Separator Margin="0,10"/>
 
                 <!-- Select Product to Add -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Select Product:" Width="100" Foreground="{DynamicResource LightText}"/>
+                        <Label Content="Select Product:" Width="100" Foreground="{StaticResource LightText}"/>
                     <ComboBox ItemsSource="{Binding AvailableProducts}" 
                               SelectedItem="{Binding SelectedAvailableProduct}" 
-                              DisplayMemberPath="Product_Name"
-                              Width="180"/>
+                              DisplayMemberPath="Product_Name"/>
                 </StackPanel>
 
                 <!-- Enter Amount Usage -->
                 <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Amount Usage:" Foreground="{DynamicResource LightText}"/>
+                        <Label Content="Amount Usage:" Foreground="{StaticResource LightText}"/>
                     <TextBox Text="{Binding ProductAmountUsage, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <!-- Add Product Button -->
                 <Button Command="{Binding AddProductToDishCommand}" 
-                        Margin="5 15 5 5" Style="{DynamicResource deleteBtn}" 
+                        Margin="5 15 5 5" Style="{StaticResource deleteBtn}" 
                         Width="70" Height="30">
-                     <fa:SvgAwesome Style="{DynamicResource addProductIcon}"/>
+                     <fa:SvgAwesome Style="{StaticResource addProductIcon}"/>
                 </Button>
 
                 <Separator Margin="0,10"/>
@@ -96,7 +91,7 @@
                 <!-- Save Dish Button -->
                 <Button Content="Save Dish" Grid.Row="1"
                         Command="{Binding AddDishCommand}" 
-                        Margin="0,10,0,0" Style="{DynamicResource SubmitBtn}"/>
+                        Margin="0,10,0,0" Style="{StaticResource SubmitBtn}"/>
             </StackPanel>
         </GroupBox>
 
@@ -105,11 +100,11 @@
             <ListBox ItemsSource="{Binding Dishes}" 
                      SelectedItem="{Binding SelectedDish}"
                      DisplayMemberPath="Dish_Name"
-                     Background="{DynamicResource CardBG}"/>
+                     Background="{StaticResource CardBG}"/>
         </GroupBox>
 
             <uc:ReturnBtn x:Name="returnBtn" Grid.Column="0" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-                <TextBlock Style="{DynamicResource copyWrite}"/>
+                <TextBlock Style="{StaticResource copyWrite}"/>
 
             </Grid>
     </Grid>

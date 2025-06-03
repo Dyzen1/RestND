@@ -10,7 +10,7 @@ namespace RestND.MVVM.View
         public ProductWindow()
         {
             InitializeComponent();
-            this.DataContext = new ProductViewModel();   
+            this.DataContext = new ProductViewModel();
         }
 
         private void return_Click(object sender, RoutedEventArgs e)

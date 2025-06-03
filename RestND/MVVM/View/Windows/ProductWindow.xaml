@@ -7,7 +7,6 @@
       xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
       xmlns:fa="http://schemas.fontawesome.com/icons/svg"
       mc:Ignorable="d"
-      d:DesignHeight="600" d:DesignWidth="900"
       Style="{StaticResource windowStyle}"
       d:DataContext="{d:DesignInstance Type=products:ProductViewModel, IsDesignTimeCreatable=True}"
       MouseLeftButtonDown="Window_MouseLeftButtonDown">
@@ -33,7 +32,7 @@
                     <Label Content="Serial Number" Foreground="{DynamicResource LightText}" 
                            VerticalAlignment="Center" FontSize="13"/>
                     <TextBox Background="Transparent"
-                             Text="{Binding NewProduct.Product_ID, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding NewProduct.Product_ID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
                              BorderBrush="{DynamicResource LightText}" ToolTip="Serial Number">
                     </TextBox>
@@ -45,7 +44,7 @@
                     <TextBox HorizontalAlignment="Left" Background="Transparent" 
                              Foreground="{DynamicResource LightText}" Height="20" 
                              BorderBrush="{DynamicResource LightText}" ToolTip="Product Name"
-                             Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged}">
+                             Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                     </TextBox>
                 </StackPanel>
 
@@ -53,7 +52,7 @@
                     <Label Content="Quantity" Foreground="{DynamicResource LightText}" 
                            VerticalAlignment="Center" FontSize="13"/>
                     <TextBox Background="Transparent"
-                             Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
                              BorderBrush="{DynamicResource LightText}" ToolTip="Quantity">
                     </TextBox>
@@ -63,7 +62,7 @@
                     <Label Content="Tolerance" Foreground="{DynamicResource LightText}" 
                            VerticalAlignment="Center" FontSize="13"/>
                     <TextBox Background="Transparent"
-                             Text="{Binding NewProduct.Tolerance, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding NewProduct.Tolerance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
                              BorderBrush="{DynamicResource LightText}" ToolTip="Tolerance">
                     </TextBox>

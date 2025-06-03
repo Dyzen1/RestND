@@ -8,8 +8,6 @@
       mc:Ignorable="d"
       WindowState="Maximized" WindowStyle="None" Background="{DynamicResource DarkText}">
 
-
-  
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

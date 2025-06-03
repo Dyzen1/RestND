@@ -4,12 +4,20 @@ using RestND.MVVM.Model;
 using RestND.MVVM.Model.Orders;
 using System;
 
-public class Transaction{
-readonly DatabaseOperations _db;
-public Transaction(DatabaseOperations db)
+public class Transaction
 {
-    _db = db;
-}
+    #region Properties
+    readonly DatabaseOperations _db;
+    #endregion
+
+    #region Constructor
+    public Transaction(DatabaseOperations db)
+    {
+        _db = db;
+    }
+
+    #endregion
+
     #region Add Dish or Update Dish and Update Product in Dish
     public bool AddDish(Dish d)
     {

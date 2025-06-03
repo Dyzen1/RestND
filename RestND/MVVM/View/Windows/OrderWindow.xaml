@@ -5,12 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
-        mc:Ignorable="d" Style="{DynamicResource windowStyle}"
-        Title="OrderWindow" Height="450" Width="800">
-    <Grid>
+        mc:Ignorable="d" Style="{StaticResource windowStyle}"
+        Title="OrderWindow">
+
+    <Border Style="{StaticResource windowBorder}">
+
+        <Grid>
+
+            <uc:ReturnBtn x:Name="returnBtn" Grid.Column="0" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+            <TextBlock Style="{StaticResource copyWrite}"/>
+
+        </Grid>
         
-        <uc:ReturnBtn x:Name="returnBtn" Grid.Column="0" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-        <TextBlock Style="{DynamicResource copyWrite}"/>
-        
-    </Grid>
+    </Border>
+    
 </Window>

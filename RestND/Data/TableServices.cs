@@ -28,6 +28,7 @@ namespace RestND.Data
 
             return tables;
         }
+
         #endregion
 
         #region Add Table
@@ -58,6 +59,7 @@ namespace RestND.Data
 
 
         }
+
         #endregion
 
         #region Delete Table
@@ -68,6 +70,7 @@ namespace RestND.Data
             string query = "DELETE FROM `tables` WHERE Table_ID = @id";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", d.Table_ID)) > 0;
         }
+
         #endregion
 
     }
