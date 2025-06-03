@@ -1,103 +1,86 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestND.MVVM.Model.Tables
 {
     public class Table
     {
         #region Table ID
-
         private int _Table_ID;
-
         public int Table_ID
         {
             get { return _Table_ID; }
             set { _Table_ID = value; }
         }
-
         #endregion
-        
+
         #region Table Number
-
         private int _Table_Number;
-
         public int Table_Number
         {
-             get { return _Table_Number; }
+            get { return _Table_Number; }
             set { _Table_Number = value; }
         }
-
         #endregion
 
-        #region X coordinates
-
-        private double _X;
-
-        public double X
+        #region Columns (C)
+        private int _C;
+        public int C
         {
-            get { return X; }
-            set { _X = value; }
-        }
-
-
-        #endregion
-
-        #region Y coordinates
-        private double _Y;
-        public double Y
-        {
-            get { return Y; }
-            set { _Y = value; }
+            get { return _C; }
+            set { _C = value; }
         }
         #endregion
 
-        #region Table Status - for tables in order
+        #region Rows (R)
+        private int _R;
+        public int R
+        {
+            get { return _R; }
+            set { _R = value; }
+        }
+        #endregion
 
+        #region Static Table Count
+        public static int Table_Count = 0;
+        #endregion
+
+        #region Max Table Number
+        public const int MAX_TABLE_NUMBER = 25;
+        #endregion
+
+        #region Table Status (e.g. is it currently occupied?)
         private bool _Table_Status;
-
         public bool Table_Status
         {
             get { return _Table_Status; }
             set { _Table_Status = value; }
         }
-
         #endregion
 
-        #region Is Active - indicates wheather a table had beed added by user 
-
+        #region Is Active - was this table added by the user
         private bool _Is_Active;
-
         public bool Is_Active
         {
             get { return _Is_Active; }
             set { _Is_Active = value; }
         }
-
         #endregion
 
-        #region Constructor for a new table
-        public Table(int Table_Num,double x, double y)
+        #region Constructor
+        public Table(int tableNumber, int c, int r)
         {
-            this.X = x;
-            this.Y = y;
-            this.Table_Number = Table_Num;
+            this.C = c;
+            this.R = r;
+            this.Table_Number = tableNumber;
             this.Table_Status = true;
             this.Is_Active = false;
         }
-
         #endregion
 
         #region Default Constructor
-
         public Table()
         {
-            
         }
-
         #endregion
-
     }
 }

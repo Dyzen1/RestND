@@ -33,8 +33,13 @@
     </Style>
 
     
+<<<<<<< HEAD
     <Style TargetType="TextBox"> <!--if the style tag has no key, it will applay to every type of textBox-->
         <Setter Property="Background" Value="Transparent"/>
+=======
+    <Style TargetType="TextBox"> <!--if the style tag has no key, it will applay to everty type of textBox-->
+        <Setter Property="Background" Value="Transparent"/> 
+>>>>>>> 552c4bd5460e2d717d68ad1a5f45076c3608055f
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
         <Setter Property="Height" Value="20"/>
@@ -44,6 +49,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
                     <Border x:Name="border"
+<<<<<<< HEAD
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
@@ -51,10 +57,20 @@
                         <ScrollViewer x:Name="PART_ContentHost"
                                       Margin="0"
                                       VerticalAlignment="Center"/>
+=======
+                    Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="8">
+                        <ScrollViewer x:Name="PART_ContentHost"
+                              Margin="0"
+                              VerticalAlignment="Center"/>
+>>>>>>> 552c4bd5460e2d717d68ad1a5f45076c3608055f
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
     </Style>
 
     
