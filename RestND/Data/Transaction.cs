@@ -18,15 +18,15 @@ public Transaction(DatabaseOperations db)
 
         try
         {
-            string query = "INSERT INTO dishes (Dish_Name, Dish_Price, Allergen_Notes, Availability_Status, Dish_Type) " +
+            string query = "INSERT INTO dishes (Dish_Name, Dish_Price, Allergen_Notes, Availability_Status, DishType_Name) " +
                            "VALUES (@name, @price, @notes, @status, @type)";
 
             bool dishAdded = _db.ExecuteNonQuery(query, _db.Connection, transaction,
                 new MySqlParameter("@name", d.Dish_Name),
                 new MySqlParameter("@price", d.Dish_Price),
-                new MySqlParameter("@notes", d.Allergen_Notes),
+                new MySqlParameter("@notes", string.Join(",", d.Allergen_Notes)),
                 new MySqlParameter("@status", d.Availability_Status),
-                new MySqlParameter("@type", d.Dish_Type.DishType_Name)
+                new MySqlParameter("@type", d.Dish_Type?.DishType_Name ?? string.Empty)
             ) > 0;
 
             if (!dishAdded)
@@ -47,17 +47,20 @@ public Transaction(DatabaseOperations db)
                 _db.CloseConnection();
                 return false;
             }
+
             transaction.Commit();
             _db.CloseConnection();
             return true;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             transaction.Rollback();
             _db.CloseConnection();
-            throw;
+            System.Windows.MessageBox.Show("Error adding dish: " + ex.Message, "Database Error");
+            return false;
         }
     }
+
 
 
 
@@ -69,11 +72,13 @@ public Transaction(DatabaseOperations db)
 
         try
         {
-            // Update dish core info
             string query = @"
             UPDATE dishes 
-            SET Dish_Name = @name, Dish_Price = @price, Allergen_Notes = @notes, 
-                Availability_Status = @status, Dish_Type = @type, Tolerance = @tolerance
+            SET Dish_Name = @name, 
+                Dish_Price = @price, 
+                Allergen_Notes = @notes, 
+                Availability_Status = @status, 
+                DishType_Name = @type
             WHERE Dish_ID = @id";
 
             _db.ExecuteNonQuery(query, _db.Connection, transaction,
@@ -81,11 +86,10 @@ public Transaction(DatabaseOperations db)
                 new MySqlParameter("@price", dish.Dish_Price),
                 new MySqlParameter("@notes", string.Join(",", dish.Allergen_Notes)),
                 new MySqlParameter("@status", dish.Availability_Status),
-                new MySqlParameter("@type", dish.Dish_Type?.DishType_Name),
+                new MySqlParameter("@type", dish.Dish_Type?.DishType_Name ?? string.Empty),
                 new MySqlParameter("@id", dish.Dish_ID)
             );
 
-            // Delete and re-insert products
             string deleteQuery = "DELETE FROM products_in_dish WHERE Dish_ID = @id";
             _db.ExecuteNonQuery(deleteQuery, _db.Connection, transaction,
                 new MySqlParameter("@id", dish.Dish_ID)
@@ -105,13 +109,15 @@ public Transaction(DatabaseOperations db)
             _db.CloseConnection();
             return true;
         }
-        catch
+        catch (Exception ex)
         {
             transaction.Rollback();
             _db.CloseConnection();
-            throw;
+            System.Windows.MessageBox.Show("Error updating dish: " + ex.Message, "Database Error");
+            return false;
         }
     }
+
 
 
 

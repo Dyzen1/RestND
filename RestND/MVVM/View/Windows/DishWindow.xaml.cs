@@ -49,5 +49,23 @@ namespace RestND.MVVM.View
             Close();
             //Application.Current.Shutdown(); - if we want the app to totally close. 
         }
+
+        private void UpdateDishBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as DishViewModel;
+            if (vm?.SelectedDish != null)
+            {
+                EditDishPopup editWindow = new EditDishPopup() 
+               {
+                    DataContext = new EditDishViewModel(vm.SelectedDish)
+                };
+                editWindow.ShowDialog();
+                vm.LoadDishesCommand.Execute(null);
+            }
+            else
+            {
+                MessageBox.Show("Please select a dish to update.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
     }
 }

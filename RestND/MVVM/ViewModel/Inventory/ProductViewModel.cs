@@ -37,7 +37,7 @@ namespace RestND.MVVM.ViewModel
         public ProductViewModel()
         {
             _productService = new ProductService();
-            _hub = App.HubConnection;
+            _hub = App.InventoryHub;
 
             _hub.On<Inventory, string>("ReceiveInventoryUpdate", (product, action) =>
             {

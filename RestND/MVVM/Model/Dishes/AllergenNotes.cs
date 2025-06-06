@@ -6,6 +6,7 @@ namespace RestND.MVVM.Model.Dishes
 {
     public enum AllergenNotes
     {
+        None,
         [Description("⚠️ PEANUT Allergy – Contains peanuts.")]
         Peanut,
         [Description("⚠️ TREE NUT Allergy – Contains tree nuts.")]

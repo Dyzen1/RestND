@@ -21,11 +21,7 @@ namespace RestND.MVVM.Model
         public string? Dish_Name
         {
             get { return _Dish_Name; }
-            set 
-            {
-                if (!string.IsNullOrEmpty(_Dish_Name))
-                    _Dish_Name = value;
-            }
+            set { _Dish_Name = value; }
         }
         #endregion
 
