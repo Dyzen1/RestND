@@ -6,6 +6,7 @@ using RestND.Data;
 using RestND.MVVM.Model;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace RestND.MVVM.ViewModel
 {
@@ -19,8 +20,6 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Observable Properties
-
-        private readonly HubConnection _hub;
 
         [ObservableProperty]
         public ObservableCollection<Inventory> products = new();
@@ -90,16 +89,15 @@ namespace RestND.MVVM.ViewModel
         #region Update Product
 
         [RelayCommand]
-        private void DeleteProduct()
+        private async Task DeleteProductAsync()
         {
-            if(CanModifyProduct())
+            if (CanModifyProduct())
             {
-                bool success = _productService.Delete(SelectedProduct); //  updated DeleteProduct -> Delete
-
-            bool success = _productService.Update(SelectedProduct);
-            if (success)
-            {
-                await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "update");
+                bool success = _productService.Delete(SelectedProduct);
+                if (success)
+                {
+                    await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "update");
+                }
             }
         }
 

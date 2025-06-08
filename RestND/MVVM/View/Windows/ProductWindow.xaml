@@ -33,13 +33,8 @@
                 <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0 0 10 0">
                     <Label Content="Serial Number" Foreground="{DynamicResource LightText}" 
                            VerticalAlignment="Center" FontSize="13"/>
-<<<<<<< HEAD
                     <TextBox Background="Transparent"
                              Text="{Binding NewProduct.Product_ID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-=======
-                    <TextBox Text="{Binding NewProduct.Product_ID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Background="Transparent"
->>>>>>> 552c4bd5460e2d717d68ad1a5f45076c3608055f
                              Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
                              BorderBrush="{DynamicResource LightText}" ToolTip="Serial Number"/>
                 </StackPanel>
@@ -50,13 +45,8 @@
                     <TextBox Text="{Binding NewProduct.Product_Name , UpdateSourceTrigger=PropertyChanged , Mode=TwoWay}"
                              HorizontalAlignment="Left" Background="Transparent" 
                              Foreground="{DynamicResource LightText}" Height="20" 
-<<<<<<< HEAD
-                             BorderBrush="{DynamicResource LightText}" ToolTip="Product Name"
-                             Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
+                             BorderBrush="{DynamicResource LightText}" ToolTip="Product Name">
                     </TextBox>
-=======
-                             BorderBrush="{DynamicResource LightText}" ToolTip="Product Name"/>
->>>>>>> 552c4bd5460e2d717d68ad1a5f45076c3608055f
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0 0 10 0">

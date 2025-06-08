@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 <Project Sdk="Microsoft.NET.Sdk.Web">
-=======
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
->>>>>>> 552c4bd5460e2d717d68ad1a5f45076c3608055f
-
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>

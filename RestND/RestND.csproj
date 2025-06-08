@@ -5,6 +5,7 @@
     <TargetFramework>net8.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationManifest>Styles\Assets\logo1.ico</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +16,8 @@
     <None Remove="MVVM\Model\Validator.cs~RF81e0c7ce.TMP" />
     <None Remove="MVVM\Model\Validator.cs~RF81f8a9d1.TMP" />
     <None Remove="Styles\Assets\bg_image.jpg" />
+    <None Remove="Styles\Assets\logo1.ico" />
+    <None Remove="Styles\Assets\logo2.ico" />
     <None Remove="Styles\Assets\table.png" />
     <None Remove="Styles\Assets\table1.png" />
   </ItemGroup>
@@ -27,6 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Styles\Assets\logo1.ico" />
+    <Content Include="Styles\Assets\logo2.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="FontAwesome" Version="4.7.0" />
@@ -34,14 +42,10 @@
     <PackageReference Include="LiveCharts.Wpf" Version="0.9.7" />
     <PackageReference Include="MahApps.Metro" Version="2.4.10" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
-<<<<<<< HEAD
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="9.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.2.0" />
-=======
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.5" />
->>>>>>> 552c4bd5460e2d717d68ad1a5f45076c3608055f
     <PackageReference Include="MySql.Data" Version="9.3.0" />
     <PackageReference Include="SharpVectors.Wpf" Version="1.8.4.2" />
   </ItemGroup>
