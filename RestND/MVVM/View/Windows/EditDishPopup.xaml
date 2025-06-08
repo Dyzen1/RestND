@@ -1,0 +1,51 @@
+﻿<Window x:Class="RestND.MVVM.View.Windows.EditDishPopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
+        xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
+        mc:Ignorable="d"
+        Background="Transparent"
+        Title="Edit Dish"
+        Width="400"
+        Height="450"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False">
+
+    <Grid>
+        <Border Background="{DynamicResource DarkText}"
+                CornerRadius="10"
+                Padding="20"
+                BorderBrush="{DynamicResource LightText}"
+                BorderThickness="1">
+            <StackPanel HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center" Width="300">
+                <Label Content="Dish Name:" Foreground="{DynamicResource LightText}" HorizontalAlignment="Center"/>
+                <TextBox Text="{Binding SelectedDish.Dish_Name, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{DynamicResource InputBox}" />
+
+                <Label Content="Price:" Foreground="{DynamicResource LightText}" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                <TextBox Text="{Binding SelectedDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{DynamicResource InputBox}" />
+
+           
+
+                <Label Content="Dish Type:" Foreground="{DynamicResource LightText}" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                <ComboBox ItemsSource="{Binding DishTypes}"
+                          SelectedItem="{Binding SelectedDish.Dish_Type}"
+                          DisplayMemberPath="DishType_Name"
+                          Style="{DynamicResource InputBox}"/>
+
+                <Button Content="Update "
+                        Command="{Binding UpdateDishCommand}"
+                        Style="{DynamicResource SubmitBtn}"
+                        Margin="0 20 0 0"/>
+            </StackPanel>
+        </Border>
+
+        <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+        <TextBlock Style="{DynamicResource copyWrite}"/>
+    </Grid>
+</Window>

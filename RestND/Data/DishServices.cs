@@ -34,10 +34,16 @@ namespace RestND.Data
                     Dish_ID = Convert.ToInt32(row["Dish_ID"]),
                     Dish_Name = row["Dish_Name"].ToString(),
                     Dish_Price = Convert.ToInt32(row["Dish_Price"]),
-                    Allergen_Notes = row["Allergen_Notes"].ToString()
-                        .Split(',')
-                        .Select(note => (AllergenNotes)Enum.Parse(typeof(AllergenNotes), note.Trim()))
-                        .ToList(),
+                    Allergen_Notes = row["Allergen_Notes"]?.ToString()
+    ?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+    .Select(note =>
+        Enum.TryParse<AllergenNotes>(note.Trim(), out var parsed)
+            ? parsed
+            : AllergenNotes.None 
+    )
+    .ToList() ?? new List<AllergenNotes>(),
+
+
                     Availability_Status = Convert.ToBoolean(row["Availability_Status"]),
                     Dish_Type = new DishType
                     {

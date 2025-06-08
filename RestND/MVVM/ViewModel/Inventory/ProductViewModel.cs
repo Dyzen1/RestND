@@ -37,6 +37,39 @@ namespace RestND.MVVM.ViewModel
         public ProductViewModel()
         {
             _productService = new ProductService();
+<<<<<<< HEAD
+=======
+            _hub = App.InventoryHub;
+
+            _hub.On<Inventory, string>("ReceiveInventoryUpdate", (product, action) =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var match = Products.FirstOrDefault(p => p.Product_ID == product.Product_ID);
+
+                    switch (action)
+                    {
+                        case "add":
+                            if (match == null)
+                                Products.Add(product);
+                            break;
+                        case "update":
+                            if (match != null)
+                            {
+                                match.Product_Name = product.Product_Name;
+                                match.Quantity_Available = product.Quantity_Available;
+                                match.Tolerance = product.Tolerance;
+                            }
+                            break;
+                        case "delete":
+                            if (match != null)
+                                Products.Remove(match);
+                            break;
+                    }
+                });
+            });
+
+>>>>>>> 4b2e2f0cbcea4c9fee549741708659cc87b288af
             LoadProducts();
         }
 

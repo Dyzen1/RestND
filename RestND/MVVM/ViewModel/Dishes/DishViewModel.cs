@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
 using RestND.MVVM.Model;
 using RestND.MVVM.Model.Dishes;
@@ -8,83 +9,79 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace RestND.MVVM.ViewModel
 {
     public partial class DishViewModel : ObservableObject
     {
-        #region Services
-
         private readonly DishServices _dishService;
         private readonly DishTypeServices _dishTypeService;
         private readonly ProductService _productService;
+        private readonly HubConnection _hub;
 
-        [ObservableProperty]
-        private ObservableCollection<DishType> dishTypes = new();
+        [ObservableProperty] private ObservableCollection<Dish> dishes = new();
+        [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
+        [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
+        [ObservableProperty] private ObservableCollection<ProductInDish> selectedProducts = new();
+        [ObservableProperty] private ObservableCollection<AllergenNotes> allergenNotes = new();
+        [ObservableProperty] private ObservableCollection<AllergenNotes> selectedAllergenNotes = new();
+        [ObservableProperty] private Dictionary<string, List<string>> dishValidationErrors = new();
 
-        #endregion
+        [ObservableProperty] private Dish newDish = new();
+        [ObservableProperty] private Dish selectedDish;
+        [ObservableProperty] private Inventory selectedAvailableProduct;
+        [ObservableProperty] private int productAmountUsage;
 
-        #region Observable Properties
-
-        [ObservableProperty]
-        private ObservableCollection<Dish> dishes = new();
-
-        [ObservableProperty]
-        private ObservableCollection<Inventory> availableProducts = new();
-
-        [ObservableProperty]
-        private ObservableCollection<ProductInDish> selectedProducts = new();
-
-        [ObservableProperty]
-        private Dish newDish = new();
-
-        [ObservableProperty]
-        private Dish selectedDish;
-
-        [ObservableProperty]
-        private ObservableCollection<AllergenNotes> allergenNotes = new();
-
-        [ObservableProperty]
-        private ObservableCollection<AllergenNotes> selectedAllergenNotes = new();
-
-        [ObservableProperty]
-        private Dictionary<string, List<string>> dishValidationErrors = new();
-
-        [ObservableProperty]
-        private Inventory selectedAvailableProduct;
-
-        [ObservableProperty]
-        private int productAmountUsage;
-
-        #endregion
-
-        #region Constructor
         public DishViewModel()
         {
             _dishTypeService = new DishTypeServices();
             _dishService = new DishServices();
             _productService = new ProductService();
+            _hub = App.DishHub;
 
             DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
             LoadNotes();
             LoadDishes();
             LoadAvailableProducts();
+
+            _hub.On<Dish, string>("ReceiveDishUpdate", (dish, action) =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var match = Dishes.FirstOrDefault(d => d.Dish_ID == dish.Dish_ID);
+
+                    switch (action)
+                    {
+                        case "add":
+                            if (match == null)
+                                Dishes.Add(dish);
+                            break;
+                        case "update":
+                            if (match != null)
+                            {
+                                match.Dish_Name = dish.Dish_Name;
+                                match.Dish_Price = dish.Dish_Price;
+                                match.Availability_Status = dish.Availability_Status;
+                                match.Allergen_Notes = dish.Allergen_Notes;
+                                match.Dish_Type = dish.Dish_Type;
+                            }
+                            break;
+                        case "delete":
+                            if (match != null)
+                                Dishes.Remove(match);
+                            break;
+                    }
+                });
+            });
         }
-
-        #endregion
-
-        #region On Change
 
         partial void OnSelectedDishChanged(Dish value)
         {
-            UpdateDishCommand.NotifyCanExecuteChanged();
             DeleteDishCommand.NotifyCanExecuteChanged();
             AddDishCommand.NotifyCanExecuteChanged();
         }
-
-        #endregion
-
-        #region Load Methods
 
         [RelayCommand]
         private void LoadDishes()
@@ -107,17 +104,10 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private void LoadNotes()
         {
-            //AllergenNotes = new ObservableCollection<AllergenNotes>(
-            //    Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>());
             AllergenNotes = new ObservableCollection<AllergenNotes>(
-                    Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>()
-  );
-
+                Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>());
         }
 
-        #endregion
-
-        #region Helpers
         private List<ProductInDish> CloneSelectedProducts() =>
             SelectedProducts.Select(p => new ProductInDish
             {
@@ -125,29 +115,36 @@ namespace RestND.MVVM.ViewModel
                 Amount_Usage = p.Amount_Usage
             }).ToList();
 
-        #endregion
-
-        #region Add Dish
-
         [RelayCommand(CanExecute = nameof(CanAddDish))]
-        private void AddDish()
+        private async Task AddDish()
         {
             NewDish.ProductUsage = CloneSelectedProducts();
             NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
+
+            if (string.IsNullOrWhiteSpace(NewDish.Dish_Name) ||
+                NewDish.Dish_Price <= 0 ||
+                NewDish.Dish_Type == null ||
+                NewDish.ProductUsage == null || !NewDish.ProductUsage.Any())
+            {
+                MessageBox.Show("Please fill in all required fields and add at least one product.");
+                return;
+            }
 
             bool success = _dishService.Add(NewDish);
 
             if (success)
             {
-                LoadDishes();
+                await _hub.SendAsync("NotifyDishUpdate", NewDish, "add");
                 NewDish = new Dish();
                 SelectedProducts.Clear();
+                SelectedAllergenNotes.Clear();
+            }
+            else
+            {
+                MessageBox.Show("Failed to save dish. Please try again.");
             }
         }
 
-        #endregion
-
-        #region Add Product To Dish
 
         [RelayCommand]
         public void AddProductToDish()
@@ -170,36 +167,31 @@ namespace RestND.MVVM.ViewModel
             }
         }
 
-        #endregion
-
-        #region Delete Dish
-
         [RelayCommand(CanExecute = nameof(CanModifyDish))]
-        private void DeleteDish()
+        private async void DeleteDish()
         {
             if (SelectedDish != null)
             {
                 bool success = _dishService.Delete(SelectedDish);
                 if (success)
                 {
+                    await _hub.SendAsync("NotifyDishUpdate", SelectedDish, "delete");
                     Dishes.Remove(SelectedDish);
                 }
             }
         }
 
-        #endregion
-
-        #region Can Execute Methods
-
         private bool CanModifyDish() => SelectedDish != null;
+        private bool CanAddDish() => true;
 
-        private bool CanAddDish()
-        {
-            NewDish.ProductUsage = CloneSelectedProducts();
-            NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
-            var errors = DishValidator.ValidateFields(NewDish, Dishes.ToList());
-            return !errors.Any();
-        }
+
+        //private bool CanAddDish()
+        //{
+        //    NewDish.ProductUsage = CloneSelectedProducts();
+        //    NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
+        //    var errors = DishValidator.ValidateFields(NewDish, Dishes.ToList());
+        //    return !errors.Any();
+        //}
 
         private bool CanUpdateDish()
         {
@@ -209,18 +201,5 @@ namespace RestND.MVVM.ViewModel
             var errors = DishValidator.ValidateFields(SelectedDish, Dishes.Where(d => d.Dish_ID != SelectedDish.Dish_ID).ToList());
             return !errors.Any();
         }
-
-        #endregion
-
-        #region Update Dish
-
-        [RelayCommand(CanExecute = nameof(CanUpdateDish))]
-        private void UpdateDish()
-        {
-            if (SelectedDish != null && _dishService.Update(SelectedDish))
-                LoadDishes();
-        }
-
-        #endregion
     }
 }
