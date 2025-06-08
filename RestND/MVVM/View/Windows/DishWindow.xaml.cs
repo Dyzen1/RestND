@@ -58,11 +58,16 @@ namespace RestND.MVVM.View
             var vm = DataContext as DishViewModel;
             if (vm?.SelectedDish != null)
             {
-                EditDishPopup editWindow = new EditDishPopup() 
-               {
+                var editWindow = new EditDishPopup
+                {
+                    Owner = this,
                     DataContext = new EditDishViewModel(vm.SelectedDish)
                 };
+
+                this.Opacity = 0.4;
                 editWindow.ShowDialog();
+                this.Opacity = 1.0;
+
                 vm.LoadDishesCommand.Execute(null);
             }
             else

@@ -103,5 +103,36 @@
         </Setter>
     </Style>
 
-    
+    <Style x:Key="InputBox" TargetType="TextBox">
+        <Setter Property="Margin" Value="0,5"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Background" Value="#1e1e1e"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style x:Key="InputBox_Password" TargetType="PasswordBox">
+        <Setter Property="Margin" Value="0,5"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Background" Value="#1e1e1e"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style x:Key="InputBox_ComboBox" TargetType="ComboBox">
+        <Setter Property="Margin" Value="0,5"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Background" Value="#1e1e1e"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+
+
 </ResourceDictionary>

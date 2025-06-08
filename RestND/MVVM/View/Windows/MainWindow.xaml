@@ -50,7 +50,7 @@
                     <uc:SideBar x:Name="sideBar" Width="100"/>
                 </Expander>
 
-                <Button Name="AdminLogin" Style="{DynamicResource loginBtn}" Grid.Row="0" Grid.Column="0"/>
+                <Button Name="AdminLogin" Style="{DynamicResource loginBtn}" Grid.Row="0" Grid.Column="0" Click="AdminLogin_Click"/>
 
 
                 <Button x:Name="addTables" Style="{DynamicResource addBtn}" 

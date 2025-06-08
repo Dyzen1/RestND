@@ -21,11 +21,11 @@
 
            
 
-                <Label Content="Dish Type:" Foreground="{DynamicResource LightText}" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                <!--<Label Content="Dish Type:" Foreground="{DynamicResource LightText}" HorizontalAlignment="Center" Margin="0,10,0,0"/>
                 <ComboBox ItemsSource="{Binding DishTypes}"
                           SelectedItem="{Binding SelectedDish.Dish_Type}"
                           DisplayMemberPath="DishType_Name"
-                          Style="{DynamicResource InputBox}"/>
+                          Style="{DynamicResource InputBox}"/>-->
 
                 <Button Content="Update "
                         Command="{Binding UpdateDishCommand}"

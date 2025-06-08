@@ -1,27 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace RestND.MVVM.View.Windows
 {
-    /// <summary>
-    /// Interaction logic for EditDishPopup.xaml
-    /// </summary>
     public partial class EditDishPopup : Window
     {
         public EditDishPopup()
         {
             InitializeComponent();
+
+            Loaded += (_, _) => Owner.Opacity = 0.4;
+            Closed += (_, _) => Owner.Opacity = 1.0;
         }
     }
 }

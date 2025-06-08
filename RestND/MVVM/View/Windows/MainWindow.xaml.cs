@@ -1,4 +1,5 @@
 ﻿
+using RestND.MVVM.ViewModel.Employees;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -142,6 +143,25 @@ namespace RestND.MVVM.View.Windows
             };
             ordersWindow.Show();
             this.Close();
+        }
+        private void AdminLogin_Click(object sender, RoutedEventArgs e)
+        {
+            OpenAdminLogin();
+        }
+
+        private void OpenAdminLogin()
+        {
+            var loginWindow = new AdminLoginWindow
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                DataContext =  new LoginViewModel()
+
+            };
+
+            this.Opacity = 0.4;
+            loginWindow.ShowDialog();
+            this.Opacity = 1.0;
         }
 
 
