@@ -26,15 +26,16 @@ public class Transaction
 
         try
         {
-            string query = "INSERT INTO dishes (Dish_Name, Dish_Price, Allergen_Notes, Availability_Status, DishType_Name) " +
-                           "VALUES (@name, @price, @notes, @status, @type)";
+            string query = "INSERT INTO dishes (Dish_Name, Dish_Price, Allergen_Notes, Availability_Status, DishType_Name, Is_Active) " +
+                           "VALUES (@name, @price, @notes, @status, @type, @active)";
 
             bool dishAdded = _db.ExecuteNonQuery(query, _db.Connection, transaction,
                 new MySqlParameter("@name", d.Dish_Name),
                 new MySqlParameter("@price", d.Dish_Price),
                 new MySqlParameter("@notes", string.Join(",", d.Allergen_Notes)),
                 new MySqlParameter("@status", d.Availability_Status),
-                new MySqlParameter("@type", d.Dish_Type?.DishType_Name ?? string.Empty)
+                new MySqlParameter("@type", d.Dish_Type?.DishType_Name ?? string.Empty),
+                new MySqlParameter("@active", d.Is_Active)
             ) > 0;
 
             if (!dishAdded)
@@ -71,8 +72,6 @@ public class Transaction
 
 
 
-
-
     public bool UpdateDish(Dish dish)
     {
         _db.OpenConnection();
@@ -87,7 +86,7 @@ public class Transaction
                 Allergen_Notes = @notes, 
                 Availability_Status = @status, 
                 DishType_Name = @type
-            WHERE Dish_ID = @id";
+                WHERE Dish_ID = @id";
 
             _db.ExecuteNonQuery(query, _db.Connection, transaction,
                 new MySqlParameter("@name", dish.Dish_Name),
@@ -125,8 +124,6 @@ public class Transaction
             return false;
         }
     }
-
-
 
 
     #endregion

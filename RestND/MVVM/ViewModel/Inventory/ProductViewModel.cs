@@ -6,7 +6,9 @@ using RestND.Data;
 using RestND.MVVM.Model;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace RestND.MVVM.ViewModel
 {
@@ -37,8 +39,6 @@ namespace RestND.MVVM.ViewModel
         public ProductViewModel()
         {
             _productService = new ProductService();
-<<<<<<< HEAD
-=======
             _hub = App.InventoryHub;
 
             _hub.On<Inventory, string>("ReceiveInventoryUpdate", (product, action) =>
@@ -69,7 +69,6 @@ namespace RestND.MVVM.ViewModel
                 });
             });
 
->>>>>>> 4b2e2f0cbcea4c9fee549741708659cc87b288af
             LoadProducts();
         }
 
@@ -103,33 +102,17 @@ namespace RestND.MVVM.ViewModel
         #region Add Product
 
         [RelayCommand]
-        private void AddProduct()
+        private async Task AddProduct()
         {
             if (!string.IsNullOrWhiteSpace(NewProduct.Product_Name) && NewProduct.Quantity_Available >= 0)
             {
-                bool success = _productService.Add(NewProduct); //  updated AddProduct -> Add
+                bool success = _productService.Add(NewProduct);
 
                 if (success)
                 {
-                    LoadProducts();
-                    NewProduct = new Inventory(); //  call the setter so UI refreshes
-                }
-            }
-        }
-
-        #endregion
-
-        #region Update Product
-
-        [RelayCommand]
-        private async Task DeleteProductAsync()
-        {
-            if (CanModifyProduct())
-            {
-                bool success = _productService.Delete(SelectedProduct);
-                if (success)
-                {
-                    await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "update");
+                    await _hub.SendAsync("NotifyInventoryUpdate", NewProduct, "add");
+                    NewProduct = new Inventory(); 
+                    LoadProducts(); // Refresh the list
                 }
             }
         }
@@ -139,7 +122,25 @@ namespace RestND.MVVM.ViewModel
         #region Delete Product
 
         [RelayCommand]
-        private void UpdateProduct()
+        private async Task DeleteProductAsync()
+        {
+            if (CanModifyProduct())
+            {
+                bool success = _productService.Delete(SelectedProduct);
+                if (success)
+                {
+                    await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "delete");
+                    LoadProducts(); // Refresh the list
+                }
+            }
+        }
+
+        #endregion
+
+        #region Update Product
+
+        [RelayCommand]
+        private async Task UpdateProduct()
         {
             if(CanModifyProduct())
             {
@@ -147,9 +148,8 @@ namespace RestND.MVVM.ViewModel
 
                 if (success)
                 {
-                    var index = Products.IndexOf(SelectedProduct);
-                    if (index >= 0)
-                        Products[index] = SelectedProduct;
+                    await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "update");
+                    LoadProducts(); // Refresh the list
                 }
             }
             

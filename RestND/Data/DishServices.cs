@@ -35,13 +35,13 @@ namespace RestND.Data
                     Dish_Name = row["Dish_Name"].ToString(),
                     Dish_Price = Convert.ToInt32(row["Dish_Price"]),
                     Allergen_Notes = row["Allergen_Notes"]?.ToString()
-    ?.Split(',', StringSplitOptions.RemoveEmptyEntries)
-    .Select(note =>
-        Enum.TryParse<AllergenNotes>(note.Trim(), out var parsed)
-            ? parsed
-            : AllergenNotes.None 
-    )
-    .ToList() ?? new List<AllergenNotes>(),
+                    ?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(note =>
+                        Enum.TryParse<AllergenNotes>(note.Trim(), out var parsed)
+                            ? parsed
+                            : AllergenNotes.None 
+                    )
+                    .ToList() ?? new List<AllergenNotes>(),
 
 
                     Availability_Status = Convert.ToBoolean(row["Availability_Status"]),
@@ -96,7 +96,7 @@ namespace RestND.Data
                     FROM products_in_dish pid
                     JOIN products p ON pid.Product_ID = p.Product_ID
                     WHERE pid.Dish_ID = d.Dish_ID
-                      AND (p.Quantity_Available < pid.Amount_Usage OR p.Quantity_Available <= d.Tolerance)
+                    AND (p.Quantity_Available < pid.Amount_Usage OR p.Quantity_Available <= d.Tolerance)
                 );
             ";
 

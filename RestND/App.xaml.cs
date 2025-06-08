@@ -17,13 +17,9 @@ namespace RestND
 {
     public partial class App : Application
     {
-<<<<<<< HEAD
-        public static HubConnection HubConnection { get; private set; }
-=======
         public static HubConnection InventoryHub { get; private set; }
         public static HubConnection DishHub { get; private set; }
 
->>>>>>> 4b2e2f0cbcea4c9fee549741708659cc87b288af
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);

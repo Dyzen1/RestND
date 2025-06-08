@@ -36,10 +36,12 @@ namespace RestND.Data
         #region Add Product
         public override bool Add(Inventory p)
         {
-            string query = "INSERT INTO inventory (Product_Name, Tolerance ,Quantity_Available) VALUES (@name, @tolerance,@qty)";
+            string query = "INSERT INTO inventory (Product_ID, Product_Name, Tolerance, Quantity_Available, Is_Active) VALUES (@id, @name, @tolerance, @qty, @active)";
             return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@id", p.Product_ID),
                 new MySqlParameter("@name", p.Product_Name),
                 new MySqlParameter("@tolerance", p.Tolerance),
+                new MySqlParameter("@active", p.Is_Active),
                 new MySqlParameter("@qty", p.Quantity_Available)) > 0;
         }
         #endregion

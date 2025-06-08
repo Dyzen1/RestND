@@ -75,6 +75,7 @@ namespace RestND.MVVM.ViewModel
                     }
                 });
             });
+            LoadDishes();
         }
 
         partial void OnSelectedDishChanged(Dish value)
@@ -168,7 +169,7 @@ namespace RestND.MVVM.ViewModel
         }
 
         [RelayCommand(CanExecute = nameof(CanModifyDish))]
-        private async void DeleteDish()
+        private async Task DeleteDish()
         {
             if (SelectedDish != null)
             {
@@ -177,6 +178,7 @@ namespace RestND.MVVM.ViewModel
                 {
                     await _hub.SendAsync("NotifyDishUpdate", SelectedDish, "delete");
                     Dishes.Remove(SelectedDish);
+                    LoadDishes();
                 }
             }
         }
@@ -184,22 +186,5 @@ namespace RestND.MVVM.ViewModel
         private bool CanModifyDish() => SelectedDish != null;
         private bool CanAddDish() => true;
 
-
-        //private bool CanAddDish()
-        //{
-        //    NewDish.ProductUsage = CloneSelectedProducts();
-        //    NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
-        //    var errors = DishValidator.ValidateFields(NewDish, Dishes.ToList());
-        //    return !errors.Any();
-        //}
-
-        private bool CanUpdateDish()
-        {
-            if (SelectedDish == null)
-                return false;
-
-            var errors = DishValidator.ValidateFields(SelectedDish, Dishes.Where(d => d.Dish_ID != SelectedDish.Dish_ID).ToList());
-            return !errors.Any();
-        }
     }
 }
