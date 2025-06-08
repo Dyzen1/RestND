@@ -1,5 +1,7 @@
-﻿using RestND.MVVM.View.Windows;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using RestND.MVVM.View.Windows;
 using RestND.MVVM.ViewModel;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -7,6 +9,7 @@ namespace RestND.MVVM.View
 {
     public partial class DishWindow : Window
     {
+        public event Action<string> ButtonClicked;
         public DishWindow()
         {
             InitializeComponent();
@@ -67,5 +70,22 @@ namespace RestND.MVVM.View
                 MessageBox.Show("Please select a dish to update.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
+        //the popup used for choosing products for a new dish.
+        //private void ChoseProductsPopup_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Overlay.Visibility = Visibility.Visible;
+
+        //    var popup = new AddProductToDishPopup();
+        //    popup.Owner = this;
+        //    popup.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+        //    popup.Closed += (s, args) =>
+        //    {
+        //        Overlay.Visibility = Visibility.Collapsed;
+        //    };
+
+        //    popup.Show();
+        //}
     }
 }

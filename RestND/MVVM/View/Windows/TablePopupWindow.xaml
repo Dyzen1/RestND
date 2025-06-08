@@ -6,10 +6,9 @@
         xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
-        mc:Ignorable="d" Background="{StaticResource DarkText}"
+        mc:Ignorable="d" Style="{StaticResource popupStyle}"
         Title="TablePopupWindow" Width="400" Height="300"
-        WindowStartupLocation="CenterOwner" WindowStyle="None"
-        ResizeMode="NoResize" ShowInTaskbar="False">
+        WindowStartupLocation="CenterOwner">
     
     <Grid>
 

@@ -16,7 +16,7 @@
 
         <Grid Margin="20 5 20 10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="75"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -30,18 +30,20 @@
                 </Grid.ColumnDefinitions>
                 
 
-                <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0 0 10 0">
+                <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0 0 10 0" 
+                            VerticalAlignment="Bottom" HorizontalAlignment="Center">
                     <Label Content="Serial Number" Foreground="{DynamicResource LightText}" 
-                           VerticalAlignment="Center" FontSize="13"/>
+                            FontSize="13" HorizontalAlignment="Left"/>
                     <TextBox Background="Transparent"
                              Text="{Binding NewProduct.Product_ID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
+                             Foreground="{DynamicResource LightText}" Height="20"
                              BorderBrush="{DynamicResource LightText}" ToolTip="Serial Number"/>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0 0 10 0">
+                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0 0 10 0" 
+                            VerticalAlignment="Bottom" HorizontalAlignment="Center">
                     <Label Content="Product Name" Foreground="{DynamicResource LightText}" 
-                           FontSize="13"/>
+                           FontSize="13" HorizontalAlignment="Left"/>
                     <TextBox Text="{Binding NewProduct.Product_Name , UpdateSourceTrigger=PropertyChanged , Mode=TwoWay}"
                              HorizontalAlignment="Left" Background="Transparent" 
                              Foreground="{DynamicResource LightText}" Height="20" 
@@ -49,9 +51,10 @@
                     </TextBox>
                 </StackPanel>
 
-                <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0 0 10 0">
+                <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0 0 10 0" 
+                            VerticalAlignment="Bottom" HorizontalAlignment="Center">
                     <Label Content="Quantity" Foreground="{DynamicResource LightText}" 
-                           VerticalAlignment="Center" FontSize="13"/>
+                           FontSize="13" HorizontalAlignment="Left"/>
                     <TextBox Background="Transparent"
                              Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
@@ -59,16 +62,16 @@
                     </TextBox>
                 </StackPanel>
 
-                <StackPanel Grid.Column="3" Orientation="Vertical" Margin="0 0 10 0">
+                <StackPanel Grid.Column="3" Orientation="Vertical" Margin="0 0 10 0" 
+                            VerticalAlignment="Bottom" HorizontalAlignment="Center">
                     <Label Content="Tolerance" Foreground="{DynamicResource LightText}" 
-                           VerticalAlignment="Center" FontSize="13"/>
+                           FontSize="13" HorizontalAlignment="Left"/>
                     <TextBox Background="Transparent"
                              Text="{Binding NewProduct.Tolerance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Foreground="{DynamicResource LightText}" HorizontalAlignment="Left" Height="20"
                              BorderBrush="{DynamicResource LightText}" ToolTip="Tolerance">
                     </TextBox>
                 </StackPanel>
-                
                 
 
                     <Button Grid.Column="3" Command="{Binding AddProductCommand}" Margin="0" 
@@ -82,48 +85,22 @@
                     
             </Grid>
 
-                <Border BorderBrush="{DynamicResource LightText}"
-                        BorderThickness="3"
-                        Padding="1"
-                        Grid.Row="1"
-                        CornerRadius="10">
+                <Border Style="{DynamicResource windowBorder}"
+                        Grid.Row="1">
 
-                    <DataGrid Grid.Row="1"
-                              ItemsSource="{Binding Products}"
+                    <DataGrid Grid.Row="1" RowStyle="{DynamicResource rowStyle}"
+                              ItemsSource="{Binding Products}" CellStyle="{DynamicResource cellStyle}"
                               SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
-                              AutoGenerateColumns="False"
-                              RowBackground="Transparent"
-                              CanUserAddRows="False"
-                              Background="{DynamicResource CardBG}"
-                              Foreground="{DynamicResource DarkText}"
-                              BorderBrush="Transparent"
-                              HeadersVisibility="None"
-                              ColumnWidth="*" BorderThickness="0">
+                              HeadersVisibility="Column">
 
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Product ID:" Binding="{Binding Product_ID}" />
-                            <DataGridTextColumn Header="Product Name:" Binding="{Binding Product_Name}" />
-                            <DataGridTextColumn Header="Quantity Available:" Binding="{Binding Quantity_Available}" />
-                            <DataGridTextColumn Header="Tolerance:" Binding="{Binding Tolerance}" />
-                        </DataGrid.Columns>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Product ID:" Binding="{Binding Product_ID}" Width="*"/>
+                        <DataGridTextColumn Header="Product Name:" Binding="{Binding Product_Name}" Width="*"/>
+                        <DataGridTextColumn Header="Quantity Available:" Binding="{Binding Quantity_Available}" Width="*"/>
+                        <DataGridTextColumn Header="Tolerance:" Binding="{Binding Tolerance}" Width="*"/>
+                    </DataGrid.Columns>
 
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Setter Property="FontSize" Value="14"/>
-                                <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
-                                <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
-                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                            </Style>
-                        </DataGrid.RowStyle>
-
-                        <DataGrid.CellStyle>
-                            <Style TargetType="DataGridCell">
-                                <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
-                                <Setter Property="BorderThickness" Value="0,0,1,0"/>
-                            </Style>
-                        </DataGrid.CellStyle>
-
-                        <!--<DataGrid.ColumnHeaderStyle>
+                    <!--<DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="Background" Value="{DynamicResource DataGridHeader}"/>
                                 <Setter Property="Padding" Value="4"/>
@@ -158,7 +135,6 @@
                             <fa:SvgAwesome Style="{DynamicResource deleteBtnIcon}"/>
                         </Button>
                     </StackPanel>
-                    
                     
                 </Grid>
         </Grid>

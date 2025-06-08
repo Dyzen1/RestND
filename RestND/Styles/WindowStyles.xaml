@@ -4,7 +4,7 @@
    
     <!--GLOBAL WINDOW STYLES-->
     
-    <Style x:Key="windowStyle" TargetType="Window"> <!--The styles inside the window tag itself-->
+    <Style x:Key="windowStyle" TargetType="Window"> <!--The style inside the window tag itself-->
         <Setter Property="FontFamily" Value="Cascadia Mono"/>
         <Setter Property="WindowState" Value="Maximized"/>
         <Setter Property="Background" Value="{DynamicResource DarkText}"/>
@@ -18,15 +18,22 @@
         <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
         <Setter Property="BorderThickness" Value="3"/>
         <Setter Property="CornerRadius" Value="10"/>
-        <Setter Property="Padding" Value="2 6 0 0"/>
+        <Setter Property="Padding" Value="1"/>
     </Style>
 
+    <Style x:Key="popupStyle" TargetType="Window">
+        <Setter Property="Background" Value="{DynamicResource DarkText}"/>
+        <Setter Property="WindowStyle" Value="None"/>
+        <Setter Property="ResizeMode" Value="NoResize"/>
+        <Setter Property="ShowInTaskbar" Value="False"/>
+        <Setter Property="FontFamily" Value="Cascadia Mono"/>
+    </Style>
     
     <Style x:Key="copyWrite" TargetType="TextBlock">
         <Setter Property="Text" Value="© David Zinger | Nomi Shumanski"/>
         <Setter Property="FontWeight" Value="DemiBold"/>
         <Setter Property="FontSize" Value="10"/>
-        <Setter Property="Foreground" Value="Gray"/>
+        <Setter Property="Foreground" Value="{DynamicResource secondaryHeaders}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0 0 0 15"/>
         <Setter Property="VerticalAlignment" Value="Bottom"/>
@@ -55,27 +62,64 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
     </Style>
 
     
-    <!--for ALL combo boxes-->
-    <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
-        <Setter Property="Width" Value="170"/>
-        <Setter Property="Height" Value="20"/>
+    <!--for ALL List boxes-->
+    <Style TargetType="ListBox">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource Hover}"/>
-            </Trigger>
-            <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter Property="BorderBrush" Value="{DynamicResource Hover}"/>
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Width" Value="170"/>
+        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+        <!--<Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8">
+                        <ScrollViewer Focusable="false"
+                                  Margin="0"
+                                  VerticalScrollBarVisibility="Auto">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>-->
+    </Style>
+    
+    <!--for ALL data grids-->
+    <Style TargetType="DataGrid">
+        <Setter Property="Background" Value="{DynamicResource CardBG}"/>
+        <Setter Property="Foreground" Value="{DynamicResource DarkText}"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="RowBackground" Value="Transparent"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="ColumnWidth" Value="*"/>
+        <Setter Property="BorderThickness" Value="0"/>
     </Style>
 
+    <Style x:Key="rowStyle" TargetType="DataGridRow">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+    </Style>
+
+    <Style x:Key="cellStyle" TargetType="DataGridCell">
+        <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+        <Setter Property="BorderThickness" Value="0,0,1,0"/>
+    </Style>
+
+    <!--for ALL labels-->
+    <Style TargetType="Label">
+        <Setter Property="Width" Value="110"/>
+        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+    </Style>
 
 </ResourceDictionary>

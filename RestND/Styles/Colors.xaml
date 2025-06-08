@@ -3,11 +3,10 @@
 
     <SolidColorBrush x:Key="DarkText" Color="#131d23"/> <!--a dark color-->
     <SolidColorBrush x:Key="LightText" Color="#d5f5e3"/> <!--most of the text in the pages-->
-    <SolidColorBrush x:Key="DataGridHeader" Color="#eeeeee"/> <!--a section divider in the page-->
     <SolidColorBrush x:Key="CardBG" Color="#2a332e"/> <!--background for cards & in the page-->
     <SolidColorBrush x:Key="ErrorMsg" Color="#C62828"/> <!--for error text messages-->
     <SolidColorBrush x:Key="Hover" Color="LightGoldenrodYellow"/> <!--for mouse hover bg-->
-
+    <SolidColorBrush x:Key="secondaryHeaders" Color="Gray"/>
     <SolidColorBrush x:Key="secondaryBtns" Color="#8fce00"/> <!--for some of the icons-->
 
     <!--<Style x:Key="bg" TargetType="Image">

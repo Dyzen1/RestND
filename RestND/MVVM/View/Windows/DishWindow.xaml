@@ -9,74 +9,67 @@
         xmlns:fa="http://schemas.fontawesome.com/icons/svg"
         mc:Ignorable="d"
         WindowState="Maximized"
-        Height="600" Width="900"
-        Background="{DynamicResource DarkText}" WindowStyle="None"
+        Style="{StaticResource windowStyle}"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
     <Border BorderBrush="{DynamicResource LightText}" BorderThickness="3" CornerRadius="10">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Add New Dish Section -->
-            <GroupBox Padding="5" BorderThickness="0">
-                <StackPanel Orientation="Vertical" Margin="2">
+            <GroupBox Header="Insert dish details" Foreground="{DynamicResource secondaryHeaders}" 
+                      BorderThickness="0" BorderBrush="Transparent">
+                <StackPanel Orientation="Vertical" Margin="0 10 0 0">
 
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Dish Name:" Width="100" Foreground="{DynamicResource LightText}"/>
-                        <TextBox Text="{Binding NewDish.Dish_Name, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Dish Name:"/>
+                        <TextBox Text="{Binding NewDish.Dish_Name, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="10 0 0 0"/>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Dish Price:" Width="100" Foreground="{DynamicResource LightText}"/>
-                        <TextBox Text="{Binding NewDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Dish Price:"/>
+                        <TextBox Text="{Binding NewDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="10 0 0 0"/>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Allergen Notes:" Foreground="{DynamicResource LightText}"/>
-                        <ComboBox SelectedItem="{Binding NewDish.Allergen_Notes, UpdateSourceTrigger=PropertyChanged}"
-                                  Width="170" ItemsSource="{Binding AllergenNotes}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Allergen Notes:"/>
+                        <ListBox SelectedItem="{Binding NewDish.Allergen_Notes, UpdateSourceTrigger=PropertyChanged}"
+                                 ItemsSource="{Binding AllergenNotes}" Margin="10 0 0 0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding DisplayName}" 
+                                        IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}, Mode=TwoWay}"
+                                      Foreground="{DynamicResource LightText}"
+                                      Cursor="Hand"
+                                      Margin="5,2"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Available:" Foreground="{DynamicResource LightText}" VerticalAlignment="Center"/>
-                        <CheckBox IsChecked="{Binding NewDish.Availability_Status, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Margin="30 0 0 0"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Dish Type:" Foreground="{DynamicResource LightText}"/>
-                        <ComboBox ItemsSource="{Binding DishTypes}"
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Dish Type:"/>
+                        <ListBox ItemsSource="{Binding DishTypes}"
                                   SelectedItem="{Binding NewDish.Dish_Type, UpdateSourceTrigger=PropertyChanged}"
-                                  DisplayMemberPath="DishType_Name" Width="170"/>
+                                  DisplayMemberPath="DishType_Name" Margin="10 0 0 0"/>
                     </StackPanel>
+
+
+                    <!--<Button Command="{Binding AddProductToDishCommand}" 
+                            Margin="5 15 5 5" Style="{DynamicResource SubmitBtn}" 
+                            Content="Add Product"/>-->
 
                     <Separator Margin="0,10"/>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Select Product:" Width="100" Foreground="{DynamicResource LightText}"/>
-                        <ComboBox ItemsSource="{Binding AvailableProducts}" 
-                                  SelectedItem="{Binding SelectedAvailableProduct}" 
-                                  DisplayMemberPath="Product_Name"
-                                  Width="180"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <Label Content="Amount Usage:" Foreground="{DynamicResource LightText}"/>
-                        <TextBox Text="{Binding ProductAmountUsage, UpdateSourceTrigger=PropertyChanged}"/>
-                    </StackPanel>
-
-                    <Button Command="{Binding AddProductToDishCommand}" 
-                            Margin="5 15 5 5" Style="{DynamicResource deleteBtn}" 
-                            Width="70" Height="30">
-                        <fa:SvgAwesome Style="{DynamicResource addProductIcon}"/>
-                    </Button>
-
-                    <Separator Margin="0,10"/>
-
-                    <Button Content="Save Dish"
-                            Command="{Binding AddDishCommand}" 
+                    <!--Click="ChoseProductsPopup_Click"-->
+                    <Button Content="Choose Products Here"
+                            Width="150"
                             Margin="0,10,0,0" Style="{DynamicResource SubmitBtn}"/>
 
                     <Button Content="Update Dish"
@@ -90,47 +83,32 @@
                 </StackPanel>
             </GroupBox>
 
-            <!-- Existing Dishes Grid -->
-            <GroupBox Grid.Column="1" Padding="0,5,0,0" BorderThickness="0">
-                <DataGrid ItemsSource="{Binding Dishes}" 
-                      SelectedItem="{Binding SelectedDish, Mode=TwoWay}" 
-                      AutoGenerateColumns="False"
-                      RowBackground="Transparent"
-                      CanUserAddRows="False"
-                      Background="{DynamicResource CardBG}"
-                      Foreground="{DynamicResource DarkText}"
-                      BorderBrush="Transparent"
-                      BorderThickness="0"
-                      ColumnWidth="*"
-                      HeadersVisibility="Column">
-
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Dish_Name}" />
-                        <DataGridTextColumn Header="Price" Binding="{Binding Dish_Price}" />
-                        <DataGridTextColumn Header="Allergens" Binding="{Binding AllergenNotesString}" />
-                        <DataGridTextColumn Header="Type" Binding="{Binding Dish_Type.DishType_Name}" />
-                    </DataGrid.Columns>
-
-                    <DataGrid.RowStyle>
-                        <Style TargetType="DataGridRow">
-                            <Setter Property="FontSize" Value="14"/>
-                            <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
-                            <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
-                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                        </Style>
-                    </DataGrid.RowStyle>
-
-                    <DataGrid.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
-                            <Setter Property="BorderThickness" Value="0,0,1,0"/>
-                        </Style>
-                    </DataGrid.CellStyle>
+            <Border Grid.Column="1" Margin="10" Style="{DynamicResource windowBorder}">
+                <DataGrid ItemsSource="{Binding SelectedProducts}"
+                          SelectedItem="{Binding SelectedAvailableProduct.Product_Name, Mode=TwoWay}"
+                        HeadersVisibility="None">
                 </DataGrid>
-            </GroupBox>
+            </Border>
+
+            <!-- Existing Dishes Grid -->
+            <Border Grid.Column="2" Margin="10" Style="{DynamicResource windowBorder}">
+                <GroupBox Grid.Column="2" BorderThickness="0">
+                    <DataGrid ItemsSource="{Binding Dishes}" RowStyle="{DynamicResource rowStyle}"
+                          SelectedItem="{Binding SelectedDish, Mode=TwoWay}" CellStyle="{DynamicResource cellStyle}"
+                          HeadersVisibility="Column">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Dish_Name}" />
+                            <DataGridTextColumn Header="Price" Binding="{Binding Dish_Price}" />
+                            <DataGridTextColumn Header="Allergens" Binding="{Binding AllergenNotesString}" />
+                            <DataGridTextColumn Header="Type" Binding="{Binding Dish_Type.DishType_Name}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </GroupBox>
+            </Border>
 
             <uc:ReturnBtn x:Name="returnBtn" Grid.Column="0" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-            <TextBlock Style="{DynamicResource copyWrite}" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,15"/>
+            <TextBlock Style="{DynamicResource copyWrite}" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,15,15"/>
         </Grid>
     </Border>
 </Window>
