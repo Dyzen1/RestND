@@ -20,7 +20,7 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private Dish selectedDish;
         [ObservableProperty] private ObservableCollection<DishType> dishTypes;
         [ObservableProperty] private ObservableCollection<AllergenNotes> allergenNotes;
-        [ObservableProperty] private ObservableCollection<AllergenNotes> selectedAllergenNotes;
+        [ObservableProperty] private string selectedAllergenNotes;
 
         public EditDishViewModel(Dish dishToEdit)
         {
@@ -33,19 +33,18 @@ namespace RestND.MVVM.ViewModel
                 Dish_Price = dishToEdit.Dish_Price,
                 Availability_Status = dishToEdit.Availability_Status,
                 Dish_Type = dishToEdit.Dish_Type,
-                Allergen_Notes = dishToEdit.Allergen_Notes?.ToList()
+                Allergen_Notes = dishToEdit.Allergen_Notes
             };
 
             DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
-            AllergenNotes = new ObservableCollection<AllergenNotes>(
-                System.Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>());
-            SelectedAllergenNotes = new ObservableCollection<AllergenNotes>(SelectedDish.Allergen_Notes);
+            AllergenNotes = new ObservableCollection<AllergenNotes>();
+            SelectedAllergenNotes =  SelectedDish.Allergen_Notes;
         }
 
         [RelayCommand]
         private async Task UpdateDish()
         {
-            SelectedDish.Allergen_Notes = SelectedAllergenNotes.ToList();
+            //SelectedDish.Allergen_Notes = SelectedAllergenNotes.ToList();
 
             bool success = _dishService.Update(SelectedDish);
             if (success)

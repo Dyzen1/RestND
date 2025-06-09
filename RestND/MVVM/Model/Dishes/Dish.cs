@@ -49,9 +49,9 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Allergen_Notes
-        private List< AllergenNotes > _Allergen_Notes;
+        private string _Allergen_Notes;
 
-        public List<AllergenNotes> Allergen_Notes
+        public string Allergen_Notes
         {
             get { return _Allergen_Notes; }
             set { _Allergen_Notes = value; }
@@ -89,7 +89,7 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Constructor with allergen notes
-        public Dish(string? dishName, double dishPrice, List<AllergenNotes> allergenNotes, List<ProductInDish> productUsage, DishType? type)
+        public Dish(string? dishName, double dishPrice, string allergenNotes, List<ProductInDish> productUsage, DishType? type)
         {
             this.Dish_Name = dishName;
             this.Dish_Price = dishPrice;

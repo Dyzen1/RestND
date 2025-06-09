@@ -4,6 +4,7 @@ using RestND.MVVM.Model.Dishes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace RestND.Data
 {
@@ -22,34 +23,33 @@ namespace RestND.Data
         public override List<Dish> GetAll()
         {
             var dishes = new List<Dish>();
-            string query = "SELECT * FROM dishes";
+            string query = "SELECT * FROM dishes WHERE Is_Active = 1";
             var rows = _db.ExecuteReader(query);
 
             foreach (var row in rows)
             {
-                if (row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
-                    continue; // Skip inactive dishes
-                dishes.Add(new Dish
+                //if (row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
+                //    continue; // Skip inactive dishes
+
+                var dish = new Dish
                 {
                     Dish_ID = Convert.ToInt32(row["Dish_ID"]),
                     Dish_Name = row["Dish_Name"].ToString(),
                     Dish_Price = Convert.ToInt32(row["Dish_Price"]),
-                    Allergen_Notes = row["Allergen_Notes"]?.ToString()
-                    ?.Split(',', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(note =>
-                        Enum.TryParse<AllergenNotes>(note.Trim(), out var parsed)
-                            ? parsed
-                            : AllergenNotes.None 
-                    )
-                    .ToList() ?? new List<AllergenNotes>(),
-
-
                     Availability_Status = Convert.ToBoolean(row["Availability_Status"]),
                     Dish_Type = new DishType
                     {
                         DishType_Name = row["DishType_Name"].ToString()
                     }
-                });
+                };
+
+                // Handle Allergen_Notes if present and not null
+                if (row.TryGetValue("Allergen_Notes", out var allergenNotes) && allergenNotes != null)
+                {
+                    dish.Allergen_Notes = allergenNotes.ToString();
+                }
+
+                dishes.Add(dish);
             }
 
             return dishes;

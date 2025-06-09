@@ -4,34 +4,23 @@ using System.ComponentModel;
 
 namespace RestND.MVVM.Model.Dishes
 {
-    public enum AllergenNotes
+    public class AllergenNotes
     {
-        None,
-        [Description("⚠️ PEANUT Allergy – Contains peanuts.")]
-        Peanut,
-        [Description("⚠️ TREE NUT Allergy – Contains tree nuts.")]
-        TreeNut,
-        [Description("⚠️ DAIRY Allergy – Contains milk or dairy products.")]
-        Dairy,
-        [Description("⚠️ EGG Allergy – Contains egg or egg-derived ingredients.")]
-        Egg,
-        [Description("⚠️ GLUTEN/WHEAT Allergy – Contains wheat (gluten).")]
-        Gluten,
-        [Description("⚠️ SOY Allergy – Contains soy or soy-derived ingredients.")]
-        Soy,
-        [Description("⚠️ FISH Allergy – Contains fish.")]
-        Fish,
-        [Description("⚠️ SHELLFISH Allergy – Contains shellfish.")]
-        Shellfish,
-        [Description("⚠️ SESAME Allergy – Contains sesame.")]
-        Sesame,
-        [Description("⚠️ MUSTARD Allergy – Contains mustard.")]
-        Mustard,
-        [Description("⚠️ CELERY Allergy – Contains celery.")]
-        Celery,
-        [Description("⚠️ SULFITE Sensitivity – Contains sulfites.")]
-        Sulfite
-        
-}
+        public  List<string> Allergens = new List<string>
+        {
+            { "Contains Gluten/Wheat." },
+            { "Contains Peanuts." },
+            { "Contains Tree Nuts." },
+            { "Contains Milk Or Dairy Ingredients." },
+            { "Contains Eggs Or Egg-Derived Ingredients." },
+            { "Contains Soy Or Soy-Derived Ingredients." },
+            { "Contains Fish." },
+            { "Contains Shellfish." },
+            { "Contains Sesame." },
+            { "Contains Mustard." },
+            { "Contains Celery." },
+            { "Contains Sulfites." }
+        };
+    }
 }
 

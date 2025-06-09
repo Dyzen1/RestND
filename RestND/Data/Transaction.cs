@@ -32,9 +32,9 @@ public class Transaction
             bool dishAdded = _db.ExecuteNonQuery(query, _db.Connection, transaction,
                 new MySqlParameter("@name", d.Dish_Name),
                 new MySqlParameter("@price", d.Dish_Price),
-                new MySqlParameter("@notes", string.Join(",", d.Allergen_Notes)),
+                new MySqlParameter("@notes", d.Allergen_Notes),
                 new MySqlParameter("@status", d.Availability_Status),
-                new MySqlParameter("@type", d.Dish_Type?.DishType_Name ?? string.Empty),
+                new MySqlParameter("@type", d.Dish_Type?.DishType_Name),
                 new MySqlParameter("@active", d.Is_Active)
             ) > 0;
 
@@ -180,8 +180,8 @@ public class Transaction
 
             bool orderAdded = _db.ExecuteNonQuery(query, _db.Connection, transaction,
                 new MySqlParameter("@name", o.assignedEmployee.Employee_Name),
-                new MySqlParameter("@price", o.Table.Table_Number),
-                new MySqlParameter("@notes", o.Bill.Price)
+                new MySqlParameter("@number", o.Table.Table_Number),
+                new MySqlParameter("@price", o.Bill.Price)
             ) > 0;
 
             if (!orderAdded)

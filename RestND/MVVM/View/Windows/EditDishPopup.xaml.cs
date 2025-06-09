@@ -7,9 +7,6 @@ namespace RestND.MVVM.View.Windows
         public EditDishPopup()
         {
             InitializeComponent();
-
-            Loaded += (_, _) => Owner.Opacity = 0.4;
-            Closed += (_, _) => Owner.Opacity = 1.0;
         }
     }
 }

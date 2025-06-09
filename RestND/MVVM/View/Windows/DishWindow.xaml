@@ -39,15 +39,12 @@
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                         <Label Content="Allergen Notes:"/>
-                        <ListBox SelectedItem="{Binding NewDish.Allergen_Notes, UpdateSourceTrigger=PropertyChanged}"
-                                 ItemsSource="{Binding AllergenNotes}" Margin="10 0 0 0">
+                        <ListBox ItemsSource="{Binding AllergenNotes}" Margin="10 0 0 0">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <CheckBox Content="{Binding DisplayName}" 
-                                        IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}, Mode=TwoWay}"
-                                      Foreground="{DynamicResource LightText}"
-                                      Cursor="Hand"
-                                      Margin="5,2"/>
+                                    <CheckBox Content="{Binding}"
+                                              Checked="CheckBox_Checked"
+                                              Unchecked="CheckBox_Unchecked" />
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -98,10 +95,10 @@
                           HeadersVisibility="Column">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Dish_Name}" />
-                            <DataGridTextColumn Header="Price" Binding="{Binding Dish_Price}" />
-                            <DataGridTextColumn Header="Allergens" Binding="{Binding AllergenNotesString}" />
-                            <DataGridTextColumn Header="Type" Binding="{Binding Dish_Type.DishType_Name}" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Dish_Name}" Width="*" />
+                            <DataGridTextColumn Header="Price" Binding="{Binding Dish_Price}" Width="*" />
+                            <DataGridTextColumn Header="Allergens" Binding="{Binding Allergen_Notes}" Width="*" />
+                            <DataGridTextColumn Header="Dish Type" Binding="{Binding Dish_Type.DishType_Name}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </GroupBox>

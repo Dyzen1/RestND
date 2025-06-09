@@ -91,7 +91,7 @@
                     <DataGrid Grid.Row="1" RowStyle="{DynamicResource rowStyle}"
                               ItemsSource="{Binding Products}" CellStyle="{DynamicResource cellStyle}"
                               SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
-                              HeadersVisibility="Column">
+                              HeadersVisibility="None">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Product ID:" Binding="{Binding Product_ID}" Width="*"/>

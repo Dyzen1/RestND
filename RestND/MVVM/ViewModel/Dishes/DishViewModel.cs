@@ -16,33 +16,39 @@ namespace RestND.MVVM.ViewModel
 {
     public partial class DishViewModel : ObservableObject
     {
+        #region Services
         private readonly DishServices _dishService;
         private readonly DishTypeServices _dishTypeService;
         private readonly ProductService _productService;
         private readonly HubConnection _hub;
+        private  readonly AllergenNotes _allergenNotes = new AllergenNotes();
+        #endregion
 
+        #region Observable properties
         [ObservableProperty] private ObservableCollection<Dish> dishes = new();
         [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
         [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
         [ObservableProperty] private ObservableCollection<ProductInDish> selectedProducts = new();
-        [ObservableProperty] private ObservableCollection<AllergenNotes> allergenNotes = new();
-        [ObservableProperty] private ObservableCollection<AllergenNotes> selectedAllergenNotes = new();
+        [ObservableProperty] private ObservableCollection<string> allergenNotes;
+        [ObservableProperty] private ObservableCollection<string> selectedAllergenNotes;
         [ObservableProperty] private Dictionary<string, List<string>> dishValidationErrors = new();
 
         [ObservableProperty] private Dish newDish = new();
         [ObservableProperty] private Dish selectedDish;
         [ObservableProperty] private Inventory selectedAvailableProduct;
         [ObservableProperty] private int productAmountUsage;
+        #endregion
 
+        #region Constructor
         public DishViewModel()
         {
             _dishTypeService = new DishTypeServices();
             _dishService = new DishServices();
             _productService = new ProductService();
             _hub = App.DishHub;
-
+            AllergenNotes = new ObservableCollection<string>(_allergenNotes.Allergens);
             DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
-            LoadNotes();
+
             LoadDishes();
             LoadAvailableProducts();
 
@@ -77,12 +83,17 @@ namespace RestND.MVVM.ViewModel
             });
             LoadDishes();
         }
+        #endregion
 
+        #region On change
         partial void OnSelectedDishChanged(Dish value)
         {
             DeleteDishCommand.NotifyCanExecuteChanged();
             AddDishCommand.NotifyCanExecuteChanged();
         }
+        #endregion
+
+        #region Relay commands
 
         [RelayCommand]
         private void LoadDishes()
@@ -102,13 +113,6 @@ namespace RestND.MVVM.ViewModel
                 AvailableProducts.Add(product);
         }
 
-        [RelayCommand]
-        private void LoadNotes()
-        {
-            AllergenNotes = new ObservableCollection<AllergenNotes>(
-                Enum.GetValues(typeof(AllergenNotes)).Cast<AllergenNotes>());
-        }
-
         private List<ProductInDish> CloneSelectedProducts() =>
             SelectedProducts.Select(p => new ProductInDish
             {
@@ -116,11 +120,12 @@ namespace RestND.MVVM.ViewModel
                 Amount_Usage = p.Amount_Usage
             }).ToList();
 
+
         [RelayCommand(CanExecute = nameof(CanAddDish))]
         private async Task AddDish()
         {
             NewDish.ProductUsage = CloneSelectedProducts();
-            NewDish.Allergen_Notes = SelectedAllergenNotes.ToList();
+            NewDish.Allergen_Notes = string.Join(",", SelectedAllergenNotes);
 
             if (string.IsNullOrWhiteSpace(NewDish.Dish_Name) ||
                 NewDish.Dish_Price <= 0 ||
@@ -182,9 +187,12 @@ namespace RestND.MVVM.ViewModel
                 }
             }
         }
+        #endregion
 
+        #region Can modify
         private bool CanModifyDish() => SelectedDish != null;
         private bool CanAddDish() => true;
+        #endregion
 
     }
 }

@@ -80,20 +80,10 @@ namespace RestND.MVVM.View.Windows
             };
 
             popup.Show();
-            //OpenPopup();
         }
 
 
         ///// METHODS FOR OPENING WINDOWS:
-        //private void OpenPopup()
-        //{
-        //    var popupWindow = new TablePopupWindow();
-        //    {
-        //        WindowState = WindowState.Maximized;
-        //    }
-        //    popupWindow.Show();
-        //    this.Close();
-        //}
 
         private void OpenInventory()
         {
