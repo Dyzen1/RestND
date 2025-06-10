@@ -1,41 +1,39 @@
-﻿using RestND.MVVM.Model.Dishes;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using RestND.MVVM.Model.Dishes;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Linq;
+using System.Text;
+using System;
 
 namespace RestND.MVVM.Model
 {
-    public class Dish
+    public class Dish : ObservableObject
     {
         #region Dish_ID
         private int _Dish_ID;
-
         public int Dish_ID
         {
-            get { return _Dish_ID; }
-            set { _Dish_ID = value; }
+            get => _Dish_ID;
+            set => SetProperty(ref _Dish_ID, value);
         }
         #endregion
 
         #region Dish_Name
         private string? _Dish_Name;
-
         public string? Dish_Name
         {
-            get { return _Dish_Name; }
-            set { _Dish_Name = value; }
+            get => _Dish_Name;
+            set => SetProperty(ref _Dish_Name, value);
         }
         #endregion
 
         #region Dish_Price
         private double _Dish_Price;
-
         public double Dish_Price
         {
-            get { return _Dish_Price; }
-            set 
-            {
-                if (_Dish_Price >= 0)
-                    _Dish_Price = value;
-            }
+            get => _Dish_Price;
+            set => SetProperty(ref _Dish_Price, value);
         }
         #endregion
 
@@ -43,8 +41,8 @@ namespace RestND.MVVM.Model
         private bool _Is_Active;
         public bool Is_Active
         {
-            get { return _Is_Active; }
-            set { _Is_Active = value; }
+            get => _Is_Active; 
+            set => SetProperty(ref _Is_Active, value);
         }
         #endregion
 
@@ -53,8 +51,8 @@ namespace RestND.MVVM.Model
 
         public string Allergen_Notes
         {
-            get { return _Allergen_Notes; }
-            set { _Allergen_Notes = value; }
+            get => _Allergen_Notes; 
+            set => SetProperty(ref _Allergen_Notes, value);
         }
         #endregion
 
@@ -63,8 +61,8 @@ namespace RestND.MVVM.Model
 
         public bool Availability_Status
         {
-            get { return _Availability_Status; }
-            set { _Availability_Status = value; }
+            get => _Availability_Status;
+            set => SetProperty(ref _Availability_Status, value);
         }
         #endregion
 
@@ -73,8 +71,8 @@ namespace RestND.MVVM.Model
 
         public List<ProductInDish> ProductUsage
         {
-            get { return _ProductUsage; }
-            set { _ProductUsage = value; }
+            get => _ProductUsage;
+            set => SetProperty(ref _ProductUsage, value);
         }
         #endregion
 
@@ -83,8 +81,8 @@ namespace RestND.MVVM.Model
 
         public DishType? Dish_Type
         {
-            get { return _Dish_Type; }
-            set { _Dish_Type = value; }
+            get => _Dish_Type;
+            set => SetProperty(ref _Dish_Type, value);
         }
         #endregion
 

@@ -6,9 +6,7 @@
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:local="clr-namespace:RestND.MVVM.Model"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
-        xmlns:fa="http://schemas.fontawesome.com/icons/svg"
         mc:Ignorable="d"
-        WindowState="Maximized"
         Style="{StaticResource windowStyle}"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
@@ -21,7 +19,7 @@
             </Grid.ColumnDefinitions>
 
             <!-- Add New Dish Section -->
-            <GroupBox Header="Insert dish details" Foreground="{DynamicResource secondaryHeaders}" 
+            <GroupBox Header="Insert new dish details" Foreground="{DynamicResource secondaryHeaders}" 
                       BorderThickness="0" BorderBrush="Transparent">
                 <StackPanel Orientation="Vertical" Margin="0 10 0 0">
 
@@ -38,13 +36,13 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                        <Label Content="Allergen Notes:"/>
-                        <ListBox ItemsSource="{Binding AllergenNotes}" Margin="10 0 0 0">
+                        <Label Content="Allergen Notes:" Width="115"/>
+                        <ListBox ItemsSource="{Binding AllergenOptions}" Margin="4 0 0 0">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <CheckBox Content="{Binding}"
-                                              Checked="CheckBox_Checked"
-                                              Unchecked="CheckBox_Unchecked" />
+                                    <CheckBox Content="{Binding Value}" 
+                                              Foreground="{DynamicResource LightText}"
+                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
@@ -52,9 +50,15 @@
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                         <Label Content="Dish Type:"/>
-                        <ListBox ItemsSource="{Binding DishTypes}"
-                                  SelectedItem="{Binding NewDish.Dish_Type, UpdateSourceTrigger=PropertyChanged}"
-                                  DisplayMemberPath="DishType_Name" Margin="10 0 0 0"/>
+                        <ListBox ItemsSource="{Binding DishTypeOptions}" Margin="10 0 0 0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding Value}" 
+                                              Foreground="{DynamicResource LightText}"
+                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </StackPanel>
 
 
@@ -74,8 +78,8 @@
                              Margin="0,10,0,0" Style="{DynamicResource SubmitBtn}"/>
 
                     <Button Content="Delete Dish"
-                   Command="{Binding DeleteDishCommand}"
-                 Margin="0,10,0,0" Style="{DynamicResource SubmitBtn}"/>
+                            Command="{Binding DeleteDishCommand}"
+                            Margin="0,10,0,0" Style="{DynamicResource SubmitBtn}"/>
 
                 </StackPanel>
             </GroupBox>
@@ -95,7 +99,7 @@
                           HeadersVisibility="Column">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Dish_Name}" Width="*" />
+                            <DataGridTextColumn Header="Name" Binding="{Binding Dish_Name}" Width="*"/>
                             <DataGridTextColumn Header="Price" Binding="{Binding Dish_Price}" Width="*" />
                             <DataGridTextColumn Header="Allergens" Binding="{Binding Allergen_Notes}" Width="*" />
                             <DataGridTextColumn Header="Dish Type" Binding="{Binding Dish_Type.DishType_Name}" Width="*" />

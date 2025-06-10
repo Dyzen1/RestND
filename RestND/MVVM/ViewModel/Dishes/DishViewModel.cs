@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
 using RestND.MVVM.Model;
 using RestND.MVVM.Model.Dishes;
+using RestND.MVVM.ViewModel.Dishes;
 using RestND.Validations;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace RestND.MVVM.ViewModel
         private readonly DishTypeServices _dishTypeService;
         private readonly ProductService _productService;
         private readonly HubConnection _hub;
-        private  readonly AllergenNotes _allergenNotes = new AllergenNotes();
+        private readonly AllergenNotes _allergenNotes = new AllergenNotes();
         #endregion
 
         #region Observable properties
@@ -29,8 +30,14 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
         [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
         [ObservableProperty] private ObservableCollection<ProductInDish> selectedProducts = new();
-        [ObservableProperty] private ObservableCollection<string> allergenNotes;
-        [ObservableProperty] private ObservableCollection<string> selectedAllergenNotes;
+        //[ObservableProperty] private ObservableCollection<string> allergenNotes;  X
+
+        //FOR THE CHECK BOX OPTIONS:
+        [ObservableProperty] private ObservableCollection<string> selectedAllergenNotes = new();
+        [ObservableProperty] private ObservableCollection<SelectableItem<string>> allergenOptions = new();
+        [ObservableProperty] private ObservableCollection<string> selectedDishTypes = new();
+        [ObservableProperty] private ObservableCollection<SelectableItem<string>> dishTypeOptions = new();
+
         [ObservableProperty] private Dictionary<string, List<string>> dishValidationErrors = new();
 
         [ObservableProperty] private Dish newDish = new();
@@ -46,11 +53,13 @@ namespace RestND.MVVM.ViewModel
             _dishService = new DishServices();
             _productService = new ProductService();
             _hub = App.DishHub;
-            AllergenNotes = new ObservableCollection<string>(_allergenNotes.Allergens);
+            //AllergenNotes = new ObservableCollection<string>(_allergenNotes.Allergens);  X
             DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
 
             LoadDishes();
             LoadAvailableProducts();
+            LoadNotes();
+            LoadDishTypes();
 
             _hub.On<Dish, string>("ReceiveDishUpdate", (dish, action) =>
             {
@@ -91,6 +100,7 @@ namespace RestND.MVVM.ViewModel
             DeleteDishCommand.NotifyCanExecuteChanged();
             AddDishCommand.NotifyCanExecuteChanged();
         }
+
         #endregion
 
         #region Relay commands
@@ -102,6 +112,60 @@ namespace RestND.MVVM.ViewModel
             var dbDishes = _dishService.GetAll();
             foreach (var dish in dbDishes)
                 Dishes.Add(dish);
+        }
+
+        [RelayCommand]
+        private void LoadNotes()
+        {
+            AllergenOptions.Clear();
+
+            foreach (var note in _allergenNotes.Allergens)
+            {
+                var item = new SelectableItem<string>(note)
+                {
+                    IsSelected = SelectedAllergenNotes.Contains(note)
+                };
+
+                item.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName == nameof(SelectableItem<string>.IsSelected))
+                    {
+                        if (item.IsSelected && !SelectedAllergenNotes.Contains(item.Value))
+                            SelectedAllergenNotes.Add(item.Value);
+                        else if (!item.IsSelected && SelectedAllergenNotes.Contains(item.Value))
+                            SelectedAllergenNotes.Remove(item.Value);
+                    }
+                };
+
+                AllergenOptions.Add(item); 
+            }
+        }
+
+        [RelayCommand]
+        private void LoadDishTypes()
+        {
+            DishTypeOptions.Clear();
+
+            foreach (var type in DishTypes)
+            {
+                var item = new SelectableItem<string>(type.DishType_Name)
+                {
+                    IsSelected = SelectedDishTypes.Contains(type.DishType_Name)
+                };
+
+                item.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName == nameof(SelectableItem<string>.IsSelected))
+                    {
+                        if (item.IsSelected && !SelectedDishTypes.Contains(item.Value))
+                            SelectedDishTypes.Add(item.Value);
+                        else if (!item.IsSelected && SelectedDishTypes.Contains(item.Value))
+                            SelectedDishTypes.Remove(item.Value);
+                    }
+                };
+
+                DishTypeOptions.Add(item);
+            }
         }
 
         [RelayCommand]
@@ -144,6 +208,7 @@ namespace RestND.MVVM.ViewModel
                 NewDish = new Dish();
                 SelectedProducts.Clear();
                 SelectedAllergenNotes.Clear();
+                SelectedDishTypes.Clear();
             }
             else
             {

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
 using RestND.MVVM.Model;
 using RestND.MVVM.Model.Dishes;
+using RestND.MVVM.ViewModel.Dishes;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,15 +15,38 @@ namespace RestND.MVVM.ViewModel
 {
     public partial class EditDishViewModel : ObservableObject
     {
+        #region Services
         private readonly DishServices _dishService = new();
         private readonly DishTypeServices _dishTypeService = new();
         private readonly HubConnection _hub;
+        #endregion
 
+        #region Observable properties
         [ObservableProperty] private Dish selectedDish;
-        [ObservableProperty] private ObservableCollection<DishType> dishTypes;
-        [ObservableProperty] private ObservableCollection<AllergenNotes> allergenNotes;
-        [ObservableProperty] private string selectedAllergenNotes;
 
+        [ObservableProperty] private ObservableCollection<DishType> dishTypes = new(); 
+        [ObservableProperty] private ObservableCollection<string> selectedDishTypes = new();
+        [ObservableProperty] private ObservableCollection<SelectableItem<string>> dishTypeOptions = new();
+
+        [ObservableProperty] private ObservableCollection<SelectableItem<string>> allergenOptions = new();
+        private readonly List<string> _allPossibleAllergens = new()
+        {
+            "Contains Gluten/Wheat.",
+            "Contains Peanuts.",
+            "Contains Tree Nuts.",
+            "Contains Milk Or Dairy Ingredients.",
+            "Contains Eggs Or Egg-Derived Ingredients.",
+            "Contains Soy Or Soy-Derived Ingredients.",
+            "Contains Fish.",
+            "Contains Shellfish.",
+            "Contains Sesame.",
+            "Contains Mustard.",
+            "Contains Celery.",
+            "Contains Sulfites."
+        };
+        #endregion
+
+        #region Constructor
         public EditDishViewModel(Dish dishToEdit)
         {
             _hub = App.DishHub;
@@ -37,14 +62,69 @@ namespace RestND.MVVM.ViewModel
             };
 
             DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
-            AllergenNotes = new ObservableCollection<AllergenNotes>();
-            SelectedAllergenNotes =  SelectedDish.Allergen_Notes;
-        }
+            AllergenOptions = new ObservableCollection<SelectableItem<string>>();
 
+            // adding the selected allergens to the options list
+            var selectedNotes = (SelectedDish.Allergen_Notes ?? "")
+                .Split(',')
+                .Select(x => x.Trim())
+                .Where(x => !string.IsNullOrEmpty(x))
+                .ToList();
+
+            foreach (var allergen in _allPossibleAllergens)
+            {
+                var item = new SelectableItem<string>(allergen)
+                {
+                    IsSelected = selectedNotes.Contains(allergen)
+                };
+
+                item.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName == nameof(SelectableItem<string>.IsSelected))
+                    {
+                        SelectedDish.Allergen_Notes = string.Join(",",
+                            AllergenOptions.Where(a => a.IsSelected).Select(a => a.Value));
+                    }
+                };
+                AllergenOptions.Add(item); 
+            }
+
+            // adding the selected types to the options list
+            foreach (var type in DishTypes)
+            {
+                var item = new SelectableItem<string>(type.DishType_Name)
+                {
+                    IsSelected = SelectedDishTypes.Contains(type.DishType_Name)
+                };
+
+                item.PropertyChanged += (s, e) =>
+                {
+                    if (e.PropertyName == nameof(SelectableItem<string>.IsSelected))
+                    {
+                        if (item.IsSelected && !SelectedDishTypes.Contains(item.Value))
+                            SelectedDishTypes.Add(item.Value);
+                        else if (!item.IsSelected && SelectedDishTypes.Contains(item.Value))
+                            SelectedDishTypes.Remove(item.Value);
+                    }
+                };
+                
+                DishTypeOptions.Add(item);
+            }
+        }
+        #endregion
+
+        #region On change
+        partial void OnSelectedDishChanged(Dish value)
+        {
+            UpdateDishCommand.NotifyCanExecuteChanged();
+        }
+        #endregion
+
+        #region Relay commands
         [RelayCommand]
         private async Task UpdateDish()
         {
-            //SelectedDish.Allergen_Notes = SelectedAllergenNotes.ToList();
+            //SelectedDish.Allergen_Notes = SelectedAllergenNotes; 
 
             bool success = _dishService.Update(SelectedDish);
             if (success)
@@ -57,5 +137,6 @@ namespace RestND.MVVM.ViewModel
                 MessageBox.Show("Failed to update dish.", "Error");
             }
         }
+        #endregion
     }
 }

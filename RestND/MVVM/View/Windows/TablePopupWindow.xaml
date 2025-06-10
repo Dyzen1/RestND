@@ -14,9 +14,8 @@
 
         <Border Style="{StaticResource windowBorder}">
             <StackPanel HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center">
-                <Label Content="Insert Table Number:" Foreground="{DynamicResource LightText}" HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding NewTable.Table_Number, UpdateSourceTrigger=PropertyChanged}" 
-                         Style="{DynamicResource InputBox}"/>
+                <Label Content="Insert Table Number:" Width="150"/>
+                <TextBox Text="{Binding NewTable.Table_Number, UpdateSourceTrigger=PropertyChanged}"/>
                 <!-- Save Table Button -->
                 <Button Content="Add Table" Grid.Row="1" Click="AddTableBtn_Click"
                         Command="{Binding AddTableCommand}" Style="{DynamicResource SubmitBtn}"

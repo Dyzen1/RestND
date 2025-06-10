@@ -6,36 +6,64 @@
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         mc:Ignorable="d" Style="{StaticResource popupStyle}"
-        Title="Edit Dish" Width="400" Height="350"
+        Title="Edit Dish" Width="450" Height="550"
         WindowStartupLocation="CenterOwner">
 
     <Grid>
         <Border Style="{DynamicResource windowBorder}">
-            <StackPanel HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center" Width="300">
-                <Label Content="Dish Name:" Foreground="{DynamicResource LightText}" HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding SelectedDish.Dish_Name, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{DynamicResource InputBox}" />
+            <StackPanel HorizontalAlignment="Center" Orientation="Vertical" 
+                        VerticalAlignment="Center" Margin="0 0 0 30">
+                
+                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                    <Label Content="Dish Name:"/>
+                    <TextBox Text="{Binding SelectedDish.Dish_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                             Margin="10 0 0 0" />
+                </StackPanel>
 
-                <Label Content="Price:" Foreground="{DynamicResource LightText}" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                <TextBox Text="{Binding SelectedDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{DynamicResource InputBox}" />
+                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                    <Label Content="Price:"/>
+                    <TextBox Text="{Binding SelectedDish.Dish_Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                             Margin="10 0 0 0" />
+                </StackPanel>
 
-           
+                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                    <Label Content="Allergen Notes:" Width="115"/>
+                    <ListBox ItemsSource="{Binding AllergenOptions}" Margin="4 0 0 0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding Value}" 
+                                          Foreground="{DynamicResource LightText}"
+                                          IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
 
-                <!--<Label Content="Dish Type:" Foreground="{DynamicResource LightText}" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-                <ComboBox ItemsSource="{Binding DishTypes}"
-                          SelectedItem="{Binding SelectedDish.Dish_Type}"
-                          DisplayMemberPath="DishType_Name"
-                          Style="{DynamicResource InputBox}"/>-->
 
-                <Button Content="Update "
+                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                    <Label Content="Dish Type:"/>
+                    <ListBox ItemsSource="{Binding DishTypeOptions}" Margin="10 0 0 0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox Content="{Binding Value}" 
+                                          Foreground="{DynamicResource LightText}"
+                                          IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+
+
+                <Button Content="Update"
                         Command="{Binding UpdateDishCommand}"
                         Style="{DynamicResource SubmitBtn}"
                         Margin="0 20 0 0"/>
             </StackPanel>
+                
         </Border>
 
         <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
         <TextBlock Style="{DynamicResource copyWrite}"/>
+        
     </Grid>
 </Window>

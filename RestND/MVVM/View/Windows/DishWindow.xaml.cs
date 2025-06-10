@@ -94,26 +94,5 @@ namespace RestND.MVVM.View
         //    popup.Show();
         //}
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            if (sender is CheckBox checkBox && checkBox.DataContext is string allergen)
-            {
-                var vm = (DishViewModel)this.DataContext;
-                if (!vm.SelectedAllergenNotes.Contains(allergen))
-                    vm.SelectedAllergenNotes.Add(allergen);
-            }
-        }
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (sender is CheckBox checkBox && checkBox.DataContext is string allergen)
-            {
-                var vm = (DishViewModel)this.DataContext;
-                if (vm.SelectedAllergenNotes.Contains(allergen))
-                    vm.SelectedAllergenNotes.Remove(allergen);
-            }
-        }
-
-
     }
 }

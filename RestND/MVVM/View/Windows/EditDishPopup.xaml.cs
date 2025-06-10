@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using RestND.MVVM.ViewModel;
+using System.Windows;
 
 namespace RestND.MVVM.View.Windows
 {
