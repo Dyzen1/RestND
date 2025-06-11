@@ -23,11 +23,7 @@ namespace RestND.MVVM.ViewModel
 
         #region Observable properties
         [ObservableProperty] private Dish selectedDish;
-
         [ObservableProperty] private ObservableCollection<DishType> dishTypes = new(); 
-        [ObservableProperty] private ObservableCollection<string> selectedDishTypes = new();
-        [ObservableProperty] private ObservableCollection<SelectableItem<string>> dishTypeOptions = new();
-
         [ObservableProperty] private ObservableCollection<SelectableItem<string>> allergenOptions = new();
         private readonly List<string> _allPossibleAllergens = new()
         {
@@ -61,10 +57,18 @@ namespace RestND.MVVM.ViewModel
                 Allergen_Notes = dishToEdit.Allergen_Notes
             };
 
+            // saving the formr user's selection of dish type.
             DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
+            if (SelectedDish.Dish_Type != null)
+            {
+                var matchingType = DishTypes.FirstOrDefault(dt => dt.DishType_Name == SelectedDish.Dish_Type.DishType_Name);
+                if (matchingType != null)
+                    SelectedDish.Dish_Type = matchingType;
+            }
+
             AllergenOptions = new ObservableCollection<SelectableItem<string>>();
 
-            // adding the selected allergens to the options list
+            // adding the selected allergens to the options list.
             var selectedNotes = (SelectedDish.Allergen_Notes ?? "")
                 .Split(',')
                 .Select(x => x.Trim())
@@ -88,28 +92,14 @@ namespace RestND.MVVM.ViewModel
                 };
                 AllergenOptions.Add(item); 
             }
+        }
 
-            // adding the selected types to the options list
-            foreach (var type in DishTypes)
-            {
-                var item = new SelectableItem<string>(type.DishType_Name)
-                {
-                    IsSelected = SelectedDishTypes.Contains(type.DishType_Name)
-                };
+        #endregion
 
-                item.PropertyChanged += (s, e) =>
-                {
-                    if (e.PropertyName == nameof(SelectableItem<string>.IsSelected))
-                    {
-                        if (item.IsSelected && !SelectedDishTypes.Contains(item.Value))
-                            SelectedDishTypes.Add(item.Value);
-                        else if (!item.IsSelected && SelectedDishTypes.Contains(item.Value))
-                            SelectedDishTypes.Remove(item.Value);
-                    }
-                };
-                
-                DishTypeOptions.Add(item);
-            }
+        #region default constructor
+        public EditDishViewModel()
+        {
+            //
         }
         #endregion
 

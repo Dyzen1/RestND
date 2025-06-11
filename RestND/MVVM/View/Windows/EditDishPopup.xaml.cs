@@ -8,6 +8,7 @@ namespace RestND.MVVM.View.Windows
         public EditDishPopup()
         {
             InitializeComponent();
+            this.DataContext = new EditDishViewModel();
         }
     }
 }
