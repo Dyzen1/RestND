@@ -3,63 +3,66 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RestND.MVVM.Model"
+        xmlns:local="clr-namespace:RestND.utilities"
+        xmlns:conv="clr-namespace:RestND.Converters"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:fa="http://schemas.fontawesome.com/icons/svg"
-        xmlns:fa6="http://schemas.fontawesome.com/icons/svg"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
-        mc:Ignorable="d" Style="{StaticResource windowStyle}"
-        Title="MainWindow" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        mc:Ignorable="d"
+        Title="MainWindow"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        Style="{StaticResource windowStyle}">
+
+    <Window.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <conv:StringToIntConverter x:Key="StringToIntConverter"/>
+    </Window.Resources>
 
     <Border Style="{StaticResource windowBorder}">
-
-    <Grid>
-
-        <!--upper menu for minimalize maximize and close-->
         <Grid>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="50"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="120"/>
-            </Grid.ColumnDefinitions>
+            <!-- Header and Sidebar -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="120"/>
+                </Grid.ColumnDefinitions>
 
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="2" >
-                <Button x:Name="MinimizeBtn" Content="_" Width="40" Height="25" 
-                        Background="Transparent" BorderBrush="Transparent"
-                        Click="MinimizeBtn_Click" Foreground="{DynamicResource LightText}"/>
-                <Button x:Name="MaximizeBtn" Content="🗖" Width="40" Height="25" 
-                        Background="Transparent" BorderBrush="Transparent"
-                        Click="MaximizeBtn_Click" Foreground="{DynamicResource LightText}"/>
-                <Button x:Name="CloseBtn" Content="X" Width="40" Height="25" 
-                        Background="Transparent" BorderBrush="Transparent"
-                        Click="CloseBtn_Click" Foreground="{DynamicResource LightText}"/>
-            </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="2">
+                    <Button x:Name="MinimizeBtn" Content="_" Width="40" Height="25" 
+                            Background="Transparent" BorderBrush="Transparent"
+                            Click="MinimizeBtn_Click" Foreground="{DynamicResource LightText}"/>
+                    <Button x:Name="MaximizeBtn" Content="🗖" Width="40" Height="25" 
+                            Background="Transparent" BorderBrush="Transparent"
+                            Click="MaximizeBtn_Click" Foreground="{DynamicResource LightText}"/>
+                    <Button x:Name="CloseBtn" Content="X" Width="40" Height="25" 
+                            Background="Transparent" BorderBrush="Transparent"
+                            Click="CloseBtn_Click" Foreground="{DynamicResource LightText}"/>
+                </StackPanel>
 
-            <!-- Sidebar Expander -->
                 <Expander ExpandDirection="Left"
-                      IsExpanded="False" BorderThickness="0" 
-                      Foreground="{DynamicResource LightText}" HorizontalAlignment="Right"
-                      VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
-                      Grid.Row="1" Grid.Column="2" Margin="5">
+                          IsExpanded="False" BorderThickness="0"
+                          Foreground="{DynamicResource LightText}" HorizontalAlignment="Right"
+                          VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
+                          Grid.Row="1" Grid.Column="2" Margin="5">
                     <uc:SideBar x:Name="sideBar" Width="100"/>
                 </Expander>
 
                 <Button Name="AdminLogin" Style="{DynamicResource loginBtn}" Grid.Row="0" Grid.Column="0" Click="AdminLogin_Click"/>
 
-
                 <Button x:Name="addTables" Style="{DynamicResource addBtn}" 
-                    Grid.Row="2" Grid.Column="0" Click="AddTable_Click">
-                <StackPanel Orientation="Horizontal">
-                    <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
-                    <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center" 
-                               Foreground="{DynamicResource LightText}" Margin="4"/>
-                </StackPanel>
+                        Grid.Row="2" Grid.Column="0" Click="AddTable_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
+                        <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center" 
+                                   Foreground="{DynamicResource LightText}" Margin="4"/>
+                    </StackPanel>
                 </Button>
 
                 <Rectangle x:Name="Overlay"
@@ -70,107 +73,29 @@
 
                 <TextBlock Style="{DynamicResource copyWrite}"
                            Grid.Row="2" Grid.Column="1"/>
-
             </Grid>
 
-        <!--sectioned the tables area for easier approach-->
-            <Grid Width="600" Height="350" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <!--buttons for each table-->
-                <Button x:Name="table1" Background="Transparent" Grid.Row="0" Grid.Column="0" 
-                        BorderThickness="0" Click="OrderBtn_Click">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="25" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table2" Background="Transparent" Grid.Row="0" Grid.Column="2" BorderThickness="0">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="43" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table3" Background="Transparent" Grid.Row="0" Grid.Column="4" BorderThickness="0">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="20" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table4" Background="Transparent" Grid.Row="1" Grid.Column="1" BorderThickness="0">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="34" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table5" Background="Transparent" Grid.Row="1" Grid.Column="3" BorderThickness="0">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="21" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table6" Background="Transparent" Grid.Row="2" Grid.Column="0" BorderThickness="0">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="32" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table7" Background="Transparent" Grid.Row="2" Grid.Column="2" BorderThickness="0">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="12" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table8" Background="Transparent" Grid.Row="2" Grid.Column="4" BorderThickness="0">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="15" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table9" Background="Transparent" Grid.Row="3" Grid.Column="1" BorderThickness="0">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="23" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table10" Background="Transparent" Grid.Row="3" Grid.Column="3" BorderThickness="0">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="11" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table11" Background="Transparent" Grid.Row="4" Grid.Column="0" BorderThickness="0">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="8" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table12" Background="Transparent" Grid.Row="4" Grid.Column="2" BorderThickness="0" >
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="10" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-                <Button x:Name="table13" Background="Transparent" Grid.Row="4" Grid.Column="4" BorderThickness="0">
-                    <Grid>
-                        <Image Style="{DynamicResource tableBtn}"/>
-                        <TextBlock Text="5" Style="{DynamicResource tableNumber}"/>
-                    </Grid>
-                </Button>
-            </Grid>
+            <!-- Dynamic 5x5 Table Grid -->
+            <ItemsControl ItemsSource="{Binding Tables}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="5" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Background="Transparent" BorderThickness="0"
+                                Visibility="{Binding Table_Status, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Command="{Binding DataContext.TableClickCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}">
+                            <Grid>
+                                <Image Style="{DynamicResource tableBtn}"/>
+                                <TextBlock Text="{Binding Table_Number}" Style="{DynamicResource tableNumber}"/>
+                            </Grid>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
         </Grid>
     </Border>

@@ -18,7 +18,7 @@
                 <TextBox Text="{Binding NewTable.Table_Number, UpdateSourceTrigger=PropertyChanged}"/>
                 <!-- Save Table Button -->
                 <Button Content="Add Table" Grid.Row="1" Click="AddTableBtn_Click"
-                        Command="{Binding AddTableCommand}" Style="{DynamicResource SubmitBtn}"
+                         Style="{DynamicResource SubmitBtn}"
                         Margin="0 40 0 0"/>
             </StackPanel>
         </Border>

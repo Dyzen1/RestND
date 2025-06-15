@@ -1,5 +1,6 @@
 ﻿
 using RestND.MVVM.ViewModel.Employees;
+using RestND.MVVM.ViewModel.Main;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -13,6 +14,7 @@ namespace RestND.MVVM.View.Windows
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = App.SharedMainVM;
             sideBar.ButtonClicked += SideBar_ButtonClicked;
         }
 

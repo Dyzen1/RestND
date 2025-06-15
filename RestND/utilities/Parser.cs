@@ -1,38 +1,43 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestND.utilities
 {
     public class Parser
     {
-
-      public static double ParseToDouble(object value)
+        public static double ParseToDouble(object value, double fallback = 0)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
-            return Convert.ToDouble(value);
-        }
-        public static int ParseToInt(object value)
-        {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value));
-
-            return Convert.ToInt32(value);
+            try
+            {
+                return Convert.ToDouble(value);
+            }
+            catch
+            {
+                return fallback;
+            }
         }
 
-        public static bool ParseToBool(object value)
+        public static int ParseToInt(object value, int fallback = 0)
         {
-            if (value == null)
-                throw new ArgumentNullException(nameof(value), "Value cannot be null");
-
-            return Convert.ToBoolean(value);
+            try
+            {
+                return Convert.ToInt32(value);
+            }
+            catch
+            {
+                return fallback;
+            }
         }
 
-
-
-
+        public static bool ParseToBool(object value, bool fallback = false)
+        {
+            try
+            {
+                return Convert.ToBoolean(value);
+            }
+            catch
+            {
+                return fallback;
+            }
+        }
     }
 }

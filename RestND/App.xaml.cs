@@ -19,10 +19,16 @@ namespace RestND
     {
         public static HubConnection InventoryHub { get; private set; }
         public static HubConnection DishHub { get; private set; }
+        public static HubConnection TableHub { get; private set; }
+        public static HubConnection MainHub { get; private set; }
+
+        public static MainWindowViewModel SharedMainVM { get; private set; }
+
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
 
             InitializeSignalR().ContinueWith(task =>
             {
@@ -31,9 +37,14 @@ namespace RestND
                     MessageBox.Show("Failed to start SignalR: " + task.Exception.InnerException?.Message);
                 }
             });
+            SharedMainVM = new MainWindowViewModel();
 
-            MainWindow mainWindow = new MainWindow();
+            var mainWindow = new MainWindow
+            {
+                DataContext = SharedMainVM
+            };
             mainWindow.Show();
+
         }
 
         private async Task InitializeSignalR()
@@ -48,8 +59,22 @@ namespace RestND
                 .WithAutomaticReconnect()
                 .Build();
 
+            TableHub = new HubConnectionBuilder()
+                    .WithUrl("http://localhost:5027/tableHub")
+                    .WithAutomaticReconnect()
+                    .Build();
+
+
+            MainHub = new HubConnectionBuilder()
+                .WithUrl("http://localhost:5027/mainHub")
+                .WithAutomaticReconnect()
+                .Build();
+
+            
             await InventoryHub.StartAsync();
             await DishHub.StartAsync();
+            await TableHub.StartAsync();
+            await MainHub.StartAsync();
         }
     }
 }
