@@ -66,6 +66,7 @@ namespace RestND.MVVM.View
                 };
 
                 this.Opacity = 0.4;
+                editWindow.Owner = this;
                 editWindow.ShowDialog();
                 this.Opacity = 1.0;
 
