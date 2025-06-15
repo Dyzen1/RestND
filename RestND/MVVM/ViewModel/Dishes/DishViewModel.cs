@@ -30,13 +30,10 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
         [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
         [ObservableProperty] private ObservableCollection<ProductInDish> selectedProducts = new();
-        //[ObservableProperty] private ObservableCollection<string> allergenNotes;  X
 
         //FOR THE CHECK BOX OPTIONS:
         [ObservableProperty] private ObservableCollection<string> selectedAllergenNotes = new();
         [ObservableProperty] private ObservableCollection<SelectableItem<string>> allergenOptions = new();
-        [ObservableProperty] private ObservableCollection<string> selectedDishTypes = new();
-        [ObservableProperty] private ObservableCollection<SelectableItem<string>> dishTypeOptions = new();
 
         [ObservableProperty] private Dictionary<string, List<string>> dishValidationErrors = new();
 
@@ -53,13 +50,12 @@ namespace RestND.MVVM.ViewModel
             _dishService = new DishServices();
             _productService = new ProductService();
             _hub = App.DishHub;
-            //AllergenNotes = new ObservableCollection<string>(_allergenNotes.Allergens);  X
+            
             DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
 
             LoadDishes();
             LoadAvailableProducts();
             LoadNotes();
-            LoadDishTypes();
 
             _hub.On<Dish, string>("ReceiveDishUpdate", (dish, action) =>
             {
@@ -142,33 +138,6 @@ namespace RestND.MVVM.ViewModel
         }
 
         [RelayCommand]
-        private void LoadDishTypes()
-        {
-            DishTypeOptions.Clear();
-
-            foreach (var type in DishTypes)
-            {
-                var item = new SelectableItem<string>(type.DishType_Name)
-                {
-                    IsSelected = SelectedDishTypes.Contains(type.DishType_Name)
-                };
-
-                item.PropertyChanged += (s, e) =>
-                {
-                    if (e.PropertyName == nameof(SelectableItem<string>.IsSelected))
-                    {
-                        if (item.IsSelected && !SelectedDishTypes.Contains(item.Value))
-                            SelectedDishTypes.Add(item.Value);
-                        else if (!item.IsSelected && SelectedDishTypes.Contains(item.Value))
-                            SelectedDishTypes.Remove(item.Value);
-                    }
-                };
-
-                DishTypeOptions.Add(item);
-            }
-        }
-
-        [RelayCommand]
         private void LoadAvailableProducts()
         {
             AvailableProducts.Clear();
@@ -208,7 +177,6 @@ namespace RestND.MVVM.ViewModel
                 NewDish = new Dish();
                 SelectedProducts.Clear();
                 SelectedAllergenNotes.Clear();
-                SelectedDishTypes.Clear();
             }
             else
             {

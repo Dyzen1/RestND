@@ -54,10 +54,11 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="8">
-                        <!-- This is required to display typed text -->
                         <ScrollViewer x:Name="PART_ContentHost"
-                                  Margin="4"
-                                  VerticalAlignment="Center" />
+                                  Margin="0"
+                                  VerticalAlignment="Center"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Auto"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

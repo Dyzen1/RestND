@@ -17,13 +17,13 @@
                 <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                     <Label Content="Dish Name:"/>
                     <TextBox Text="{Binding SelectedDish.Dish_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Margin="10 0 0 0" />
+                             Margin="10 0 0 0"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                     <Label Content="Price:"/>
                     <TextBox Text="{Binding SelectedDish.Dish_Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Margin="10 0 0 0" />
+                             Margin="10 0 0 0"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
@@ -39,19 +39,16 @@
                     </ListBox>
                 </StackPanel>
 
-
                 <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                     <Label Content="Dish Type:"/>
-                    <ListBox ItemsSource="{Binding DishTypeOptions}" Margin="10 0 0 0">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <CheckBox Content="{Binding Value}" 
-                                          Foreground="{DynamicResource LightText}"
-                                          IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                    <ListBox ItemsSource="{Binding DishTypes}" 
+                            SelectedItem="{Binding SelectedDish.Dish_Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            DisplayMemberPath="DishType_Name"
+                            SelectionMode="Single"
+                            Margin="10 0 0 0"/>
                 </StackPanel>
+
+
 
 
                 <Button Content="Update"

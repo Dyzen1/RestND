@@ -29,8 +29,8 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Dish_Price
-        private double _Dish_Price;
-        public double Dish_Price
+        private int _Dish_Price;
+        public int Dish_Price
         {
             get => _Dish_Price;
             set => SetProperty(ref _Dish_Price, value);
@@ -87,7 +87,7 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Constructor with allergen notes
-        public Dish(string? dishName, double dishPrice, string allergenNotes, List<ProductInDish> productUsage, DishType? type)
+        public Dish(string? dishName, int dishPrice, string allergenNotes, List<ProductInDish> productUsage, DishType? type)
         {
             this.Dish_Name = dishName;
             this.Dish_Price = dishPrice;
@@ -101,7 +101,7 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Constructor without allergen notes
-        public Dish(string? dishName, double dishPrice, List<ProductInDish> productUsage, DishType? type)
+        public Dish(string? dishName, int dishPrice, List<ProductInDish> productUsage, DishType? type)
         {
             this.Dish_Name = dishName;
             this.Dish_Price = dishPrice;
