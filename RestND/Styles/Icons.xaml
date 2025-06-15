@@ -41,9 +41,12 @@
         <Setter Property="Height" Value="20"/>
     </Style>
 
-    
+
     <Style x:Key="tableBtn" TargetType="Image">
-        <Setter Property="Source" Value="\Styles\Assets\table1.png"/>
+        <Setter Property="Source" Value="/Styles/Assets/table1.png"/>
+        <Setter Property="Stretch" Value="Uniform"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
 
 
