@@ -29,7 +29,7 @@
     <Style x:Key="editBtnIcon" TargetType="fa:SvgAwesome">
         <Setter Property="Icon" Value="Regular_PenToSquare"/>
         <Setter Property="PrimaryColor" Value="{DynamicResource LightText}"/>
-        <Setter Property="Width" Value="20"/>
+        <Setter Property="Width" Value="15"/>
         <Setter Property="Height" Value="20"/>
     </Style>
 

@@ -15,7 +15,6 @@
 
     <Window.Resources>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-        <conv:StringToIntConverter x:Key="StringToIntConverter"/>
     </Window.Resources>
 
     <Border Style="{StaticResource windowBorder}">
@@ -26,7 +25,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="120"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120"/>
@@ -56,14 +55,42 @@
 
                 <Button Name="AdminLogin" Style="{DynamicResource loginBtn}" Grid.Row="0" Grid.Column="0" Click="AdminLogin_Click"/>
 
-                <Button x:Name="addTables" Style="{DynamicResource addBtn}" 
-                        Grid.Row="2" Grid.Column="0" Click="AddTable_Click">
-                    <StackPanel Orientation="Horizontal">
-                        <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
-                        <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center" 
-                                   Foreground="{DynamicResource LightText}" Margin="4"/>
-                    </StackPanel>
-                </Button>
+                <StackPanel Orientation="Vertical"
+            Grid.Row="2" Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Margin="10,0,0,0">
+
+
+                    <Button x:Name="editTables" Style="{DynamicResource addBtn}" Click="AddTable_Click" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:SvgAwesome Style="{DynamicResource editBtnIcon}"/>
+                            <TextBlock Text="Edit Table" FontSize="12" TextAlignment="Center"
+                       Foreground="{DynamicResource LightText}" Margin="4"/>
+                        </StackPanel>
+                    </Button>
+
+                  
+                    <Button x:Name="addTables" Style="{DynamicResource addBtn}" Click="AddTable_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
+                            <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center"
+                       Foreground="{DynamicResource LightText}" Margin="4"/>
+                        </StackPanel>
+                    </Button>
+
+
+                    <Button x:Name="deleteTables" Style="{DynamicResource addBtn}" Click="AddTable_Click" >
+                        <StackPanel Orientation="Horizontal">
+                            <fa:SvgAwesome Style="{DynamicResource deleteBtn}"/>
+                            <TextBlock Text="Edit Table" FontSize="12" TextAlignment="Center"
+                         Foreground="{DynamicResource LightText}" Margin="4"/>
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+
+
 
                 <Rectangle x:Name="Overlay"
                            Fill="Black"
@@ -75,7 +102,7 @@
                            Grid.Row="2" Grid.Column="1"/>
             </Grid>
 
-            <!-- Dynamic 5x5 Table Grid -->
+            
             <ItemsControl ItemsSource="{Binding Tables}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -93,6 +120,7 @@
                                 <TextBlock Text="{Binding Table_Number}" Style="{DynamicResource tableNumber}"/>
                             </Grid>
                         </Button>
+                        
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

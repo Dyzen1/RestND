@@ -38,7 +38,7 @@ namespace RestND.MVVM.View.Windows
             }
         }
 
-        //method for being able to move the window with the mouse. 
+        
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
@@ -71,19 +71,22 @@ namespace RestND.MVVM.View.Windows
         private void AddTable_Click(object sender, RoutedEventArgs e)
         {
             Overlay.Visibility = Visibility.Visible;
+            this.Opacity = 0.4;
 
-            var popup = new TablePopupWindow();
-            popup.Owner = this;
-            popup.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            var popup = new TablePopupWindow
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
 
             popup.Closed += (s, args) =>
             {
                 Overlay.Visibility = Visibility.Collapsed;
+                this.Opacity = 1.0;
             };
 
-            popup.Show();
+            popup.ShowDialog(); 
         }
-
 
         ///// METHODS FOR OPENING WINDOWS:
 
@@ -137,35 +140,35 @@ namespace RestND.MVVM.View.Windows
             this.Close();
         }
         private void AdminLogin_Click(object sender, RoutedEventArgs e)
-        {
-            OpenAdminLogin();
-        }
-
-        private void OpenAdminLogin()
+        
+               
         {
             var loginWindow = new AdminLoginWindow
             {
                 Owner = this,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                DataContext =  new LoginViewModel()
+                DataContext = new LoginViewModel()
 
             };
 
             this.Opacity = 0.4;
             loginWindow.ShowDialog();
             this.Opacity = 1.0;
-        }
-
-
-        //private void OpenEmployees()
-        //{
-        //    var dishesWindow = new DishWindow();
-        //    {
-        //        WindowState = WindowState.Maximized;
-        //    }
-        //    dishesWindow.Show();
-        //    this.Close();
-        //}
+        
 
     }
+
+
+
+    //private void OpenEmployees()
+    //{
+    //    var dishesWindow = new DishWindow();
+    //    {
+    //        WindowState = WindowState.Maximized;
+    //    }
+    //    dishesWindow.Show();
+    //    this.Close();
+    //}
+
+}
 }
