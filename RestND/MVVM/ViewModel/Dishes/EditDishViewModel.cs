@@ -96,13 +96,6 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
-        #region default constructor
-        public EditDishViewModel()
-        {
-            //
-        }
-        #endregion
-
         #region On change
         partial void OnSelectedDishChanged(Dish value)
         {

@@ -48,9 +48,6 @@
                             Margin="10 0 0 0"/>
                 </StackPanel>
 
-
-
-
                 <Button Content="Update"
                         Command="{Binding UpdateDishCommand}"
                         Style="{DynamicResource SubmitBtn}"
