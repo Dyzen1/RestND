@@ -23,8 +23,11 @@ namespace RestND.MVVM.ViewModel
 
         #region Observable properties
         [ObservableProperty] private Dish selectedDish;
-        [ObservableProperty] private ObservableCollection<DishType> dishTypes = new(); 
+        [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
         [ObservableProperty] private ObservableCollection<SelectableItem<string>> allergenOptions = new();
+        [ObservableProperty] private ObservableCollection<SelectableItem<ProductInDish>> productOptions = new();
+        [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
+        [ObservableProperty] private ObservableCollection<ProductInDish> selectedProductsInDish = new();
         private readonly List<string> _allPossibleAllergens = new()
         {
             "Contains Gluten/Wheat.",
@@ -57,7 +60,7 @@ namespace RestND.MVVM.ViewModel
                 Allergen_Notes = dishToEdit.Allergen_Notes
             };
 
-            // saving the formr user's selection of dish type.
+            // saving the former user's selection of dish type.
             DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
             if (SelectedDish.Dish_Type != null)
             {
@@ -90,12 +93,11 @@ namespace RestND.MVVM.ViewModel
                             AllergenOptions.Where(a => a.IsSelected).Select(a => a.Value));
                     }
                 };
-                AllergenOptions.Add(item); 
+                AllergenOptions.Add(item);
             }
         }
-
         #endregion
-
+        
         #region On change
         partial void OnSelectedDishChanged(Dish value)
         {
@@ -104,10 +106,31 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Relay commands
+        private List<ProductInDish> CloneSelectedProducts() =>
+            SelectedProductsInDish.Select(p => new ProductInDish
+            {
+                Product_ID = p.Product_ID,
+                Amount_Usage = p.Amount_Usage
+            }).ToList();
+
         [RelayCommand]
         private async Task UpdateDish()
         {
-            //SelectedDish.Allergen_Notes = SelectedAllergenNotes; 
+            SelectedDish.ProductUsage = CloneSelectedProducts();
+            SelectedDish.Allergen_Notes = string.Join(",", SelectedDish);
+            SelectedDish.ProductUsage = ProductOptions
+                    .Where(x => x.IsSelected)
+                    .Select(x => x.Value)
+                    .ToList();
+
+            if (string.IsNullOrWhiteSpace(SelectedDish.Dish_Name) ||
+                SelectedDish.Dish_Price <= 0 ||
+                SelectedDish.Dish_Type == null ||
+                SelectedDish.ProductUsage == null || !SelectedDish.ProductUsage.Any())
+            {
+                MessageBox.Show("Please fill in all required fields and add at least one product.");
+                return;
+            }
 
             bool success = _dishService.Update(SelectedDish);
             if (success)

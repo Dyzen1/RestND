@@ -55,52 +55,32 @@
 
                 <Button Name="AdminLogin" Style="{DynamicResource loginBtn}" Grid.Row="0" Grid.Column="0" Click="AdminLogin_Click"/>
 
-                <StackPanel Orientation="Vertical"
-<<<<<<< HEAD
-                            Grid.Row="2" Grid.Column="0"
+                <StackPanel Grid.Row="2" Grid.Column="0"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Bottom">
-                    
-=======
-            Grid.Row="2" Grid.Column="0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Bottom"
-            Margin="10,0,0,0">
+                            VerticalAlignment="Bottom"
+                            Margin="10,0,0,0">
 
->>>>>>> 5df84f4964791ab7fd2b3d778af9927ea30e79d8
                     <Button x:Name="addTables" Style="{DynamicResource addBtn}" Click="AddTable_Click">
                         <StackPanel Orientation="Horizontal">
                             <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
                             <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center"
-<<<<<<< HEAD
                                         Foreground="{DynamicResource LightText}" Margin="4"/>
                         </StackPanel>
                     </Button>
 
-                    <Button x:Name="editTables" Style="{DynamicResource addBtn}" Click="AddTable_Click" >
-=======
-                       Foreground="{DynamicResource LightText}" Margin="4"/>
-                        </StackPanel>
-                    </Button>
-
                     <Button x:Name="editTables" Style="{DynamicResource addBtn}" Click="EditTable_Click">
->>>>>>> 5df84f4964791ab7fd2b3d778af9927ea30e79d8
                         <StackPanel Orientation="Horizontal">
                             <fa:SvgAwesome Style="{DynamicResource editBtnIcon}"/>
                             <TextBlock Text="Edit Table" FontSize="12" TextAlignment="Center"
-                       Foreground="{DynamicResource LightText}" Margin="4"/>
+                                        Foreground="{DynamicResource LightText}" Margin="4"/>
                         </StackPanel>
                     </Button>
 
-<<<<<<< HEAD
-                    <Button x:Name="deleteTables" Style="{DynamicResource addBtn}" Click="AddTable_Click" >
-=======
                     <Button x:Name="deleteTables" Style="{DynamicResource addBtn}" Click="DeleteTable_Click">
->>>>>>> 5df84f4964791ab7fd2b3d778af9927ea30e79d8
                         <StackPanel Orientation="Horizontal">
                             <fa:SvgAwesome Style="{DynamicResource deleteBtnIcon}"/>
                             <TextBlock Text="Delete Table" FontSize="12" TextAlignment="Center"
-                       Foreground="{DynamicResource LightText}" Margin="4"/>
+                                        Foreground="{DynamicResource LightText}" Margin="4"/>
                         </StackPanel>
                     </Button>
 

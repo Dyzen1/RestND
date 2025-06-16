@@ -6,11 +6,20 @@
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         mc:Ignorable="d" Style="{StaticResource popupStyle}"
-        Title="Edit Dish" Width="450" Height="550"
+        Title="Edit Dish" Width="450" Height="700"
         WindowStartupLocation="CenterOwner">
 
-    <Grid>
-        <Border Style="{DynamicResource windowBorder}">
+    <Border Style="{DynamicResource windowBorder}">
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <GroupBox Grid.Row="0" Header="Update Dish Details">
+
             <StackPanel HorizontalAlignment="Center" Orientation="Vertical" 
                         VerticalAlignment="Center" Margin="0 0 0 30">
                 
@@ -39,25 +48,45 @@
                     </ListBox>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                    <Label Content="Dish Type:"/>
-                    <ListBox ItemsSource="{Binding DishTypes}" 
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Dish Type:"/>
+                        <ListBox ItemsSource="{Binding DishTypes}" 
                             SelectedItem="{Binding SelectedDish.Dish_Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             DisplayMemberPath="DishType_Name"
                             SelectionMode="Single"
                             Margin="10 0 0 0"/>
+                    </StackPanel>
                 </StackPanel>
-
-                <Button Content="Update"
-                        Command="{Binding UpdateDishCommand}"
-                        Style="{DynamicResource SubmitBtn}"
-                        Margin="0 20 0 0"/>
-            </StackPanel>
                 
-        </Border>
+            </GroupBox>
 
-        <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-        <TextBlock Style="{DynamicResource copyWrite}"/>
+            <GroupBox Grid.Row="1" Header="Update Products">
+                <StackPanel Orientation="Horizontal" Margin="8" HorizontalAlignment="Center">
+                    <ListBox ItemsSource="{Binding ProductOptions}" BorderBrush="Transparent" Width="400">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <CheckBox Content="{Binding Value.Product_Name}" Width="120"
+                                              Foreground="{DynamicResource LightText}"
+                                              IsChecked="{Binding IsSelected, Mode=TwoWay}" VerticalAlignment="Center"/>
+                                    <TextBox Width="50" Margin="35 0 0 0"
+                                             Text="{Binding Value.Amount_Usage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Label Content="/gr"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </GroupBox>
+
+            <Button Content="Save" Grid.Row="2" 
+                    Command="{Binding UpdateDishCommand}"
+                    Style="{DynamicResource SubmitBtn}"
+                    Margin="0 10 0 48"/>
+
+            <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+            <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="2"/>
         
-    </Grid>
+        </Grid>
+    </Border>
 </Window>

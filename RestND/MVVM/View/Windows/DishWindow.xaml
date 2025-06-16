@@ -13,15 +13,18 @@
     <Border BorderBrush="{DynamicResource LightText}" BorderThickness="3" CornerRadius="10">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="300"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="450"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
             <!-- Add New Dish Section -->
-            <GroupBox Header="Insert new dish details" Foreground="{DynamicResource secondaryHeaders}" 
-                      BorderThickness="0" BorderBrush="Transparent">
-                <StackPanel Orientation="Vertical" Margin="0 10 0 0">
+            <GroupBox Header="New Dish Details" Grid.Row="0" Grid.Column="0">
+                <StackPanel Orientation="Vertical" Margin="0 10 0 0" HorizontalAlignment="Center">
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                         <Label Content="Dish Name:"/>
@@ -36,8 +39,8 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                        <Label Content="Allergen Notes:" Width="115"/>
-                        <ListBox ItemsSource="{Binding AllergenOptions}" Margin="4 0 0 0">
+                        <Label Content="Allergen Notes:" Width="120"/>
+                        <ListBox ItemsSource="{Binding AllergenOptions}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <CheckBox Content="{Binding Value}" 
@@ -53,72 +56,67 @@
                         <ListBox ItemsSource="{Binding DishTypes}" 
                                 SelectedItem="{Binding NewDish.Dish_Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 DisplayMemberPath="DishType_Name"
-                                SelectionMode="Single"
-                                Margin="10 0 0 0"/>
+                                SelectionMode="Single" Margin="10 0 0 0"/>
                     </StackPanel>
-
-                    <!--<StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                        <Label Content="Dish Type:"/>
-                        <ListBox ItemsSource="{Binding DishTypeOptions}" Margin="10 0 0 0">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox Content="{Binding Value}" 
-                                              Foreground="{DynamicResource LightText}"
-                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </StackPanel>-->
-
-
-                    <!--<Button Command="{Binding AddProductToDishCommand}" 
-                            Margin="5 15 5 5" Style="{DynamicResource SubmitBtn}" 
-                            Content="Add Product"/>-->
-
-                    <Separator Margin="0,10"/>
-
-                    <!--Click="ChoseProductsPopup_Click"-->
-                    <Button Content="Choose Products Here"
-                            Width="150"
-                            Margin="0,10,0,0" Style="{DynamicResource SubmitBtn}"/>
-
-                    <Button Content="Update Dish"
-                             Click="UpdateDishBtn_Click"
-                             Margin="0,10,0,0" Style="{DynamicResource SubmitBtn}"/>
-
-                    <Button Content="Delete Dish"
-                            Command="{Binding DeleteDishCommand}"
-                            Margin="0,10,0,0" Style="{DynamicResource SubmitBtn}"/>
-
                 </StackPanel>
             </GroupBox>
 
-            <Border Grid.Column="1" Margin="10" Style="{DynamicResource windowBorder}">
-                <DataGrid ItemsSource="{Binding SelectedProducts}"
-                          SelectedItem="{Binding SelectedAvailableProduct.Product_Name, Mode=TwoWay}"
-                        HeadersVisibility="None">
-                </DataGrid>
-            </Border>
+            <!--<Button Command="{Binding AddProductToDishCommand}" 
+                            Margin="5 15 5 5" Style="{DynamicResource SubmitBtn}" 
+                            Content="Add Product"/>-->
+
+            <GroupBox Header="Products For New Dish"
+                      Grid.Row="1" Grid.Column="0">
+                <StackPanel Orientation="Horizontal" Margin="8" HorizontalAlignment="Center">
+                    <ListBox ItemsSource="{Binding ProductOptions}" BorderBrush="Transparent" Width="400">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <CheckBox Content="{Binding Value.Product_Name}" Width="120"
+                                              Foreground="{DynamicResource LightText}"
+                                              IsChecked="{Binding IsSelected, Mode=TwoWay}" VerticalAlignment="Center"/>
+                                    <TextBox Width="50" Margin="35 0 0 0"
+                                             Text="{Binding Value.Amount_Usage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <Label Content="/gr"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </GroupBox>
+
+            <StackPanel Grid.Row="2" Grid.Column="0" 
+                        Margin="0 10 0 20">
+                <Button Content="Update Dish" 
+                         Click="UpdateDishBtn_Click"
+                         Style="{DynamicResource SubmitBtn}"/>
+
+                <Button Content="Delete Dish"
+                        Command="{Binding DeleteDishCommand}"
+                        Margin="0,10,0,0" Style="{DynamicResource SubmitBtn}"/>
+            </StackPanel>
 
             <!-- Existing Dishes Grid -->
-            <Border Grid.Column="2" Margin="10" Style="{DynamicResource windowBorder}">
-                <GroupBox Grid.Column="2" BorderThickness="0">
-                    <DataGrid ItemsSource="{Binding Dishes}" RowStyle="{DynamicResource rowStyle}"
+            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="8" 
+                    Style="{DynamicResource windowBorder}">
+                <DataGrid ItemsSource="{Binding Dishes}" RowStyle="{DynamicResource rowStyle}"
                           SelectedItem="{Binding SelectedDish, Mode=TwoWay}" CellStyle="{DynamicResource cellStyle}"
                           HeadersVisibility="Column">
 
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding Dish_Name}" Width="*"/>
-                            <DataGridTextColumn Header="Price" Binding="{Binding Dish_Price}" Width="*" />
-                            <DataGridTextColumn Header="Allergens" Binding="{Binding Allergen_Notes}" Width="*" />
-                            <DataGridTextColumn Header="Dish Type" Binding="{Binding Dish_Type.DishType_Name}" Width="*" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </GroupBox>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Dish_Name}" Width="*"/>
+                        <DataGridTextColumn Header="Price" Binding="{Binding Dish_Price}" Width="*" />
+                        <DataGridTextColumn Header="Allergens" Binding="{Binding Allergen_Notes}" Width="*" />
+                        <DataGridTextColumn Header="Dish Type" Binding="{Binding Dish_Type.DishType_Name}" Width="*" />
+                    </DataGrid.Columns>
+
+                </DataGrid>
             </Border>
 
-            <uc:ReturnBtn x:Name="returnBtn" Grid.Column="0" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-            <TextBlock Style="{DynamicResource copyWrite}" Grid.Column="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,15,15"/>
+            <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2" Grid.Column="0"
+                          VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+            <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="2" Grid.Column="1" 
+                       VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,15,20"/>
         </Grid>
     </Border>
 </Window>

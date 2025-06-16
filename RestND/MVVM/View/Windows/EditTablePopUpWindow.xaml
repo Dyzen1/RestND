@@ -13,13 +13,12 @@
         <Border Style="{StaticResource windowBorder}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Width="250">
                 <Label Content="Select Table:"/>
-                  <ComboBox   Style="{StaticResource ComboBoxLikeTextBoxStyle}"
-                             ItemsSource="{Binding ActiveTables}"
+                  <ComboBox ItemsSource="{Binding ActiveTables}"
                             SelectedItem="{Binding SelectedTable}"
-                             DisplayMemberPath="Table_Number"
-                     Margin="0 0 0 20"  />
+                            DisplayMemberPath="Table_Number"
+                            Margin="0 0 0 20"  />
 
-                <Label Content="New Table Number:"/>
+                <Label Content="New Table Number:" Width="150" HorizontalContentAlignment="Center"/>
                 <TextBox Text="{Binding EditedTableNumber, UpdateSourceTrigger=PropertyChanged}" />
 
                 <Button Content="Update Table"

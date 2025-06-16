@@ -38,7 +38,7 @@
         <Setter Property="VerticalAlignment" Value="Bottom"/>
     </Style>
 
-
+    <!--for ALL textBoxes-->
     <Style TargetType="TextBox">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -64,8 +64,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
 
     <!--for ALL List boxes-->
     <Style TargetType="ListBox">
@@ -128,9 +126,6 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
 
-
-
-
     <Style x:Key="InputBox_Password" TargetType="PasswordBox">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -156,16 +151,16 @@
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="ComboBoxLikeTextBoxStyle" TargetType="ComboBox">
+
+    <!--for ALL comboBoxes-->
+    <Style TargetType="ComboBox">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Height" Value="30"/>
+        <Setter Property="Height" Value="23"/>
         <Setter Property="Width" Value="160"/>
         <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
         <Setter Property="Padding" Value="4,0,25,0"/>
-
-        
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ComboBoxItem">
@@ -176,8 +171,6 @@
                 </Style>
             </Setter.Value>
         </Setter>
-
-    
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
@@ -241,7 +234,12 @@
         </Setter>
     </Style>
 
-
+    <!--for ALL groupBoxes-->
+    <Style TargetType="GroupBox">
+        <Setter Property="BorderThickness" Value="0.5"/>
+        <Setter Property="Margin" Value="7"/>
+        <Setter Property="Foreground" Value="{DynamicResource secondaryHeaders}"/>
+    </Style>
 
 
 </ResourceDictionary>

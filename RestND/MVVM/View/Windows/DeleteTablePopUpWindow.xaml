@@ -20,8 +20,7 @@
                 <Label Content="Select Table to Delete:" Width="180" HorizontalAlignment="Center"/>
 
                 <!-- ComboBox to Select Table -->
-                <ComboBox Style="{StaticResource ComboBoxLikeTextBoxStyle}"
-                            ItemsSource="{Binding ActiveTables}"
+                <ComboBox ItemsSource="{Binding ActiveTables}"
                           SelectedItem="{Binding SelectedTable, Mode=TwoWay}"
                           DisplayMemberPath="Table_Number"
                           Width="180"

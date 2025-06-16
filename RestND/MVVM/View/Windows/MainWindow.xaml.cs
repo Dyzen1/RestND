@@ -88,8 +88,6 @@ namespace RestND.MVVM.View.Windows
             popup.ShowDialog(); 
         }
 
-
-
         private void EditTable_Click(object sender, RoutedEventArgs e)
         {
             var vm = App.SharedMainVM;
@@ -109,6 +107,44 @@ namespace RestND.MVVM.View.Windows
             {
                 this.Opacity = 1;
                 Overlay.Visibility = Visibility.Collapsed;
+            };
+
+            popup.ShowDialog();
+        }
+
+        private void AdminLogin_Click(object sender, RoutedEventArgs e)
+
+
+        {
+            var loginWindow = new AdminLoginWindow
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                DataContext = new LoginViewModel()
+
+            };
+
+            this.Opacity = 0.4;
+            loginWindow.ShowDialog();
+            this.Opacity = 1.0;
+
+
+        }
+        private void DeleteTable_Click(object sender, RoutedEventArgs e)
+        {
+            Overlay.Visibility = Visibility.Visible;
+            this.Opacity = 0.4;
+
+            var popup = new DeleteTablePopUpWindow
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            popup.Closed += (s, args) =>
+            {
+                Overlay.Visibility = Visibility.Collapsed;
+                this.Opacity = 1.0;
             };
 
             popup.ShowDialog();
@@ -165,43 +201,6 @@ namespace RestND.MVVM.View.Windows
             };
             ordersWindow.Show();
             this.Close();
-        }
-        private void AdminLogin_Click(object sender, RoutedEventArgs e)
-        
-               
-        {
-            var loginWindow = new AdminLoginWindow
-            {
-                Owner = this,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                DataContext = new LoginViewModel()
-
-            };
-
-            this.Opacity = 0.4;
-            loginWindow.ShowDialog();
-            this.Opacity = 1.0;
-        
-
-    }
-        private void DeleteTable_Click(object sender, RoutedEventArgs e)
-        {
-            Overlay.Visibility = Visibility.Visible;
-            this.Opacity = 0.4;
-
-            var popup = new DeleteTablePopUpWindow
-            {
-                Owner = this,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-
-            popup.Closed += (s, args) =>
-            {
-                Overlay.Visibility = Visibility.Collapsed;
-                this.Opacity = 1.0;
-            };
-
-            popup.ShowDialog();
         }
 
 
