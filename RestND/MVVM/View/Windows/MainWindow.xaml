@@ -58,8 +58,15 @@
                 <StackPanel Orientation="Vertical"
                             Grid.Row="2" Grid.Column="0"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Bottom"
-                            Margin="10,0,0,0">
+                            VerticalAlignment="Bottom">
+                    
+                    <Button x:Name="addTables" Style="{DynamicResource addBtn}" Click="AddTable_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
+                            <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center"
+                                        Foreground="{DynamicResource LightText}" Margin="4"/>
+                        </StackPanel>
+                    </Button>
 
                     <Button x:Name="editTables" Style="{DynamicResource addBtn}" Click="AddTable_Click" >
                         <StackPanel Orientation="Horizontal">
@@ -68,16 +75,6 @@
                        Foreground="{DynamicResource LightText}" Margin="4"/>
                         </StackPanel>
                     </Button>
-
-
-                    <Button x:Name="addTables" Style="{DynamicResource addBtn}" Click="AddTable_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
-                            <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center"
-                       Foreground="{DynamicResource LightText}" Margin="4"/>
-                        </StackPanel>
-                    </Button>
-
 
                     <Button x:Name="deleteTables" Style="{DynamicResource addBtn}" Click="AddTable_Click" >
                         <StackPanel Orientation="Horizontal">
