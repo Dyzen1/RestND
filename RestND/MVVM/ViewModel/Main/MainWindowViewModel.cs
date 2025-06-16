@@ -13,14 +13,33 @@ namespace RestND.MVVM.ViewModel.Main
 {
     public partial class MainWindowViewModel : ObservableObject
     {
+        #region Services and Fields
+
         private readonly TableServices _tableService = new();
         private readonly HubConnection _hub = App.MainHub;
+
+        #endregion
+
+        #region Observable Properties
 
         [ObservableProperty]
         private ObservableCollection<Table> tables = new();
 
         [ObservableProperty]
+        private ObservableCollection<Table> activeTables = new();
+
+        [ObservableProperty]
         private Table newTable = new();
+
+        [ObservableProperty]
+        private Table selectedTable;
+
+        [ObservableProperty]
+        private int editedTableNumber;
+
+        #endregion
+
+        #region Constructor
 
         public MainWindowViewModel()
         {
@@ -47,24 +66,32 @@ namespace RestND.MVVM.ViewModel.Main
                             }
                             break;
                         case "delete":
-                            if (existing != null) Tables.Remove(existing);
+                            if (existing != null)
+                            {
+                                Tables.Remove(existing);
+                                ActiveTables.Remove(existing);
+                            }
                             break;
                     }
                 });
             });
         }
 
-        private void LoadTables()
+        #endregion
+
+        #region Load Tables
+
+        public void LoadTables()
         {
             var result = _tableService.GetAll();
 
             Tables.Clear();
+            ActiveTables.Clear();
 
-            // Fill 25 slots
             for (int i = 0; i < 25; i++)
             {
                 var t = result.FirstOrDefault(t => t.C == i % 5 && t.R == i / 5);
-                Tables.Add(t ?? new Table
+                var table = t ?? new Table
                 {
                     Table_ID = -1,
                     Table_Number = 0,
@@ -72,10 +99,19 @@ namespace RestND.MVVM.ViewModel.Main
                     R = i / 5,
                     Table_Status = false,
                     Is_Active = false
-                });
-            }
+                };
 
+                Tables.Add(table);
+                if (table.Is_Active)
+                {
+                    ActiveTables.Add(table);
+                }
+            }
         }
+
+        #endregion
+
+        #region Add Table
 
         [RelayCommand]
         public async Task AddTableAsync()
@@ -87,12 +123,13 @@ namespace RestND.MVVM.ViewModel.Main
                 return;
             }
 
-            var doesExist = Tables.FirstOrDefault(t => t.Table_Number == NewTable.Table_Number );
+            var doesExist = Tables.FirstOrDefault(t => t.Table_Number == NewTable.Table_Number);
             if (doesExist != null)
             {
                 MessageBox.Show("Table number already exists");
                 return;
             }
+
             NewTable.Is_Active = true;
             NewTable.Table_Status = true;
             NewTable.C = slot.C;
@@ -106,23 +143,50 @@ namespace RestND.MVVM.ViewModel.Main
             }
         }
 
+        #endregion
+
+        #region Delete Table
+
         [RelayCommand]
-        public async Task DeleteTableAsync(Table table)
+        public async Task DeleteTableAsync()
         {
-            if (_tableService.Delete(table))
+            if (_tableService.Delete(SelectedTable))
             {
-                await _hub.SendAsync("NotifyTableUpdate", table, "delete");
+                await _hub.SendAsync("NotifyTableUpdate", SelectedTable, "delete");
+                LoadTables();
             }
         }
 
+        #endregion
+
+        #region Edit Table
+
         [RelayCommand]
-        public async Task EditTableAsync(Table table)
+        public async Task EditTableAsync()
         {
-            if (_tableService.Update(table))
+            var duplicate = Tables.FirstOrDefault(t =>
+                t.Table_ID != SelectedTable.Table_ID &&
+                t.Table_Number == EditedTableNumber);
+
+            if (duplicate != null)
             {
-                await _hub.SendAsync("NotifyTableUpdate", table, "update");
+                MessageBox.Show("Another table already has this number.");
+                return;
+            }
+
+            SelectedTable.Table_Number = EditedTableNumber;
+
+            if (_tableService.Update(SelectedTable))
+            {
+                await _hub.SendAsync("NotifyTableUpdate", SelectedTable, "update");
+                LoadTables();
             }
         }
+
+        #endregion
+
+        #region Table Click
+
         [RelayCommand]
         private void TableClick(Table table)
         {
@@ -135,5 +199,7 @@ namespace RestND.MVVM.ViewModel.Main
             MessageBox.Show($"Opening Table #{table.Table_Number}");
             // TODO: Navigate to order screen
         }
+
+        #endregion
     }
 }

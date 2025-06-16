@@ -88,6 +88,33 @@ namespace RestND.MVVM.View.Windows
             popup.ShowDialog(); 
         }
 
+
+
+        private void EditTable_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = App.SharedMainVM;
+
+ 
+
+            var popup = new EditTablePopUpWindow
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            this.Opacity = 0.4;
+            Overlay.Visibility = Visibility.Visible;
+
+            popup.Closed += (_, _) =>
+            {
+                this.Opacity = 1;
+                Overlay.Visibility = Visibility.Collapsed;
+            };
+
+            popup.ShowDialog();
+        }
+
+
         ///// METHODS FOR OPENING WINDOWS:
 
         private void OpenInventory()
@@ -157,18 +184,37 @@ namespace RestND.MVVM.View.Windows
         
 
     }
+        private void DeleteTable_Click(object sender, RoutedEventArgs e)
+        {
+            Overlay.Visibility = Visibility.Visible;
+            this.Opacity = 0.4;
+
+            var popup = new DeleteTablePopUpWindow
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            popup.Closed += (s, args) =>
+            {
+                Overlay.Visibility = Visibility.Collapsed;
+                this.Opacity = 1.0;
+            };
+
+            popup.ShowDialog();
+        }
 
 
 
-    //private void OpenEmployees()
-    //{
-    //    var dishesWindow = new DishWindow();
-    //    {
-    //        WindowState = WindowState.Maximized;
-    //    }
-    //    dishesWindow.Show();
-    //    this.Close();
-    //}
+        //private void OpenEmployees()
+        //{
+        //    var dishesWindow = new DishWindow();
+        //    {
+        //        WindowState = WindowState.Maximized;
+        //    }
+        //    dishesWindow.Show();
+        //    this.Close();
+        //}
 
-}
+    }
 }
