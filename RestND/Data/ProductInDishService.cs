@@ -22,9 +22,11 @@ namespace RestND.Data
                 products.Add(new ProductInDish
                 {
                     Product_ID = row["Product_ID"].ToString(),
-                    Dish_ID = row["Dish_ID"].ToString(),
                     Product_Name = row["Product_Name"].ToString(),
-                    Amount_Usage = Convert.ToDouble(row["Amount_Usage"])
+                    Amount_Usage = Convert.ToDouble(row["Amount_Usage"]),
+                    Dish_ID = row["Dish_ID"].ToString()
+
+
                 });
             }
             return products;

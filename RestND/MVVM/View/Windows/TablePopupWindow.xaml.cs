@@ -12,13 +12,14 @@ namespace RestND.MVVM.View.Windows
             InitializeComponent();
             _mainVM = App.SharedMainVM;
             this.DataContext = _mainVM;
+            _mainVM.ClosePopupAction = () => this.Close();
         }
 
-        private async void AddTableBtn_Click(object sender, RoutedEventArgs e)
-        {
-            await _mainVM.AddTableAsync();
-            this.Close();
-        }
+        //private async void AddTableBtn_Click(object sender, RoutedEventArgs e)
+        //{
+        //    await _mainVM.AddTable();
+        //    this.Close();
+        //}
 
         private void return_Click(object sender, RoutedEventArgs e)
         {

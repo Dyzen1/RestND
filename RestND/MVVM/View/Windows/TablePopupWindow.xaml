@@ -6,24 +6,45 @@
         xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
-        mc:Ignorable="d" Style="{StaticResource popupStyle}"
+        xmlns:conv="clr-namespace:RestND.Converters"
+        mc:Ignorable="d"
+        Style="{StaticResource popupStyle}"
         Title="TablePopupWindow" Width="400" Height="300"
         WindowStartupLocation="CenterOwner">
-    
-    <Grid>
+    <Window.Resources>
+        <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    </Window.Resources>
 
+    <Grid>
         <Border Style="{StaticResource windowBorder}">
-            <StackPanel HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical"
+                        Margin="20">
                 <Label Content="Insert Table Number:" Width="150"/>
-                <TextBox Text="{Binding NewTable.Table_Number, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <!-- Table Number Input -->
+                <TextBox Text="{Binding NewTableNumberText, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+
+
+                <!-- Real-Time Error Display -->
+                <TextBlock Text="{Binding TableErrorMessage}"
+                           Foreground="Red"
+                           FontWeight="Bold"
+                           Margin="5"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Center"
+                           Visibility="{Binding TableErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+
                 <!-- Save Table Button -->
-                <Button Content="Add Table" Grid.Row="1" Click="AddTableBtn_Click"
-                         Style="{DynamicResource SubmitBtn}"
+                <Button Content="Add Table"
+                        Command="{Binding AddTableCommand}"
+                        Style="{StaticResource SubmitBtn}"
                         Margin="0 40 0 0"/>
             </StackPanel>
         </Border>
-        
+
         <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-                <TextBlock Style="{DynamicResource copyWrite}"/>
+        <TextBlock Style="{DynamicResource copyWrite}"/>
     </Grid>
 </Window>

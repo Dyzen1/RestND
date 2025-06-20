@@ -6,18 +6,24 @@
         xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel.Main"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
-        mc:Ignorable="d" Style="{StaticResource popupStyle}"
-        Title="DeleteTablePopUpWindow" Width="400" Height="300"
+        xmlns:conv="clr-namespace:RestND.Converters"
+        mc:Ignorable="d"
+        Style="{StaticResource popupStyle}"
+        Title="DeleteTablePopUpWindow"
+        Width="400"
+        Height="300"
         WindowStartupLocation="CenterOwner">
 
-  
+    <Window.Resources>
+        <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    </Window.Resources>
 
     <Grid>
         <Border Style="{StaticResource windowBorder}">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Width="250">
 
                 <!-- Label -->
-                <Label Content="Select Table to Delete:" Width="180" HorizontalAlignment="Center"/>
+                <Label Content="Select Table to Delete:" HorizontalAlignment="Center"/>
 
                 <!-- ComboBox to Select Table -->
                 <ComboBox ItemsSource="{Binding ActiveTables}"
@@ -26,11 +32,20 @@
                           Width="180"
                           Margin="0,10,0,0"/>
 
+                <!-- Error Display -->
+                <TextBlock Text="{Binding TableErrorMessage}"
+                           Foreground="Red"
+                           FontWeight="Bold"
+                           Margin="5"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Center"
+                           Visibility="{Binding TableErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+
                 <!-- Delete Table Button -->
                 <Button Content="Delete Table"
-                        Click="DeleteTableBtn_Click"
-                        Style="{DynamicResource SubmitBtn}"
-                        Margin="0,40,0,0"
+                        Command="{Binding DeleteTableCommand}"
+                        Style="{StaticResource SubmitBtn}"
+                        Margin="0,30,0,0"
                         Width="120"/>
             </StackPanel>
         </Border>

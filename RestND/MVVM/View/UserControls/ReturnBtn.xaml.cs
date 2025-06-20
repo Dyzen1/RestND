@@ -25,9 +25,7 @@ namespace RestND.MVVM.View.UserControls
 
         private void return_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = new MainWindow();
-            mainWindow.WindowState = WindowState.Maximized;
-            mainWindow.Show();
+    
             Window.GetWindow(this)?.Close();
         }
     }

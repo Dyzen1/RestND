@@ -12,13 +12,9 @@ namespace RestND.MVVM.View.Windows
             InitializeComponent();
             _mainVM = App.SharedMainVM;
             this.DataContext = _mainVM;
+            _mainVM.ClosePopupAction = () => this.Close();
         }
 
-        private async void DeleteTableBtn_Click(object sender, RoutedEventArgs e)
-        {
-            await App.SharedMainVM.DeleteTableAsync();
-            this.Close();
 
-        }
     }
 }

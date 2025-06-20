@@ -26,13 +26,9 @@ namespace RestND.MVVM.View.Windows
             InitializeComponent();
             _mainVM = App.SharedMainVM;
             this.DataContext = _mainVM;
+            _mainVM.ClosePopupAction = () => this.Close();
         }
 
-        private async void UpdateAndClose_Click(object sender, RoutedEventArgs e)
-        {
-            await App.SharedMainVM.EditTableAsync();
-            this.Close();
-        }
 
     }
 }
