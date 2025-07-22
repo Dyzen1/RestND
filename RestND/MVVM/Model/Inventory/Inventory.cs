@@ -72,8 +72,8 @@ namespace RestND.MVVM.Model
         private string _Created_At;
         public string Created_At
         {
-            get { return _Created_At; }
-            set { _Created_At = value; }
+            get => _Created_At;
+            set => SetProperty(ref _Created_At, value);
         }
         #endregion
 

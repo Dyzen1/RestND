@@ -57,8 +57,9 @@ namespace RestND.MVVM.ViewModel
                             if (match != null)
                             {
                                 match.Product_Name = product.Product_Name;
-                                match.Quantity_Available = product.Quantity_Available;
                                 match.Tolerance = product.Tolerance;
+                                match.Quantity_Available = product.Quantity_Available;
+                                match.Product_ID = product.Product_ID;
                             }
                             break;
                         case "delete":
@@ -80,6 +81,7 @@ namespace RestND.MVVM.ViewModel
         {
             UpdateProductCommand.NotifyCanExecuteChanged();
             DeleteProductCommand.NotifyCanExecuteChanged();
+            AddProductCommand.NotifyCanExecuteChanged();
         }
 
         #endregion

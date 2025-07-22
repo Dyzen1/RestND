@@ -8,7 +8,6 @@
       xmlns:fa="http://schemas.fontawesome.com/icons/svg"
       mc:Ignorable="d"
       Style="{StaticResource windowStyle}"
-      d:DataContext="{d:DesignInstance Type=products:ProductViewModel, IsDesignTimeCreatable=True}"
       MouseLeftButtonDown="Window_MouseLeftButtonDown">
     
 
@@ -44,7 +43,7 @@
                             VerticalAlignment="Bottom" HorizontalAlignment="Center">
                     <Label Content="Product Name" Foreground="{DynamicResource LightText}" 
                            FontSize="13" HorizontalAlignment="Left"/>
-                    <TextBox Text="{Binding NewProduct.Product_Name , UpdateSourceTrigger=PropertyChanged , Mode=TwoWay}"
+                    <TextBox Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              HorizontalAlignment="Left" Background="Transparent" 
                              Foreground="{DynamicResource LightText}" Height="20" 
                              BorderBrush="{DynamicResource LightText}" ToolTip="Product Name">
@@ -98,6 +97,7 @@
                         <DataGridTextColumn Header="Product Name:" Binding="{Binding Product_Name}" Width="*"/>
                         <DataGridTextColumn Header="Quantity Available:" Binding="{Binding Quantity_Available}" Width="*"/>
                         <DataGridTextColumn Header="Tolerance:" Binding="{Binding Tolerance}" Width="*"/>
+                        <DataGridTextColumn Header="Created At: " Binding="{Binding Created_At}" Width="*"/>
                     </DataGrid.Columns>
 
                     <!--<DataGrid.ColumnHeaderStyle>

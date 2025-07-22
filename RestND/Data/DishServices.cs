@@ -36,7 +36,6 @@ namespace RestND.Data
                     Dish_ID = Convert.ToInt32(row["Dish_ID"]),
                     Dish_Name = row["Dish_Name"].ToString(),
                     Dish_Price = Convert.ToInt32(row["Dish_Price"]),
-                    Availability_Status = Convert.ToBoolean(row["Availability_Status"]),
                     Dish_Type = new DishType
                     {
                         DishType_Name = row["DishType_Name"].ToString()

@@ -15,7 +15,6 @@ public partial class DishTypeViewModel : ObservableObject
 
     #region propery
     public List<DishType> DishTypeList { get; set; }
-
     #endregion
 
     #region Observable Properties
@@ -26,11 +25,6 @@ public partial class DishTypeViewModel : ObservableObject
     [ObservableProperty]
     private DishType selectedDishType;
     // Called automatically when SelectedDishType changes
-    partial void OnSelectedDishTypeChanged(DishType value)
-    {
-        DeleteDishTypeCommand.NotifyCanExecuteChanged();
-        UpdateDishTypeCommand.NotifyCanExecuteChanged();
-    }
     #endregion
 
     #region Constractor
@@ -38,6 +32,14 @@ public partial class DishTypeViewModel : ObservableObject
     {
         _dishTypeService = new DishTypeServices();
         DishTypeList = _dishTypeService.GetAll();
+    }
+    #endregion
+
+    #region On change
+    partial void OnSelectedDishTypeChanged(DishType value)
+    {
+        DeleteDishTypeCommand.NotifyCanExecuteChanged();
+        UpdateDishTypeCommand.NotifyCanExecuteChanged();
     }
     #endregion
 

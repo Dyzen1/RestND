@@ -15,7 +15,6 @@ public class Transaction
     {
         _db = db;
     }
-
     #endregion
 
     #region Add Dish or Update Dish and Update Product in Dish
@@ -26,14 +25,13 @@ public class Transaction
 
         try
         {
-            string query = "INSERT INTO dishes (Dish_Name, Dish_Price, Allergen_Notes, Availability_Status, DishType_Name, Is_Active) " +
+            string query = "INSERT INTO dishes (Dish_Name, Dish_Price, Allergen_Notes, DishType_Name, Is_Active) " +
                            "VALUES (@name, @price, @notes, @status, @type, @active)";
 
             bool dishAdded = _db.ExecuteNonQuery(query, _db.Connection, transaction,
                 new MySqlParameter("@name", d.Dish_Name),
                 new MySqlParameter("@price", d.Dish_Price),
                 new MySqlParameter("@notes", d.Allergen_Notes),
-                new MySqlParameter("@status", d.Availability_Status),
                 new MySqlParameter("@type", d.Dish_Type?.DishType_Name),
                 new MySqlParameter("@active", d.Is_Active)
             ) > 0;
@@ -92,7 +90,6 @@ public class Transaction
                 new MySqlParameter("@name", dish.Dish_Name),
                 new MySqlParameter("@price", dish.Dish_Price),
                 new MySqlParameter("@notes", string.Join(",", dish.Allergen_Notes)),
-                new MySqlParameter("@status", dish.Availability_Status),
                 new MySqlParameter("@type", dish.Dish_Type?.DishType_Name ?? string.Empty),
                 new MySqlParameter("@id", dish.Dish_ID)
             );

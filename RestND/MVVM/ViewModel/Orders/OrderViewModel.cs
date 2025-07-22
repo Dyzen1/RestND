@@ -127,72 +127,72 @@ namespace RestND.MVVM.ViewModel.Orders
 
         #endregion
 
-        #region Add Dish to Order
+        //#region Add Dish to Order
 
-        [RelayCommand(CanExecute = nameof(CanAddDishToOrder))]
-        private void AddDishToOrder(int quantity)
-        {
-            DishInOrder dishInOrder = new DishInOrder
-            {
-                Dish = NewDish,
-                Quantity = quantity
-            };
-            bool success = _dishInOrderServices.AddDishToOrder(SelectedOrder.Order_ID, dishInOrder);
+        //[RelayCommand(CanExecute = nameof(CanAddDishToOrder))]
+        //private void AddDishToOrder(int quantity)
+        //{
+        //    DishInOrder dishInOrder = new DishInOrder
+        //    {
+        //        Dish = NewDish,
+        //        Quantity = quantity
+        //    };
+        //    bool success = _dishInOrderServices.AddDishToOrder(SelectedOrder.Order_ID, dishInOrder);
 
-            if (success)
-            {
-                DishesInCurrentOrder.Add(dishInOrder);
-                updateBillSum();
+        //    if (success)
+        //    {
+        //        DishesInCurrentOrder.Add(dishInOrder);
+        //        updateBillSum();
 
-                foreach (var product in dishInOrder.Dish.ProductUsage)
-                {
-                    string productId = product.Product_ID;
-                    double totalToSubtract = product.Amount_Usage * dishInOrder.Quantity;
+        //        foreach (var product in dishInOrder.Dish.ProductUsage)
+        //        {
+        //            int productId = product.Product_ID;
+        //            double totalToSubtract = product.Amount_Usage * dishInOrder.Quantity;
 
-                    if (_productInventory.ContainsKey(productId))
-                    {
-                        _productInventory[productId] -= totalToSubtract;
-                        _inventoryServices.UpdateProductQuantity(productId, _productInventory[productId]);
-                    }
-                }
+        //            if (_productInventory.ContainsKey(productId))
+        //            {
+        //                _productInventory[productId] -= totalToSubtract;
+        //                _inventoryServices.UpdateProductQuantity(productId, _productInventory[productId]);
+        //            }
+        //        }
 
 
-            }
-        }
+        //    }
+        //}
 
-        #endregion
+        //#endregion
    
-        #region Remove Dish from Current order
+        //#region Remove Dish from Current order
 
-        [RelayCommand]
-        public void RemoveDishFromOrder(DishInOrder dishInOrder)
-        {
-            if (SelectedOrder != null && dishInOrder != null)
-            {
-                bool success = _dishInOrderServices.DeleteDishFromOrder(dishInOrder.Dish.Dish_ID, SelectedOrder.Order_ID);
-                if (success)
-                {
-                    DishesInCurrentOrder.Remove(dishInOrder);
-                    updateBillSum();
+        //[RelayCommand]
+        //public void RemoveDishFromOrder(DishInOrder dishInOrder)
+        //{
+        //    if (SelectedOrder != null && dishInOrder != null)
+        //    {
+        //        bool success = _dishInOrderServices.DeleteDishFromOrder(dishInOrder.Dish.Dish_ID, SelectedOrder.Order_ID);
+        //        if (success)
+        //        {
+        //            DishesInCurrentOrder.Remove(dishInOrder);
+        //            updateBillSum();
 
-                    foreach (var product in dishInOrder.Dish.ProductUsage)
-                    {
-                        string productId = product.Product_ID;
-                        double totalToRestore = product.Amount_Usage * dishInOrder.Quantity;
+        //            foreach (var product in dishInOrder.Dish.ProductUsage)
+        //            {
+        //                string productId = product.Product_ID;
+        //                double totalToRestore = product.Amount_Usage * dishInOrder.Quantity;
 
-                        if (_productInventory.ContainsKey(productId))
-                        {
-                            _productInventory[productId] += totalToRestore;
-                            _inventoryServices.UpdateProductQuantity(productId, _productInventory[productId]);
-                        }
-                    }
+        //                if (_productInventory.ContainsKey(productId))
+        //                {
+        //                    _productInventory[productId] += totalToRestore;
+        //                    _inventoryServices.UpdateProductQuantity(productId, _productInventory[productId]);
+        //                }
+        //            }
 
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
 
-        #endregion
+        //#endregion
 
         #region UpdateBill
         private void updateBillSum()

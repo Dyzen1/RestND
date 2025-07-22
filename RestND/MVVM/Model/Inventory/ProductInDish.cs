@@ -4,24 +4,13 @@
     public class ProductInDish
     {
         #region Product_ID
-        // The ID of the product (linked from the 'product' table)
-        private string _Product_ID;
+        // The ID of the product (linked from the 'inventory' table)
+        private int _Product_ID;
 
-        public string Product_ID
+        public int Product_ID
         {
             get { return _Product_ID; }
             set { _Product_ID = value; }
-        }
-        #endregion
-
-        #region Product_Name
-        // The name of the product (e.g., "Tomato", "Cheese")
-        private string _Product_Name;
-
-        public string Product_Name
-        {
-            get { return _Product_Name; }
-            set { _Product_Name = value; }
         }
         #endregion
 
@@ -37,27 +26,37 @@
         #endregion
 
         #region Dish_ID
-        private string _Dish_ID;
+        // The ID of the dish (linked from the 'dishes' table)
+        private int _Dish_ID;
 
-        public string Dish_ID
+        public int Dish_ID
         {
             get { return _Dish_ID; }
             set { _Dish_ID = value; }
         }
         #endregion
 
-        #region Constructor
+        #region Product_Name
+        private string _Product_Name;
 
-        public ProductInDish(string Product_Name, double amount_Usage)
+        public string Product_Name
         {
-            this.Product_Name = Product_Name;
-            this.Amount_Usage = Amount_Usage;
+            get { return _Product_Name; }
+            set { _Product_Name = value; }
         }
+        #endregion
 
+        #region Constructor
+        public ProductInDish(int Product_ID, int Dish_ID, string Product_Name, double Amount_Usage)
+        {
+            this.Product_ID = Product_ID; 
+            this.Dish_ID = Dish_ID;
+            this.Amount_Usage = Amount_Usage;
+            this.Product_Name = Product_Name;
+        }
         #endregion
 
         #region Default Constructor
-
         public ProductInDish()
         {
             

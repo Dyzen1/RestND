@@ -17,12 +17,12 @@ namespace RestND.Data
             var query = "SELECT * FROM products_in_dish";
             var rows = _db.ExecuteReader(query);
 
-            foreach(var row in rows)
+            foreach (var row in rows)
             {
                 products.Add(new ProductInDish
                 {
-                    Product_ID = row["Product_ID"].ToString(),
-                    Dish_ID = row["Dish_ID"].ToString(),
+                    Product_ID = Convert.ToInt32(row["Product_ID"]),
+                    Dish_ID = Convert.ToInt32(row["Dish_ID"]),
                     Product_Name = row["Product_Name"].ToString(),
                     Amount_Usage = Convert.ToDouble(row["Amount_Usage"])
                 });
@@ -37,7 +37,6 @@ namespace RestND.Data
         public bool AddProductsToDish(int dishId, List<ProductInDish> productUsages)
         {
             var affectedRows = 0;
-
 
             var query = "INSERT INTO products_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
             foreach (var usage in productUsages)

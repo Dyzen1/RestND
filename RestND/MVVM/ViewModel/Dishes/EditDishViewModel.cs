@@ -55,7 +55,6 @@ namespace RestND.MVVM.ViewModel
                 Dish_ID = dishToEdit.Dish_ID,
                 Dish_Name = dishToEdit.Dish_Name,
                 Dish_Price = dishToEdit.Dish_Price,
-                Availability_Status = dishToEdit.Availability_Status,
                 Dish_Type = dishToEdit.Dish_Type,
                 Allergen_Notes = dishToEdit.Allergen_Notes
             };

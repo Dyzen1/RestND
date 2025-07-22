@@ -56,16 +56,6 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Availability_Status
-        private bool _Availability_Status;
-
-        public bool Availability_Status
-        {
-            get => _Availability_Status;
-            set => SetProperty(ref _Availability_Status, value);
-        }
-        #endregion
-
         #region ProductUsage
         private List<ProductInDish> _ProductUsage = new();
 
@@ -92,7 +82,6 @@ namespace RestND.MVVM.Model
             this.Dish_Name = dishName;
             this.Dish_Price = dishPrice;
             this.Allergen_Notes = allergenNotes;
-            this.Availability_Status = true;
             this.ProductUsage = productUsage;
             this.Dish_Type = type;
             this.Is_Active = true;
@@ -105,7 +94,6 @@ namespace RestND.MVVM.Model
         {
             this.Dish_Name = dishName;
             this.Dish_Price = dishPrice;
-            this.Availability_Status = true;
             this.ProductUsage = productUsage;
             this.Dish_Type = type;
             this.Is_Active = true;

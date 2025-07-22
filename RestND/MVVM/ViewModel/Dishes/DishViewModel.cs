@@ -37,8 +37,6 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private ObservableCollection<string> selectedProducts = new();
         [ObservableProperty] private ObservableCollection<SelectableItem<ProductInDish>> productOptions = new();
 
-        [ObservableProperty] private Dictionary<string, List<string>> dishValidationErrors = new();
-
         [ObservableProperty] private Dish newDish = new();
         [ObservableProperty] private Dish selectedDish;
         [ObservableProperty] private Inventory selectedAvailableProduct;
@@ -77,7 +75,6 @@ namespace RestND.MVVM.ViewModel
                             {
                                 match.Dish_Name = dish.Dish_Name;
                                 match.Dish_Price = dish.Dish_Price;
-                                match.Availability_Status = dish.Availability_Status;
                                 match.Allergen_Notes = dish.Allergen_Notes;
                                 match.Dish_Type = dish.Dish_Type;
                             }
@@ -145,11 +142,12 @@ namespace RestND.MVVM.ViewModel
         {
             ProductOptions.Clear();
 
-            foreach (var product in AvailableProducts)
+            foreach (var product in SelectedProductsInDish)
             {
                 var productInDish = new ProductInDish
                 {
                     Product_ID = product.Product_ID,
+                    Dish_ID = product.Dish_ID,
                     Product_Name = product.Product_Name,
                     Amount_Usage = 0
                 };
@@ -171,10 +169,15 @@ namespace RestND.MVVM.ViewModel
 
 
         [RelayCommand(CanExecute = nameof(CanAddDish))]
-        private async Task AddDish()
+        private async Task AddDish() //and its products
         {
             NewDish.ProductUsage = CloneSelectedProducts();
             NewDish.Allergen_Notes = string.Join(",", SelectedAllergenNotes);
+
+            NewDish.ProductUsage = ProductOptions
+                .Where(x => x.IsSelected)
+                .Select(x => x.Value)
+                .ToList();
 
             if (string.IsNullOrWhiteSpace(NewDish.Dish_Name) ||
                 NewDish.Dish_Price <= 0 ||
@@ -184,11 +187,6 @@ namespace RestND.MVVM.ViewModel
                 MessageBox.Show("Please fill in all required fields and add at least one product.");
                 return;
             }
-
-            NewDish.ProductUsage = ProductOptions
-                .Where(x => x.IsSelected)
-                .Select(x => x.Value)
-                .ToList();
 
             bool success = _dishService.Add(NewDish);
 
@@ -205,27 +203,6 @@ namespace RestND.MVVM.ViewModel
             }
         }
 
-
-        //[RelayCommand]
-        //public void AddProductToDish()
-        //{
-        //    if (SelectedAvailableProduct != null && ProductAmountUsage > 0)
-        //    {
-        //        var product = new ProductInDish
-        //        {
-        //            Product_ID = SelectedAvailableProduct.Product_ID,
-        //            Amount_Usage = ProductAmountUsage
-        //        };
-
-        //        if (!SelectedProductsInDish.Any(p => p.Product_ID == product.Product_ID))
-        //        {
-        //            SelectedProductsInDish.Add(product);
-        //        }
-
-        //        SelectedAvailableProduct = null;
-        //        ProductAmountUsage = 0;
-        //    }
-        //}
 
         [RelayCommand(CanExecute = nameof(CanModifyDish))]
         private async Task DeleteDish()
