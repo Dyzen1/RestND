@@ -4,27 +4,39 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
-        mc:Ignorable="d" Style="{StaticResource popupStyle}"
-        Title="Admin Login" Width="400" Height="300" WindowStartupLocation="CenterOwner">
+        mc:Ignorable="d"
+        Style="{StaticResource popupStyle}"
+        Title="Admin Login"
+        Width="400" Height="300"
+        WindowStartupLocation="CenterOwner">
 
     <Grid>
+        
         <Border Style="{DynamicResource windowBorder}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
 
-                <Label Content="User ID:" Foreground="{DynamicResource LightText}" 
+                <Label Content="ID Number:" Foreground="{DynamicResource LightText}"
                        HorizontalContentAlignment="Center"/>
+                
                 <TextBox Text="{Binding UserId, UpdateSourceTrigger=PropertyChanged}"/>
 
-                <Label Content="Password:" Foreground="{DynamicResource LightText}" 
+                <Label Content="Password:" Foreground="{DynamicResource LightText}"
                        HorizontalContentAlignment="Center" Margin="0,10,0,0"/>
-                <PasswordBox x:Name="PasswordBox" 
-                             Style="{StaticResource InputBox_Password}" 
-                             PasswordChanged="PasswordBox_PasswordChanged"/> 
+                <PasswordBox x:Name="PasswordBox"
+                             Style="{StaticResource InputBox_Password}"
+                             PasswordChanged="PasswordBox_PasswordChanged"/>
 
                 <Button Content="Login"
                         Command="{Binding LoginCommand}"
                         Style="{DynamicResource SubmitBtn}"
                         Margin="0,20,0,0"/>
+
+                <!-- Forgot Password -->
+                <Button Content="Forgot password"
+                        Click="ForgotPassword_Click"
+                        Style="{DynamicResource frGotPassword}"
+
+                       />
             </StackPanel>
         </Border>
 

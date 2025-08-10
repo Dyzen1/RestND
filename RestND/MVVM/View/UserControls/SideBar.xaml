@@ -17,7 +17,7 @@
                     <TextBlock Text="Inventory"/>
                 </StackPanel>
             </Button>
-            <Button Style="{DynamicResource SideBarBtn}">
+            <Button Style="{DynamicResource SideBarBtn}" Click="EmployeesBtn_Click">
                 <StackPanel>
                     <fa:SvgAwesome Icon="Solid_Users" Style="{DynamicResource SideBarIcon}"/>
                     <TextBlock Text="Employees"/>

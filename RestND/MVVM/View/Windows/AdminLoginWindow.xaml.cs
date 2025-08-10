@@ -19,5 +19,16 @@ namespace RestND.MVVM.View.Windows
             if (DataContext is LoginViewModel vm && sender is PasswordBox pb)
                 vm.Password = pb.Password;
         }
+        private void ForgotPassword_Click(object sender, RoutedEventArgs e)
+        {
+            var forgot = new ForgotPasswordWindow
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+                // need to set up  datacontext for forgot password window DONNT FORGET !!! 
+            };
+            forgot.ShowDialog();
+
+        }
     }
 }

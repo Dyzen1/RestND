@@ -76,7 +76,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button x:Name="deleteTables" Style="{DynamicResource addBtn}" Click="DeleteTable_Click">
+                    <Button x:Name="deleteTables" Style="{DynamicResource addBtn}" Click="DeleteTable_Click" Width="111" Height="22">
                         <StackPanel Orientation="Horizontal">
                             <fa:SvgAwesome Style="{DynamicResource deleteBtnIcon}"/>
                             <TextBlock Text="Delete Table" FontSize="12" TextAlignment="Center"
