@@ -62,25 +62,41 @@
                 </StackPanel>
             </GroupBox>
 
-            <GroupBox Header="Products For New Dish"
-                      Grid.Row="1" Grid.Column="0">
-                <StackPanel Orientation="Horizontal" Margin="8" HorizontalAlignment="Center">
-                    <ListBox ItemsSource="{Binding AvailableProducts}" BorderBrush="Transparent" Width="400">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                    <CheckBox Content="{Binding Value.Product_Name}" Width="120"
-                                              Foreground="{DynamicResource LightText}"
-                                              IsChecked="{Binding IsSelected, Mode=TwoWay}" VerticalAlignment="Center"/>
-                                    <TextBox Width="50" Margin="35 0 0 0"
-                                             Text="{Binding Value.Amount_Usage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Label Content="/gr"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </StackPanel>
+            <GroupBox Header="Products For New Dish" Grid.Row="1" Grid.Column="0">
+                <DataGrid ItemsSource="{Binding ProductSelections}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          HeadersVisibility="Column"
+                          BorderThickness="0"
+                          Width="420"
+                          RowStyle="{DynamicResource rowStyle}"
+                          CellStyle="{DynamicResource cellStyle}">
+                    <DataGrid.Columns>
+                        <!-- Use/Select -->
+                        <DataGridCheckBoxColumn Header="Use"
+                                    Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="60" />
+
+                        <!-- Name (read-only) -->
+                        <DataGridTextColumn Header="Product"
+                                Binding="{Binding Product_Name}"
+                                IsReadOnly="True"
+                                Width="*" />
+
+                        <!-- Stock (read-only, optional but nice) -->
+                        <DataGridTextColumn Header="In Stock"
+                                Binding="{Binding Quantity_Available}"
+                                IsReadOnly="True"
+                                Width="90" />
+
+                        <!-- Amount to use in this dish -->
+                        <DataGridTextColumn Header="Amount (gr)"
+                                Binding="{Binding AmountUsage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                Width="120" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </GroupBox>
+
 
             <Button Grid.Column="0" Grid.Row="2" Command="{Binding AddDishCommand}" Margin="0 15 0 0" 
                     Style="{DynamicResource addBtn}" HorizontalAlignment="Center" VerticalAlignment="Top">

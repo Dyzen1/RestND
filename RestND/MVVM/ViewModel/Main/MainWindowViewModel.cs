@@ -3,7 +3,8 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
 using RestND.MVVM.Model.Tables;
-using System.Collections.Generic;
+using RestND.Validations;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,9 @@ namespace RestND.MVVM.ViewModel.Main
         #region Services and Fields
 
         private readonly TableServices _tableService = new();
+        private readonly TableValidator _validator = new();
         private readonly HubConnection _hub = App.MainHub;
+        public Action? ClosePopupAction { get; set; }
 
         #endregion
 
@@ -35,7 +38,13 @@ namespace RestND.MVVM.ViewModel.Main
         private Table selectedTable;
 
         [ObservableProperty]
-        private int editedTableNumber;
+        private string editedTableNumberText;
+
+        [ObservableProperty]
+        private string newTableNumberText;
+
+        [ObservableProperty]
+        private string tableErrorMessage;
 
         #endregion
 
@@ -79,6 +88,13 @@ namespace RestND.MVVM.ViewModel.Main
 
         #endregion
 
+        partial void OnSelectedTableChanged(Table value)
+        {
+            AddTableCommand.NotifyCanExecuteChanged();
+            EditTableCommand.NotifyCanExecuteChanged();
+            DeleteTableCommand.NotifyCanExecuteChanged();
+        }
+
         #region Load Tables
 
         public void LoadTables()
@@ -114,22 +130,43 @@ namespace RestND.MVVM.ViewModel.Main
         #region Add Table
 
         [RelayCommand]
-        public async Task AddTableAsync()
+        public async Task AddTable()
         {
+            // 1. Parse input
+            if (!int.TryParse(NewTableNumberText, out int parsedNumber))
+            {
+                TableErrorMessage = "Please enter a valid number.";
+                return;
+            }
+
+            // 2. Validate it's positive
+            if (!_validator.postiveTaleNumber(parsedNumber, out string notPositiveErr))
+            {
+                TableErrorMessage = notPositiveErr;
+                return;
+            }
+
+            // 3. Validate table number uniqueness
+            if (!_validator.CheckIfExists(parsedNumber, out string existsErr))
+            {
+                TableErrorMessage = existsErr;
+                return;
+            }
+
+            // 4. Check if there’s room for a new table
+            if (!_validator.isFull(out string fullErr))
+            {
+                TableErrorMessage = fullErr;
+                return;
+            }
+
+            // 5. Validation passed
+            TableErrorMessage = string.Empty;
+
             var slot = Tables.FirstOrDefault(t => !t.Is_Active);
-            if (slot == null)
-            {
-                MessageBox.Show("All 25 table slots are occupied.");
-                return;
-            }
+            if (slot == null) return;
 
-            var doesExist = Tables.FirstOrDefault(t => t.Table_Number == NewTable.Table_Number);
-            if (doesExist != null)
-            {
-                MessageBox.Show("Table number already exists");
-                return;
-            }
-
+            NewTable.Table_Number = parsedNumber;
             NewTable.Is_Active = true;
             NewTable.Table_Status = true;
             NewTable.C = slot.C;
@@ -139,7 +176,9 @@ namespace RestND.MVVM.ViewModel.Main
             {
                 await _hub.SendAsync("NotifyTableUpdate", NewTable, "add");
                 NewTable = new Table();
+                NewTableNumberText = string.Empty;
                 LoadTables();
+                ClosePopupAction?.Invoke();
             }
         }
 
@@ -148,12 +187,23 @@ namespace RestND.MVVM.ViewModel.Main
         #region Delete Table
 
         [RelayCommand]
-        public async Task DeleteTableAsync()
+        public async Task DeleteTable()
         {
+            TableErrorMessage = string.Empty;
+
+            // 1. Validate that a table is selected
+            if (!_validator.CheckIfnull(SelectedTable, out string nullErr))
+            {
+                TableErrorMessage = nullErr;
+                return;
+            }
+
+            // 2. Proceed with delete
             if (_tableService.Delete(SelectedTable))
             {
                 await _hub.SendAsync("NotifyTableUpdate", SelectedTable, "delete");
                 LoadTables();
+                ClosePopupAction?.Invoke(); // Optional: close popup
             }
         }
 
@@ -162,24 +212,50 @@ namespace RestND.MVVM.ViewModel.Main
         #region Edit Table
 
         [RelayCommand]
-        public async Task EditTableAsync()
+        public async Task EditTable()
         {
-            var duplicate = Tables.FirstOrDefault(t =>
-                t.Table_ID != SelectedTable.Table_ID &&
-                t.Table_Number == EditedTableNumber);
+            TableErrorMessage = string.Empty;
 
-            if (duplicate != null)
+            // 1. Validate user input is a number
+            if (!int.TryParse(EditedTableNumberText, out int parsedNumber))
             {
-                MessageBox.Show("Another table already has this number.");
+                TableErrorMessage = "Please enter a valid number.";
                 return;
             }
 
-            SelectedTable.Table_Number = EditedTableNumber;
+            // 2. Validate it's a positive number
+            if (!_validator.postiveTaleNumber(parsedNumber, out string notPositiveErr))
+            {
+                TableErrorMessage = notPositiveErr;
+                return;
+            }
+
+            // 3. Check if another table has this number
+            var duplicate = Tables.FirstOrDefault(t =>
+                t.Table_ID != SelectedTable?.Table_ID &&
+                t.Table_Number == parsedNumber);
+
+            if (duplicate != null)
+            {
+                TableErrorMessage = "Another table already has this number.";
+                return;
+            }
+
+            // 4. Check if a table is selected
+            if (!_validator.CheckIfnull(SelectedTable, out string nullErr))
+            {
+                TableErrorMessage = nullErr;
+                return;
+            }
+
+            // 5. Apply and save
+            SelectedTable.Table_Number = parsedNumber;
 
             if (_tableService.Update(SelectedTable))
             {
                 await _hub.SendAsync("NotifyTableUpdate", SelectedTable, "update");
                 LoadTables();
+                ClosePopupAction?.Invoke(); // Optional: close the popup after success
             }
         }
 
@@ -190,13 +266,20 @@ namespace RestND.MVVM.ViewModel.Main
         [RelayCommand]
         private void TableClick(Table table)
         {
-            if (!table.Is_Active)
+            if (!_validator.CheckIfnull(table, out string msg))
             {
-                MessageBox.Show("This table is inactive.");
+                TableErrorMessage = msg;
                 return;
             }
 
-            MessageBox.Show($"Opening Table #{table.Table_Number}");
+            if (!table.Is_Active)
+            {
+                TableErrorMessage = "This table is inactive.";
+                return;
+            }
+
+            TableErrorMessage = string.Empty;
+
             // TODO: Navigate to order screen
         }
 

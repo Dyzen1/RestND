@@ -2,7 +2,9 @@ using MySql.Data.MySqlClient;
 using RestND.Data;
 using RestND.MVVM.Model;
 using RestND.MVVM.Model.Orders;
+using RestND.MVVM.View.Windows;
 using System;
+using System.Windows;
 
 public class Transaction
 {
@@ -26,13 +28,13 @@ public class Transaction
         try
         {
             string query = "INSERT INTO dishes (Dish_Name, Dish_Price, Allergen_Notes, DishType_Name, Is_Active) " +
-                           "VALUES (@name, @price, @notes, @status, @type, @active)";
-
+                           "VALUES (@name, @price, @notes, @type, @active)";
+          
             bool dishAdded = _db.ExecuteNonQuery(query, _db.Connection, transaction,
                 new MySqlParameter("@name", d.Dish_Name),
                 new MySqlParameter("@price", d.Dish_Price),
                 new MySqlParameter("@notes", d.Allergen_Notes),
-                new MySqlParameter("@type", d.Dish_Type?.DishType_Name),
+                new MySqlParameter("@type", d.Dish_Type.DishType_Name),
                 new MySqlParameter("@active", d.Is_Active)
             ) > 0;
 

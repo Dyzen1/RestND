@@ -1,5 +1,4 @@
-﻿using RestND.MVVM.ViewModel.Main;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,17 +15,13 @@ using System.Windows.Shapes;
 namespace RestND.MVVM.View.Windows
 {
     /// <summary>
-    /// Interaction logic for EditTablePopUpWindow.xaml
+    /// Interaction logic for AddNewEmployeeWindow.xaml
     /// </summary>
-    public partial class EditTablePopUpWindow : Window
+    public partial class AddNewEmployeeWindow : Window
     {
-        private readonly MainWindowViewModel _mainVM;
-        public EditTablePopUpWindow()
+        public AddNewEmployeeWindow()
         {
             InitializeComponent();
- 
         }
-
-
     }
 }

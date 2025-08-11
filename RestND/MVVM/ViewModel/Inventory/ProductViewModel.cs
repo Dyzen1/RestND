@@ -1,9 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
 using RestND.MVVM.Model;
+using RestND.Validations;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -17,20 +17,21 @@ namespace RestND.MVVM.ViewModel
         #region Services
 
         private readonly ProductService _productService;
+        private readonly InventoryValidator _validator = new();
         private readonly HubConnection _hub;
 
         #endregion
 
         #region Observable Properties
 
-        [ObservableProperty]
-        public ObservableCollection<Inventory> products = new();
+        [ObservableProperty] private ObservableCollection<Inventory> products = new();
+        [ObservableProperty] private Inventory selectedProduct;
+        [ObservableProperty] private Inventory newProduct = new();
 
-        [ObservableProperty]
-        public Inventory selectedProduct;
-
-        [ObservableProperty]
-        public Inventory newProduct = new();
+        [ObservableProperty] private string productIdError;
+        [ObservableProperty] private string productNameError;
+        [ObservableProperty] private string quantityError;
+        [ObservableProperty] private string toleranceError;
 
         #endregion
 
@@ -106,16 +107,52 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private async Task AddProduct()
         {
-            if (!string.IsNullOrWhiteSpace(NewProduct.Product_Name) && NewProduct.Quantity_Available >= 0)
-            {
-                bool success = _productService.Add(NewProduct);
+            ClearErrors();
 
-                if (success)
-                {
-                    await _hub.SendAsync("NotifyInventoryUpdate", NewProduct, "add");
-                    NewProduct = new Inventory(); 
-                    LoadProducts(); // Refresh the list
-                }
+            if (string.IsNullOrWhiteSpace(NewProduct.Product_ID))
+            {
+                ProductIdError = "Product ID is required.";
+                return;
+            }
+
+            if (!_validator.CheckIfIdExists(NewProduct.Product_ID, Products.ToList(), out string idErr))
+            {
+                ProductIdError = idErr;
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(NewProduct.Product_Name))
+            {
+                ProductNameError = "Product name is required.";
+                return;
+            }
+
+            if (!_validator.CheckIfNameExists(NewProduct.Product_Name, Products.ToList(), out string nameErr))
+            {
+                ProductNameError = nameErr;
+                return;
+            }
+
+            if (!_validator.PositiveQuantity(NewProduct.Quantity_Available, out string qtyErr))
+            {
+                QuantityError = qtyErr;
+                return;
+            }
+
+            if (!_validator.PositiveTolerance(NewProduct.Tolerance, out string tolErr))
+            {
+                ToleranceError = tolErr;
+                return;
+            }
+
+            bool success = _productService.Add(NewProduct);
+
+            if (success)
+            {
+                await _hub.SendAsync("NotifyInventoryUpdate", NewProduct, "add");
+                NewProduct = new Inventory();
+                ClearErrors();
+                LoadProducts();
             }
         }
 
@@ -126,14 +163,19 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private async Task DeleteProductAsync()
         {
-            if (CanModifyProduct())
+            ClearErrors();
+
+            if (SelectedProduct == null)
             {
-                bool success = _productService.Delete(SelectedProduct);
-                if (success)
-                {
-                    await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "delete");
-                    LoadProducts(); // Refresh the list
-                }
+                ProductIdError = "Please select a product to delete.";
+                return;
+            }
+
+            bool success = _productService.Delete(SelectedProduct);
+            if (success)
+            {
+                await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "delete");
+                LoadProducts();
             }
         }
 
@@ -144,26 +186,48 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private async Task UpdateProduct()
         {
-            if(CanModifyProduct())
-            {
-                bool success = _productService.Update(SelectedProduct); 
+            ClearErrors();
 
-                if (success)
-                {
-                    await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "update");
-                    LoadProducts(); // Refresh the list
-                }
+            if (SelectedProduct == null)
+            {
+                ProductIdError = "Please select a product to update.";
+                return;
             }
-            
+
+            if (string.IsNullOrWhiteSpace(SelectedProduct.Product_Name))
+            {
+                ProductNameError = "Product name is required.";
+                return;
+            }
+
+            if (!_validator.PositiveQuantity(SelectedProduct.Quantity_Available, out string qtyErr))
+            {
+                QuantityError = qtyErr;
+                return;
+            }
+
+            if (!_validator.PositiveTolerance(SelectedProduct.Tolerance, out string tolErr))
+            {
+                ToleranceError = tolErr;
+                return;
+            }
+
+            bool success = _productService.Update(SelectedProduct);
+
+            if (success)
+            {
+                await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "update");
+                LoadProducts();
+            }
         }
 
         #endregion
 
         #region Helpers
 
-        private bool CanModifyProduct()
+        private void ClearErrors()
         {
-            return SelectedProduct != null;
+            ProductIdError = ProductNameError = QuantityError = ToleranceError = string.Empty;
         }
 
         #endregion

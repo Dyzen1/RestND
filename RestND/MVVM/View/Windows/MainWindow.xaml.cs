@@ -1,5 +1,4 @@
-﻿
-using RestND.MVVM.ViewModel.Employees;
+﻿using RestND.MVVM.ViewModel.Employees;
 using RestND.MVVM.ViewModel.Main;
 using System;
 using System.Windows;
@@ -14,7 +13,7 @@ namespace RestND.MVVM.View.Windows
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = App.SharedMainVM;
+            this.DataContext = App.SharedMainVM; // keep shared VM
             sideBar.ButtonClicked += SideBar_ButtonClicked;
         }
 
@@ -35,10 +34,12 @@ namespace RestND.MVVM.View.Windows
                 case "Reports":
                     OpenReports();
                     break;
+                case "Employees":
+                    OpenEmployees();
+                    break;
             }
         }
 
-        
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
@@ -52,10 +53,7 @@ namespace RestND.MVVM.View.Windows
 
         private void MaximizeBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(WindowState == WindowState.Maximized)
-                WindowState = WindowState.Normal;
-            else
-                WindowState = WindowState.Maximized;
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
 
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
@@ -85,15 +83,11 @@ namespace RestND.MVVM.View.Windows
                 this.Opacity = 1.0;
             };
 
-            popup.ShowDialog(); 
+            popup.ShowDialog();
         }
 
         private void EditTable_Click(object sender, RoutedEventArgs e)
         {
-            var vm = App.SharedMainVM;
-
- 
-
             var popup = new EditTablePopUpWindow
             {
                 Owner = this,
@@ -105,7 +99,7 @@ namespace RestND.MVVM.View.Windows
 
             popup.Closed += (_, _) =>
             {
-                this.Opacity = 1;
+                this.Opacity = 1.0;
                 Overlay.Visibility = Visibility.Collapsed;
             };
 
@@ -113,23 +107,19 @@ namespace RestND.MVVM.View.Windows
         }
 
         private void AdminLogin_Click(object sender, RoutedEventArgs e)
-
-
         {
             var loginWindow = new AdminLoginWindow
             {
                 Owner = this,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 DataContext = new LoginViewModel()
-
             };
 
             this.Opacity = 0.4;
             loginWindow.ShowDialog();
             this.Opacity = 1.0;
-
-
         }
+
         private void DeleteTable_Click(object sender, RoutedEventArgs e)
         {
             Overlay.Visibility = Visibility.Visible;
@@ -150,70 +140,48 @@ namespace RestND.MVVM.View.Windows
             popup.ShowDialog();
         }
 
-
-        ///// METHODS FOR OPENING WINDOWS:
+        ///// NAVIGATION (hide main, set owner on child):
 
         private void OpenInventory()
         {
-            var inventoryWindow = new ProductWindow();
-            {
-                WindowState = WindowState.Maximized;
-            }
-            inventoryWindow.Show();
-            this.Close();
+            var w = new ProductWindow { Owner = this, WindowState = WindowState.Maximized };
+            w.Show();
+            this.Hide();
         }
 
         private void OpenOverView()
         {
-            var overView = new OverView();
-            {
-                WindowState = WindowState.Maximized;
-            }
-            overView.Show();
-            this.Close();
+            var w = new OverView { Owner = this, WindowState = WindowState.Maximized };
+            w.Show();
+            this.Hide();
         }
 
         private void OpenDishes()
         {
-            var dishesWindow = new DishWindow();
-            {
-                WindowState = WindowState.Maximized;
-            }
-            dishesWindow.Show();
-            this.Close();
+            var w = new DishWindow { Owner = this, WindowState = WindowState.Maximized };
+            w.Show();
+            this.Hide();
         }
 
         private void OpenReports()
         {
-            var reportWindow = new ReportWindow();
-            {
-                WindowState = WindowState.Maximized;
-            };
-            reportWindow.Show();
-            this.Close();
+            var w = new ReportWindow { Owner = this, WindowState = WindowState.Maximized };
+            w.Show();
+            this.Hide();
         }
 
         private void OpenOrders()
         {
-            var ordersWindow = new OrderWindow();
-            {
-                WindowState = WindowState.Maximized;
-            };
-            ordersWindow.Show();
-            this.Close();
+            var w = new OrderWindow { Owner = this, WindowState = WindowState.Maximized };
+            w.Show();
+            this.Hide();
         }
 
-
-
-        //private void OpenEmployees()
-        //{
-        //    var dishesWindow = new DishWindow();
-        //    {
-        //        WindowState = WindowState.Maximized;
-        //    }
-        //    dishesWindow.Show();
-        //    this.Close();
-        //}
-
+        private void OpenEmployees()
+        {
+            var w = new EmployeesWindow { Owner = this, WindowState = WindowState.Maximized };
+            w.Show();
+            this.Hide();
+        }
     }
 }

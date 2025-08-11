@@ -5,9 +5,9 @@
     {
         #region Product_ID
         // The ID of the product (linked from the 'inventory' table)
-        private int _Product_ID;
+        private string _Product_ID;
 
-        public int Product_ID
+        public string Product_ID
         {
             get { return _Product_ID; }
             set { _Product_ID = value; }
@@ -47,7 +47,7 @@
         #endregion
 
         #region Constructor
-        public ProductInDish(int Product_ID, int Dish_ID, string Product_Name, double Amount_Usage)
+        public ProductInDish(string Product_ID, int Dish_ID, string Product_Name, double Amount_Usage)
         {
             this.Product_ID = Product_ID; 
             this.Dish_ID = Dish_ID;

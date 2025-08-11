@@ -29,18 +29,16 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private ObservableCollection<Dish> dishes = new();
         [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
         [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
-        [ObservableProperty] private ObservableCollection<ProductInDish> selectedProductsInDish = new();
+        [ObservableProperty] private ObservableCollection<SelectableProduct> productSelections = new();
+
+
 
         //FOR THE CHECK BOX OPTIONS:
         [ObservableProperty] private ObservableCollection<string> selectedAllergenNotes = new();
         [ObservableProperty] private ObservableCollection<SelectableItem<string>> allergenOptions = new();
-        [ObservableProperty] private ObservableCollection<string> selectedProducts = new();
-        [ObservableProperty] private ObservableCollection<SelectableItem<ProductInDish>> productOptions = new();
 
         [ObservableProperty] private Dish newDish = new();
         [ObservableProperty] private Dish selectedDish;
-        [ObservableProperty] private Inventory selectedAvailableProduct;
-        [ObservableProperty] private int productAmountUsage;
         #endregion
 
         #region Constructor
@@ -50,12 +48,13 @@ namespace RestND.MVVM.ViewModel
             _dishService = new DishServices();
             _productService = new ProductService();
             _hub = App.DishHub;
-            
+
             DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
             AvailableProducts = new ObservableCollection<Inventory>(_productService.GetAll());
 
             LoadDishes();
-            LoadProducts();
+            RefreshProductSelections();
+            //LoadProducts();
             LoadNotes();
 
             _hub.On<Dish, string>("ReceiveDishUpdate", (dish, action) =>
@@ -137,54 +136,64 @@ namespace RestND.MVVM.ViewModel
             }
         }
 
-        [RelayCommand]
-        private void LoadProducts()
-        {
-            ProductOptions.Clear();
+        //[RelayCommand]
+        //private void LoadProducts()
+        //{
+        //    ProductOptions.Clear();
 
-            foreach (var product in SelectedProductsInDish)
-            {
-                var productInDish = new ProductInDish
-                {
-                    Product_ID = product.Product_ID,
-                    Dish_ID = product.Dish_ID,
-                    Product_Name = product.Product_Name,
-                    Amount_Usage = 0
-                };
-                var item = new SelectableItem<ProductInDish>(productInDish)
-                {
-                    IsSelected = false 
-                };
+        //    foreach (var product in SelectedProductsInDish)
+        //    {
+        //        var productInDish = new ProductInDish
+        //        {
+        //            Product_ID = product.Product_ID,
+        //            Dish_ID = product.Dish_ID,
+        //            Product_Name = product.Product_Name,
+        //            Amount_Usage = 0
+        //        };
+        //        var item = new SelectableItem<ProductInDish>(productInDish)
+        //        {
+        //            IsSelected = false 
+        //        };
 
-                ProductOptions.Add(item);
-            }
-        }
+        //        ProductOptions.Add(item);
+        //    }
+        //}
 
-        private List<ProductInDish> CloneSelectedProducts() =>
-            SelectedProductsInDish.Select(p => new ProductInDish
-            {
-                Product_ID = p.Product_ID,
-                Amount_Usage = p.Amount_Usage
-            }).ToList();
+        //private List<ProductInDish> CloneSelectedProducts() =>
+        //    SelectedProductsInDish.Select(p => new ProductInDish
+        //    {
+        //        Product_ID = p.Product_ID,
+        //        Amount_Usage = p.Amount_Usage
+        //    }).ToList();
 
 
         [RelayCommand(CanExecute = nameof(CanAddDish))]
-        private async Task AddDish() //and its products
+        private async Task AddDish()
         {
-            NewDish.ProductUsage = CloneSelectedProducts();
+            // Allergens from checkboxes
             NewDish.Allergen_Notes = string.Join(",", SelectedAllergenNotes);
 
-            NewDish.ProductUsage = ProductOptions
-                .Where(x => x.IsSelected)
-                .Select(x => x.Value)
+            // Build ProductUsage from the grid rows the user checked + filled
+            var chosen = ProductSelections
+                .Where(x => x.isSelected && x.amountUsage > 0)
+                .Select(x => new ProductInDish
+                {
+                    Product_ID = x.Product_ID,
+                    Product_Name = x.Product_Name,
+                    Amount_Usage = x.AmountUsage,
+                    Dish_ID = NewDish.Dish_ID // keep 0 if DB assigns
+                })
                 .ToList();
 
+            NewDish.ProductUsage = chosen;
+
+            // Basic validation
             if (string.IsNullOrWhiteSpace(NewDish.Dish_Name) ||
                 NewDish.Dish_Price <= 0 ||
                 NewDish.Dish_Type == null ||
                 NewDish.ProductUsage == null || !NewDish.ProductUsage.Any())
             {
-                MessageBox.Show("Please fill in all required fields and add at least one product.");
+                MessageBox.Show("Please fill all fields and add at least one product with an amount > 0.");
                 return;
             }
 
@@ -193,15 +202,22 @@ namespace RestND.MVVM.ViewModel
             if (success)
             {
                 await _hub.SendAsync("NotifyDishUpdate", NewDish, "add");
+
+                // reset the form
                 NewDish = new Dish();
-                SelectedProducts.Clear();
                 SelectedAllergenNotes.Clear();
+                foreach (var sp in productSelections)
+                {
+                    sp.isSelected = false;
+                    sp.amountUsage = 0;
+                }
             }
             else
             {
                 MessageBox.Show("Failed to save dish. Please try again.");
             }
         }
+
 
 
         [RelayCommand(CanExecute = nameof(CanModifyDish))]
@@ -225,5 +241,14 @@ namespace RestND.MVVM.ViewModel
         private bool CanAddDish() => true;
         #endregion
 
+        #region Refresh Products Selection
+        private void RefreshProductSelections()
+        {
+            productSelections = new ObservableCollection<SelectableProduct>(
+                AvailableProducts.Select(p =>
+                    new SelectableProduct(p.Product_ID, p.Product_Name, p.Quantity_Available))
+            );
+        }
+        #endregion
     }
 }

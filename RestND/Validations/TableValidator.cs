@@ -1,63 +1,68 @@
-﻿using RestND.Data;
+﻿using RestND.MVVM.Model.Tables;
+using RestND.Data;
 using RestND.MVVM.Model.Tables;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace RestND.Validations
 {
     public class TableValidator
     {
-        private readonly Table _table;
-        private readonly List<Table> _existingTables;
+        private readonly TableServices _tableService = new();
 
-        public TableValidator(Table table)
+
+
+        public bool CheckIfnull(Table table, out string err)
         {
-            _table = table;
-            _existingTables = new TableServices().GetAll();
-        }
-
-        public bool ValidateAll(out Dictionary<string, List<string>> errors)
-        {
-            errors = new Dictionary<string, List<string>>();
-
-            ValidateTableNumber(errors);
-            ValidateCoordinates(errors);
-
-            return errors.Count == 0;
-        }
-
-        private void ValidateTableNumber(Dictionary<string, List<string>> errors)
-        {
-            if (_table.Table_Number <= 0)
+            err = string.Empty;
+            if (table == null)
             {
-                AddError(errors, nameof(_table.Table_Number), "Table number must be greater than zero.");
+                err = "You must choose a table";
+                return false;
             }
-            else if (_existingTables.Any(t =>
-                         t.Table_Number == _table.Table_Number &&
-                         t.Is_Active &&
-                         t.Table_ID != _table.Table_ID))
+
+            return true;
+
+        }
+        public bool isFull(out string err)
+        {
+            err = string.Empty;
+            List<Table> tables = _tableService.GetAll(); // returns only Is_Active == true
+
+            if (tables.Count >= 25)
             {
-                AddError(errors, nameof(_table.Table_Number), "Table number already exists and is active.");
+                err = "All 25 table slots are occupied.";
+                return false;
             }
+
+            return true;
+        }
+        public bool CheckIfExists(int tableNumber, out string err)
+        {
+            err = string.Empty;
+            List<Table> tables = _tableService.GetAll();
+            var doesExist = tables.FirstOrDefault(t => t.Table_Number == tableNumber);
+            if (doesExist != null)
+            {
+                err = "Table number already exists";
+                return false;
+            }
+            return true;
+
         }
 
-        private void ValidateCoordinates(Dictionary<string, List<string>> errors)
+        public bool postiveTaleNumber(int tableNumber, out string err)
         {
-            if (_table.C < 0 || _table.R < 0)
-                AddError(errors, "Coordinates", "Coordinates must be positive values.");
+            err = string.Empty;
+            if (tableNumber <= 0)
+            {
+                err = "Table number must be a positive integer.";
+                return false;
+            }
+            return true;
 
-            if (_table.C == _table.R)
-                AddError(errors, "Coordinates", "Coordinates cannot be equal.");
 
-            if (_table.C > 1000 || _table.R > 1000)
-                AddError(errors, "Coordinates", "Coordinates exceed layout boundaries.");
-        }
-
-        private void AddError(Dictionary<string, List<string>> dict, string key, string message)
-        {
-            if (!dict.ContainsKey(key))
-                dict[key] = new List<string>();
-            dict[key].Add(message);
         }
     }
 }

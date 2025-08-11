@@ -1,18 +1,7 @@
 ﻿using RestND.MVVM.View.Windows;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace RestND.MVVM.View.UserControls
 {
@@ -25,10 +14,32 @@ namespace RestND.MVVM.View.UserControls
 
         private void return_Click(object sender, RoutedEventArgs e)
         {
-            var mainWindow = new MainWindow();
-            mainWindow.WindowState = WindowState.Maximized;
-            mainWindow.Show();
-            Window.GetWindow(this)?.Close();
+            var hostWindow = Window.GetWindow(this);
+            if (hostWindow == null) return;
+
+            // Prefer the owner if it exists (the original MainWindow)
+            if (hostWindow.Owner is MainWindow mainOwned)
+            {
+                mainOwned.WindowState = WindowState.Maximized;
+                mainOwned.Show();
+            }
+            else
+            {
+                // Fallback: find an existing MainWindow instance (do NOT create a new one)
+                var existingMain = Application.Current.Windows
+                    .OfType<MainWindow>()
+                    .FirstOrDefault() ?? Application.Current.MainWindow as MainWindow;
+
+                if (existingMain != null)
+                {
+                    existingMain.WindowState = WindowState.Maximized;
+                    existingMain.Show();
+                }
+                // If existingMain is null, your app likely closed MainWindow earlier.
+                // In that case you *could* create a new one, but better to avoid ever closing it.
+            }
+
+            hostWindow.Close();
         }
     }
 }
