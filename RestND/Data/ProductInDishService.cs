@@ -10,13 +10,34 @@ namespace RestND.Data
     {
         private readonly DatabaseOperations _db = DatabaseOperations.Instance;
 
-        #region Get All Products in Dish
-        public List<ProductInDish> GetAll()
+        //#region Get All Products in Dish
+        //public List<ProductInDish> GetAll()
+        //{
+        //    var products = new List<ProductInDish>();
+        //    var query = "SELECT * FROM products_in_dish";
+        //    var rows = _db.ExecuteReader(query);
+
+        //    foreach (var row in rows)
+        //    {
+        //        products.Add(new ProductInDish
+        //        {
+        //            Product_ID = row["Product_ID"].ToString(),
+        //            Product_Name = row["Product_Name"].ToString(),
+        //            Amount_Usage = Convert.ToDouble(row["Amount_Usage"]),
+        //            Dish_ID = Convert.ToInt32(row["Dish_ID"])
+        //        });
+        //    }
+        //    return products;
+        //}
+
+        //#endregion
+
+        #region Get Products in Dish by Dish ID
+        public List<ProductInDish> GetProductsInDish(int dishId)
         {
             var products = new List<ProductInDish>();
-            var query = "SELECT * FROM products_in_dish";
-            var rows = _db.ExecuteReader(query);
-
+            var query = "SELECT * FROM products_in_dish WHERE Dish_ID = @dishId";
+            var rows = _db.ExecuteReader(query, new MySqlParameter("@dishId", dishId));
             foreach (var row in rows)
             {
                 products.Add(new ProductInDish
@@ -25,13 +46,10 @@ namespace RestND.Data
                     Product_Name = row["Product_Name"].ToString(),
                     Amount_Usage = Convert.ToDouble(row["Amount_Usage"]),
                     Dish_ID = Convert.ToInt32(row["Dish_ID"])
-
-
                 });
             }
             return products;
         }
-
         #endregion
 
         // Add products to a dish

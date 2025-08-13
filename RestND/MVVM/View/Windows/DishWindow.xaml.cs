@@ -1,7 +1,10 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using RestND.Data;
+using RestND.MVVM.Model;
 using RestND.MVVM.View.Windows;
 using RestND.MVVM.ViewModel;
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -17,15 +20,6 @@ namespace RestND.MVVM.View
             this.DataContext = new DishViewModel();
         }
 
-        private void return_Click(object sender, RoutedEventArgs e)
-        {
-            var mainWindow = new MainWindow();
-            {
-                mainWindow.WindowState = WindowState.Maximized;
-            }
-            mainWindow.Show();
-            this.Close();
-        }
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
@@ -59,7 +53,7 @@ namespace RestND.MVVM.View
             var vm = DataContext as DishViewModel;
             if (vm?.SelectedDish != null)
             {
-                var editWindow = new EditDishPopup
+                var editWindow = new EditDishPopup(vm.SelectedDish)
                 {
                     Owner = this,
                     DataContext = new EditDishViewModel(vm.SelectedDish)
@@ -77,23 +71,5 @@ namespace RestND.MVVM.View
                 MessageBox.Show("Please select a dish to update.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-
-        //the popup used for choosing products for a new dish.
-        //private void ChoseProductsPopup_Click(object sender, RoutedEventArgs e)
-        //{
-        //    Overlay.Visibility = Visibility.Visible;
-
-        //    var popup = new AddProductToDishPopup();
-        //    popup.Owner = this;
-        //    popup.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-        //    popup.Closed += (s, args) =>
-        //    {
-        //        Overlay.Visibility = Visibility.Collapsed;
-        //    };
-
-        //    popup.Show();
-        //}
-
     }
 }

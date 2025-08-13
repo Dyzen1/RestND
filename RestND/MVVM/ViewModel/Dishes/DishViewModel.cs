@@ -21,8 +21,9 @@ namespace RestND.MVVM.ViewModel
         private readonly DishServices _dishService;
         private readonly DishTypeServices _dishTypeService;
         private readonly ProductService _productService;
-        private readonly HubConnection _hub;
+        private readonly ProductInDishService _productInDishService = new();
         private readonly AllergenNotes _allergenNotes = new AllergenNotes();
+        private readonly HubConnection _hub;
         #endregion
 
         #region Observable properties
@@ -30,7 +31,6 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
         [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
         [ObservableProperty] private ObservableCollection<SelectableProduct> productSelections = new();
-
 
 
         //FOR THE CHECK BOX OPTIONS:
@@ -54,7 +54,6 @@ namespace RestND.MVVM.ViewModel
 
             LoadDishes();
             RefreshProductSelections();
-            //LoadProducts();
             LoadNotes();
 
             _hub.On<Dish, string>("ReceiveDishUpdate", (dish, action) =>
@@ -68,15 +67,6 @@ namespace RestND.MVVM.ViewModel
                         case "add":
                             if (match == null)
                                 Dishes.Add(dish);
-                            break;
-                        case "update":
-                            if (match != null)
-                            {
-                                match.Dish_Name = dish.Dish_Name;
-                                match.Dish_Price = dish.Dish_Price;
-                                match.Allergen_Notes = dish.Allergen_Notes;
-                                match.Dish_Type = dish.Dish_Type;
-                            }
                             break;
                         case "delete":
                             if (match != null)
@@ -94,6 +84,15 @@ namespace RestND.MVVM.ViewModel
         {
             DeleteDishCommand.NotifyCanExecuteChanged();
             AddDishCommand.NotifyCanExecuteChanged();
+
+            if (value == null) return;
+
+            // Only fetch if not already loaded
+            if (value.ProductUsage == null || value.ProductUsage.Count == 0)
+            {
+                var rows = _productInDishService.GetProductsInDish(value.Dish_ID);
+                value.ProductUsage = rows?.ToList() ?? new List<ProductInDish>();
+            }
         }
 
         #endregion
@@ -135,36 +134,6 @@ namespace RestND.MVVM.ViewModel
                 AllergenOptions.Add(item); 
             }
         }
-
-        //[RelayCommand]
-        //private void LoadProducts()
-        //{
-        //    ProductOptions.Clear();
-
-        //    foreach (var product in SelectedProductsInDish)
-        //    {
-        //        var productInDish = new ProductInDish
-        //        {
-        //            Product_ID = product.Product_ID,
-        //            Dish_ID = product.Dish_ID,
-        //            Product_Name = product.Product_Name,
-        //            Amount_Usage = 0
-        //        };
-        //        var item = new SelectableItem<ProductInDish>(productInDish)
-        //        {
-        //            IsSelected = false 
-        //        };
-
-        //        ProductOptions.Add(item);
-        //    }
-        //}
-
-        //private List<ProductInDish> CloneSelectedProducts() =>
-        //    SelectedProductsInDish.Select(p => new ProductInDish
-        //    {
-        //        Product_ID = p.Product_ID,
-        //        Amount_Usage = p.Amount_Usage
-        //    }).ToList();
 
 
         [RelayCommand(CanExecute = nameof(CanAddDish))]
@@ -219,7 +188,6 @@ namespace RestND.MVVM.ViewModel
         }
 
 
-
         [RelayCommand(CanExecute = nameof(CanModifyDish))]
         private async Task DeleteDish()
         {
@@ -244,7 +212,7 @@ namespace RestND.MVVM.ViewModel
         #region Refresh Products Selection
         private void RefreshProductSelections()
         {
-            productSelections = new ObservableCollection<SelectableProduct>(
+            ProductSelections = new ObservableCollection<SelectableProduct>(
                 AvailableProducts.Select(p =>
                     new SelectableProduct(p.Product_ID, p.Product_Name, p.Quantity_Available))
             );

@@ -23,6 +23,11 @@
                 <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
 
+            <Border Grid.Column="1" Grid.RowSpan="3"
+                    VerticalAlignment="Stretch" BorderThickness="2"
+                    BorderBrush="{DynamicResource secondaryHeaders}"/>
+
+
             <!-- Add New Dish Section -->
             <GroupBox Header="New Dish Details" Grid.Row="0" Grid.Column="0">
                 <StackPanel Orientation="Vertical" Margin="0 10 0 0" HorizontalAlignment="Center">
@@ -62,20 +67,23 @@
                 </StackPanel>
             </GroupBox>
 
+
             <GroupBox Header="Products For New Dish" Grid.Row="1" Grid.Column="0">
                 <DataGrid ItemsSource="{Binding ProductSelections}"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           HeadersVisibility="Column"
                           BorderThickness="0"
-                          Width="420"
+                          HorizontalAlignment="Stretch" Margin="0 2 0 0"
                           RowStyle="{DynamicResource rowStyle}"
                           CellStyle="{DynamicResource cellStyle}">
                     <DataGrid.Columns>
-                        <!-- Use/Select -->
-                        <DataGridCheckBoxColumn Header="Use"
-                                    Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    Width="60" />
+                        <DataGridCheckBoxColumn Width="30"
+                            Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridCheckBoxColumn.Header>
+                                <fa:SvgAwesome Icon="Regular_SquareCheck" Width="15" Height="15"/>
+                            </DataGridCheckBoxColumn.Header>
+                        </DataGridCheckBoxColumn>
 
                         <!-- Name (read-only) -->
                         <DataGridTextColumn Header="Product"
@@ -84,15 +92,15 @@
                                 Width="*" />
 
                         <!-- Stock (read-only, optional but nice) -->
-                        <DataGridTextColumn Header="In Stock"
+                        <DataGridTextColumn Header="Quantity In Stock"
                                 Binding="{Binding Quantity_Available}"
                                 IsReadOnly="True"
-                                Width="90" />
+                                Width="*" />
 
                         <!-- Amount to use in this dish -->
                         <DataGridTextColumn Header="Amount (gr)"
                                 Binding="{Binding AmountUsage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                Width="120" />
+                                Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
             </GroupBox>
@@ -119,20 +127,49 @@
             </StackPanel>
 
             <!-- Existing Dishes Grid -->
-            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="8" 
+            <Border Grid.Column="1" Grid.RowSpan="3" Margin="8" 
                     Style="{DynamicResource windowBorder}">
-                <DataGrid ItemsSource="{Binding Dishes}" RowStyle="{DynamicResource rowStyle}"
-                          SelectedItem="{Binding SelectedDish, Mode=TwoWay}" CellStyle="{DynamicResource cellStyle}"
-                          HeadersVisibility="Column">
+                <DataGrid ItemsSource="{Binding Dishes}"
+                          SelectedItem="{Binding SelectedDish}" 
+                          CellStyle="{DynamicResource cellStyle}"
+                          AutoGenerateColumns="False"
+                          RowDetailsVisibilityMode="VisibleWhenSelected">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Dish_Name}" Width="*"/>
+                        <DataGridTextColumn Header="Dish" Binding="{Binding Dish_Name}" Width="*"/>
                         <DataGridTextColumn Header="Price" Binding="{Binding Dish_Price}" Width="*" />
                         <DataGridTextColumn Header="Allergens" Binding="{Binding Allergen_Notes}" Width="*" />
                         <DataGridTextColumn Header="Dish Type" Binding="{Binding Dish_Type.DishType_Name}" Width="*" />
                     </DataGrid.Columns>
 
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="DetailsVisibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="DetailsVisibility" Value="Visible"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding ProductUsage}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel>
+                                            <TextBlock Text="{Binding Product_Name}" DockPanel.Dock="Left"/>
+                                            <TextBlock Text="{Binding Amount_Usage, StringFormat={}{0} gr}" DockPanel.Dock="Right"/>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
+
                 </DataGrid>
+
             </Border>
 
             <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2" Grid.Column="0"
