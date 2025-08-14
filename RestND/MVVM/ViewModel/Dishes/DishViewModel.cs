@@ -32,7 +32,6 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
         [ObservableProperty] private ObservableCollection<SelectableProduct> productSelections = new();
 
-
         //FOR THE CHECK BOX OPTIONS:
         [ObservableProperty] private ObservableCollection<string> selectedAllergenNotes = new();
         [ObservableProperty] private ObservableCollection<SelectableItem<string>> allergenOptions = new();
@@ -87,13 +86,28 @@ namespace RestND.MVVM.ViewModel
 
             if (value == null) return;
 
-            // Only fetch if not already loaded
+            // Load link rows only if missing/empty
             if (value.ProductUsage == null || value.ProductUsage.Count == 0)
             {
-                var rows = _productInDishService.GetProductsInDish(value.Dish_ID);
-                value.ProductUsage = rows?.ToList() ?? new List<ProductInDish>();
+                var rows = _productInDishService.GetProductsInDish(value.Dish_ID) ?? new List<ProductInDish>();
+
+                // 🔧 Patch missing names using inventory (handles null/empty Product_Name)
+                var nameById = AvailableProducts
+                    .ToDictionary(p => p.Product_ID, p => p.Product_Name);
+
+                foreach (var r in rows)
+                {
+                    if (string.IsNullOrWhiteSpace(r.Product_Name) &&
+                        nameById.TryGetValue(r.Product_ID, out var name))
+                    {
+                        r.Product_Name = name;
+                    }
+                }
+
+                value.ProductUsage = rows;
             }
         }
+
 
         #endregion
 
@@ -144,7 +158,7 @@ namespace RestND.MVVM.ViewModel
 
             // Build ProductUsage from the grid rows the user checked + filled
             var chosen = ProductSelections
-                .Where(x => x.isSelected && x.amountUsage > 0)
+                .Where(x => x.IsSelected && x.AmountUsage > 0)
                 .Select(x => new ProductInDish
                 {
                     Product_ID = x.Product_ID,
@@ -174,11 +188,17 @@ namespace RestND.MVVM.ViewModel
 
                 // reset the form
                 NewDish = new Dish();
+
+                // uncheck all allergens (and clear the backing collection)
+                foreach (var a in AllergenOptions)
+                    a.IsSelected = false;
+
                 SelectedAllergenNotes.Clear();
-                foreach (var sp in productSelections)
+
+                foreach (var sp in ProductSelections)
                 {
-                    sp.isSelected = false;
-                    sp.amountUsage = 0;
+                    sp.IsSelected = false;
+                    sp.AmountUsage = 0;
                 }
             }
             else

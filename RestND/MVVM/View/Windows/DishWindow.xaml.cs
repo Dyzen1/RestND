@@ -7,7 +7,9 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace RestND.MVVM.View
 {
@@ -20,6 +22,7 @@ namespace RestND.MVVM.View
             this.DataContext = new DishViewModel();
         }
 
+        // move the window around by clicking and dragging.
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
@@ -48,6 +51,7 @@ namespace RestND.MVVM.View
             //Application.Current.Shutdown(); - if we want the app to totally close. 
         }
 
+        // handles opening the update dish popup window.
         private void UpdateDishBtn_Click(object sender, RoutedEventArgs e)
         {
             var vm = DataContext as DishViewModel;
@@ -71,5 +75,30 @@ namespace RestND.MVVM.View
                 MessageBox.Show("Please select a dish to update.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
+        // method for collapsing back the products details row on the second click.
+        private void Row_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is not DataGridRow row) return;
+
+            // if click happened inside the details area, ignore (don’t collapse)
+            if (FindAncestor<DataGridDetailsPresenter>(e.OriginalSource as DependencyObject) != null)
+                return;
+
+            // second click on the same row -> collapse by deselecting
+            if (row.IsSelected)
+            {
+                row.IsSelected = false;   // this collapses details (VisibleWhenSelected)
+                e.Handled = true;         // stop the default re-select
+            }
+        }
+        // helper method to Row_PreviewMouseLeftButtonDown().
+        private static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            while (current != null && current is not T)
+                current = VisualTreeHelper.GetParent(current);
+            return current as T;
+        }
+
     }
 }

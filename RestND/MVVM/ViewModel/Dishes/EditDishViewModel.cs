@@ -31,21 +31,20 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private ObservableCollection<SelectableItem<string>> allergenOptions = new();
 
         [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
-        //[ObservableProperty] private ObservableCollection<ProductInDish> selectedProductsInDish = new();
         private readonly List<string> _allPossibleAllergens = new()
         {
-            "Contains Gluten/Wheat.",
-            "Contains Peanuts.",
-            "Contains Tree Nuts.",
-            "Contains Milk Or Dairy Ingredients.",
-            "Contains Eggs Or Egg-Derived Ingredients.",
-            "Contains Soy Or Soy-Derived Ingredients.",
-            "Contains Fish.",
-            "Contains Shellfish.",
-            "Contains Sesame.",
-            "Contains Mustard.",
-            "Contains Celery.",
-            "Contains Sulfites."
+            "Contains Gluten/Wheat",
+            "Contains Peanuts",
+            "Contains Tree Nuts",
+            "Contains Milk Or Dairy Ingredients",
+            "Contains Eggs Or Egg-Derived Ingredients",
+            "Contains Soy Or Soy-Derived Ingredients",
+            "Contains Fish",
+            "Contains Shellfish",
+            "Contains Sesame",
+            "Contains Mustard",
+            "Contains Celery",
+            "Contains Sulfites"
         };
         #endregion
 
@@ -94,10 +93,8 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private async Task UpdateDish()
         {
-            //SelectedDish.Allergen_Notes = string.Join(",", SelectedDish);
-            SelectedDish.Allergen_Notes = string.Join(",",
+            SelectedDish.Allergen_Notes = string.Join(", ",
             AllergenOptions.Where(a => a.IsSelected).Select(a => a.Value));
-
 
             // Build ProductUsage from the grid rows the user checked + filled
             var chosen = ProductSelections
@@ -156,7 +153,7 @@ namespace RestND.MVVM.ViewModel
                 {
                     if (e.PropertyName == nameof(SelectableItem<string>.IsSelected))
                     {
-                        SelectedDish.Allergen_Notes = string.Join(",",
+                        SelectedDish.Allergen_Notes = string.Join(", ",
                             AllergenOptions.Where(a => a.IsSelected).Select(a => a.Value));
                     }
                 };
@@ -166,7 +163,7 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
-        #region Gett Products Selection
+        #region Get Products Selection
         private void GetProductSelections()
         {
             ProductSelections.Clear();
