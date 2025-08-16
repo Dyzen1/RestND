@@ -41,7 +41,7 @@
                                 <TextBlock Text="Add" Margin="6,0,0,0" />
                             </StackPanel>
                         </Button>
-                        <Button Command="{Binding UpdateEmployeeCommand}" Style="{DynamicResource SubmitBtn}" Margin="0,0,8,0">
+                        <Button Command="{Binding UpdateEmployeeCommand}" Style="{DynamicResource SubmitBtn}" Margin="0,0,8,0" Click="EditEmployee">
                             <TextBlock Text="Update"/>
                         </Button>
                         <Button Command="{Binding DeleteEmployeeCommand}" Style="{DynamicResource SubmitBtn}" >

@@ -39,25 +39,25 @@ namespace RestND.MVVM.View
 
             popup.ShowDialog();
         }
-        //private void EditEmployee(object sender, RoutedEventArgs e)
-        //{
-        //    Overlay.Visibility = Visibility.Visible;
-        //    this.Opacity = 0.4;
+        private void EditEmployee(object sender, RoutedEventArgs e)
+        {
+            Overlay.Visibility = Visibility.Visible;
+            this.Opacity = 0.4;
 
-        //    var popup = new AddNewEmployeeWindow
-        //    {
-        //        Owner = this,
-        //        WindowStartupLocation = WindowStartupLocation.CenterOwner
-        //    };
+            var popup = new EditEmployeeWindow
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
 
-        //    popup.Closed += (s, args) =>
-        //    {
-        //        Overlay.Visibility = Visibility.Collapsed;
-        //        this.Opacity = 1.0;
-        //    };
+            popup.Closed += (s, args) =>
+            {
+                Overlay.Visibility = Visibility.Collapsed;
+                this.Opacity = 1.0;
+            };
 
-        //    popup.ShowDialog();
-        //}
+            popup.ShowDialog();
+        }
 
         //private void DeleteEmployee(object sender, RoutedEventArgs e)
         //{
