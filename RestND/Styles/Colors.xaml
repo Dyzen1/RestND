@@ -8,6 +8,10 @@
     <SolidColorBrush x:Key="Hover" Color="LightGoldenrodYellow"/> <!--for mouse hover bg-->
     <SolidColorBrush x:Key="secondaryHeaders" Color="Gray"/>
     <SolidColorBrush x:Key="secondaryBtns" Color="#8fce00"/> <!--for some of the icons-->
+    <SolidColorBrush x:Key="DividerBrush" Color="#40FFFFFF"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="#2D89EF"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#40FFFFFF"/>
+
 
     <!--<Style x:Key="bg" TargetType="Image">
         <Setter Property="Source" Value="\Styles\Assets\bg_image.jpg"/>
