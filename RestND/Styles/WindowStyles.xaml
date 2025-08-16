@@ -82,6 +82,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
         <Setter Property="Width" Value="160"/>
         <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+        <Setter Property="MaxHeight" Value="150"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListBox">
@@ -94,7 +95,6 @@
                           ClipToBounds="True">
                         <ScrollViewer x:Name="PART_ScrollViewer"
                                   Focusable="false"
-                                  Padding="{TemplateBinding Padding}"
                                   VerticalScrollBarVisibility="Auto"
                                   HorizontalScrollBarVisibility="Auto">
                             <ItemsPresenter /> <!--this is what actually presents the items!!-->
@@ -162,88 +162,6 @@
         </Setter>
     </Style>
 
-    <!--for ALL comboBoxes-->
-    <Style TargetType="ComboBox">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Height" Value="23"/>
-        <Setter Property="Width" Value="160"/>
-        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
-        <Setter Property="Padding" Value="4,0,25,0"/>
-        <Setter Property="ItemContainerStyle">
-            <Setter.Value>
-                <Style TargetType="ComboBoxItem">
-                    <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="Background" Value="White"/>
-                    <Setter Property="Padding" Value="6,2"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                </Style>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ComboBox">
-                    <Grid>
-                        <Border Name="Border"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="8">
-                            <Grid>
-                                <ContentPresenter Name="ContentSite"
-                                              Margin="4,2,25,2"
-                                              HorizontalAlignment="Left"
-                                              VerticalAlignment="Center"
-                                              Content="{TemplateBinding SelectionBoxItem}"
-                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                              IsHitTestVisible="False"/>
-                                <ToggleButton Name="ToggleButton"
-                                          IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                          Background="Transparent"
-                                          BorderThickness="0"
-                                          Focusable="False"
-                                          ClickMode="Press"
-                                          HorizontalAlignment="Right"
-                                          VerticalAlignment="Center"
-                                          Width="20"
-                                          Height="20"
-                                          Margin="0,0,4,0">
-                                    <Path Data="M 0 0 L 4 4 L 8 0 Z"
-                                      Fill="{TemplateBinding Foreground}"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
-                                </ToggleButton>
-                            </Grid>
-                        </Border>
-
-                        <Popup Name="PART_Popup"
-                           Placement="Bottom"
-                           IsOpen="{TemplateBinding IsDropDownOpen}"
-                           AllowsTransparency="True"
-                           Focusable="False"
-                           PopupAnimation="Slide">
-                            <Grid Name="DropDown"
-                              SnapsToDevicePixels="True"
-                              MinWidth="{TemplateBinding ActualWidth}"
-                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                <Border Background="White"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="4"/>
-                                <ScrollViewer Margin="4,6,4,6">
-                                    <StackPanel IsItemsHost="True"
-                                            KeyboardNavigation.DirectionalNavigation="Contained"/>
-                                </ScrollViewer>
-                            </Grid>
-                        </Popup>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
     <!--for ALL groupBoxes-->
     <Style TargetType="GroupBox">
         <Setter Property="BorderThickness" Value="0.5"/>
@@ -251,5 +169,98 @@
         <Setter Property="Foreground" Value="{DynamicResource secondaryHeaders}"/>
     </Style>
 
+
+    <Style x:Key="sideBarExpander" TargetType="Expander">
+        <Setter Property="ExpandDirection" Value="Left"/>
+        <Setter Property="IsExpanded" Value="False"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        
+    </Style>
+    
+
+    <!--for ALL comboBoxes-->
+    <!--
+<Style TargetType="ComboBox">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Height" Value="23"/>
+    <Setter Property="Width" Value="160"/>
+    <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+    <Setter Property="Padding" Value="4,0,25,0"/>
+    <Setter Property="ItemContainerStyle">
+        <Setter.Value>
+            <Style TargetType="ComboBoxItem">
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="Background" Value="White"/>
+                <Setter Property="Padding" Value="6,2"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            </Style>
+        </Setter.Value>
+    </Setter>
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="ComboBox">
+                <Grid>
+                    <Border Name="Border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8">
+                        <Grid>
+                            <ContentPresenter Name="ContentSite"
+                                          Margin="4,2,25,2"
+                                          HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                          IsHitTestVisible="False"/>
+                            <ToggleButton Name="ToggleButton"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                      Background="Transparent"
+                                      BorderThickness="0"
+                                      Focusable="False"
+                                      ClickMode="Press"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"
+                                      Width="20"
+                                      Height="20"
+                                      Margin="0,0,4,0">
+                                <Path Data="M 0 0 L 4 4 L 8 0 Z"
+                                  Fill="{TemplateBinding Foreground}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                            </ToggleButton>
+                        </Grid>
+                    </Border>
+
+                    <Popup Name="PART_Popup"
+                       Placement="Bottom"
+                       IsOpen="{TemplateBinding IsDropDownOpen}"
+                       AllowsTransparency="True"
+                       Focusable="False"
+                       PopupAnimation="Slide">
+                        <Grid Name="DropDown"
+                          SnapsToDevicePixels="True"
+                          MinWidth="{TemplateBinding ActualWidth}"
+                          MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                            <Border Background="White"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="4"/>
+                            <ScrollViewer Margin="4,6,4,6">
+                                <StackPanel IsItemsHost="True"
+                                        KeyboardNavigation.DirectionalNavigation="Contained"/>
+                            </ScrollViewer>
+                        </Grid>
+                    </Popup>
+                </Grid>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>-->
 
 </ResourceDictionary>

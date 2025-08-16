@@ -18,30 +18,33 @@ namespace RestND.MVVM.ViewModel
         #region Services
         private readonly DishServices _dishService = new();
         private readonly DishTypeServices _dishTypeService = new();
+        private readonly ProductService _productService = new();
+        private readonly ProductInDishService _productInDishService= new();
         private readonly HubConnection _hub;
         #endregion
 
         #region Observable properties
+        [ObservableProperty] private ObservableCollection<SelectableProduct> productSelections = new();
+
         [ObservableProperty] private Dish selectedDish;
         [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
         [ObservableProperty] private ObservableCollection<SelectableItem<string>> allergenOptions = new();
-        [ObservableProperty] private ObservableCollection<SelectableItem<ProductInDish>> productOptions = new();
+
         [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
-        [ObservableProperty] private ObservableCollection<ProductInDish> selectedProductsInDish = new();
         private readonly List<string> _allPossibleAllergens = new()
         {
-            "Contains Gluten/Wheat.",
-            "Contains Peanuts.",
-            "Contains Tree Nuts.",
-            "Contains Milk Or Dairy Ingredients.",
-            "Contains Eggs Or Egg-Derived Ingredients.",
-            "Contains Soy Or Soy-Derived Ingredients.",
-            "Contains Fish.",
-            "Contains Shellfish.",
-            "Contains Sesame.",
-            "Contains Mustard.",
-            "Contains Celery.",
-            "Contains Sulfites."
+            "Contains Gluten/Wheat",
+            "Contains Peanuts",
+            "Contains Tree Nuts",
+            "Contains Milk Or Dairy Ingredients",
+            "Contains Eggs Or Egg-Derived Ingredients",
+            "Contains Soy Or Soy-Derived Ingredients",
+            "Contains Fish",
+            "Contains Shellfish",
+            "Contains Sesame",
+            "Contains Mustard",
+            "Contains Celery",
+            "Contains Sulfites"
         };
         #endregion
 
@@ -49,6 +52,7 @@ namespace RestND.MVVM.ViewModel
         public EditDishViewModel(Dish dishToEdit)
         {
             _hub = App.DishHub;
+            _productService = new ProductService();
 
             SelectedDish = new Dish
             {
@@ -59,6 +63,8 @@ namespace RestND.MVVM.ViewModel
                 Allergen_Notes = dishToEdit.Allergen_Notes
             };
 
+            SelectedDish.ProductUsage = _productInDishService.GetProductsInDish(SelectedDish.Dish_ID).ToList();
+
             // saving the former user's selection of dish type.
             DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
             if (SelectedDish.Dish_Type != null)
@@ -68,9 +74,68 @@ namespace RestND.MVVM.ViewModel
                     SelectedDish.Dish_Type = matchingType;
             }
 
-            AllergenOptions = new ObservableCollection<SelectableItem<string>>();
+            BuildAllergenOptions();
+            AvailableProducts = new ObservableCollection<Inventory>(_productService.GetAll());
+            GetProductSelections();
 
-            // adding the selected allergens to the options list.
+        }
+        #endregion
+        
+        #region On change
+        partial void OnSelectedDishChanged(Dish value)
+        {
+            UpdateDishCommand.NotifyCanExecuteChanged();
+        }
+        #endregion
+
+        #region Relay commands
+
+        [RelayCommand]
+        private async Task UpdateDish()
+        {
+            SelectedDish.Allergen_Notes = string.Join(", ",
+            AllergenOptions.Where(a => a.IsSelected).Select(a => a.Value));
+
+            // Build ProductUsage from the grid rows the user checked + filled
+            var chosen = ProductSelections
+                .Where(x => x.IsSelected)
+                .Select(x => new ProductInDish
+                {
+                    Product_ID = x.Product_ID,
+                    Product_Name = x.Product_Name,
+                    Amount_Usage = x.AmountUsage,
+                    Dish_ID = SelectedDish.Dish_ID // keep 0 if DB assigns
+                })
+                .ToList();
+
+            SelectedDish.ProductUsage = chosen;
+
+            if (string.IsNullOrWhiteSpace(SelectedDish.Dish_Name) ||
+                SelectedDish.Dish_Price <= 0 ||
+                SelectedDish.Dish_Type == null ||
+                SelectedDish.ProductUsage == null || !SelectedDish.ProductUsage.Any())
+            {
+                MessageBox.Show("Please fill in all required fields and add at least one product.");
+                return;
+            }
+
+            bool success = _dishService.Update(SelectedDish);
+            if (success)
+            {
+                await _hub.SendAsync("NotifyDishUpdate", SelectedDish, "update");
+                MessageBox.Show("Dish updated successfully.", "Success");
+
+            }
+            else
+            {
+                MessageBox.Show("Failed to update dish.", "Error");
+            }
+        }
+
+        public void BuildAllergenOptions()
+        {
+            AllergenOptions.Clear();
+
             var selectedNotes = (SelectedDish.Allergen_Notes ?? "")
                 .Split(',')
                 .Select(x => x.Trim())
@@ -88,58 +153,37 @@ namespace RestND.MVVM.ViewModel
                 {
                     if (e.PropertyName == nameof(SelectableItem<string>.IsSelected))
                     {
-                        SelectedDish.Allergen_Notes = string.Join(",",
+                        SelectedDish.Allergen_Notes = string.Join(", ",
                             AllergenOptions.Where(a => a.IsSelected).Select(a => a.Value));
                     }
                 };
                 AllergenOptions.Add(item);
             }
         }
-        #endregion
-        
-        #region On change
-        partial void OnSelectedDishChanged(Dish value)
-        {
-            UpdateDishCommand.NotifyCanExecuteChanged();
-        }
+
         #endregion
 
-        #region Relay commands
-        private List<ProductInDish> CloneSelectedProducts() =>
-            SelectedProductsInDish.Select(p => new ProductInDish
-            {
-                Product_ID = p.Product_ID,
-                Amount_Usage = p.Amount_Usage
-            }).ToList();
-
-        [RelayCommand]
-        private async Task UpdateDish()
+        #region Get Products Selection
+        private void GetProductSelections()
         {
-            SelectedDish.ProductUsage = CloneSelectedProducts();
-            SelectedDish.Allergen_Notes = string.Join(",", SelectedDish);
-            SelectedDish.ProductUsage = ProductOptions
-                    .Where(x => x.IsSelected)
-                    .Select(x => x.Value)
-                    .ToList();
+            ProductSelections.Clear();
 
-            if (string.IsNullOrWhiteSpace(SelectedDish.Dish_Name) ||
-                SelectedDish.Dish_Price <= 0 ||
-                SelectedDish.Dish_Type == null ||
-                SelectedDish.ProductUsage == null || !SelectedDish.ProductUsage.Any())
-            {
-                MessageBox.Show("Please fill in all required fields and add at least one product.");
-                return;
-            }
+            // Map former selections: Product_ID -> ProductInDish
+            var existing = (SelectedDish?.ProductUsage ?? new List<ProductInDish>())
+                           .ToDictionary(x => x.Product_ID);
 
-            bool success = _dishService.Update(SelectedDish);
-            if (success)
+            // Show ALL inventory; preselect + prefill amounts for ones already in the dish
+            foreach (var p in AvailableProducts)
             {
-                await _hub.SendAsync("NotifyDishUpdate", SelectedDish, "update");
-                MessageBox.Show("Dish updated successfully.", "Success");
-            }
-            else
-            {
-                MessageBox.Show("Failed to update dish.", "Error");
+                var row = new SelectableProduct(p.Product_ID, p.Product_Name, p.Quantity_Available);
+
+                if (existing.TryGetValue(p.Product_ID, out var link))
+                {
+                    row.IsSelected = true;
+                    row.AmountUsage = link.Amount_Usage;
+                }
+
+                ProductSelections.Add(row);
             }
         }
         #endregion

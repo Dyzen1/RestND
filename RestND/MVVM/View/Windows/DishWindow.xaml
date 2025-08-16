@@ -20,12 +20,17 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="90"/>
             </Grid.RowDefinitions>
+
+            <Border Grid.Column="1" Grid.RowSpan="3"
+                    VerticalAlignment="Stretch" BorderThickness="2"
+                    BorderBrush="{DynamicResource secondaryHeaders}"/>
+
 
             <!-- Add New Dish Section -->
             <GroupBox Header="New Dish Details" Grid.Row="0" Grid.Column="0">
-                <StackPanel Orientation="Vertical" Margin="0 10 0 0" HorizontalAlignment="Center">
+                <StackPanel Orientation="Vertical" Margin="15 0 0 0" HorizontalAlignment="Left">
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                         <Label Content="Dish Name:"/>
@@ -41,7 +46,7 @@
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                         <Label Content="Allergen Notes:" Width="120"/>
-                        <ListBox ItemsSource="{Binding AllergenOptions}">
+                        <ListBox ItemsSource="{Binding AllergenOptions}" Width="220">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <CheckBox Content="{Binding Value}" 
@@ -62,20 +67,23 @@
                 </StackPanel>
             </GroupBox>
 
+
             <GroupBox Header="Products For New Dish" Grid.Row="1" Grid.Column="0">
                 <DataGrid ItemsSource="{Binding ProductSelections}"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           HeadersVisibility="Column"
-                          BorderThickness="0"
-                          Width="420"
+                          BorderThickness="0" BorderBrush="Transparent"
+                          HorizontalAlignment="Stretch" Margin="3"
                           RowStyle="{DynamicResource rowStyle}"
                           CellStyle="{DynamicResource cellStyle}">
                     <DataGrid.Columns>
-                        <!-- Use/Select -->
-                        <DataGridCheckBoxColumn Header="Use"
-                                    Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    Width="60" />
+                        <DataGridCheckBoxColumn Width="30"
+                            Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridCheckBoxColumn.Header>
+                                <fa:SvgAwesome Icon="Regular_SquareCheck" Width="15" Height="15"/>
+                            </DataGridCheckBoxColumn.Header>
+                        </DataGridCheckBoxColumn>
 
                         <!-- Name (read-only) -->
                         <DataGridTextColumn Header="Product"
@@ -84,15 +92,15 @@
                                 Width="*" />
 
                         <!-- Stock (read-only, optional but nice) -->
-                        <DataGridTextColumn Header="In Stock"
+                        <DataGridTextColumn Header="Quantity In Stock"
                                 Binding="{Binding Quantity_Available}"
                                 IsReadOnly="True"
-                                Width="90" />
+                                Width="*" />
 
                         <!-- Amount to use in this dish -->
                         <DataGridTextColumn Header="Amount (gr)"
                                 Binding="{Binding AmountUsage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                Width="120" />
+                                Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
             </GroupBox>
@@ -103,12 +111,71 @@
                 <StackPanel Orientation="Horizontal">
                     <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
                     <TextBlock Text="Add Dish" FontSize="13" Foreground="{DynamicResource LightText}" 
-                                Margin="4,0,0,0"/>
+                                Margin="4 0 0 0"/>
                 </StackPanel>
             </Button>
 
-            <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Horizontal"
-                        Margin="0 0 0 25" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+            <!-- Existing Dishes Grid -->
+            <Border Grid.Column="1" Grid.RowSpan="2" Margin="8" 
+                    Style="{DynamicResource windowBorder}">
+                <DataGrid ItemsSource="{Binding Dishes}"
+                          SelectedItem="{Binding SelectedDish}" 
+                          CellStyle="{DynamicResource cellStyle}"
+                          AutoGenerateColumns="False" 
+                          RowDetailsVisibilityMode="VisibleWhenSelected">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Dish" Binding="{Binding Dish_Name}" Width="90"/>
+                        <DataGridTextColumn Header="Price" Binding="{Binding Dish_Price}" Width="50" />
+                        <DataGridTextColumn Header="Allergens" Binding="{Binding Allergen_Notes}" Width="*" />
+                        <DataGridTextColumn Header="Dish Type" Binding="{Binding Dish_Type.DishType_Name}" Width="90" />
+                    </DataGrid.Columns>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="DetailsVisibility" Value="Collapsed"/>
+                            <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+                            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+
+                            <!-- toggle on second click -->
+                            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Row_PreviewMouseLeftButtonDown"/>
+
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="DetailsVisibility" Value="Visible"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+                                    <Setter Property="Background" Value="{DynamicResource Hover}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding ProductUsage}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <fa:SvgAwesome Icon="Regular_SquareCheck" Width="10" Height="10" Margin="0,0,5,0"
+                                                           PrimaryColor="{DynamicResource secondaryHeaders}"/>
+                                            <TextBlock Text="{Binding Product_Name}" Margin="0,0,5,0"
+                                                       Foreground="{DynamicResource secondaryHeaders}"/>
+                                            <TextBlock Text="{Binding Amount_Usage, StringFormat={}{0}gr}" 
+                                                       Foreground="{DynamicResource secondaryHeaders}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
+
+                </DataGrid>
+
+            </Border>
+
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal"
+                        HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Button Content="Update Dish" 
                          Click="UpdateDishBtn_Click"
                          Style="{DynamicResource SubmitBtn}"/>
@@ -118,26 +185,9 @@
                         Margin="20,0,0,0" Style="{DynamicResource SubmitBtn}"/>
             </StackPanel>
 
-            <!-- Existing Dishes Grid -->
-            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Margin="8" 
-                    Style="{DynamicResource windowBorder}">
-                <DataGrid ItemsSource="{Binding Dishes}" RowStyle="{DynamicResource rowStyle}"
-                          SelectedItem="{Binding SelectedDish, Mode=TwoWay}" CellStyle="{DynamicResource cellStyle}"
-                          HeadersVisibility="Column">
-
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Dish_Name}" Width="*"/>
-                        <DataGridTextColumn Header="Price" Binding="{Binding Dish_Price}" Width="*" />
-                        <DataGridTextColumn Header="Allergens" Binding="{Binding Allergen_Notes}" Width="*" />
-                        <DataGridTextColumn Header="Dish Type" Binding="{Binding Dish_Type.DishType_Name}" Width="*" />
-                    </DataGrid.Columns>
-
-                </DataGrid>
-            </Border>
-
             <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2" Grid.Column="0"
                           VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-            <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="2" Grid.Column="1" 
+            <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="2" Grid.Column="0" 
                        VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,15,20"/>
         </Grid>
     </Border>

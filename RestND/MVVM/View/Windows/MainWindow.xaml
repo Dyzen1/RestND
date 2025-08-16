@@ -45,12 +45,9 @@
                             Click="CloseBtn_Click" Foreground="{DynamicResource LightText}"/>
                 </StackPanel>
 
-                <Expander ExpandDirection="Left"
-                          IsExpanded="False" BorderThickness="0"
-                          Foreground="{DynamicResource LightText}" HorizontalAlignment="Right"
-                          VerticalAlignment="Top" HorizontalContentAlignment="Stretch"
-                          Grid.Row="1" Grid.Column="2" Margin="5">
-                    <uc:SideBar x:Name="sideBar" Width="100"/>
+                <Expander Style="{DynamicResource sideBarExpander}"
+                          Grid.Row="1" Grid.Column="2">
+                    <uc:SideBar x:Name="sideBar"/>
                 </Expander>
 
                 <Button Name="AdminLogin" Style="{DynamicResource loginBtn}" Grid.Row="0" Grid.Column="0" Click="AdminLogin_Click"/>

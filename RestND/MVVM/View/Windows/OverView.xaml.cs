@@ -12,14 +12,6 @@ namespace RestND.MVVM.View.Windows
             this.DataContext = new OrderViewModel();
         }
 
-        private void return_Click(object sender, RoutedEventArgs e)
-        {
-            var mainWindow = new MainWindow();
-            mainWindow.WindowState = WindowState.Maximized;
-            mainWindow.Show();
-            this.Close();
-        }
-
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)

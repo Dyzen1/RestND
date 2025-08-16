@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
+        xmlns:fa="http://schemas.fontawesome.com/icons/svg"
         mc:Ignorable="d" Style="{StaticResource popupStyle}"
         Title="Edit Dish" Width="450" Height="700"
         WindowStartupLocation="CenterOwner">
@@ -19,34 +20,33 @@
             </Grid.RowDefinitions>
 
             <GroupBox Grid.Row="0" Header="Update Dish Details">
+                <StackPanel HorizontalAlignment="Left" Orientation="Vertical" 
+                        VerticalAlignment="Center" Margin="15 0 0 0">
 
-            <StackPanel HorizontalAlignment="Center" Orientation="Vertical" 
-                        VerticalAlignment="Center" Margin="0 0 0 30">
-                
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                    <Label Content="Dish Name:"/>
-                    <TextBox Text="{Binding SelectedDish.Dish_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Dish Name:"/>
+                        <TextBox Text="{Binding SelectedDish.Dish_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                Margin="10 0 0 0"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Price:"/>
+                        <TextBox Text="{Binding SelectedDish.Dish_Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                              Margin="10 0 0 0"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                    <Label Content="Price:"/>
-                    <TextBox Text="{Binding SelectedDish.Dish_Price, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Margin="10 0 0 0"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                    <Label Content="Allergen Notes:" Width="115"/>
-                    <ListBox ItemsSource="{Binding AllergenOptions}" Margin="4 0 0 0">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <CheckBox Content="{Binding Value}" 
-                                          Foreground="{DynamicResource LightText}"
-                                          IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Allergen Notes:" Width="115"/>
+                        <ListBox ItemsSource="{Binding AllergenOptions}" Width="220" Margin="4 0 0 0">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding Value}" 
+                                              Foreground="{DynamicResource LightText}"
+                                              IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                         <Label Content="Dish Type:"/>
@@ -57,26 +57,44 @@
                             Margin="10 0 0 0"/>
                     </StackPanel>
                 </StackPanel>
-                
             </GroupBox>
 
-            <GroupBox Grid.Row="1" Header="Update Products">
-                <StackPanel Orientation="Horizontal" Margin="8" HorizontalAlignment="Center">
-                    <ListBox ItemsSource="{Binding ProductOptions}" BorderBrush="Transparent" Width="400">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                    <CheckBox Content="{Binding Value.Product_Name}" Width="120"
-                                              Foreground="{DynamicResource LightText}"
-                                              IsChecked="{Binding IsSelected, Mode=TwoWay}" VerticalAlignment="Center"/>
-                                    <TextBox Width="50" Margin="35 0 0 0"
-                                             Text="{Binding Value.Amount_Usage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Label Content="/gr"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </StackPanel>
+            <GroupBox Grid.Row="1" Header="Update Ingredients">
+                <DataGrid ItemsSource="{Binding ProductSelections}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          HeadersVisibility="Column"
+                          BorderThickness="0"
+                          Width="420" Margin="3"
+                          RowStyle="{DynamicResource rowStyle}"
+                          CellStyle="{DynamicResource cellStyle}">
+                    
+                    <DataGrid.Columns>
+                        <DataGridCheckBoxColumn Width="30"
+                            Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <DataGridCheckBoxColumn.Header>
+                                <fa:SvgAwesome Icon="Regular_SquareCheck" Width="15" Height="15"/>
+                            </DataGridCheckBoxColumn.Header>
+                        </DataGridCheckBoxColumn>
+                            
+                        <!-- Name (read-only) -->
+                        <DataGridTextColumn Header="Product"
+                            Binding="{Binding Product_Name}"
+                            IsReadOnly="True"
+                            Width="*" />
+
+                        <!-- Stock (read-only, optional but nice) -->
+                        <DataGridTextColumn Header="Quantity In Stock"
+                            Binding="{Binding Quantity_Available}"
+                            IsReadOnly="True"
+                            Width="*" />
+
+                        <!-- Amount to use in this dish -->
+                        <DataGridTextColumn Header="Amount (gr)"
+                            Binding="{Binding AmountUsage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            Width="90" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </GroupBox>
 
             <Button Content="Save" Grid.Row="2" 
@@ -86,7 +104,7 @@
 
             <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
             <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="2"/>
-        
+
         </Grid>
     </Border>
 </Window>
