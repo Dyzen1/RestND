@@ -171,7 +171,7 @@
     
 
     <!--for ALL comboBoxes-->
-    <!--
+    
 <Style TargetType="ComboBox">
     <Setter Property="Background" Value="Transparent"/>
     <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
@@ -251,6 +251,6 @@
             </ControlTemplate>
         </Setter.Value>
     </Setter>
-</Style>-->
+</Style>
 
 </ResourceDictionary>

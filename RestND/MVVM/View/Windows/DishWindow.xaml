@@ -18,18 +18,23 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="90"/>
+                <RowDefinition Height="250"/>
+                <RowDefinition Height="70"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Column="1" Grid.RowSpan="3"
+            <uc:SearchBar x:Name="DishSearch" Grid.Row="0" Grid.Column="1" 
+                          Margin="8 15 0 0" HorizontalAlignment="Left"
+                          Placeholder="Search by dish name"/>
+
+            <Border Grid.Column="1" Grid.RowSpan="4"
                     VerticalAlignment="Stretch" BorderThickness="2"
                     BorderBrush="{DynamicResource secondaryHeaders}"/>
 
 
             <!-- Add New Dish Section -->
-            <GroupBox Header="New Dish Details" Grid.Row="0" Grid.Column="0">
+            <GroupBox Header="New Dish Details" Grid.RowSpan="2" Grid.Column="0">
                 <StackPanel Orientation="Vertical" Margin="15 0 0 0" HorizontalAlignment="Left">
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
@@ -68,8 +73,16 @@
             </GroupBox>
 
 
-            <GroupBox Header="Products For New Dish" Grid.Row="1" Grid.Column="0">
-                <DataGrid ItemsSource="{Binding ProductSelections}"
+            <GroupBox Header="Products For New Dish" Grid.Row="2" Grid.Column="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <uc:SearchBar x:Name="ProductSearch" Grid.Row="0"
+                          Placeholder="Search by product name" Margin="3" HorizontalAlignment="Left"/>
+                <DataGrid ItemsSource="{Binding ProductSelections}" Grid.Row="1"
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           HeadersVisibility="Column"
@@ -103,22 +116,23 @@
                                 Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
+                </Grid>
             </GroupBox>
 
 
-            <Button Grid.Column="0" Grid.Row="2" Command="{Binding AddDishCommand}" Margin="0 15 0 0" 
+            <Button Grid.Column="0" Grid.Row="3" Command="{Binding AddDishCommand}" Margin="0 10 0 0" 
                     Style="{DynamicResource addBtn}" HorizontalAlignment="Center" VerticalAlignment="Top">
                 <StackPanel Orientation="Horizontal">
                     <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
-                    <TextBlock Text="Add Dish" FontSize="13" Foreground="{DynamicResource LightText}" 
-                                Margin="4 0 0 0"/>
+                    <TextBlock Text="Add Dish" FontSize="13" Foreground="{DynamicResource LightText}"
+                               Margin="5 0 0 0"/>
                 </StackPanel>
             </Button>
 
-            <!-- Existing Dishes Grid -->
-            <Border Grid.Column="1" Grid.RowSpan="2" Margin="8" 
+            <!-- Dishes Grid -->
+            <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="8" 
                     Style="{DynamicResource windowBorder}">
-                <DataGrid ItemsSource="{Binding Dishes}"
+                <DataGrid ItemsSource="{Binding Dishes}" x:Name="DishGrid"
                           SelectedItem="{Binding SelectedDish}" 
                           CellStyle="{DynamicResource cellStyle}"
                           AutoGenerateColumns="False" 
@@ -174,8 +188,9 @@
 
             </Border>
 
-            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal"
-                        HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Margin="0 0 0 10">
                 <Button Content="Update Dish" 
                          Click="UpdateDishBtn_Click"
                          Style="{DynamicResource SubmitBtn}"/>
@@ -185,9 +200,9 @@
                         Margin="20,0,0,0" Style="{DynamicResource SubmitBtn}"/>
             </StackPanel>
 
-            <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2" Grid.Column="0"
+            <uc:ReturnBtn x:Name="returnBtn" Grid.Row="3" Grid.Column="0"
                           VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-            <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="2" Grid.Column="0" 
+            <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="3" Grid.Column="0" 
                        VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,15,20"/>
         </Grid>
     </Border>
