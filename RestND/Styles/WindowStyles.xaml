@@ -12,8 +12,22 @@
         <Setter Property="Width" Value="800"/>
         <Setter Property="Height" Value="500"/>
     </Style>
+    <Style x:Key="smallWindowStyle" TargetType="Window">
+        <!-- Font -->
+        <Setter Property="FontFamily" Value="Cascadia Mono"/>
 
-    
+        <!-- Size -->
+        <Setter Property="Width" Value="450"/>
+        <Setter Property="Height" Value="400"/>
+
+        <!-- Appearance -->
+        <Setter Property="Background" Value="{DynamicResource DarkText}"/>
+        <Setter Property="WindowStyle" Value="None"/>
+        <Setter Property="ResizeMode" Value="NoResize"/>
+        <!-- Optional rounded corners -->
+        <Setter Property="AllowsTransparency" Value="True"/>
+    </Style>
+
     <Style x:Key="windowBorder" TargetType="Border">
         <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
         <Setter Property="BorderThickness" Value="3"/>
@@ -36,6 +50,16 @@
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0 0 0 15"/>
         <Setter Property="VerticalAlignment" Value="Bottom"/>
+    </Style>
+
+    <Style x:Key="dataGridHeaderStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Padding" Value="8,6"/>
+        <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
     </Style>
 
     <!--for ALL textBoxes-->

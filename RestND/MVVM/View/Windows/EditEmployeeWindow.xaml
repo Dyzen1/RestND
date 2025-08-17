@@ -1,14 +1,13 @@
-﻿<Window x:Class="RestND.MVVM.View.Windows.AddNewEmployeeWindow"
+﻿<Window x:Class="RestND.MVVM.View.Windows.EditEmployeeWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:fa="http://schemas.fontawesome.com/icons/svg"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         mc:Ignorable="d"
 
         Style="{StaticResource smallWindowStyle}"
-        Title="Add Employee"
+        Title="Edit Employee"
         WindowStartupLocation="CenterOwner"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
@@ -21,7 +20,7 @@
             </Grid.RowDefinitions>
 
             <!-- Title -->
-            <TextBlock Text="New Employee"
+            <TextBlock Text="Edit Employee"
                        Foreground="{DynamicResource LightText}"
                        FontWeight="Bold"
                        FontSize="14"
@@ -30,28 +29,29 @@
             <!-- Form -->
             <StackPanel Grid.Row="1" Orientation="Vertical" Margin="4,0,0,0">
 
-                <!-- Employee ID (keep if you need manual entry; make ReadOnly if auto-increment) -->
+                <!-- Employee ID (read-only) -->
                 <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                     <Label Content="Employee ID:"/>
-                    <TextBox Text="{Binding NewEmployee.Employee_ID, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding SelectedEmployee.Employee_ID, UpdateSourceTrigger=PropertyChanged}"
+                             IsReadOnly="True"
                              Margin="10 0 0 0" Width="260"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                     <Label Content="First Name:"/>
-                    <TextBox Text="{Binding NewEmployee.Employee_Name, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding SelectedEmployee.Employee_Name, UpdateSourceTrigger=PropertyChanged}"
                              Margin="10 0 0 0" Width="260"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                     <Label Content="Last Name:"/>
-                    <TextBox Text="{Binding NewEmployee.Employee_Lastname, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding SelectedEmployee.Employee_Lastname, UpdateSourceTrigger=PropertyChanged}"
                              Margin="10 0 0 0" Width="260"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                     <Label Content="Email:"/>
-                    <TextBox Text="{Binding NewEmployee.Email, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding SelectedEmployee.Email, UpdateSourceTrigger=PropertyChanged}"
                              Margin="10 0 0 0" Width="260"/>
                 </StackPanel>
 
@@ -61,16 +61,11 @@
                     <ListBox ItemsSource="{Binding Roles}"
                              DisplayMemberPath="Role_Name"
                              SelectedValuePath="Role_ID"
-                             SelectedValue="{Binding NewEmployee.Role_ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             SelectedValue="{Binding SelectedEmployee.Role_ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Margin="10 0 0 0"
                              Width="260"
                              Height="90"
                              SelectionMode="Single"/>
-                </StackPanel>
-
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                    <Label Content="Password:"/>
-                    <PasswordBox x:Name="pwd" Margin="10 0 0 0" Width="260"/>
                 </StackPanel>
 
                 <!-- Optional form error/info -->
@@ -97,17 +92,9 @@
                             Margin="0,0,8,0"
                             Click="Cancel_Click"
                             Style="{DynamicResource SubmitBtn}"/>
-                    <Button Command="{Binding AddEmployeeCommand}"
-                            CommandParameter="{Binding ElementName=pwd, Path=Password}"
-                            Style="{DynamicResource addBtn}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
-                            <TextBlock Text="Add Employee"
-                                       FontSize="13"
-                                       Foreground="{DynamicResource LightText}"
-                                       Margin="6,0,0,0"/>
-                        </StackPanel>
-                    </Button>
+                    <Button Content="Save Changes"
+                            Command="{Binding UpdateEmployeeCommand}"
+                            Style="{DynamicResource SubmitBtn}"/>
                 </StackPanel>
             </Grid>
         </Grid>

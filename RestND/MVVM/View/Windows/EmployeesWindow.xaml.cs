@@ -1,27 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using DocumentFormat.OpenXml.Drawing.Charts;
+using RestND.MVVM.View.Windows;
+using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
-namespace RestND.MVVM.View.Windows
+namespace RestND.MVVM.View
 {
-    /// <summary>
-    /// Interaction logic for EmployeesWindow.xaml
-    /// </summary>
     public partial class EmployeesWindow : Window
     {
         public EmployeesWindow()
         {
             InitializeComponent();
         }
+
+        // Matches: MouseLeftButtonDown="Window_MouseLeftButtonDown" in XAML
+        private void Window_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+                DragMove();
+        }
+        private void AddEmployee(object sender, RoutedEventArgs e)
+        {
+            Overlay.Visibility = Visibility.Visible;
+            this.Opacity = 0.4;
+
+            var popup = new AddNewEmployeeWindow
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            popup.Closed += (s, args) =>
+            {
+                Overlay.Visibility = Visibility.Collapsed;
+                this.Opacity = 1.0;
+            };
+
+            popup.ShowDialog();
+        }
+        private void EditEmployee(object sender, RoutedEventArgs e)
+        {
+            Overlay.Visibility = Visibility.Visible;
+            this.Opacity = 0.4;
+
+            var popup = new EditEmployeeWindow
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+
+            popup.Closed += (s, args) =>
+            {
+                Overlay.Visibility = Visibility.Collapsed;
+                this.Opacity = 1.0;
+            };
+
+            popup.ShowDialog();
+        }
+
+        //private void DeleteEmployee(object sender, RoutedEventArgs e)
+        //{
+        //    Overlay.Visibility = Visibility.Visible;
+        //    this.Opacity = 0.4;
+
+        //    var popup = new AddNewEmployeeWindow
+        //    {
+        //        Owner = this,
+        //        WindowStartupLocation = WindowStartupLocation.CenterOwner
+        //    };
+
+        //    popup.Closed += (s, args) =>
+        //    {
+        //        Overlay.Visibility = Visibility.Collapsed;
+        //        this.Opacity = 1.0;
+        //    };
+
+        //    popup.ShowDialog();
+        //}
     }
 }
