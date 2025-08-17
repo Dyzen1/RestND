@@ -18,6 +18,7 @@ namespace RestND.MVVM.ViewModel
     public partial class DishViewModel : ObservableObject
     {
         #region Services
+        //private readonly DishValidator _dishValidator;
         private readonly DishServices _dishService;
         private readonly DishTypeServices _dishTypeService;
         private readonly ProductService _productService;
@@ -38,6 +39,8 @@ namespace RestND.MVVM.ViewModel
 
         [ObservableProperty] private Dish newDish = new();
         [ObservableProperty] private Dish selectedDish;
+
+        [ObservableProperty] private string priceErrorMessage;
         #endregion
 
         #region Constructor

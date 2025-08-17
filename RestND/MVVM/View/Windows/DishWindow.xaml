@@ -47,6 +47,14 @@
                         <Label Content="Dish Price:"/>
                         <TextBox Text="{Binding NewDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="10 0 0 0"/>
+                        <!-- Validation error display -->
+                        <!--<TextBlock Text="{Binding TableErrorMessage}"
+                                   Foreground="Red"
+                                   FontWeight="Bold"
+                                   Margin="5"
+                                   TextWrapping="Wrap"
+                                   HorizontalAlignment="Center"
+                                   Visibility="{Binding TableErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>-->
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
