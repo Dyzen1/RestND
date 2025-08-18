@@ -48,6 +48,6 @@ namespace RestND.Validations
             }
             return true;
         }
-     
+
     }
 }

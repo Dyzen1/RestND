@@ -1,6 +1,5 @@
 ﻿using RestND.MVVM.Model.Tables;
 using RestND.Data;
-using RestND.MVVM.Model.Tables;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -11,8 +10,6 @@ namespace RestND.Validations
     {
         private readonly TableServices _tableService = new();
 
-
-
         public bool CheckIfnull(Table table, out string err)
         {
             err = string.Empty;
@@ -21,10 +18,9 @@ namespace RestND.Validations
                 err = "You must choose a table";
                 return false;
             }
-
             return true;
-
         }
+
         public bool isFull(out string err)
         {
             err = string.Empty;
@@ -38,6 +34,7 @@ namespace RestND.Validations
 
             return true;
         }
+
         public bool CheckIfExists(int tableNumber, out string err)
         {
             err = string.Empty;
@@ -49,20 +46,17 @@ namespace RestND.Validations
                 return false;
             }
             return true;
-
         }
 
-        public bool postiveTaleNumber(int tableNumber, out string err)
+        public bool postiveTableNumber(int tableNumber, out string err)
         {
             err = string.Empty;
             if (tableNumber <= 0)
             {
-                err = "Table number must be a positive integer.";
+                err = "Table number must be a positive number!";
                 return false;
             }
             return true;
-
-
         }
     }
 }

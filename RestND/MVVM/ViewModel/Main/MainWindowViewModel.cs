@@ -49,7 +49,6 @@ namespace RestND.MVVM.ViewModel.Main
         #endregion
 
         #region Constructor
-
         public MainWindowViewModel()
         {
             LoadTables();
@@ -85,18 +84,18 @@ namespace RestND.MVVM.ViewModel.Main
                 });
             });
         }
-
         #endregion
 
+        #region On Change
         partial void OnSelectedTableChanged(Table value)
         {
             AddTableCommand.NotifyCanExecuteChanged();
             EditTableCommand.NotifyCanExecuteChanged();
             DeleteTableCommand.NotifyCanExecuteChanged();
         }
+        #endregion
 
         #region Load Tables
-
         public void LoadTables()
         {
             var result = _tableService.GetAll();
@@ -124,7 +123,6 @@ namespace RestND.MVVM.ViewModel.Main
                 }
             }
         }
-
         #endregion
 
         #region Add Table
@@ -140,7 +138,7 @@ namespace RestND.MVVM.ViewModel.Main
             }
 
             // 2. Validate it's positive
-            if (!_validator.postiveTaleNumber(parsedNumber, out string notPositiveErr))
+            if (!_validator.postiveTableNumber(parsedNumber, out string notPositiveErr))
             {
                 TableErrorMessage = notPositiveErr;
                 return;
@@ -178,10 +176,9 @@ namespace RestND.MVVM.ViewModel.Main
                 NewTable = new Table();
                 NewTableNumberText = string.Empty;
                 LoadTables();
-                ClosePopupAction?.Invoke();
+                //ClosePopupAction?.Invoke();
             }
         }
-
         #endregion
 
         #region Delete Table
@@ -224,7 +221,7 @@ namespace RestND.MVVM.ViewModel.Main
             }
 
             // 2. Validate it's a positive number
-            if (!_validator.postiveTaleNumber(parsedNumber, out string notPositiveErr))
+            if (!_validator.postiveTableNumber(parsedNumber, out string notPositiveErr))
             {
                 TableErrorMessage = notPositiveErr;
                 return;

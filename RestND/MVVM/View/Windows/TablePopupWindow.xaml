@@ -11,6 +11,7 @@
         Style="{StaticResource popupStyle}"
         Title="TablePopupWindow" Width="400" Height="300"
         WindowStartupLocation="CenterOwner">
+    
     <Window.Resources>
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Window.Resources>
@@ -29,11 +30,7 @@
 
                 <!-- Real-Time Error Display -->
                 <TextBlock Text="{Binding TableErrorMessage}"
-                           Foreground="Red"
-                           FontWeight="Bold"
-                           Margin="5"
-                           TextWrapping="Wrap"
-                           HorizontalAlignment="Center"
+                           Style="{DynamicResource errorMessage}"
                            Visibility="{Binding TableErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
 
                 <!-- Save Table Button -->

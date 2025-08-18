@@ -18,7 +18,7 @@ namespace RestND.MVVM.ViewModel
     public partial class DishViewModel : ObservableObject
     {
         #region Services
-        //private readonly DishValidator _dishValidator;
+        private readonly DishValidator _dishValidator;
         private readonly DishServices _dishService;
         private readonly DishTypeServices _dishTypeService;
         private readonly ProductService _productService;
@@ -40,7 +40,7 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private Dish newDish = new();
         [ObservableProperty] private Dish selectedDish;
 
-        [ObservableProperty] private string priceErrorMessage;
+        [ObservableProperty] private string dishErrorMessage;
         #endregion
 
         #region Constructor
@@ -173,25 +173,48 @@ namespace RestND.MVVM.ViewModel
 
             NewDish.ProductUsage = chosen;
 
-            // Basic validation
-            if (string.IsNullOrWhiteSpace(NewDish.Dish_Name) ||
-                NewDish.Dish_Price <= 0 ||
-                NewDish.Dish_Type == null ||
-                NewDish.ProductUsage == null || !NewDish.ProductUsage.Any())
-            {
-                MessageBox.Show("Please fill all fields and add at least one product with an amount > 0.");
-                return;
-            }
+            //validations:
+            // 1. is price a number
+            //if (!int.TryParse(NewDish.Dish_Price, out int parsedNumber))
+            //{
+            //    TableErrorMessage = "Please enter a valid number.";
+            //    return;
+            //}
+            //// 1. dish name existance validation
+            //if (!_dishValidator.CheckIfExists(NewDish.Dish_Name, out string nameErr))
+            //{
+            //    DishErrorMessage = nameErr;
+            //    return;
+            //}
+            //// 2. is price positive validation
+            //if (!_dishValidator.checkPricePos(NewDish.Dish_Price, out string priceErr))
+            //{
+            //    DishErrorMessage = priceErr;
+            //    return;
+            //}
+            //// 3. dish type validation
+            //if (!_dishValidator.CheckDishType(NewDish.Dish_Type.DishType_Name, out string dishTypeErr))
+            //{
+            //    DishErrorMessage = dishTypeErr;
+            //    return;
+            //}
+            //// 4. empty fields
+            //if (string.IsNullOrWhiteSpace(NewDish.Dish_Name) || string.IsNullOrWhiteSpace(NewDish.Allergen_Notes) ||
+            //    NewDish.ProductUsage == null || !NewDish.ProductUsage.Any())
+            //{
+            //    DishErrorMessage = "Please fill all fields.";
+            //    return;
+            //}
+            //// 5. validation passed
+            //DishErrorMessage = string.Empty; 
 
             bool success = _dishService.Add(NewDish);
 
             if (success)
             {
                 await _hub.SendAsync("NotifyDishUpdate", NewDish, "add");
-
                 // reset the form
                 NewDish = new Dish();
-
                 // uncheck all allergens (and clear the backing collection)
                 foreach (var a in AllergenOptions)
                     a.IsSelected = false;
@@ -203,10 +226,6 @@ namespace RestND.MVVM.ViewModel
                     sp.IsSelected = false;
                     sp.AmountUsage = 0;
                 }
-            }
-            else
-            {
-                MessageBox.Show("Failed to save dish. Please try again.");
             }
         }
 
