@@ -1,112 +1,145 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RestND.Data;
-using RestND.MVVM.Model;
 using RestND.MVVM.Model.Employees;
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
-public partial class RoleViewModel: ObservableObject{
-    #region Services
-    // Service for handling Role database operations
-    private readonly RoleServices _roleService;
-    #endregion
-
-    #region Observable Properties
-    // List of roles displayed in the UI
-    [ObservableProperty]
-    private ObservableCollection<Role> roles = new();
-    // The role currently selected in the UI
-    [ObservableProperty]
-    private Role selectedRole;
-    // Called automatically when SelectedRole changes
-    partial void OnSelectedRoleChanged(Role value)
+namespace RestND.MVVM.ViewModel
+{
+    public partial class RoleViewModel : ObservableObject
     {
-        DeleteRoleCommand.NotifyCanExecuteChanged();
-        UpdateRoleCommand.NotifyCanExecuteChanged();
-    }
-    #endregion
+        private readonly RoleServices _roleService = new();
 
-    #region Constructor
-    // Constructor: initializes the RoleService and loads roles
-    public RoleViewModel()
-    {
-        _roleService = new RoleServices();
-        LoadRoles();
-    }
-    #endregion
+        [ObservableProperty] private ObservableCollection<Role> roles = new();
+        [ObservableProperty] private Role selectedRole;
 
-    #region Load Method
-    // Loads all roles from the database
-    [RelayCommand]
-    private void LoadRoles()
-    {
-        Roles.Clear();
-        var dbRoles = _roleService.GetAll();
-        foreach (var role in dbRoles)
-            Roles.Add(role);
-    }
-    #endregion
+        [ObservableProperty] private string newRoleName;
+        [ObservableProperty] private AuthorizationStatus selectedAuthorization;
 
-    #region Delete
-    // Command for deleting the selected role
-    [RelayCommand(CanExecute = nameof(CanModifyRole))]
-    private void DeleteRole()
-    {
-        if (SelectedRole != null)
+        [ObservableProperty]
+        private ObservableCollection<AuthorizationStatus> authorizationOptions =
+            new(Enum.GetValues(typeof(AuthorizationStatus)).Cast<AuthorizationStatus>());
+
+        [ObservableProperty] private string formErrorMessage;
+
+        public event Action? RequestClose;
+
+        public RoleViewModel()
         {
-            bool success = _roleService.Delete(SelectedRole);
+            SelectedAuthorization = authorizationOptions.FirstOrDefault();
+            LoadRoles();
+            // Optional: select first row to enable Update/Delete immediately
+            SelectedRole = Roles.FirstOrDefault();
+        }
 
-            if (success)
+        // ?? RE-ENABLED: keep buttons in sync with selection
+        partial void OnSelectedRoleChanged(Role value)
+        {
+            DeleteRoleCommand.NotifyCanExecuteChanged();
+            UpdateRoleCommand.NotifyCanExecuteChanged();
+        }
+
+        [RelayCommand]
+        private void LoadRoles()
+        {
+            Roles.Clear();
+            foreach (var r in _roleService.GetAll())
+                Roles.Add(r);
+        }
+
+        [RelayCommand]
+        private void AddRole()
+        {
+            FormErrorMessage = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(NewRoleName))
             {
-                Roles.Remove(SelectedRole);
+                FormErrorMessage = "Role name is required.";
+                return;
+            }
+
+            bool exists = _roleService.GetAll()
+                .Any(r => string.Equals(r.Role_Name, NewRoleName, StringComparison.OrdinalIgnoreCase));
+
+            if (exists)
+            {
+                FormErrorMessage = "Role name already exists.";
+                return;
+            }
+
+            var role = new Role
+            {
+                Role_Name = NewRoleName.Trim(),
+                Role_Authorization = SelectedAuthorization,
+                Is_Active = true
+            };
+
+            if (_roleService.Add(role))
+            {
+                LoadRoles();
+                NewRoleName = string.Empty;
+                SelectedAuthorization = authorizationOptions.FirstOrDefault();
+                RequestClose?.Invoke(); // if opened as dialog
+            }
+            else
+            {
+                FormErrorMessage = "Failed to create role.";
             }
         }
-    }
-    #endregion
 
-    #region Update
-    // Command for updating the selected role
-    [RelayCommand(CanExecute = nameof(CanModifyRole))]
-    private void UpdateRole()
-    {
-        if (SelectedRole != null)
+        [RelayCommand(CanExecute = nameof(CanModifyRole))]
+        private void UpdateRole()
         {
-            bool success = _roleService.Update(SelectedRole);
+            FormErrorMessage = string.Empty;
 
-            if (success)
+            if (SelectedRole == null) return;
+
+            if (string.IsNullOrWhiteSpace(SelectedRole.Role_Name))
+            {
+                FormErrorMessage = "Role name is required.";
+                return;
+            }
+
+            bool exists = _roleService.GetAll()
+                .Any(r => r.Role_ID != SelectedRole.Role_ID &&
+                          string.Equals(r.Role_Name, SelectedRole.Role_Name, StringComparison.OrdinalIgnoreCase));
+
+            if (exists)
+            {
+                FormErrorMessage = "Role name already exists.";
+                return;
+            }
+
+            if (_roleService.Update(SelectedRole))
             {
                 LoadRoles();
             }
-        }
-    }
-    #endregion
-
-    #region Add
-    // Command for adding a new role
-    [RelayCommand]
-    private void AddRole()
-    {
-        if (SelectedRole != null)
-        {
-            bool success = _roleService.Add(SelectedRole);
-
-            if (success)
+            else
             {
-                LoadRoles();
-                SelectedRole = new Role();
+                FormErrorMessage = "Failed to update role.";
             }
         }
-    }
-    #endregion
 
-    #region CanModifyRole
-    // Helper method: checks if a role is selected (used for button enabling)
-    private bool CanModifyRole()
-    {
-        return SelectedRole != null;
-    }
-    #endregion
+        [RelayCommand(CanExecute = nameof(CanModifyRole))]
+        private void DeleteRole()
+        {
+            FormErrorMessage = string.Empty;
 
-   
-    
+            if (SelectedRole == null) return;
+
+            if (_roleService.Delete(SelectedRole))
+            {
+                LoadRoles();
+                SelectedRole = null; // triggers CanExecute updates
+            }
+            else
+            {
+                FormErrorMessage = "Failed to delete role.";
+            }
+        }
+
+        private bool CanModifyRole() => SelectedRole != null;
+    }
 }

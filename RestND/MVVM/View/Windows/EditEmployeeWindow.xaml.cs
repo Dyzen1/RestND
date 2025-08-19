@@ -1,27 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using RestND.MVVM.ViewModel; 
 
 namespace RestND.MVVM.View.Windows
 {
-    /// <summary>
-    /// Interaction logic for EditEmployeeWindow.xaml
-    /// </summary>
     public partial class EditEmployeeWindow : Window
     {
         public EditEmployeeWindow()
         {
             InitializeComponent();
+
+            // Subscribe when DataContext is set or changed
+            DataContextChanged += EditEmployeeWindow_DataContextChanged;
+        }
+
+        private void EditEmployeeWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue is EmployeeViewModel oldVm)
+                oldVm.RequestClose -= Vm_RequestClose;
+
+            if (e.NewValue is EmployeeViewModel newVm)
+                newVm.RequestClose += Vm_RequestClose;
+        }
+
+        private void Vm_RequestClose()
+        {
+            
+            if (IsLoaded)
+            {
+                try { DialogResult = true; } catch {  }
+                Close();
+            }
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -30,17 +39,9 @@ namespace RestND.MVVM.View.Windows
                 DragMove();
         }
 
-        // <-- This fixes the missing handler error
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false; // optional, only if opened via ShowDialog()
-            Close();
-        }
-
-        // Optional helper if you want to close after a successful add from the VM:
-        public void CloseOnSuccess()
-        {
-            DialogResult = true;  // optional
+            try { DialogResult = false; } catch { /* not dialog */ }
             Close();
         }
     }

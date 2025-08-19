@@ -86,10 +86,9 @@ namespace RestND.Data
         #region Update Employee
         public override bool Update(Employee e)
         {
-            if (e.Employee_Role is null || e.Employee_Role.Role_ID <= 0)
-                throw new ArgumentException("Employee_Role must be selected and contain a valid Role_ID.");
+          
 
-            // If you only want to re-hash when password is changed, handle that at the VM level.
+           
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(e.Password ?? string.Empty);
 
             const string query = @"

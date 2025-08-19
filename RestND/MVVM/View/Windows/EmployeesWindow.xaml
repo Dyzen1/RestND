@@ -31,14 +31,17 @@
             <GroupBox Header="Employees" Grid.Column="0" Grid.Row="0" Margin="8">
                 <DockPanel>
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,8">
-                        <Button Command="{Binding AddEmployeeCommand}" Style="{DynamicResource SubmitBtn}" Margin="0,0,8,0">
+                        <Button Command="{Binding AddEmployeeCommand}" Style="{DynamicResource SubmitBtn}" Margin="0,0,8,0" Click="AddEmployee">
                             <TextBlock Text="Add"/>
                         </Button>
-                        <Button Command="{Binding UpdateEmployeeCommand}" Style="{DynamicResource SubmitBtn}" Margin="0,0,8,0">
+                        <Button  Style="{DynamicResource SubmitBtn}" Margin="0,0,8,0" Click="EditEmployee">
                             <TextBlock Text="Update"/>
                         </Button>
                         <Button Command="{Binding DeleteEmployeeCommand}" Style="{DynamicResource SubmitBtn}">
                             <TextBlock Text="Delete"/>
+                        </Button>
+                        <Button Style="{DynamicResource SubmitBtn}" Margin="10,0,8,0" Click="OpenRoles_Click">
+                            <TextBlock Text="New Role"/>
                         </Button>
                     </StackPanel>
 
