@@ -1,0 +1,64 @@
+﻿<Window x:Class="RestND.MVVM.View.Windows.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
+        xmlns:conv="clr-namespace:RestND.Converters"
+        xmlns:vm="clr-namespace:RestND.MVVM.ViewModel.Employees"
+        xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
+        mc:Ignorable="d"
+        Title="Login"
+        Style="{StaticResource popupStyle}"
+        Height="300" Width="400"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <conv:BoolToLoginTextConverter x:Key="BoolToLoginTextConverter"/>
+        <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <Border Style="{StaticResource windowBorder}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
+
+                <!-- ID Input -->
+                <Label Content="ID Number:" Foreground="{DynamicResource LightText}"
+                       HorizontalContentAlignment="Center"/>
+                <!-- Bind to IdText (string) to avoid numeric binding issues -->
+                <TextBox Text="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
+
+                <!-- Password Input -->
+                <Label Content="Password:" Foreground="{DynamicResource LightText}"
+                       Margin="0,10,0,0" HorizontalContentAlignment="Center"/>
+                <PasswordBox x:Name="PasswordBox"
+                             PasswordChanged="PasswordBox_PasswordChanged"
+                             Style="{StaticResource InputBox_Password}"/>
+
+                <!-- Login Button -->
+                <Button Content="{Binding Success, Converter={StaticResource BoolToLoginTextConverter}}"
+                        Command="{Binding GetUserPasswordCommand}"
+                        Style="{StaticResource SubmitBtn}"
+                        Margin="0,20,0,0" />
+
+                <!-- Error message -->
+                <TextBlock Text="{Binding ErrorMessage}"
+                           Foreground="Red"
+                           Margin="0,10,0,0"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Center"
+                           Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}" />
+
+                <!-- Forgot Password -->
+                <Button Content="Forgot password"
+                        Click="ForgotPassword_Click"
+                        Style="{StaticResource frGotPassword}" />
+            </StackPanel>
+        </Border>
+
+        <!-- Footer -->
+        <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+        <TextBlock Style="{StaticResource copyWrite}"
+                   VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+    </Grid>
+</Window>

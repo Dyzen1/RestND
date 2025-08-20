@@ -24,7 +24,7 @@ namespace RestND.Validations
         public bool isFull(out string err)
         {
             err = string.Empty;
-            List<Table> tables = _tableService.GetAll(); // returns only Is_Active == true
+            List<Table> tables = _tableService.GetAll(); 
 
             if (tables.Count >= 25)
             {

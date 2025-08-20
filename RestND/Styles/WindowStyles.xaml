@@ -57,7 +57,7 @@
         <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="Padding" Value="8,6"/>
         <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
-        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
         <Setter Property="BorderThickness" Value="0,0,0,1"/>
     </Style>

@@ -46,6 +46,16 @@ namespace RestND.MVVM.ViewModel.Main
         [ObservableProperty]
         private string tableErrorMessage;
 
+        [ObservableProperty]
+        private bool isLoggedIn;
+
+        public string LoginButtonText => IsLoggedIn ? "Logout" : "Login";
+
+        partial void OnIsLoggedInChanged(bool oldValue, bool newValue)
+        {
+            OnPropertyChanged(nameof(LoginButtonText));
+        }
+
         #endregion
 
         #region Constructor
@@ -94,6 +104,34 @@ namespace RestND.MVVM.ViewModel.Main
             DeleteTableCommand.NotifyCanExecuteChanged();
         }
         #endregion
+
+        [RelayCommand]
+        private void LoginLogout()
+        {
+            if (!IsLoggedIn)
+            {
+                // Show Login Window
+                var loginWindow = new RestND.MVVM.View.Windows.LoginWindow();
+
+                // Setup ViewModel event to get login success callback
+                if (loginWindow.DataContext is RestND.MVVM.ViewModel.Employees.LoginViewModel loginVm)
+                {
+                    loginVm.LoginSucceeded += () =>
+                    {
+                        IsLoggedIn = true;
+                        loginWindow.Close();
+                    };
+                }
+
+                loginWindow.ShowDialog();
+            }
+            else
+            {
+                // Logout logic
+                IsLoggedIn = false;
+                // You can add any cleanup/reset here
+            }
+        }
 
         #region Load Tables
         public void LoadTables()

@@ -87,7 +87,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
         <Setter Property="Width" Value="100"/>
         <Setter Property="Background" Value="{DynamicResource LightText}"/>
-        <Setter Property="Content" Value="Admin Login"/>
+        <Setter Property="Content" Value="Login"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">

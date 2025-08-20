@@ -106,9 +106,9 @@ namespace RestND.MVVM.View.Windows
             popup.ShowDialog();
         }
 
-        private void AdminLogin_Click(object sender, RoutedEventArgs e)
+        private void Login_Click(object sender, RoutedEventArgs e)
         {
-            var loginWindow = new AdminLoginWindow
+            var loginWindow = new LoginWindow
             {
                 Owner = this,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,

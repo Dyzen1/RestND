@@ -102,8 +102,8 @@
                         <DataGridTextColumn Header="Product ID:" Binding="{Binding Product_ID}" Width="*"/>
                         <DataGridTextColumn Header="Product Name:" Binding="{Binding Product_Name}" Width="*"/>
                         <DataGridTextColumn Header="Quantity Available:" Binding="{Binding Quantity_Available}" Width="*"/>
-                        <DataGridTextColumn Header="Tolerance:" Binding="{Binding Tolerance}" Width="*"/>
-                        <DataGridTextColumn Header="Created At: " Binding="{Binding Created_At}" Width="*"/>
+                        <DataGridTextColumn Header="Tolerance:" Binding="{Binding Tolerance}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Created At: " Binding="{Binding Created_At}" Width="*" IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>

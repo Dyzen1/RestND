@@ -19,8 +19,10 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                
                 <ColumnDefinition Width="12"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -43,15 +45,24 @@
                         <Button Style="{DynamicResource SubmitBtn}" Margin="10,0,8,0" Click="OpenRoles_Click">
                             <TextBlock Text="New Role"/>
                         </Button>
+
+                        <uc:SearchBar
+                        x:Name="EmployeeSearchBar"
+                        Placeholder="Search Employees"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Left" />
                     </StackPanel>
+                    
 
                     <DataGrid ItemsSource="{Binding Employees}"
                               SelectedItem="{Binding SelectedEmployee, Mode=TwoWay}"
+                              RowStyle="{DynamicResource rowStyle}"
                               AutoGenerateColumns="False"
                               HeadersVisibility="Column"
-                              ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}">
+                              ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}" 
+                              IsReadOnly="True">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="ID" Binding="{Binding Employee_ID}" Width="70"/>
+                            <DataGridTextColumn Header="ID" Binding="{Binding Employee_ID}" Width="100"/>
                             <DataGridTextColumn Header="First Name" Binding="{Binding Employee_Name}" Width="*"/>
                             <DataGridTextColumn Header="Last Name" Binding="{Binding Employee_LastName}" Width="*"/>
                             <DataGridTextColumn Header="Role" Binding="{Binding Employee_Role.Role_Name}" Width="160"/>
@@ -70,7 +81,11 @@
                 <TabControl>
                     <TabItem Header="In Progress">
                         <DataGrid ItemsSource="{Binding EmployeeOrdersInProgress}" AutoGenerateColumns="False"
-                                  HeadersVisibility="Column" ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}">
+                                  RowStyle="{DynamicResource rowStyle}"
+                                  HeadersVisibility="Column" ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
+                                  IsReadOnly="True"
+                                  
+                                  >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Employee" Binding="{Binding EmployeeName}" Width="*"/>
                                 <DataGridTextColumn Header="Order #" Binding="{Binding OrderId}" Width="100"/>
