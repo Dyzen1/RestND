@@ -130,35 +130,37 @@ namespace RestND.MVVM.ViewModel.Main
         [RelayCommand]
         public async Task AddTable()
         {
-            // 1. Parse input
+            // 1. check if input is empty
+            if(!_validator.IsEmptyField(NewTableNumberText, out string emptyErr))
+            {
+                TableErrorMessage = emptyErr;
+                return;
+            }
+            // 2. Parse input
             if (!int.TryParse(NewTableNumberText, out int parsedNumber))
             {
                 TableErrorMessage = "Please enter a valid number.";
                 return;
             }
-
-            // 2. Validate it's positive
-            if (!_validator.postiveTableNumber(parsedNumber, out string notPositiveErr))
+            // 3. Validate it's positive
+            if (!_validator.CheckPosNum(parsedNumber, out string notPositiveErr))
             {
                 TableErrorMessage = notPositiveErr;
                 return;
             }
-
-            // 3. Validate table number uniqueness
+            // 4. Validate table number uniqueness
             if (!_validator.CheckIfExists(parsedNumber, out string existsErr))
             {
                 TableErrorMessage = existsErr;
                 return;
             }
-
-            // 4. Check if there’s room for a new table
+            // 5. Check if there’s room for a new table
             if (!_validator.isFull(out string fullErr))
             {
                 TableErrorMessage = fullErr;
                 return;
             }
-
-            // 5. Validation passed
+            // 6. Validation passed
             TableErrorMessage = string.Empty;
 
             var slot = Tables.FirstOrDefault(t => !t.Is_Active);
@@ -221,7 +223,7 @@ namespace RestND.MVVM.ViewModel.Main
             }
 
             // 2. Validate it's a positive number
-            if (!_validator.postiveTableNumber(parsedNumber, out string notPositiveErr))
+            if (!_validator.CheckPosNum(parsedNumber, out string notPositiveErr))
             {
                 TableErrorMessage = notPositiveErr;
                 return;

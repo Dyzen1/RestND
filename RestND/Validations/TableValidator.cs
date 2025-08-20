@@ -6,7 +6,7 @@ using System.Windows;
 
 namespace RestND.Validations
 {
-    public class TableValidator
+    public class TableValidator : GeneralValidations
     {
         private readonly TableServices _tableService = new();
 
@@ -43,17 +43,6 @@ namespace RestND.Validations
             if (doesExist != null)
             {
                 err = "Table number already exists";
-                return false;
-            }
-            return true;
-        }
-
-        public bool postiveTableNumber(int tableNumber, out string err)
-        {
-            err = string.Empty;
-            if (tableNumber <= 0)
-            {
-                err = "Table number must be a positive number!";
                 return false;
             }
             return true;

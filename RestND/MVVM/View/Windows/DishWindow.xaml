@@ -44,13 +44,13 @@
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                         <Label Content="Dish Name:"/>
-                        <TextBox Text="{Binding NewDish.Dish_Name, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Text="{Binding NewDishNameInput, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="10 0 0 0"/>
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                         <Label Content="Dish Price:"/>
-                        <TextBox Text="{Binding NewDish.Dish_Price, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Text="{Binding NewDishPriceInput, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="10 0 0 0"/>
                     </StackPanel>
 
@@ -70,7 +70,7 @@
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                         <Label Content="Dish Type:"/>
                         <ListBox ItemsSource="{Binding DishTypes}" 
-                                SelectedItem="{Binding NewDish.Dish_Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                SelectedItem="{Binding NewDishTypeInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 DisplayMemberPath="DishType_Name"
                                 SelectionMode="Single" Margin="10 0 0 0"/>
                     </StackPanel>
