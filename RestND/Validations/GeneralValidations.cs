@@ -13,7 +13,7 @@ namespace RestND.Validations
     public class GeneralValidations
     {
 
-        public static bool isNameValid(string name, out string errorMessage)
+        public bool isNameValid(string name, out string errorMessage)
         {
             errorMessage = string.Empty;
             if (string.IsNullOrEmpty(name))
@@ -32,7 +32,7 @@ namespace RestND.Validations
         }
 
 
-         public  static bool isIdValid(string id, out string errorMessage)
+         public bool isIdValid(string id, out string errorMessage)
         {
             errorMessage = string.Empty;
             if (string.IsNullOrEmpty(id))
@@ -44,6 +44,28 @@ namespace RestND.Validations
             if (!Regex.IsMatch(id, pattern))
             {
                 errorMessage = "Invalid ID!";
+                return false;
+            }
+            return true;
+        }
+
+        public bool IsEmptyField(string input, out string err)
+        {
+            err = string.Empty;
+            if (input == null)
+            {
+                err = "All fields must be populated.";
+                return false;
+            }
+            return true;
+        }
+
+        public bool CheckPosNum(int num, out string err)
+        {
+            err = string.Empty;
+            if (num <= 0)
+            {
+                err = "Number must be positive.";
                 return false;
             }
             return true;
