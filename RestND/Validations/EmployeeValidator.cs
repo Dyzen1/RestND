@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace RestND.Validations
 {
-    public class EmployeeValidator
+    public class EmployeeValidator : GeneralValidations
     {
         private readonly EmployeeServices _employeeService = new();
 
