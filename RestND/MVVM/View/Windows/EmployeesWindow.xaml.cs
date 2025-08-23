@@ -2,7 +2,10 @@
 using DocumentFormat.OpenXml.Drawing.Charts;
 using RestND.MVVM.View.Windows;
 using System;
+using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace RestND.MVVM.View
@@ -12,6 +15,7 @@ namespace RestND.MVVM.View
         public EmployeesWindow()
         {
             InitializeComponent();
+            EmployeeSearchBar.SearchTextChanged += EmployeeSearchBar_SearchTextChanged;
         }
 
         // Matches: MouseLeftButtonDown="Window_MouseLeftButtonDown" in XAML
@@ -107,6 +111,43 @@ namespace RestND.MVVM.View
             };
 
             popup.ShowDialog();
+        }
+        private void EmployeeSearchBar_SearchTextChanged(object sender, string searchText)
+        {
+            ApplyEmployeeFilter(searchText);
+        }
+
+
+
+        private void ApplyEmployeeFilter(string searchText)
+        {
+            if (DataContext is not RestND.MVVM.ViewModel.EmployeeViewModel vm) return;
+
+            var items = vm.Employees;
+            if (items is null) return;
+
+            ICollectionView view = CollectionViewSource.GetDefaultView(items);
+            if (view == null) return;
+
+            string q = (searchText ?? string.Empty).Trim();
+
+            if (string.IsNullOrWhiteSpace(q))
+            {
+                view.Filter = null;  // show all
+                view.Refresh();
+                return;
+            }
+
+            view.Filter = o =>
+            {
+                if (o is not RestND.MVVM.Model.Employees.Employee emp)
+                    return false;
+
+                return emp.Employee_ID.ToString().Contains(q, StringComparison.OrdinalIgnoreCase)
+                    || (emp.Employee_Name?.Contains(q, StringComparison.OrdinalIgnoreCase) ?? false)
+                    || (emp.Employee_LastName?.Contains(q, StringComparison.OrdinalIgnoreCase) ?? false);
+            };
+            view.Refresh();
         }
 
 

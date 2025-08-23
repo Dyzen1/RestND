@@ -70,8 +70,9 @@
 
                 <!-- Password -->
                 <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                    
                     <Label Content="Password:"/>
-                    <PasswordBox x:Name="pwd" Margin="10 0 0 0" Width="260"/>
+                    <PasswordBox x:Name="pwd" Margin="10 0 0 0" Width="260" Style="{StaticResource InputBox_Password}"/>
                 </StackPanel>
 
                 <!-- Optional error message -->

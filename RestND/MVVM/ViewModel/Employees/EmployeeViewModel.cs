@@ -46,7 +46,7 @@ namespace RestND.MVVM.ViewModel
             Roles = new ObservableCollection<Role>(_roleService.GetAll());
         }
 
-        // Add new employee; pass password from the Add dialog (e.g., CommandParameter)
+       
         [RelayCommand]
         private async Task AddEmployee(string password)
         {
@@ -88,7 +88,7 @@ namespace RestND.MVVM.ViewModel
                 return;
             }
 
-            // On update: ID format check but no uniqueness; email must be unique excluding self.
+
             if (!_validator.ValidateForUpdate(SelectedEmployee, out var err))
             {
                 FormErrorMessage = err;
@@ -101,7 +101,6 @@ namespace RestND.MVVM.ViewModel
                 LoadEmployees();
                 FormErrorMessage = string.Empty;
 
-                // Close the Edit dialog
                 RequestClose?.Invoke();
             }
             else
@@ -127,8 +126,8 @@ namespace RestND.MVVM.ViewModel
                 LoadEmployees();
                 SelectedEmployee = null;
 
-                // Optionally close a dialog after delete
-                RequestClose?.Invoke();
+                
+
             }
             else
             {

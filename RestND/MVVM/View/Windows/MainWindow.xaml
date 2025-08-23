@@ -50,7 +50,10 @@
                     <uc:SideBar x:Name="sideBar"/>
                 </Expander>
 
-                <Button Name="AdminLogin" Style="{DynamicResource loginBtn}" Grid.Row="0" Grid.Column="0" Click="AdminLogin_Click"/>
+                <Button Name="Login" 
+                       Style="{DynamicResource loginBtn}" 
+                      Content="{Binding LoginButtonText}" 
+                     Command="{Binding LoginLogoutCommand}" />
 
                 <StackPanel Grid.Row="2" Grid.Column="0"
                             HorizontalAlignment="Center"
