@@ -15,11 +15,9 @@
     <Style x:Key="smallWindowStyle" TargetType="Window">
         <!-- Font -->
         <Setter Property="FontFamily" Value="Cascadia Mono"/>
-
         <!-- Size -->
         <Setter Property="Width" Value="450"/>
         <Setter Property="Height" Value="400"/>
-
         <!-- Appearance -->
         <Setter Property="Background" Value="{DynamicResource DarkText}"/>
         <Setter Property="WindowStyle" Value="None"/>

@@ -3,18 +3,19 @@ using RestND.MVVM.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace RestND.Validations
 {
-    public  class InventoryValidator
+    public  class InventoryValidator : GeneralValidations
     {
-        private readonly ProductService _productService;
+        private readonly ProductService _productService = new();
         public  bool CheckIfNull(Inventory product, out string err)
         {
             err = string.Empty;
             if (product == null)
             {
-                err = "You must choose a product";
+                err = "You must choose a product to update";
                 return false;
             }
             return true;
@@ -49,27 +50,22 @@ namespace RestND.Validations
             }
             return true;
         }
-        public  bool PositiveTolerance(double tolerance, out string err)
-        {
-            err = string.Empty;
-            if (tolerance <= 0)
-            {
-                err = "Tolerance must be a positive number.";
-                return false;
-            }
-            return true;
-        }
-        public bool PositiveQuantity(int quantity, out string err)
-        {
-            err = string.Empty;
-            if (quantity < 0)
-            {
-                err = "Quantity must be a non-negative.";
-                return false;
-            }
-            return true;
-        }
-        
 
+        public bool isSerialNumValid(string num, out string errorMessage)
+        {
+            errorMessage = string.Empty;
+            if (string.IsNullOrEmpty(num))
+            {
+                errorMessage = "Please insert a serial number";
+                return false;
+            }
+            string pattern = @"^\S{2,50}$";
+            if (!Regex.IsMatch(num, pattern))
+            {
+                errorMessage = "Invalid serial number!";
+                return false;
+            }
+            return true;
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace RestND.Validations
             errorMessage = string.Empty;
             if (string.IsNullOrEmpty(id))
             {
-                errorMessage = "Pleas insert an ID!";
+                errorMessage = "Please insert an ID!";
                 return false;
             }
             string pattern = @"^\d{9}$";
@@ -52,7 +52,7 @@ namespace RestND.Validations
         public bool IsEmptyField(string input, out string err)
         {
             err = string.Empty;
-            if (input == null)
+            if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
             {
                 err = "All fields must be populated.";
                 return false;

@@ -16,7 +16,7 @@
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Window.Resources>
 
-    <Border BorderBrush="{DynamicResource LightText}" BorderThickness="3" CornerRadius="10">
+    <Border Style="{DynamicResource windowBorder}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="450"/>
@@ -33,7 +33,7 @@
                           Margin="8 15 0 0" HorizontalAlignment="Left"
                           Placeholder="Search by dish name"/>
 
-            <Border Grid.Column="1" Grid.RowSpan="4" 
+            <Border Grid.Column="1" Grid.RowSpan="3" 
                     VerticalAlignment="Stretch" BorderThickness="2"
                     BorderBrush="{DynamicResource secondaryHeaders}"/>
 

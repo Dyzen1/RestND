@@ -177,49 +177,60 @@ namespace RestND.MVVM.ViewModel
                 .ToList();
 
             //validations:
+            // 1. check allergens selection
             if(SelectedAllergenNotes.Count == 0)
             {
-                DishErrorMessage = "Please select at least one allergen note.";
+                DishErrorMessage = "Please select at least one allergen note";
                 return;
             }
-            // 1. check if inputs are empty
-            if (NewDishPriceInput == null || NewDishTypeInput == null ||
-                chosen == null || NewDishNameInput == null)
+            // 2. check if inputs are empty
+            if (NewDishPriceInput == null || NewDishTypeInput == null || chosen == null)
             {
-                DishErrorMessage = "All fields must be populated.";
+                DishErrorMessage = "All fields must be populated";
                 return;
             }
-            // 2. check if product usage is empty
+            // 3+4. check name input
+            if(!_dishValidator.IsEmptyField(NewDishNameInput, out string err))
+            {
+                DishErrorMessage = err;
+                return;
+            }
+            if (!_dishValidator.isNameValid(NewDishNameInput, out string erro))
+            {
+                DishErrorMessage = erro;
+                return;
+            }
+            // 5. check if product usage is empty
             if (chosen.Count == 0)
             {
-                DishErrorMessage = "Please select at least one product with a positive amount.";
+                DishErrorMessage = "Please select at least one product with a positive amount";
                 return;
             }
-            // 3. dish name existance validation
+            // 6. dish name existance validation
             if (!_dishValidator.CheckIfExists(NewDishNameInput, out string nameError))
             {
                 DishErrorMessage = nameError;
                 return;
             }
-            // 4. is price a number
+            // 7. is price a number
             if (!int.TryParse(NewDishPriceInput, out int parsedNumber))
             {
-                DishErrorMessage = "Please enter a valid number.";
+                DishErrorMessage = "Please enter a valid number";
                 return;
             }
-            // 5. is price positive validation
+            // 8. is price positive validation
             if (!_dishValidator.CheckPosNum(parsedNumber, out string priceErr))
             {
                 DishErrorMessage = priceErr;
                 return;
             }
-            // 6. validation passed
+            // 9. validation passed
             DishErrorMessage = string.Empty;
 
             NewDish.ProductUsage = chosen;
             NewDish.Dish_Name = NewDishNameInput;
             NewDish.Dish_Price = parsedNumber;
-            NewDish.Dish_Type = newDishTypeInput;
+            NewDish.Dish_Type = NewDishTypeInput;
             NewDish.Is_Active = true;
             NewDish.Allergen_Notes = string.Join(",", SelectedAllergenNotes);// Allergens from checkboxes
 

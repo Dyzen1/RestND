@@ -83,8 +83,7 @@ public class Transaction
             UPDATE dishes 
             SET Dish_Name = @name, 
                 Dish_Price = @price, 
-                Allergen_Notes = @notes, 
-                Availability_Status = @status, 
+                Allergen_Notes = @notes,
                 DishType_Name = @type
                 WHERE Dish_ID = @id";
 
@@ -92,6 +91,7 @@ public class Transaction
                 new MySqlParameter("@name", dish.Dish_Name),
                 new MySqlParameter("@price", dish.Dish_Price),
                 new MySqlParameter("@notes", string.Join(",", dish.Allergen_Notes)),
+                new MySqlParameter("@status", dish.Is_Active),
                 new MySqlParameter("@type", dish.Dish_Type?.DishType_Name ?? string.Empty),
                 new MySqlParameter("@id", dish.Dish_ID)
             );
@@ -119,7 +119,7 @@ public class Transaction
         {
             transaction.Rollback();
             _db.CloseConnection();
-            System.Windows.MessageBox.Show("Error updating dish: " + ex.Message, "Database Error");
+            MessageBox.Show("Error updating dish: " + ex.Message, "Database Error");
             return false;
         }
     }

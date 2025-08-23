@@ -4,6 +4,7 @@ using RestND.MVVM.Model;
 using RestND.MVVM.View.Windows;
 using RestND.MVVM.ViewModel;
 using RestND.MVVM.ViewModel.Dishes;
+using RestND.Validations;
 using System;
 using System.Linq;
 using System.Windows;
@@ -18,6 +19,7 @@ namespace RestND.MVVM.View
     public partial class DishWindow : Window
     {
         public event Action<string> ButtonClicked;
+        private readonly DishValidator _dishValidator = new();
         public DishWindow()
         {
             InitializeComponent();
@@ -68,8 +70,8 @@ namespace RestND.MVVM.View
         private void UpdateDishBtn_Click(object sender, RoutedEventArgs e)
         {
             var vm = DataContext as DishViewModel;
-            if (vm?.SelectedDish != null)
-            {
+            if (_dishValidator.CheckIfNull(vm.SelectedDish, out string errorMessage))
+            {// if a dish was selected for an update
                 var editWindow = new EditDishPopup(vm.SelectedDish)
                 {
                     Owner = this,
@@ -85,7 +87,8 @@ namespace RestND.MVVM.View
             }
             else
             {
-                MessageBox.Show("Please select a dish to update.", "No Selection", MessageBoxButton.OK, MessageBoxImage.Information);
+                vm.DishErrorMessage = errorMessage;
+                return;
             }
         }
 

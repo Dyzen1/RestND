@@ -23,5 +23,16 @@ namespace RestND.Validations
             }
             return true;
         }
+
+        public bool CheckIfNull(Dish dish, out string err)
+        {
+            err = string.Empty;
+            if (dish == null)
+            {
+                err = "You must choose a dish to update";
+                return false;
+            }
+            return true;
+        }
     }
 }
