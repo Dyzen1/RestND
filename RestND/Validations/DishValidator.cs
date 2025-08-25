@@ -11,10 +11,9 @@ namespace RestND.Validations
 
         private readonly DishServices _dishService = new();
 
-        public bool CheckIfExists(string dishName, out string err)
+        public bool CheckIfExists(string dishName, List<Dish> dishes, out string err)
         {
             err = string.Empty;
-            List<Dish> dishes = _dishService.GetAll();
             var doesExist = dishes.FirstOrDefault(d => d.Dish_Name == dishName && d.Is_Active);
             if (doesExist != null)
             {

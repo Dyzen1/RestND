@@ -105,16 +105,18 @@ namespace RestND.MVVM.ViewModel.Main
         }
         #endregion
 
+        #region Login Logout
+
         [RelayCommand]
         private void LoginLogout()
         {
             if (!IsLoggedIn)
             {
                 // Show Login Window
-                var loginWindow = new RestND.MVVM.View.Windows.LoginWindow();
+                var loginWindow = new View.Windows.LoginWindow();
 
                 // Setup ViewModel event to get login success callback
-                if (loginWindow.DataContext is RestND.MVVM.ViewModel.Employees.LoginViewModel loginVm)
+                if (loginWindow.DataContext is Employees.LoginViewModel loginVm)
                 {
                     loginVm.LoginSucceeded += () =>
                     {
@@ -132,6 +134,7 @@ namespace RestND.MVVM.ViewModel.Main
                 // You can add any cleanup/reset here
             }
         }
+        #endregion
 
         #region Load Tables
         public void LoadTables()

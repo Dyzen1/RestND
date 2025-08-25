@@ -1,6 +1,7 @@
 ﻿using RestND.MVVM.Model;
 using RestND.MVVM.View.Windows;
 using RestND.MVVM.ViewModel;
+using RestND.Validations;
 using System;
 using System.Windows;
 using System.Windows.Data;
@@ -10,6 +11,7 @@ namespace RestND.MVVM.View
 {
     public partial class ProductWindow : Window
     {
+        private readonly InventoryValidator _validator = new();
         public ProductWindow()
         {
             InitializeComponent();
@@ -75,6 +77,26 @@ namespace RestND.MVVM.View
                     && i.Product_Name.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0;
             };
             view.Refresh();
+        }
+
+        // handles opening the update product popup window.
+        private void UpdateProductBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var vm = DataContext as ProductViewModel;
+            if (_validator.CheckIfNull(vm.SelectedProduct, out string errorMessage))
+            {// if a dish was selected for an update
+                var popup = new EditProductWindow
+                {
+                    Owner = this,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                     DataContext = vm
+                };
+
+                this.Opacity = 0.4;
+                popup.Owner = this;
+                popup.ShowDialog();
+                this.Opacity = 1.0;
+            }
         }
     }
 }

@@ -1,0 +1,76 @@
+﻿<Window x:Class="RestND.MVVM.View.Windows.EditProductWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
+        xmlns:conv="clr-namespace:RestND.Converters"
+        xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
+        mc:Ignorable="d" Style="{StaticResource popupStyle}"
+        Title="EditProductWindow" Height="500" Width="450">
+
+    <Window.Resources>
+        <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    </Window.Resources>
+    <Border Style="{DynamicResource windowBorder}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="350"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <GroupBox Grid.Row="0" Header="Update Dish Details" Margin="25 25 25 0">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Product ID -->
+                    <StackPanel Orientation="Vertical" Grid.Row="0" VerticalAlignment="Top">
+                        <Label Content="Serial Number:"/>
+                        <TextBox Text="{Binding SelectedProduct.Product_ID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <!-- Product Name -->
+                    <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Top">
+                        <Label Content="Product Name:"/>
+                        <TextBox Text="{Binding SelectedProduct.Product_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <!-- Quantity -->
+                    <StackPanel Orientation="Vertical" Grid.Row="2" VerticalAlignment="Top">
+                        <Label Content="Quantity:"/>
+                        <TextBox Text="{Binding SelectedProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <!-- Tolerance -->
+                    <StackPanel Orientation="Vertical" Grid.Row="3" VerticalAlignment="Top">
+                        <Label Content="Tolerance:"/>
+                        <TextBox Text="{Binding SelectedProduct.Tolerance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                </Grid>
+            </GroupBox>
+
+            <!-- Validation error display -->
+            <TextBlock Text="{Binding ProductErrorMessage}" Grid.Row="1" 
+                       Style="{DynamicResource errorMessage}" 
+                       Visibility="{Binding ProductErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+            <!-- save Button -->
+            <Button Content="Save" Grid.Row="2" 
+                    Command="{Binding UpdateProductCommand}"
+                    Style="{DynamicResource SubmitBtn}"
+                    Margin="0 0 0 10" VerticalAlignment="Top"/>
+
+            <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+            <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="2"/>
+
+        </Grid>
+    </Border>
+</Window>

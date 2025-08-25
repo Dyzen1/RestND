@@ -22,7 +22,7 @@ namespace RestND.Validations
                 return false;
             }
 
-            string pattern = @"^[A-Za-z]{2,50}$"; //only letters, 2 to 50 characters
+            string pattern = @"^[A-Za-z\s]{2,50}$"; //only letters, 2 to 50 characters
             if (!Regex.IsMatch(name, pattern))
             {
                 errorMessage = "Name must be 2–50 letters only.";
@@ -61,6 +61,17 @@ namespace RestND.Validations
         }
 
         public bool CheckPosNum(int num, out string err)
+        {
+            err = string.Empty;
+            if (num <= 0)
+            {
+                err = "Number must be positive.";
+                return false;
+            }
+            return true;
+        }
+
+        public bool CheckPosNumDouble(double num, out string err)
         {
             err = string.Empty;
             if (num <= 0)

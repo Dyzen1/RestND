@@ -117,9 +117,9 @@
             <!-- Footer -->
             <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2"
                             HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 20">
-                <Button Style="{DynamicResource SubmitBtn}" 
-                        Command="{Binding UpdateProductCommand}"
-                        Content="Update product"/>
+                <Button Style="{DynamicResource SubmitBtn}"
+                        Content="Update product"
+                        Click="UpdateProductBtn_Click"/>
 
                 <Button Style="{DynamicResource SubmitBtn}" 
                         Command="{Binding DeleteProductCommand}"

@@ -118,7 +118,7 @@
                         <!-- Amount to use in this dish -->
                         <DataGridTextColumn Header="Amount (gr)"
                                 Binding="{Binding AmountUsage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                Width="*" />
+                                Width="90" />
                     </DataGrid.Columns>
                 </DataGrid>
                 </Grid>

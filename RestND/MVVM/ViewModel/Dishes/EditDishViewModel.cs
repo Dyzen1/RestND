@@ -86,10 +86,10 @@ namespace RestND.MVVM.ViewModel
         #endregion
         
         #region On change
-        partial void OnSelectedDishChanged(Dish value)
-        {
-            UpdateDishCommand.NotifyCanExecuteChanged();
-        }
+        //partial void OnSelectedDishChanged(Dish value)
+        //{
+        //    UpdateDishCommand.NotifyCanExecuteChanged();
+        //}
         #endregion
 
         #region Relay commands
@@ -110,32 +110,32 @@ namespace RestND.MVVM.ViewModel
                 .ToList();
 
             //validations:
+            // 1. verify at least one allergen was selected
             if (AllergenOptions.Count == 0)
             {
                 DishErrorMessage = "Please select at least one allergen note";
                 return;
             }
-            // 1. check if inputs are empty
-            if (SelectedDish.Dish_Price == null || SelectedDish.Dish_Type == null ||
-                chosen == null || string.IsNullOrEmpty(SelectedDish.Dish_Name) || 
-                string.IsNullOrWhiteSpace(SelectedDish.Dish_Name))
+            // 2. check if inputs are empty
+            if (SelectedDish.Dish_Type == null || chosen == null || 
+                _dishValidator.IsEmptyField(SelectedDish.Dish_Name, out string err))
             {
                 DishErrorMessage = "All fields must be populated";
                 return;
             }
-            // 2. check if product usage is empty
+            // 3. check if product usage is empty
             if (chosen.Count == 0)
             {
                 DishErrorMessage = "Please select at least one product with a positive amount";
                 return;
             }
-            // 3. is price positive validation
+            // 4. is price positive validation
             if (!_dishValidator.CheckPosNum(SelectedDish.Dish_Price, out string priceErr))
             {
                 DishErrorMessage = priceErr;
                 return;
             }
-            // 4. validation passed
+            // 5. validation passed
             DishErrorMessage = string.Empty;
 
             SelectedDish.ProductUsage = chosen;

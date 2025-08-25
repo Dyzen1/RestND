@@ -208,21 +208,46 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private async Task UpdateProduct()
         {
-
-            if (SelectedProduct == null)
+            // 1+2. check id input
+            if (!_validator.IsEmptyField(SelectedProduct.Product_ID, out string err))
             {
-                ProductErrorMessage = "Please select a product to update.";
+                ProductErrorMessage = err;
+                return;
+            }
+            if (!_validator.isSerialNumValid(SelectedProduct.Product_ID, out string erro))
+            {
+                ProductErrorMessage = erro;
+                return;
+            }
+            // 3+4. check name input
+            if (!_validator.IsEmptyField(SelectedProduct.Product_Name, out string nErr))
+            {
+                ProductErrorMessage = nErr;
+                return;
+            }
+            if (!_validator.isNameValid(SelectedProduct.Product_Name, out string nameE))
+            {
+                ProductErrorMessage = nameE;
+                return;
+            }
+            // 5. is quantity positive validation
+            if (!_validator.CheckPosNum(SelectedProduct.Quantity_Available, out string qErr))
+            {
+                ProductErrorMessage = qErr;
+                return;
+            }
+            // 6. is tolerance positive validation
+            if (!_validator.CheckPosNumDouble(SelectedProduct.Tolerance, out string tErr))
+            {
+                ProductErrorMessage = tErr;
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(SelectedProduct.Product_Name))
-            {
-                ProductErrorMessage = "Product name is required.";
-                return;
-            }
+            // 7. validation passed
+            ProductErrorMessage = string.Empty;
+            SelectedProduct.Is_Active = true;
 
             bool success = _productService.Update(SelectedProduct);
-
             if (success)
             {
                 await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "update");

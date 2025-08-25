@@ -207,7 +207,7 @@ namespace RestND.MVVM.ViewModel
                 return;
             }
             // 6. dish name existance validation
-            if (!_dishValidator.CheckIfExists(NewDishNameInput, out string nameError))
+            if (!_dishValidator.CheckIfExists(NewDishNameInput, Dishes.ToList(), out string nameError))
             {
                 DishErrorMessage = nameError;
                 return;
