@@ -175,7 +175,7 @@ namespace RestND.MVVM.ViewModel
             {
                 await _hub.SendAsync("NotifyInventoryUpdate", NewProduct, "add");
                 NewProduct = new Inventory();
-                LoadProducts();
+                //LoadProducts();
             }
         }
 

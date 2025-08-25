@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
+using RestND.MVVM.Model.Security;
 using RestND.MVVM.Model.Tables;
 using RestND.Validations;
 using System;
@@ -62,6 +63,7 @@ namespace RestND.MVVM.ViewModel.Main
         public MainWindowViewModel()
         {
             LoadTables();
+         
 
             _hub.On<Table, string>("ReceiveTableUpdate", (table, action) =>
             {
@@ -129,7 +131,8 @@ namespace RestND.MVVM.ViewModel.Main
             }
             else
             {
-                // Logout logic
+                AuthContext.SignOut();
+
                 IsLoggedIn = false;
                 // You can add any cleanup/reset here
             }
@@ -172,7 +175,7 @@ namespace RestND.MVVM.ViewModel.Main
         public async Task AddTable()
         {
             // 1. check if input is empty
-            if(!_validator.IsEmptyField(NewTableNumberText, out string emptyErr))
+            if (!_validator.IsEmptyField(NewTableNumberText, out string emptyErr))
             {
                 TableErrorMessage = emptyErr;
                 return;

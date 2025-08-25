@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestND.MVVM.ViewModel;
+using System;
 using System.Windows;
 using System.Windows.Input;
 
@@ -9,6 +10,7 @@ namespace RestND.MVVM.View.Windows
         public RolesWindow()
         {
             InitializeComponent();
+            this.DataContext = new RoleViewModel();
             DataContextChanged += RolesWindow_DataContextChanged;
         }
 

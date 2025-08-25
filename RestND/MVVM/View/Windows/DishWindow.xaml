@@ -33,11 +33,6 @@
                           Margin="8 15 0 0" HorizontalAlignment="Left"
                           Placeholder="Search by dish name"/>
 
-            <Border Grid.Column="1" Grid.RowSpan="3" 
-                    VerticalAlignment="Stretch" BorderThickness="2"
-                    BorderBrush="{DynamicResource secondaryHeaders}"/>
-
-
             <!-- Add New Dish Section -->
             <GroupBox Header="New Dish Details" Grid.RowSpan="2" Grid.Column="0">
                 <StackPanel Orientation="Vertical" Margin="15 0 0 0" HorizontalAlignment="Left">

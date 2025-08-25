@@ -12,7 +12,7 @@
 
 
     <Style x:Key="SubmitBtn" TargetType="Button">
-        <Setter Property="Background" Value="#7CB342"/>
+        <Setter Property="Background" Value="{DynamicResource secondaryBtns}"/>
         <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
         <Setter Property="Height" Value="25"/>
         <Setter Property="Width" Value="100"/>
@@ -31,6 +31,28 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="cancelBtn" TargetType="Button">
+    <Setter Property="Background" Value="{DynamicResource CancelBtn}"/>
+    <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+    <Setter Property="Height" Value="25"/>
+    <Setter Property="Width" Value="100"/>
+    <Setter Property="BorderThickness" Value="0.5"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="Button">
+                <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="8"
+                        Padding="{TemplateBinding Padding}">
+                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
     </Style>
 
 

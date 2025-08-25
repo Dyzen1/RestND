@@ -3,62 +3,59 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
-        xmlns:conv="clr-namespace:RestND.Converters"
-        xmlns:vm="clr-namespace:RestND.MVVM.ViewModel.Employees"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
+         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel.Employees"
         mc:Ignorable="d"
-        Title="Login"
         Style="{StaticResource popupStyle}"
-        Height="300" Width="400"
-        WindowStartupLocation="CenterScreen">
+        Title="Admin Login"
+        Width="400" Height="300"
+        WindowStartupLocation="CenterOwner">
+    <Window.DataContext>
+        <vm:LoginViewModel/>
+    </Window.DataContext>
+    
+    <Window.InputBindings>
+        <!-- Enter anywhere in the window triggers the command -->
+        <KeyBinding Key="Enter" Command="{Binding LoginCommand}" />
+    </Window.InputBindings>
 
-    <Window.Resources>
-        <conv:BoolToLoginTextConverter x:Key="BoolToLoginTextConverter"/>
-        <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-    </Window.Resources>
 
     <Grid>
-        <Border Style="{StaticResource windowBorder}">
+        <Border Style="{DynamicResource windowBorder}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300">
-
-                <!-- ID Input -->
                 <Label Content="ID Number:" Foreground="{DynamicResource LightText}"
                        HorizontalContentAlignment="Center"/>
-                <!-- Bind to IdText (string) to avoid numeric binding issues -->
-                <TextBox Text="{Binding Id, UpdateSourceTrigger=PropertyChanged}" />
 
-                <!-- Password Input -->
+                <!-- Bind to EmployeeId (int) -->
+                <TextBox Text="{Binding EmployeeId, UpdateSourceTrigger=PropertyChanged}"
+                         />
+
                 <Label Content="Password:" Foreground="{DynamicResource LightText}"
-                       Margin="0,10,0,0" HorizontalContentAlignment="Center"/>
+                       HorizontalContentAlignment="Center" Margin="0,10,0,0"/>
+
+                <!-- Push password into VM from code-behind -->
                 <PasswordBox x:Name="PasswordBox"
+                             Style="{StaticResource InputBox_Password}"
                              PasswordChanged="PasswordBox_PasswordChanged"
-                             Style="{StaticResource InputBox_Password}"/>
+                             KeyDown="PasswordBox_KeyDown"/>
 
-                <!-- Login Button -->
-                <Button Content="{Binding Success, Converter={StaticResource BoolToLoginTextConverter}}"
-                        Command="{Binding GetUserPasswordCommand}"
-                        Style="{StaticResource SubmitBtn}"
-                        Margin="0,20,0,0" />
+                <!-- Execute LoginCommand (MVVM) -->
+                <Button Content="Login"
+                        Command="{Binding LoginCommand}"
+                        Style="{DynamicResource SubmitBtn}"
+                        Margin="0,15,0,0"/>
 
-                <!-- Error message -->
+                <!-- Show any error from VM -->
                 <TextBlock Text="{Binding ErrorMessage}"
-                           Foreground="Red"
-                           Margin="0,10,0,0"
-                           TextWrapping="Wrap"
-                           HorizontalAlignment="Center"
-                           Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}" />
+                           Style="{DynamicResource errorMessage}"/>
 
-                <!-- Forgot Password -->
-                <Button Content="Forgot password"
+                <Button Content="Forgot password" Margin="0 0 0 20"
                         Click="ForgotPassword_Click"
-                        Style="{StaticResource frGotPassword}" />
+                        Style="{DynamicResource frGotPassword}"/>
             </StackPanel>
         </Border>
 
-        <!-- Footer -->
-        <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-        <TextBlock Style="{StaticResource copyWrite}"
-                   VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+        <uc:ReturnBtn VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+        <TextBlock Style="{DynamicResource copyWrite}"/>
     </Grid>
 </Window>

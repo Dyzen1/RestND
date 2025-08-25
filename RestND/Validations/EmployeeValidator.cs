@@ -169,9 +169,7 @@ namespace RestND.Validations
             if (!ValidId(e.Employee_ID, out err, checkExists: false)) return false;
             if (!ValidEmail(e.Email, out err, checkExists: true, excludeId: e.Employee_ID)) return false;
 
-            // Password optional on update
-            if (!string.IsNullOrWhiteSpace(e.Password))
-                if (!ValidPassword(e.Password, out err)) return false;
+   
 
             err = string.Empty;
             return true;

@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Input;
 using RestND.MVVM.ViewModel.Employees;
 
 namespace RestND.MVVM.View.Windows
@@ -10,25 +10,36 @@ namespace RestND.MVVM.View.Windows
         {
             InitializeComponent();
 
-            var vm = new LoginViewModel();
-            vm.LoginSucceeded += () => this.DialogResult = true;
-            vm.LoginFailed += msg => MessageBox.Show(this, msg, "Login Failed", MessageBoxButton.OK, MessageBoxImage.Warning);
-            this.DataContext = vm;
-
-            Loaded += (_, _) => { if (Owner != null) Owner.Opacity = 0.4; };
-            Closed += (_, _) => { if (Owner != null) Owner.Opacity = 1.0; };
+            // close the window when VM reports success (pure MVVM close pattern)
+            Loaded += (s, e) =>
+            {
+                if (DataContext is LoginViewModel vm)
+                {
+                    vm.LoginSucceeded += () => Dispatcher.Invoke(Close);
+                    vm.LoginFailed += _ => { /* Error shown via binding */ };
+                }
+            };
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (DataContext is LoginViewModel vm && sender is PasswordBox pb)
-                vm.Password = pb.Password;
+            if (DataContext is LoginViewModel vm)
+                vm.Password = PasswordBox.Password ?? string.Empty;
+        }
+
+        // let Enter inside the PasswordBox run the command as well
+        private void PasswordBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && DataContext is LoginViewModel vm)
+            {
+                vm.LoginCommand.Execute(null);
+                e.Handled = true;
+            }
         }
 
         private void ForgotPassword_Click(object sender, RoutedEventArgs e)
         {
-            var forgot = new ForgotPasswordWindow { Owner = this, WindowStartupLocation = WindowStartupLocation.CenterOwner };
-            forgot.ShowDialog();
+            MessageBox.Show("Ask your administrator to reset your password.");
         }
     }
 }

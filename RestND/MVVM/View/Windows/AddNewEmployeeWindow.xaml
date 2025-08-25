@@ -19,100 +19,86 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Title -->
-            <TextBlock Text="New Employee"
-                       Foreground="{DynamicResource LightText}"
-                       FontWeight="Bold"
-                       FontSize="14"
-                       Margin="0,0,0,8"/>
+            <GroupBox Header="New Employee Details">
 
-            <!-- Form -->
-            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="4,0,0,0">
+                <!-- Form -->
+                <StackPanel Grid.Row="1" Orientation="Vertical" Margin="4,0,0,0">
 
-                <!-- Employee ID -->
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                    <Label Content="Employee ID:"/>
-                    <TextBox Text="{Binding NewEmployee.Employee_ID, UpdateSourceTrigger=PropertyChanged}"
+                    <!-- Employee ID -->
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Employee ID:"/>
+                        <TextBox Text="{Binding NewEmployee.Employee_ID, UpdateSourceTrigger=PropertyChanged}"
                              Margin="10 0 0 0" Width="260"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <!-- First Name -->
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                    <Label Content="First Name:"/>
-                    <TextBox Text="{Binding NewEmployee.Employee_Name, UpdateSourceTrigger=PropertyChanged}"
+                    <!-- First Name -->
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="First Name:"/>
+                        <TextBox Text="{Binding NewEmployee.Employee_Name, UpdateSourceTrigger=PropertyChanged}"
                              Margin="10 0 0 0" Width="260"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <!-- Last Name -->
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                    <Label Content="Last Name:"/>
-                    <TextBox Text="{Binding NewEmployee.Employee_LastName, UpdateSourceTrigger=PropertyChanged}"
+                    <!-- Last Name -->
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Last Name:"/>
+                        <TextBox Text="{Binding NewEmployee.Employee_LastName, UpdateSourceTrigger=PropertyChanged}"
                              Margin="10 0 0 0" Width="260"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <!-- Email -->
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                    <Label Content="Email:"/>
-                    <TextBox Text="{Binding NewEmployee.Email, UpdateSourceTrigger=PropertyChanged}"
+                    <!-- Email -->
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Email:"/>
+                        <TextBox Text="{Binding NewEmployee.Email, UpdateSourceTrigger=PropertyChanged}"
                              Margin="10 0 0 0" Width="260"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <!-- Role -->
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
-                    <Label Content="Role:"/>
-                    <ComboBox ItemsSource="{Binding Roles}"
+                    <!-- Role -->
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                        <Label Content="Role:"/>
+                        <ComboBox ItemsSource="{Binding Roles}"
                               DisplayMemberPath="Role_Name"
                               SelectedItem="{Binding NewEmployee.Employee_Role, Mode=TwoWay}"
                               Margin="10 0 0 0"
                               Width="260"
                               Height="25"/>
-                </StackPanel>
+                    </StackPanel>
 
-                <!-- Password -->
-                <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+                    <!-- Password -->
+                    <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
+
+                        <Label Content="Password:"/>
+                        <PasswordBox x:Name="pwd" Margin="10 0 0 0" Width="260" Style="{StaticResource InputBox_Password}"/>
+                    </StackPanel>
+
+                    <!-- Optional error message -->
+                    <TextBlock Text="{Binding FormErrorMessage}"
+                            Style="{DynamicResource errorMessage}"/>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Actions -->
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Grid.Row="2">
                     
-                    <Label Content="Password:"/>
-                    <PasswordBox x:Name="pwd" Margin="10 0 0 0" Width="260" Style="{StaticResource InputBox_Password}"/>
-                </StackPanel>
-
-                <!-- Optional error message -->
-                <TextBlock Text="{Binding FormErrorMessage}"
-                           Foreground="{DynamicResource LightText}"
-                           Opacity="0.75"/>
-            </StackPanel>
-
-            <!-- Bottom bar -->
-            <Grid Grid.Row="2" Margin="0,12,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Return -->
-                <uc:ReturnBtn x:Name="returnBtn"
-                              HorizontalAlignment="Left"
-                              VerticalAlignment="Center"/>
-
-                <!-- Actions -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Cancel"
-                            Margin="0,0,8,0"
-                            Click="Cancel_Click"
-                            Style="{DynamicResource SubmitBtn}"/>
                     <Button Click="Add_Click"
-        IsDefault="True"
-        Style="{DynamicResource addBtn}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
-                            <TextBlock Text="Add Employee"
-                   FontSize="13"
-                   Foreground="{DynamicResource LightText}"
-                   Margin="6,0,0,0"/>
-                        </StackPanel>
-                    </Button>
-
-                </StackPanel>
-            </Grid>
+                            IsDefault="True"
+                            Style="{DynamicResource addBtn}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
+                        <TextBlock Text="Add Employee"
+                                       FontSize="13"
+                                       Foreground="{DynamicResource LightText}"
+                                       Margin="6,0,0,0"/>
+                    </StackPanel>
+                </Button>
+                <Button Content="Cancel"
+                        Margin="0,0,8,0"
+                        Click="Cancel_Click"
+                        Style="{DynamicResource SubmitBtn}"/>
+            </StackPanel>
+            
+            <!-- Return -->
+            <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2"/>
+           
         </Grid>
     </Border>
 </Window>
