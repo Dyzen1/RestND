@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
+        xmlns:mdl="clr-namespace:RestND.MVVM.Model.Employees"
+        xmlns:conv="clr-namespace:RestND.Converters"
         mc:Ignorable="d"
         Title="Roles"
         Width="650" Height="460"
@@ -11,9 +13,15 @@
         Style="{StaticResource smallWindowStyle}"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
+    <!-- ViewModel -->
     <Window.DataContext>
         <vm:RoleViewModel/>
     </Window.DataContext>
+
+    <!-- Converters -->
+    <Window.Resources>
+        <conv:FlagCheckConverter x:Key="FlagCheck"/>
+    </Window.Resources>
 
     <Border Style="{DynamicResource windowBorder}">
         <Grid Margin="12">
@@ -33,30 +41,77 @@
 
             <!-- Create New Role -->
             <GroupBox Header="Create New Role" Grid.Row="1" Margin="0,0,0,10">
-                <StackPanel Margin="8">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
-                        <Label Content="Role Name:" Width="110" VerticalAlignment="Center"/>
-                        <TextBox Text="{Binding NewRoleName, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="260"/>
-                    </StackPanel>
+                <Grid Margin="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- name row -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- flags row -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- create button row -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- error row -->
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Authorization:" Width="110" VerticalAlignment="Center"/>
-                        <ComboBox ItemsSource="{Binding AuthorizationOptions}"
-                                  SelectedItem="{Binding SelectedAuthorization, Mode=TwoWay}"
-                                  Width="160"/>
-                        <Button Content="Create"
-                                Margin="10,0,0,0"
-                                Style="{DynamicResource SubmitBtn}"
-                                Command="{Binding AddRoleCommand}"
-                                IsDefault="True"/>
-                    </StackPanel>
+                    <!-- Role name -->
+                    <Label Grid.Row="0" Grid.Column="0" Content="Role Name:" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="1"
+                             Text="{Binding NewRoleName, UpdateSourceTrigger=PropertyChanged}"
+                             Width="260"/>
 
-                    <TextBlock Text="{Binding FormErrorMessage}"
+                    <!-- Multi-select permissions (flags) -->
+                    <Label Grid.Row="1" Grid.Column="0" Content="Authorization:" VerticalAlignment="Top" Margin="0,6,0,0"/>
+                    <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,2,0,0">
+                        <CheckBox Content="Inventory"  Margin="0,0,8,6"
+                                  IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Inventory}}"
+                                  Command="{Binding ToggleNewPermissionCommand}"
+                                  CommandParameter="{x:Static mdl:AppPermission.Inventory}"/>
+                        <CheckBox Content="OverView"   Margin="0,0,8,6"
+                                  IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.OverView}}"
+                                  Command="{Binding ToggleNewPermissionCommand}"
+                                  CommandParameter="{x:Static mdl:AppPermission.OverView}"/>
+                        <CheckBox Content="Dishes"     Margin="0,0,8,6"
+                                  IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Dishes}}"
+                                  Command="{Binding ToggleNewPermissionCommand}"
+                                  CommandParameter="{x:Static mdl:AppPermission.Dishes}"/>
+                        <CheckBox Content="Reports"    Margin="0,0,8,6"
+                                  IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Reports}}"
+                                  Command="{Binding ToggleNewPermissionCommand}"
+                                  CommandParameter="{x:Static mdl:AppPermission.Reports}"/>
+                        <CheckBox Content="Orders"     Margin="0,0,8,6"
+                                  IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Orders}}"
+                                  Command="{Binding ToggleNewPermissionCommand}"
+                                  CommandParameter="{x:Static mdl:AppPermission.Orders}"/>
+                        <CheckBox Content="Employees"  Margin="0,0,8,6"
+                                  IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Employees}}"
+                                  Command="{Binding ToggleNewPermissionCommand}"
+                                  CommandParameter="{x:Static mdl:AppPermission.Employees}"/>
+                        <CheckBox Content="Tables"
+                                  IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Tables}}"
+                                  Command="{Binding ToggleNewPermissionCommand}"
+                                  CommandParameter="{x:Static mdl:AppPermission.Tables}"/>
+                    </WrapPanel>
+
+                    <!-- CREATE button -->
+                    <Button Grid.Row="2" Grid.Column="1"
+                            Content="Create"
+                            Margin="0,10,0,0"
+                            HorizontalAlignment="Left"
+                            Style="{DynamicResource SubmitBtn}"
+                            Command="{Binding AddRoleCommand}"
+                            IsDefault="True"/>
+
+                    <!-- Error -->
+                    <TextBlock Grid.Row="3" Grid.ColumnSpan="2"
+                               Text="{Binding FormErrorMessage}"
                                Margin="0,8,0,0"
                                Foreground="{DynamicResource LightText}"
                                Opacity="0.8"/>
-                </StackPanel>
+                </Grid>
             </GroupBox>
 
             <!-- Existing Roles -->
@@ -69,23 +124,52 @@
                           CanUserAddRows="False"
                           Margin="0">
                     <DataGrid.Columns>
-                        
+
                         <DataGridTextColumn Header="Role Name"
                                             Binding="{Binding Role_Name, UpdateSourceTrigger=PropertyChanged}"
                                             Width="*"/>
 
-                        <!-- Authorization column with enum dropdown -->
-                        <DataGridTemplateColumn Header="Authorization" Width="160">
+                        <!-- Authorization column: view as text, edit as flags checklist -->
+                        <DataGridTemplateColumn Header="Authorization" Width="260">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Role_Authorization}"/>
+                                    <TextBlock Text="{Binding Role_Authorization}"
+                                               Foreground="White"
+                                               FontWeight="Bold"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>
                                 <DataTemplate>
-                                    <ComboBox ItemsSource="{Binding DataContext.AuthorizationOptions, RelativeSource={RelativeSource AncestorType=Window}}"
-                                              SelectedItem="{Binding Role_Authorization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                              MinWidth="140"/>
+                                    <WrapPanel>
+                                        <CheckBox Content="Inv"   Margin="0,0,6,0"
+                                                  IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Inventory}}"
+                                                  Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{x:Static mdl:AppPermission.Inventory}"/>
+                                        <CheckBox Content="View"  Margin="0,0,6,0"
+                                                  IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.OverView}}"
+                                                  Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{x:Static mdl:AppPermission.OverView}"/>
+                                        <CheckBox Content="Dish"  Margin="0,0,6,0"
+                                                  IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Dishes}}"
+                                                  Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{x:Static mdl:AppPermission.Dishes}"/>
+                                        <CheckBox Content="Rep"   Margin="0,0,6,0"
+                                                  IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Reports}}"
+                                                  Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{x:Static mdl:AppPermission.Reports}"/>
+                                        <CheckBox Content="Ord"   Margin="0,0,6,0"
+                                                  IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Orders}}"
+                                                  Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{x:Static mdl:AppPermission.Orders}"/>
+                                        <CheckBox Content="Emp"   Margin="0,0,6,0"
+                                                  IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Employees}}"
+                                                  Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{x:Static mdl:AppPermission.Employees}"/>
+                                        <CheckBox Content="Tbl"
+                                                  IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Tables}}"
+                                                  Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                  CommandParameter="{x:Static mdl:AppPermission.Tables}"/>
+                                    </WrapPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellEditingTemplate>
                         </DataGridTemplateColumn>

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RestND.MVVM.Model.Employees
 {
@@ -12,8 +8,8 @@ namespace RestND.MVVM.Model.Employees
         private int _Role_ID;
         public int Role_ID
         {
-            get { return _Role_ID; }
-            set { _Role_ID = value; }
+            get => _Role_ID;
+            set => _Role_ID = value;
         }
         #endregion
 
@@ -21,45 +17,41 @@ namespace RestND.MVVM.Model.Employees
         private string? _Role_Name;
         public string? Role_Name
         {
-            get { return _Role_Name; }
-            set { _Role_Name = value; }
+            get => _Role_Name;
+            set => _Role_Name = value;
         }
         #endregion
 
-        #region Role Authorization
-        private AuthorizationStatus _Role_Authorization;
-
-        public AuthorizationStatus Role_Authorization
+        #region Permissions (flags)
+        private AppPermission _Permissions;
+        public AppPermission Permissions
         {
-            get { return _Role_Authorization; }
-            set { _Role_Authorization = value; }
+            get => _Permissions;
+            set => _Permissions = value;
         }
         #endregion
 
-        #region Is_Active - a property for knowing wheather the discount has been deleted or not
+        #region Is_Active
         private bool _Is_Active;
         public bool Is_Active
         {
-            get { return _Is_Active; }
-            set { _Is_Active = value; }
+            get => _Is_Active;
+            set => _Is_Active = value;
         }
         #endregion
 
-        #region constructor
-        public Role(string? roleName, AuthorizationStatus roleAuthorization)
+        // Display-only for your grid’s read-only cell:
+        public string Role_Authorization => Permissions.ToString();
+
+        #region Ctors
+        public Role() { }
+
+        public Role(string? roleName, AppPermission permissions, bool isActive = true)
         {
-            this.Role_Name = roleName;
-            this.Role_Authorization = roleAuthorization;
-            this.Is_Active = true;
+            Role_Name = roleName;
+            Permissions = permissions;
+            Is_Active = isActive;
         }
         #endregion
-
-        #region Default Constructor
-        public Role()
-        {
-            //default constructor
-        }
-        #endregion
-
     }
 }

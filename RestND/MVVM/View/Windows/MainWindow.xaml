@@ -14,7 +14,7 @@
         Style="{StaticResource windowStyle}">
 
     <Window.Resources>
-        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Window.Resources>
 
     <Border Style="{StaticResource windowBorder}">

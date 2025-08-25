@@ -6,6 +6,7 @@
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:uc ="clr-namespace:RestND.MVVM.View.UserControls"
         xmlns:fa="http://schemas.fontawesome.com/icons/svg"
+        xmlns:conv="clr-namespace:RestND.Converters"
         mc:Ignorable="d"
         Title="Employees"
         Style="{StaticResource windowStyle}"
@@ -14,6 +15,10 @@
     <Window.DataContext>
         <vm:EmployeeViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        
+        <conv:PermissionToEnabledConverter x:Key="CanManageEmployees" Required="Employees"/>
+    </Window.Resources>
 
     <Border BorderBrush="{DynamicResource LightText}" BorderThickness="3" CornerRadius="10">
         <Grid>
@@ -33,16 +38,31 @@
             <GroupBox Header="Employees" Grid.Column="0" Grid.Row="0" Margin="8">
                 <DockPanel>
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,8">
-                        <Button Command="{Binding AddEmployeeCommand}" Style="{DynamicResource SubmitBtn}" Margin="0,0,8,0" Click="AddEmployee">
+                        <Button Command="{Binding AddEmployeeCommand}"
+        Style="{DynamicResource SubmitBtn}"
+        Margin="0,0,8,0"
+        Click="AddEmployee"
+        IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
                             <TextBlock Text="Add"/>
                         </Button>
-                        <Button  Style="{DynamicResource SubmitBtn}" Margin="0,0,8,0" Click="EditEmployee">
+
+                        <Button Style="{DynamicResource SubmitBtn}"
+        Margin="0,0,8,0"
+        Click="EditEmployee"
+        IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
                             <TextBlock Text="Update"/>
                         </Button>
-                        <Button Command="{Binding DeleteEmployeeCommand}" Style="{DynamicResource SubmitBtn}">
+
+                        <Button Command="{Binding DeleteEmployeeCommand}"
+        Style="{DynamicResource SubmitBtn}"
+        IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
                             <TextBlock Text="Delete"/>
                         </Button>
-                        <Button Style="{DynamicResource SubmitBtn}" Margin="10,0,8,0" Click="OpenRoles_Click">
+
+                        <Button Style="{DynamicResource SubmitBtn}"
+        Margin="10,0,8,0"
+        Click="OpenRoles_Click"
+        IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
                             <TextBlock Text="New Role"/>
                         </Button>
 

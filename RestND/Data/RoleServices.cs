@@ -12,7 +12,7 @@ namespace RestND.Data
         public override List<Role> GetAll()
         {
             var roles = new List<Role>();
-            const string query = "SELECT Role_ID, Role_Name, Role_Authorization, Is_Active FROM roles WHERE Is_Active = TRUE";
+            const string query = "SELECT Role_ID, Role_Name, Permissions, Is_Active FROM roles WHERE Is_Active = TRUE";
 
             var rows = _db.ExecuteReader(query);
             foreach (var row in rows)
@@ -21,7 +21,7 @@ namespace RestND.Data
                 {
                     Role_ID = Convert.ToInt32(row["Role_ID"]),
                     Role_Name = Convert.ToString(row["Role_Name"]),
-                    Role_Authorization = (AuthorizationStatus)Convert.ToInt32(row["Role_Authorization"]),
+                    Permissions = (AppPermission)Convert.ToInt32(row["Permissions"]),
                     Is_Active = Convert.ToBoolean(row["Is_Active"])
                 });
             }
@@ -34,12 +34,12 @@ namespace RestND.Data
         public override bool Add(Role r)
         {
             const string query = @"
-INSERT INTO roles (Role_Name, Role_Authorization, Is_Active)
-VALUES (@Role_Name, @Role_Authorization, @Is_Active);";
+INSERT INTO roles (Role_Name, Permissions, Is_Active)
+VALUES (@Role_Name, @Permissions, @Is_Active);";
 
             return _db.ExecuteNonQuery(query,
-                new MySqlParameter("@Role_Name", r.Role_Name ?? (object)DBNull.Value),
-                new MySqlParameter("@Role_Authorization", (int)r.Role_Authorization),
+                new MySqlParameter("@Role_Name", (object?)r.Role_Name ?? DBNull.Value),
+                new MySqlParameter("@Permissions", (int)r.Permissions),
                 new MySqlParameter("@Is_Active", r.Is_Active)
             ) > 0;
         }
@@ -51,13 +51,13 @@ VALUES (@Role_Name, @Role_Authorization, @Is_Active);";
             const string query = @"
 UPDATE roles
 SET Role_Name = @Role_Name,
-    Role_Authorization = @Role_Authorization
+    Permissions = @Permissions
 WHERE Role_ID = @id;";
 
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@id", r.Role_ID),
-                new MySqlParameter("@Role_Name", r.Role_Name ?? (object)DBNull.Value),
-                new MySqlParameter("@Role_Authorization", (int)r.Role_Authorization)
+                new MySqlParameter("@Role_Name", (object?)r.Role_Name ?? DBNull.Value),
+                new MySqlParameter("@Permissions", (int)r.Permissions)
             ) > 0;
         }
         #endregion

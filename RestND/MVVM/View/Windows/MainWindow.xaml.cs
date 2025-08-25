@@ -4,6 +4,10 @@ using System;
 using System.Windows;
 using System.Windows.Input;
 
+// NEW: auth usings
+using RestND.MVVM.Model.Employees;   // AppPermission
+using RestND.MVVM.Model.Security;    // AuthContext
+
 namespace RestND.MVVM.View.Windows
 {
     public partial class MainWindow : Window
@@ -68,6 +72,13 @@ namespace RestND.MVVM.View.Windows
 
         private void AddTable_Click(object sender, RoutedEventArgs e)
         {
+            // NEW: gate by Tables permission
+            if (!AuthContext.Has(AppPermission.Tables))
+            {
+                MessageBox.Show("You don't have permission to add tables.");
+                return;
+            }
+
             Overlay.Visibility = Visibility.Visible;
             this.Opacity = 0.4;
 
@@ -88,11 +99,18 @@ namespace RestND.MVVM.View.Windows
 
         private void EditTable_Click(object sender, RoutedEventArgs e)
         {
+            // NEW: gate by Tables permission
+            if (!AuthContext.Has(AppPermission.Tables))
+            {
+                MessageBox.Show("You don't have permission to edit tables.");
+                return;
+            }
+
             var popup = new EditTablePopUpWindow
             {
                 Owner = this,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
+            };  
 
             this.Opacity = 0.4;
             Overlay.Visibility = Visibility.Visible;
@@ -122,6 +140,13 @@ namespace RestND.MVVM.View.Windows
 
         private void DeleteTable_Click(object sender, RoutedEventArgs e)
         {
+            // NEW: gate by Tables permission
+            if (!AuthContext.Has(AppPermission.Tables))
+            {
+                MessageBox.Show("You don't have permission to delete tables.");
+                return;
+            }
+
             Overlay.Visibility = Visibility.Visible;
             this.Opacity = 0.4;
 
@@ -144,6 +169,13 @@ namespace RestND.MVVM.View.Windows
 
         private void OpenInventory()
         {
+            // NEW
+            if (!AuthContext.Has(AppPermission.Inventory))
+            {
+                MessageBox.Show("You don't have permission to open Inventory.");
+                return;
+            }
+
             var w = new ProductWindow { Owner = this, WindowState = WindowState.Maximized };
             w.Show();
             this.Hide();
@@ -151,6 +183,13 @@ namespace RestND.MVVM.View.Windows
 
         private void OpenOverView()
         {
+            // NEW
+            if (!AuthContext.Has(AppPermission.OverView))
+            {
+                MessageBox.Show("You don't have permission to open OverView.");
+                return;
+            }
+
             var w = new OverView { Owner = this, WindowState = WindowState.Maximized };
             w.Show();
             this.Hide();
@@ -158,6 +197,13 @@ namespace RestND.MVVM.View.Windows
 
         private void OpenDishes()
         {
+            // NEW
+            if (!AuthContext.Has(AppPermission.Dishes))
+            {
+                MessageBox.Show("You don't have permission to open Dishes.");
+                return;
+            }
+
             var w = new DishWindow { Owner = this, WindowState = WindowState.Maximized };
             w.Show();
             this.Hide();
@@ -165,6 +211,13 @@ namespace RestND.MVVM.View.Windows
 
         private void OpenReports()
         {
+            // NEW
+            if (!AuthContext.Has(AppPermission.Reports))
+            {
+                MessageBox.Show("You don't have permission to open Reports.");
+                return;
+            }
+
             var w = new ReportWindow { Owner = this, WindowState = WindowState.Maximized };
             w.Show();
             this.Hide();
@@ -172,6 +225,8 @@ namespace RestND.MVVM.View.Windows
 
         private void OpenOrders()
         {
+          
+
             var w = new OrderWindow { Owner = this, WindowState = WindowState.Maximized };
             w.Show();
             this.Hide();
@@ -179,6 +234,13 @@ namespace RestND.MVVM.View.Windows
 
         private void OpenEmployees()
         {
+            // NEW
+            if (!AuthContext.Has(AppPermission.Employees))
+            {
+                MessageBox.Show("You don't have permission to open Employees.");
+                return;
+            }
+
             var w = new EmployeesWindow { Owner = this, WindowState = WindowState.Maximized };
             w.Show();
             this.Hide();
