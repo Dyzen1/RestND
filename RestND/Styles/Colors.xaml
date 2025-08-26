@@ -7,10 +7,12 @@
     <SolidColorBrush x:Key="ErrorMsg" Color="#C62828"/> <!--for error text messages-->
     <SolidColorBrush x:Key="Hover" Color="LightGoldenrodYellow"/> <!--for mouse hover bg-->
     <SolidColorBrush x:Key="secondaryHeaders" Color="Gray"/>
-    <SolidColorBrush x:Key="secondaryBtns" Color="#8fce00"/> <!--for some of the icons-->
+    <SolidColorBrush x:Key="secondaryBtns" Color="#7CB342"/> <!--for some of the icons-->
     <SolidColorBrush x:Key="DividerBrush" Color="#40FFFFFF"/>
     <SolidColorBrush x:Key="AccentBrush" Color="#2D89EF"/>
     <SolidColorBrush x:Key="BorderBrush" Color="#40FFFFFF"/>
+    <SolidColorBrush x:Key="CancelBtn" Color="#DC3545"/><!--for cancel buttons-->
+    
 
 
     <!--<Style x:Key="bg" TargetType="Image">

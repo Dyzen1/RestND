@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestND.MVVM.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,13 +16,14 @@ using System.Windows.Shapes;
 namespace RestND.MVVM.View.Windows
 {
     /// <summary>
-    /// Interaction logic for AddProductToDishPopup.xaml
+    /// Interaction logic for EditProductWindow.xaml
     /// </summary>
-    public partial class AddProductToDishPopup : Window
+    public partial class EditProductWindow : Window
     {
-        public AddProductToDishPopup()
+        public EditProductWindow()
         {
             InitializeComponent();
+           
         }
     }
 }

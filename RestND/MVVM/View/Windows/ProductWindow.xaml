@@ -16,115 +16,122 @@
     </Window.Resources>
 
     <Border Style="{DynamicResource windowBorder}">
-        <Grid Margin="20 5 20 10">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
 
-            <!-- Input Form -->
-            <Grid Grid.Row="0" Margin="0 0 0 10">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="360"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                <!-- Product ID -->
-                <StackPanel Grid.Column="0" Orientation="Vertical" Margin="0 0 10 0"
-                            VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                    <Label Content="Serial Number" Foreground="{DynamicResource LightText}" FontSize="13"/>
-                    <TextBox Background="Transparent"
-                             Text="{Binding NewProduct.Product_ID, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Foreground="{DynamicResource LightText}" Height="20"
-                             BorderBrush="{DynamicResource LightText}" ToolTip="Serial Number"/>
-                    <TextBlock Text="{Binding ProductIdError}" Foreground="Red" FontSize="11" FontWeight="Bold"
-                               Visibility="{Binding ProductIdError, Converter={StaticResource StringToVisibilityConverter}}"/>
-                </StackPanel>
-
-                <!-- Product Name -->
-                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0 0 10 0"
-                            VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                    <Label Content="Product Name" Foreground="{DynamicResource LightText}" FontSize="13"/>
-                    <TextBox Text="{Binding NewProduct.Product_Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Background="Transparent"
-                             Foreground="{DynamicResource LightText}" Height="20"
-                             BorderBrush="{DynamicResource LightText}" ToolTip="Product Name"/>
-                    <TextBlock Text="{Binding ProductNameError}" Foreground="Red" FontSize="11" FontWeight="Bold"
-                               Visibility="{Binding ProductNameError, Converter={StaticResource StringToVisibilityConverter}}"/>
-                </StackPanel>
-
-                <!-- Quantity -->
-                <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0 0 10 0"
-                            VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                    <Label Content="Quantity" Foreground="{DynamicResource LightText}" FontSize="13"/>
-                    <TextBox Background="Transparent"
-                             Text="{Binding NewProduct.Quantity_Available, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Foreground="{DynamicResource LightText}" Height="20"
-                             BorderBrush="{DynamicResource LightText}" ToolTip="Quantity"/>
-                    <TextBlock Text="{Binding QuantityError}" Foreground="Red" FontSize="11" FontWeight="Bold"
-                               Visibility="{Binding QuantityError, Converter={StaticResource StringToVisibilityConverter}}"/>
-                </StackPanel>
-
-                <!-- Tolerance -->
-                <StackPanel Grid.Column="3" Orientation="Vertical" Margin="0 0 10 0"
-                            VerticalAlignment="Bottom" HorizontalAlignment="Center">
-                    <Label Content="Tolerance" Foreground="{DynamicResource LightText}" FontSize="13"/>
-                    <TextBox Background="Transparent"
-                             Text="{Binding NewProduct.Tolerance, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                             Foreground="{DynamicResource LightText}" Height="20"
-                             BorderBrush="{DynamicResource LightText}" ToolTip="Tolerance"/>
-                    <TextBlock Text="{Binding ToleranceError}" Foreground="Red" FontSize="11" FontWeight="Bold"
-                               Visibility="{Binding ToleranceError, Converter={StaticResource StringToVisibilityConverter}}"/>
-                </StackPanel>
-
-                <!-- Add Button -->
-                <Button Grid.Column="3" Command="{Binding AddProductCommand}" Margin="0"
-                        Style="{StaticResource addBtn}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <StackPanel Orientation="Horizontal">
-                        <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
-                        <TextBlock Text="Add Product" FontSize="13"
-                                   Foreground="{DynamicResource LightText}" Margin="4,0,0,0"/>
+            <GroupBox Header="New Product Details" Margin="20 0 18 8" Grid.Column="0" 
+                      Grid.Row="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="90"/>
+                        <RowDefinition Height="90"/>
+                        <RowDefinition Height="90"/>
+                        <RowDefinition Height="90"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+               
+                    <!-- Product ID -->
+                    <StackPanel Orientation="Vertical" Grid.Row="0" VerticalAlignment="Bottom">
+                        <Label Content="Serial Number:"/>
+                        <TextBox Text="{Binding NewProductIdInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     </StackPanel>
-                </Button>
-            </Grid>
 
+                    <!-- Product Name -->
+                    <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Bottom">
+                        <Label Content="Product Name:"/>
+                        <TextBox Text="{Binding NewProductNameInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <!-- Quantity -->
+                    <StackPanel Orientation="Vertical" Grid.Row="2" VerticalAlignment="Bottom">
+                        <Label Content="Quantity:"/>
+                        <TextBox Text="{Binding NewQuantityInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <!-- Tolerance -->
+                    <StackPanel Orientation="Vertical" Grid.Row="3" VerticalAlignment="Bottom">
+                        <Label Content="Tolerance:"/>
+                        <TextBox Text="{Binding NewToleranceInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </StackPanel>
+
+                    <!-- Add Button -->
+                    <Button Grid.Row="4" Command="{Binding AddProductCommand}"
+                             Style="{StaticResource addBtn}" VerticalAlignment="Center" 
+                             HorizontalAlignment="Center" Margin="0 20 0 0">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
+                            <TextBlock Text="Add Product" FontSize="13"
+                                    Foreground="{DynamicResource LightText}" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </GroupBox>
+
+            <!-- Validation error display -->
+            <TextBlock Text="{Binding ProductErrorMessage}" Grid.Row="2" 
+                    Style="{DynamicResource errorMessage}"
+                    Visibility="{Binding ProductErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+            <!--search by product name-->
+            <uc:SearchBar x:Name="ProductSearch" Grid.Row="0" Grid.Column="1" 
+                          Margin="8 15 0 0" HorizontalAlignment="Left"
+                          Placeholder="Search by product name"/>
             <!-- DataGrid Section -->
-            <Border Style="{DynamicResource windowBorder}" Grid.Row="1">
-                <DataGrid Grid.Row="1" RowStyle="{DynamicResource rowStyle}"
+            <Border Style="{DynamicResource windowBorder}"
+                    Grid.Column="1" Grid.Row="1" Margin="8">
+                <DataGrid RowStyle="{DynamicResource rowStyle}"
                           ItemsSource="{Binding Products}"
                           CellStyle="{DynamicResource cellStyle}"
                           SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
-                          HeadersVisibility="None">
+                          HeadersVisibility="Column" BorderBrush="Transparent"
+                          AutoGenerateColumns="False">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Product ID:" Binding="{Binding Product_ID}" Width="*"/>
-                        <DataGridTextColumn Header="Product Name:" Binding="{Binding Product_Name}" Width="*"/>
-                        <DataGridTextColumn Header="Quantity Available:" Binding="{Binding Quantity_Available}" Width="*"/>
-                        <DataGridTextColumn Header="Tolerance:" Binding="{Binding Tolerance}" Width="*" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Created At: " Binding="{Binding Created_At}" Width="*" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Serial Number" 
+                                            Binding="{Binding Product_ID}" Width="*"
+                                            IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Product Name" 
+                                            Binding="{Binding Product_Name}" Width="*"
+                                            IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Quantity Available" 
+                                            Binding="{Binding Quantity_Available}" Width="*"
+                                            IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Tolerance" 
+                                            Binding="{Binding Tolerance}" Width="*"
+                                            IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Created At" 
+                                            Binding="{Binding Created_At}" Width="*"
+                                            IsReadOnly="True"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
 
             <!-- Footer -->
-            <Grid Grid.Row="2">
-                <uc:ReturnBtn x:Name="returnBtn"/>
-                <TextBlock Style="{DynamicResource copyWrite}" Margin="5 5"/>
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 20">
+                <Button Style="{DynamicResource SubmitBtn}"
+                        Content="Update product"
+                        Click="UpdateProductBtn_Click"/>
 
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                            Margin="0,10,20,0">
-                    <Button Style="{DynamicResource editBtn}" Command="{Binding UpdateProductCommand}">
-                        <fa:SvgAwesome Style="{DynamicResource editBtnIcon}"/>
-                    </Button>
+                <Button Style="{DynamicResource SubmitBtn}" 
+                        Command="{Binding DeleteProductCommand}"
+                        Content="Delete product" Margin="20,0,0,0"/>
+            </StackPanel>
 
-                    <Button Style="{DynamicResource deleteBtn}" Command="{Binding DeleteProductCommand}">
-                        <fa:SvgAwesome Style="{DynamicResource deleteBtnIcon}"/>
-                    </Button>
-                </StackPanel>
-            </Grid>
+            <uc:ReturnBtn x:Name="returnBtn" Grid.Column="0" Grid.Row="2"
+                    VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+
+            <TextBlock Style="{DynamicResource copyWrite}" VerticalAlignment="Bottom" 
+                       HorizontalAlignment="Center" Margin="0,0,0,15" 
+                        Grid.Column="1" Grid.Row="2"/>
         </Grid>
     </Border>
 </Window>

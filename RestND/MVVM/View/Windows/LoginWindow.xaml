@@ -43,15 +43,13 @@
                 <Button Content="Login"
                         Command="{Binding LoginCommand}"
                         Style="{DynamicResource SubmitBtn}"
-                        Margin="0,12,0,0"/>
+                        Margin="0,15,0,0"/>
 
                 <!-- Show any error from VM -->
                 <TextBlock Text="{Binding ErrorMessage}"
-                           Foreground="Tomato"
-                           Margin="0,8,0,0"
-                           TextAlignment="Center"/>
+                           Style="{DynamicResource errorMessage}"/>
 
-                <Button Content="Forgot password"
+                <Button Content="Forgot password" Margin="0 0 0 20"
                         Click="ForgotPassword_Click"
                         Style="{DynamicResource frGotPassword}"/>
             </StackPanel>

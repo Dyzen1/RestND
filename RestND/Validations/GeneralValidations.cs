@@ -22,7 +22,7 @@ namespace RestND.Validations
                 return false;
             }
 
-            string pattern = @"^[A-Za-z]{2,50}$"; //only letters, 2 to 50 characters
+            string pattern = @"^[A-Za-z\s]{2,50}$"; //only letters, 2 to 50 characters
             if (!Regex.IsMatch(name, pattern))
             {
                 errorMessage = "Name must be 2–50 letters only.";
@@ -37,7 +37,7 @@ namespace RestND.Validations
             errorMessage = string.Empty;
             if (string.IsNullOrEmpty(id))
             {
-                errorMessage = "Pleas insert an ID!";
+                errorMessage = "Please insert an ID!";
                 return false;
             }
             string pattern = @"^\d{9}$";
@@ -52,7 +52,7 @@ namespace RestND.Validations
         public bool IsEmptyField(string input, out string err)
         {
             err = string.Empty;
-            if (input == null)
+            if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
             {
                 err = "All fields must be populated.";
                 return false;
@@ -61,6 +61,17 @@ namespace RestND.Validations
         }
 
         public bool CheckPosNum(int num, out string err)
+        {
+            err = string.Empty;
+            if (num <= 0)
+            {
+                err = "Number must be positive.";
+                return false;
+            }
+            return true;
+        }
+
+        public bool CheckPosNumDouble(double num, out string err)
         {
             err = string.Empty;
             if (num <= 0)

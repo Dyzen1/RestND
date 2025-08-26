@@ -66,31 +66,31 @@
                     <!-- Multi-select permissions (flags) -->
                     <Label Grid.Row="1" Grid.Column="0" Content="Authorization:" VerticalAlignment="Top" Margin="0,6,0,0"/>
                     <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,2,0,0">
-                        <CheckBox Content="Inventory"  Margin="0,0,8,6"
+                        <CheckBox Content="Inventory"  Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Inventory}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Inventory}"/>
-                        <CheckBox Content="OverView"   Margin="0,0,8,6"
+                        <CheckBox Content="OverView"   Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.OverView}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.OverView}"/>
-                        <CheckBox Content="Dishes"     Margin="0,0,8,6"
+                        <CheckBox Content="Dishes"     Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Dishes}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Dishes}"/>
-                        <CheckBox Content="Reports"    Margin="0,0,8,6"
+                        <CheckBox Content="Reports"    Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Reports}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Reports}"/>
-                        <CheckBox Content="Orders"     Margin="0,0,8,6"
+                        <CheckBox Content="Orders"     Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Orders}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Orders}"/>
-                        <CheckBox Content="Employees"  Margin="0,0,8,6"
+                        <CheckBox Content="Employees"  Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Employees}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Employees}"/>
-                        <CheckBox Content="Tables"
+                        <CheckBox Content="Tables" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Tables}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Tables}"/>
@@ -118,11 +118,12 @@
             <GroupBox Header="Existing Roles" Grid.Row="2">
                 <DataGrid ItemsSource="{Binding Roles}"
                           SelectedItem="{Binding SelectedRole, Mode=TwoWay}"
+                          CellStyle="{DynamicResource cellStyle}"
+                          RowStyle="{DynamicResource rowStyle}"
                           AutoGenerateColumns="False"
                           HeadersVisibility="Column"
                           ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
-                          CanUserAddRows="False"
-                          Margin="0">
+                          CanUserAddRows="False">
                     <DataGrid.Columns>
 
                         <DataGridTextColumn Header="Role Name"
@@ -134,9 +135,7 @@
                         <DataGridTemplateColumn Header="Authorization" Width="260">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Role_Authorization}"
-                                               Foreground="White"
-                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Role_Authorization}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                             <DataGridTemplateColumn.CellEditingTemplate>

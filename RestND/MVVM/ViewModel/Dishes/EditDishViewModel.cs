@@ -5,6 +5,7 @@ using RestND.Data;
 using RestND.MVVM.Model;
 using RestND.MVVM.Model.Dishes;
 using RestND.MVVM.ViewModel.Dishes;
+using RestND.Validations;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace RestND.MVVM.ViewModel
     public partial class EditDishViewModel : ObservableObject
     {
         #region Services
+        private readonly DishValidator _dishValidator = new();
         private readonly DishServices _dishService = new();
         private readonly DishTypeServices _dishTypeService = new();
         private readonly ProductService _productService = new();
@@ -46,6 +48,8 @@ namespace RestND.MVVM.ViewModel
             "Contains Celery",
             "Contains Sulfites"
         };
+
+        [ObservableProperty] private string dishErrorMessage;
         #endregion
 
         #region Constructor
@@ -82,10 +86,10 @@ namespace RestND.MVVM.ViewModel
         #endregion
         
         #region On change
-        partial void OnSelectedDishChanged(Dish value)
-        {
-            UpdateDishCommand.NotifyCanExecuteChanged();
-        }
+        //partial void OnSelectedDishChanged(Dish value)
+        //{
+        //    UpdateDishCommand.NotifyCanExecuteChanged();
+        //}
         #endregion
 
         #region Relay commands
@@ -93,9 +97,6 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private async Task UpdateDish()
         {
-            SelectedDish.Allergen_Notes = string.Join(", ",
-            AllergenOptions.Where(a => a.IsSelected).Select(a => a.Value));
-
             // Build ProductUsage from the grid rows the user checked + filled
             var chosen = ProductSelections
                 .Where(x => x.IsSelected)
@@ -108,27 +109,45 @@ namespace RestND.MVVM.ViewModel
                 })
                 .ToList();
 
-            SelectedDish.ProductUsage = chosen;
-
-            if (string.IsNullOrWhiteSpace(SelectedDish.Dish_Name) ||
-                SelectedDish.Dish_Price <= 0 ||
-                SelectedDish.Dish_Type == null ||
-                SelectedDish.ProductUsage == null || !SelectedDish.ProductUsage.Any())
+            //validations:
+            // 1. verify at least one allergen was selected
+            if (AllergenOptions.Count == 0)
             {
-                MessageBox.Show("Please fill in all required fields and add at least one product.");
+                DishErrorMessage = "Please select at least one allergen note";
                 return;
             }
+            // 2. check if inputs are empty
+            if (SelectedDish.Dish_Type == null || chosen == null || 
+                _dishValidator.IsEmptyField(SelectedDish.Dish_Name, out string err))
+            {
+                DishErrorMessage = "All fields must be populated";
+                return;
+            }
+            // 3. check if product usage is empty
+            if (chosen.Count == 0)
+            {
+                DishErrorMessage = "Please select at least one product with a positive amount";
+                return;
+            }
+            // 4. is price positive validation
+            if (!_dishValidator.CheckPosNum(SelectedDish.Dish_Price, out string priceErr))
+            {
+                DishErrorMessage = priceErr;
+                return;
+            }
+            // 5. validation passed
+            DishErrorMessage = string.Empty;
+
+            SelectedDish.ProductUsage = chosen;
+            SelectedDish.Allergen_Notes = string.Join(", ",
+            AllergenOptions.Where(a => a.IsSelected).Select(a => a.Value));// Allergens from checkboxes
+            SelectedDish.Is_Active = true; 
 
             bool success = _dishService.Update(SelectedDish);
             if (success)
             {
                 await _hub.SendAsync("NotifyDishUpdate", SelectedDish, "update");
                 MessageBox.Show("Dish updated successfully.", "Success");
-
-            }
-            else
-            {
-                MessageBox.Show("Failed to update dish.", "Error");
             }
         }
 

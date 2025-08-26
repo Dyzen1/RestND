@@ -28,10 +28,11 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private Inventory selectedProduct;
         [ObservableProperty] private Inventory newProduct = new();
 
-        [ObservableProperty] private string productIdError;
-        [ObservableProperty] private string productNameError;
-        [ObservableProperty] private string quantityError;
-        [ObservableProperty] private string toleranceError;
+        [ObservableProperty] private string productErrorMessage;
+        [ObservableProperty] private string newProductIdInput;
+        [ObservableProperty] private string newProductNameInput;
+        [ObservableProperty] private string newQuantityInput;
+        [ObservableProperty] private string newToleranceInput;
 
         #endregion
 
@@ -107,43 +108,66 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private async Task AddProduct()
         {
-            ClearErrors();
-
-            if (string.IsNullOrWhiteSpace(NewProduct.Product_ID))
+            //validations:
+            // 1+2. check id input
+            if (!_validator.IsEmptyField(NewProductIdInput, out string err))
             {
-                ProductIdError = "Product ID is required.";
+                ProductErrorMessage = err;
                 return;
             }
-
-            if (!_validator.CheckIfIdExists(NewProduct.Product_ID, Products.ToList(), out string idErr))
+            if (!_validator.isSerialNumValid(NewProductIdInput, out string erro))
             {
-                ProductIdError = idErr;
+                ProductErrorMessage = erro;
                 return;
             }
-
-            if (string.IsNullOrWhiteSpace(NewProduct.Product_Name))
+            // 3. product id existance validation
+            if (!_validator.CheckIfIdExists(NewProductIdInput, Products.ToList(), out string idErr))
             {
-                ProductNameError = "Product name is required.";
+                ProductErrorMessage = idErr;
                 return;
             }
-
-            if (!_validator.CheckIfNameExists(NewProduct.Product_Name, Products.ToList(), out string nameErr))
+            // 4+5. check name input
+            if (!_validator.IsEmptyField(NewProductNameInput, out string nErr))
             {
-                ProductNameError = nameErr;
+                ProductErrorMessage = nErr;
                 return;
             }
-
-            if (!_validator.PositiveQuantity(NewProduct.Quantity_Available, out string qtyErr))
+            if (!_validator.isNameValid(NewProductNameInput, out string nameE))
             {
-                QuantityError = qtyErr;
+                ProductErrorMessage = nameE;
                 return;
             }
-
-            if (!_validator.PositiveTolerance(NewProduct.Tolerance, out string tolErr))
+            // 6. product name existance validation
+            if (!_validator.CheckIfNameExists(NewProductNameInput, Products.ToList(), out string nameErr))
             {
-                ToleranceError = tolErr;
+                ProductErrorMessage = nameErr;
                 return;
             }
+            // 7. check that quantity && tolerance are a number
+            if (!int.TryParse(NewQuantityInput, out int parsedQuantity) || !int.TryParse(NewToleranceInput, out int parsedTolerance))
+            {
+                ProductErrorMessage = "Please enter a valid number";
+                return;
+            }
+            // 8. is quantity positive validation
+            if (!_validator.CheckPosNum(parsedQuantity, out string qErr))
+            {
+                ProductErrorMessage = qErr;
+                return;
+            }
+            // 9. is tolerance positive validation
+            if (!_validator.CheckPosNum(parsedTolerance, out string tErr))
+            {
+                ProductErrorMessage = tErr;
+                return;
+            }
+            // 10. validation passed
+            ProductErrorMessage = string.Empty;
+
+            NewProduct.Product_ID = NewProductIdInput;
+            NewProduct.Product_Name = NewProductNameInput;
+            NewProduct.Tolerance = parsedTolerance;
+            NewProduct.Quantity_Available = parsedQuantity;
 
             bool success = _productService.Add(NewProduct);
 
@@ -151,8 +175,7 @@ namespace RestND.MVVM.ViewModel
             {
                 await _hub.SendAsync("NotifyInventoryUpdate", NewProduct, "add");
                 NewProduct = new Inventory();
-                ClearErrors();
-                LoadProducts();
+                //LoadProducts();
             }
         }
 
@@ -163,11 +186,10 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private async Task DeleteProductAsync()
         {
-            ClearErrors();
 
             if (SelectedProduct == null)
             {
-                ProductIdError = "Please select a product to delete.";
+                ProductErrorMessage = "Please select a product to delete.";
                 return;
             }
 
@@ -186,34 +208,46 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private async Task UpdateProduct()
         {
-            ClearErrors();
-
-            if (SelectedProduct == null)
+            // 1+2. check id input
+            if (!_validator.IsEmptyField(SelectedProduct.Product_ID, out string err))
             {
-                ProductIdError = "Please select a product to update.";
+                ProductErrorMessage = err;
+                return;
+            }
+            if (!_validator.isSerialNumValid(SelectedProduct.Product_ID, out string erro))
+            {
+                ProductErrorMessage = erro;
+                return;
+            }
+            // 3+4. check name input
+            if (!_validator.IsEmptyField(SelectedProduct.Product_Name, out string nErr))
+            {
+                ProductErrorMessage = nErr;
+                return;
+            }
+            if (!_validator.isNameValid(SelectedProduct.Product_Name, out string nameE))
+            {
+                ProductErrorMessage = nameE;
+                return;
+            }
+            // 5. is quantity positive validation
+            if (!_validator.CheckPosNum(SelectedProduct.Quantity_Available, out string qErr))
+            {
+                ProductErrorMessage = qErr;
+                return;
+            }
+            // 6. is tolerance positive validation
+            if (!_validator.CheckPosNumDouble(SelectedProduct.Tolerance, out string tErr))
+            {
+                ProductErrorMessage = tErr;
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(SelectedProduct.Product_Name))
-            {
-                ProductNameError = "Product name is required.";
-                return;
-            }
-
-            if (!_validator.PositiveQuantity(SelectedProduct.Quantity_Available, out string qtyErr))
-            {
-                QuantityError = qtyErr;
-                return;
-            }
-
-            if (!_validator.PositiveTolerance(SelectedProduct.Tolerance, out string tolErr))
-            {
-                ToleranceError = tolErr;
-                return;
-            }
+            // 7. validation passed
+            ProductErrorMessage = string.Empty;
+            SelectedProduct.Is_Active = true;
 
             bool success = _productService.Update(SelectedProduct);
-
             if (success)
             {
                 await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "update");
@@ -223,13 +257,5 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
-        #region Helpers
-
-        private void ClearErrors()
-        {
-            ProductIdError = ProductNameError = QuantityError = ToleranceError = string.Empty;
-        }
-
-        #endregion
     }
 }
