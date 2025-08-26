@@ -12,6 +12,7 @@
         WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <conv:StringToDecimalConverter x:Key="StringToDecimalConverter"/>
+      
     </Window.Resources>
     <Border Style="{DynamicResource windowBorder}">
         <Grid>

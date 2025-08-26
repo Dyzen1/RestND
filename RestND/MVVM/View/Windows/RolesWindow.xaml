@@ -127,7 +127,8 @@
 
                         <DataGridTextColumn Header="Role Name"
                                             Binding="{Binding Role_Name, UpdateSourceTrigger=PropertyChanged}"
-                                            Width="*"/>
+                                            Width="*"
+                                            />
 
                         <!-- Authorization column: view as text, edit as flags checklist -->
                         <DataGridTemplateColumn Header="Authorization" Width="260">
