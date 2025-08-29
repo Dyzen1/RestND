@@ -5,7 +5,7 @@
     <SolidColorBrush x:Key="LightText" Color="#d5f5e3"/> <!--most of the text in the pages-->
     <SolidColorBrush x:Key="CardBG" Color="#2a332e"/> <!--background for cards & in the page-->
     <SolidColorBrush x:Key="ErrorMsg" Color="#C62828"/> <!--for error text messages-->
-    <SolidColorBrush x:Key="Hover" Color="LightGoldenrodYellow"/> <!--for mouse hover bg-->
+    <SolidColorBrush x:Key="LightBG" Color="LightGoldenrodYellow"/> <!--for mouse hover bg-->
     <SolidColorBrush x:Key="secondaryHeaders" Color="Gray"/>
     <SolidColorBrush x:Key="secondaryBtns" Color="#7CB342"/> <!--for some of the icons-->
     <SolidColorBrush x:Key="DividerBrush" Color="#40FFFFFF"/>

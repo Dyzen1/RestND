@@ -17,11 +17,11 @@ namespace RestND.MVVM.View.UserControls
             var hostWindow = Window.GetWindow(this);
             if (hostWindow == null) return;
 
-            // Prefer the owner if it exists (the original MainWindow)
-            if (hostWindow.Owner is MainWindow mainOwned)
+            if (hostWindow.Owner != null)
             {
-                mainOwned.WindowState = WindowState.Maximized;
-                mainOwned.Show();
+                hostWindow.Owner.Show();
+                hostWindow.Close();
+                return;
             }
             else
             {
@@ -39,7 +39,7 @@ namespace RestND.MVVM.View.UserControls
                 // In that case you *could* create a new one, but better to avoid ever closing it.
             }
 
-            hostWindow.Close();
+            hostWindow.Hide();
         }
     }
 }

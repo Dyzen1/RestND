@@ -1,40 +1,19 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿    using RestND.Data;
+using RestND.MVVM.ViewModel.Navigation;
+using System;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Navigation;
 
-namespace RestND.MVVM.View.UserControls
-{
-    public partial class SideBar : UserControl
+    namespace RestND.MVVM.View.UserControls
     {
-        public event Action<string> ButtonClicked;
-        public SideBar()
+        public partial class SideBar : UserControl
         {
-            InitializeComponent();
-        }
+            public SideBar()
+            {
+                InitializeComponent();
+                this.DataContext = new NavigationViewModel();
+            }
 
-        private void InventoryBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonClicked?.Invoke("Inventory");
-        }
-
-        private void OverViewBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonClicked?.Invoke("OverView");
-        }
-
-        private void DishesBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonClicked?.Invoke("Dishes");
-        }
-
-        private void ReportsBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonClicked?.Invoke("Reports");
-        }
-
-        private void EmployeesBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonClicked?.Invoke("Employees");
         }
     }
-}

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RestND.utilities"
         xmlns:conv="clr-namespace:RestND.Converters"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
-        xmlns:fa="http://schemas.fontawesome.com/icons/svg"
+        xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         mc:Ignorable="d"
         Title="MainWindow"
@@ -47,7 +47,7 @@
 
                 <Expander Style="{DynamicResource sideBarExpander}"
                           Grid.Row="1" Grid.Column="2">
-                    <uc:SideBar x:Name="sideBar"/>
+                    <uc:SideBar/>
                 </Expander>
 
                 <Button Name="Login" 
@@ -62,7 +62,7 @@
 
                     <Button x:Name="addTables" Style="{DynamicResource addBtn}" Click="AddTable_Click">
                         <StackPanel Orientation="Horizontal">
-                            <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
+                            <fa:ImageAwesome Style="{DynamicResource addBtnIcon}"/>
                             <TextBlock Text="Add Table" FontSize="12" TextAlignment="Center"
                                         Foreground="{DynamicResource LightText}" Margin="4"/>
                         </StackPanel>
@@ -70,7 +70,7 @@
 
                     <Button x:Name="editTables" Style="{DynamicResource addBtn}" Click="EditTable_Click">
                         <StackPanel Orientation="Horizontal">
-                            <fa:SvgAwesome Style="{DynamicResource editBtnIcon}"/>
+                            <fa:ImageAwesome Style="{DynamicResource editBtnIcon}"/>
                             <TextBlock Text="Edit Table" FontSize="12" TextAlignment="Center"
                                         Foreground="{DynamicResource LightText}" Margin="4"/>
                         </StackPanel>
@@ -78,7 +78,7 @@
 
                     <Button x:Name="deleteTables" Style="{DynamicResource addBtn}" Click="DeleteTable_Click" Width="111" Height="22">
                         <StackPanel Orientation="Horizontal">
-                            <fa:SvgAwesome Style="{DynamicResource deleteBtnIcon}"/>
+                            <fa:ImageAwesome Style="{DynamicResource deleteBtnIcon}"/>
                             <TextBlock Text="Delete Table" FontSize="12" TextAlignment="Center"
                                         Foreground="{DynamicResource LightText}" Margin="4"/>
                         </StackPanel>

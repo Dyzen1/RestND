@@ -6,7 +6,7 @@
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:local="clr-namespace:RestND.MVVM.Model"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls" 
-        xmlns:fa="http://schemas.fontawesome.com/icons/svg"
+        xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
         xmlns:conv="clr-namespace:RestND.Converters"
         mc:Ignorable="d"
         Style="{StaticResource windowStyle}"
@@ -19,8 +19,9 @@
     <Border Style="{DynamicResource windowBorder}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="450"/>
+                <ColumnDefinition Width="400"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="110"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
@@ -32,6 +33,11 @@
             <uc:SearchBar x:Name="DishSearch" Grid.Row="0" Grid.Column="1" 
                           Margin="8 15 0 0" HorizontalAlignment="Left"
                           Placeholder="Search by dish name"/>
+
+            <Expander Style="{DynamicResource sideBarExpander}"
+                      Grid.RowSpan="3" Grid.Column="2">
+                      <uc:SideBar/>
+            </Expander>
 
             <!-- Add New Dish Section -->
             <GroupBox Header="New Dish Details" Grid.RowSpan="2" Grid.Column="0">
@@ -82,8 +88,8 @@
                     
                     <uc:SearchBar x:Name="ProductSearch" Grid.Row="0"
                           Placeholder="Search by product name" Margin="3" HorizontalAlignment="Left"/>
+                    
                 <DataGrid ItemsSource="{Binding ProductSelections}" Grid.Row="1"
-                          AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           HeadersVisibility="Column"
                           BorderThickness="0" BorderBrush="Transparent"
@@ -91,29 +97,27 @@
                           RowStyle="{DynamicResource rowStyle}"
                           CellStyle="{DynamicResource cellStyle}">
                     <DataGrid.Columns>
-                        <DataGridCheckBoxColumn Width="30"
+                            <DataGridCheckBoxColumn Width="30"
                             Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <DataGridCheckBoxColumn.Header>
-                                <fa:SvgAwesome Icon="Regular_SquareCheck" Width="15" Height="15"/>
+                                <fa:ImageAwesome Icon="CheckSquare" Width="15" Height="15"/>
                             </DataGridCheckBoxColumn.Header>
                         </DataGridCheckBoxColumn>
 
                         <!-- Name (read-only) -->
                         <DataGridTextColumn Header="Product"
                                 Binding="{Binding Product_Name}"
-                                IsReadOnly="True"
-                                Width="*" />
+                                IsReadOnly="True" Width="*"/>
 
                         <!-- Stock (read-only, optional but nice) -->
-                        <DataGridTextColumn Header="Quantity In Stock"
+                        <DataGridTextColumn Header="Quantity"
                                 Binding="{Binding Quantity_Available}"
-                                IsReadOnly="True"
-                                Width="*" />
+                                IsReadOnly="True" Width="*"/>
 
                         <!-- Amount to use in this dish -->
                         <DataGridTextColumn Header="Amount (gr)"
                                 Binding="{Binding AmountUsage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                Width="90" />
+                                Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
                 </Grid>
@@ -125,9 +129,10 @@
                        Visibility="{Binding DishErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
 
             <Button Grid.Column="0" Grid.Row="3" Command="{Binding AddDishCommand}" Margin="0 10 0 0" 
-                    Style="{DynamicResource addBtn}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    Style="{DynamicResource addBtn}" HorizontalAlignment="Center" 
+                    VerticalAlignment="Center">
                 <StackPanel Orientation="Horizontal">
-                    <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
+                    <fa:ImageAwesome Style="{DynamicResource addBtnIcon}"/>
                     <TextBlock Text="Add Dish" FontSize="13" Foreground="{DynamicResource LightText}"
                                Margin="5 0 0 0"/>
                 </StackPanel>
@@ -163,7 +168,7 @@
                                 <Trigger Property="IsSelected" Value="True">
                                     <Setter Property="DetailsVisibility" Value="Visible"/>
                                     <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
-                                    <Setter Property="Background" Value="{DynamicResource Hover}"/>
+                                    <Setter Property="Background" Value="{DynamicResource LightBG}"/>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
@@ -175,8 +180,8 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <fa:SvgAwesome Icon="Regular_SquareCheck" Width="10" Height="10" Margin="0,0,5,0"
-                                                           PrimaryColor="{DynamicResource secondaryHeaders}"/>
+                                            <fa:ImageAwesome Icon="Check" Width="10" Height="10" Margin="0,0,5,0"
+                                                           Foreground="{DynamicResource secondaryHeaders}"/>
                                             <TextBlock Text="{Binding Product_Name}" Margin="0,0,5,0"
                                                        Foreground="{DynamicResource secondaryHeaders}"/>
                                             <TextBlock Text="{Binding Amount_Usage, StringFormat={}{0}gr}" 

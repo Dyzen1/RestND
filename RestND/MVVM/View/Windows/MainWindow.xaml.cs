@@ -12,36 +12,11 @@ namespace RestND.MVVM.View.Windows
 {
     public partial class MainWindow : Window
     {
-        public event Action<string> ButtonClicked;
 
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = App.SharedMainVM; // keep shared VM
-            sideBar.ButtonClicked += SideBar_ButtonClicked;
-        }
-
-        //// ON CLICK METHODS:
-        private void SideBar_ButtonClicked(string destination)
-        {
-            switch (destination)
-            {
-                case "Inventory":
-                    OpenInventory();
-                    break;
-                case "OverView":
-                    OpenOverView();
-                    break;
-                case "Dishes":
-                    OpenDishes();
-                    break;
-                case "Reports":
-                    OpenReports();
-                    break;
-                case "Employees":
-                    OpenEmployees();
-                    break;
-            }
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -63,11 +38,6 @@ namespace RestND.MVVM.View.Windows
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
-        }
-
-        private void OrderBtn_Click(object sender, RoutedEventArgs e)
-        {
-            OpenOrders();
         }
 
         private void AddTable_Click(object sender, RoutedEventArgs e)
@@ -165,85 +135,8 @@ namespace RestND.MVVM.View.Windows
             popup.ShowDialog();
         }
 
-        ///// NAVIGATION (hide main, set owner on child):
+        ///// NAVIGATION: been transferred to Nvigation service for officincy. 
 
-        private void OpenInventory()
-        {
-            // NEW
-            if (!AuthContext.Has(AppPermission.Inventory))
-            {
-                MessageBox.Show("You don't have permission to open Inventory.");
-                return;
-            }
-
-            var w = new ProductWindow { Owner = this, WindowState = WindowState.Maximized };
-            w.Show();
-            this.Hide();
-        }
-
-        private void OpenOverView()
-        {
-            // NEW
-            if (!AuthContext.Has(AppPermission.OverView))
-            {
-                MessageBox.Show("You don't have permission to open OverView.");
-                return;
-            }
-
-            var w = new OverView { Owner = this, WindowState = WindowState.Maximized };
-            w.Show();
-            this.Hide();
-        }
-
-        private void OpenDishes()
-        {
-            // NEW
-            if (!AuthContext.Has(AppPermission.Dishes))
-            {
-                MessageBox.Show("You don't have permission to open Dishes.");
-                return;
-            }
-
-            var w = new DishWindow { Owner = this, WindowState = WindowState.Maximized };
-            w.Show();
-            this.Hide();
-        }
-
-        private void OpenReports()
-        {
-            // NEW
-            if (!AuthContext.Has(AppPermission.Reports))
-            {
-                MessageBox.Show("You don't have permission to open Reports.");
-                return;
-            }
-
-            var w = new ReportWindow { Owner = this, WindowState = WindowState.Maximized };
-            w.Show();
-            this.Hide();
-        }
-
-        private void OpenOrders()
-        {
-          
-
-            var w = new OrderWindow { Owner = this, WindowState = WindowState.Maximized };
-            w.Show();
-            this.Hide();
-        }
-
-        private void OpenEmployees()
-        {
-            // NEW
-            if (!AuthContext.Has(AppPermission.Employees))
-            {
-                MessageBox.Show("You don't have permission to open Employees.");
-                return;
-            }
-
-            var w = new EmployeesWindow { Owner = this, WindowState = WindowState.Maximized };
-            w.Show();
-            this.Hide();
-        }
+        
     }
 }

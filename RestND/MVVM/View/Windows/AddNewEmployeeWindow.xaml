@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:fa="http://schemas.fontawesome.com/icons/svg"
+        xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         mc:Ignorable="d"
         Style="{StaticResource smallWindowStyle}"
@@ -83,7 +83,7 @@
                             IsDefault="True"
                             Style="{DynamicResource addBtn}">
                     <StackPanel Orientation="Horizontal">
-                        <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
+                        <fa:ImageAwesome Style="{DynamicResource addBtnIcon}"/>
                         <TextBlock Text="Add Employee"
                                        FontSize="13"
                                        Foreground="{DynamicResource LightText}"
