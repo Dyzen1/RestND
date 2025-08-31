@@ -77,7 +77,7 @@ namespace RestND.Data
         #region Delete Product from Dish
         public bool DeleteProductFromDish(int dishId, int productId)
         {
-            var query = "DELETE FROM products_in_dish WHERE Dish_ID = @dishId AND Product_ID = @productId";
+            var query = "DELETE FROM products_in_dish WHERE Product_ID = @productId";
 
             var affectedRows = _db.ExecuteNonQuery(query,
                 new MySqlParameter("@dishId", dishId),
