@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:uc ="clr-namespace:RestND.MVVM.View.UserControls"
-        xmlns:fa="http://schemas.fontawesome.com/icons/svg"
+        xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
         xmlns:conv="clr-namespace:RestND.Converters"
         mc:Ignorable="d"
         Title="Employees"
@@ -15,62 +15,68 @@
     <Window.DataContext>
         <vm:EmployeeViewModel/>
     </Window.DataContext>
+    
     <Window.Resources>
-        
         <conv:PermissionToEnabledConverter x:Key="CanManageEmployees" Required="Employees"/>
     </Window.Resources>
 
-    <Border BorderBrush="{DynamicResource LightText}" BorderThickness="3" CornerRadius="10">
+    <Border Style="{DynamicResource windowBorder}">
         <Grid>
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                
-                <ColumnDefinition Width="12"/>
                 <ColumnDefinition Width="*"/>
-                
+                <ColumnDefinition Width="110"/>
             </Grid.ColumnDefinitions>
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="60"/>
             </Grid.RowDefinitions>
+
+            <Expander Style="{DynamicResource sideBarExpander}"
+                    Grid.RowSpan="3" Grid.Column="2">
+                <uc:SideBar/>
+            </Expander>
 
             <!-- LEFT: Employees -->
             <GroupBox Header="Employees" Grid.Column="0" Grid.Row="0" Margin="8">
                 <DockPanel>
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="0,0,0,8">
                         <Button Command="{Binding AddEmployeeCommand}"
-        Style="{DynamicResource SubmitBtn}"
-        Margin="0,0,8,0"
-        Click="AddEmployee"
-        IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
+                                Style="{DynamicResource SubmitBtn}"
+                                Margin="0,0,8,0"
+                                Click="AddEmployee"
+                                IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
                             <TextBlock Text="Add"/>
                         </Button>
 
                         <Button Style="{DynamicResource SubmitBtn}"
-        Margin="0,0,8,0"
-        Click="EditEmployee"
-        IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
+                                Margin="0,0,8,0"
+                                Click="EditEmployee"
+                                IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
                             <TextBlock Text="Update"/>
                         </Button>
 
                         <Button Command="{Binding DeleteEmployeeCommand}"
-        Style="{DynamicResource SubmitBtn}"
-        IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
+                                Style="{DynamicResource SubmitBtn}"
+                                IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
                             <TextBlock Text="Delete"/>
                         </Button>
 
                         <Button Style="{DynamicResource SubmitBtn}"
-        Margin="10,0,8,0"
-        Click="OpenRoles_Click"
-        IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
+                                Margin="10,0,8,0"
+                                Click="OpenRoles_Click"
+                                IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
                             <TextBlock Text="New Role"/>
                         </Button>
 
                         <uc:SearchBar
-                        x:Name="EmployeeSearchBar"
-                        Placeholder="Search Employees"
-                        Margin="0,0,0,0"
-                        HorizontalAlignment="Left" />
+                            x:Name="EmployeeSearchBar"
+                            Placeholder="Search Employees"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left" />
+                        
                     </StackPanel>
                     
 
@@ -97,7 +103,7 @@
                        Width="1" HorizontalAlignment="Center"/>
 
             <!-- RIGHT: Orders -->
-            <GroupBox Header="Employee Orders" Grid.Column="2" Grid.Row="0" Margin="8">
+            <GroupBox Header="Employee Orders" Grid.Column="1" Grid.Row="0" Margin="8">
                 <TabControl>
                     <TabItem Header="In Progress">
                         <DataGrid ItemsSource="{Binding EmployeeOrdersInProgress}" AutoGenerateColumns="False"
@@ -132,20 +138,6 @@
                 </TabControl>
             </GroupBox>
 
-            <!-- Footer -->
-            <Grid Grid.Row="1" Grid.ColumnSpan="3" Margin="0,0,0,12">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <uc:ReturnBtn Grid.Column="0" VerticalAlignment="Center" Margin="10,0,0,18"/>
-                <TextBlock Grid.Column="1"
-                           Style="{DynamicResource copyWrite}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
-            </Grid>
-
             <!-- Overlay -->
             <Border x:Name="Overlay"
                     Grid.RowSpan="2"
@@ -153,6 +145,12 @@
                     Background="#80000000"
                     Visibility="Collapsed"
                     Panel.ZIndex="99"/>
+
+            <uc:ReturnBtn x:Name="returnBtn" Grid.Column="0" Grid.Row="1"/>
+            <TextBlock Grid.ColumnSpan="3" Grid.Row="1" 
+                       VerticalAlignment="Bottom"  HorizontalAlignment="Center"
+                       Style="{DynamicResource copyWrite}"/>
+
         </Grid>
     </Border>
 </Window>

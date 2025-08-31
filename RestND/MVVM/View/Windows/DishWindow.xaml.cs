@@ -18,7 +18,7 @@ namespace RestND.MVVM.View
 {
     public partial class DishWindow : Window
     {
-        public event Action<string> ButtonClicked;
+        //public event Action<string> ButtonClicked;
         private readonly DishValidator _dishValidator = new();
         public DishWindow()
         {

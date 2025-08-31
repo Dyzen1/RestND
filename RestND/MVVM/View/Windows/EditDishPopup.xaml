@@ -6,7 +6,7 @@
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         xmlns:conv="clr-namespace:RestND.Converters"
-        xmlns:fa="http://schemas.fontawesome.com/icons/svg"
+        xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
         mc:Ignorable="d" Style="{StaticResource popupStyle}"
         Title="Edit Dish" Width="450" Height="700"
         WindowStartupLocation="CenterOwner">
@@ -88,7 +88,7 @@
                         <DataGridCheckBoxColumn Width="30"
                             Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <DataGridCheckBoxColumn.Header>
-                                <fa:SvgAwesome Icon="Regular_SquareCheck" Width="15" Height="15"/>
+                                    <fa:ImageAwesome Icon="Check" Width="15" Height="15"/>
                             </DataGridCheckBoxColumn.Header>
                         </DataGridCheckBoxColumn>
                             

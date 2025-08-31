@@ -1,15 +1,30 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF">
 
 <!--NOT ALL OF THE STYLES ARE BTNs, SOME ARE THE DESIGN INSIDE THE BTN-->
+    
+    
     <Style x:Key="SideBarBtn" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
         <Setter Property="Height" Value="40"/>
         <Setter Property="Margin" Value="0,0,0,5"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <fa:ImageAwesome Icon="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                                    Width="15"
+                                    Foreground="{DynamicResource LightText}"/>
+                        <TextBlock Text="{TemplateBinding Content}"
+                                    HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
-
 
     <Style x:Key="SubmitBtn" TargetType="Button">
         <Setter Property="Background" Value="{DynamicResource secondaryBtns}"/>
@@ -56,7 +71,7 @@
     </Style>
 
 
-    <Style x:Key="DishBtn" TargetType="Button">
+    <!--<Style x:Key="DishBtn" TargetType="Button">
         <Setter Property="Background" Value="LightGray"/>
         <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
         <Setter Property="Height" Value="35"/>
@@ -64,7 +79,7 @@
         <Setter Property="Margin" Value="4,4,4,4"/>
         <Setter Property="BorderThickness" Value="0.5"/>
         <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
-    </Style>
+    </Style>-->
 
     
     <Style x:Key="addBtn" TargetType="Button"> <!--For Btns With Icon-->
@@ -84,11 +99,11 @@
     </Style>
 
     
-    <Style x:Key="returnBtn" TargetType="Button"> <!--For Btns With Icon-->
+    <Style x:Key="returnBtn" TargetType="Button"> <!---For Btns With Icon-->
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="Width" Value="30"/>
+        <Setter Property="Width" Value="40"/>
     </Style>
 
 
@@ -133,8 +148,8 @@
         <Setter Property="Margin" Value="0,15,0,0"/>
         <Setter Property="BorderBrush" Value="{DynamicResource LightText}"/>
         <Setter Property="Template">
-       
-        <Setter.Value>
+
+            <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border Background="{TemplateBinding Background}" 
                     BorderBrush="{TemplateBinding BorderBrush}"

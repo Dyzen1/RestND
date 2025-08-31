@@ -63,7 +63,6 @@ namespace RestND.MVVM.ViewModel.Main
         public MainWindowViewModel()
         {
             LoadTables();
-         
 
             _hub.On<Table, string>("ReceiveTableUpdate", (table, action) =>
             {

@@ -5,7 +5,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:products="clr-namespace:RestND.MVVM.ViewModel"
       xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
-      xmlns:fa="http://schemas.fontawesome.com/icons/svg"
+      xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
       xmlns:conv="clr-namespace:RestND.Converters"
       mc:Ignorable="d"
       Style="{StaticResource windowStyle}"
@@ -24,9 +24,15 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="360"/>
+                <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="110"/>
             </Grid.ColumnDefinitions>
+
+            <Expander Style="{DynamicResource sideBarExpander}"
+                    Grid.RowSpan="3" Grid.Column="2">
+                <uc:SideBar/>
+            </Expander>
 
             <GroupBox Header="New Product Details" Margin="20 0 18 8" Grid.Column="0" 
                       Grid.Row="1">
@@ -65,10 +71,10 @@
 
                     <!-- Add Button -->
                     <Button Grid.Row="4" Command="{Binding AddProductCommand}"
-                             Style="{StaticResource addBtn}" VerticalAlignment="Center" 
+                             Style="{DynamicResource addBtn}" VerticalAlignment="Center" 
                              HorizontalAlignment="Center" Margin="0 20 0 0">
                         <StackPanel Orientation="Horizontal">
-                            <fa:SvgAwesome Style="{DynamicResource addBtnIcon}"/>
+                            <fa:ImageAwesome Style="{DynamicResource addBtnIcon}"/>
                             <TextBlock Text="Add Product" FontSize="13"
                                     Foreground="{DynamicResource LightText}" Margin="5,0,0,0"/>
                         </StackPanel>
@@ -127,7 +133,7 @@
             </StackPanel>
 
             <uc:ReturnBtn x:Name="returnBtn" Grid.Column="0" Grid.Row="2"
-                    VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+                        VerticalAlignment="Bottom" Margin="15,0,0,15"/>
 
             <TextBlock Style="{DynamicResource copyWrite}" VerticalAlignment="Bottom" 
                        HorizontalAlignment="Center" Margin="0,0,0,15" 

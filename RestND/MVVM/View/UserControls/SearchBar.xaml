@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:RestND.MVVM.View.UserControls"
              mc:Ignorable="d" 
-             xmlns:fa="http://schemas.fontawesome.com/icons/svg"
+             xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
              x:Name="root"
              MaxWidth="180" MaxHeight="40">
-    <Border Style="{DynamicResource windowBorder}" BorderThickness="2">
+    <Border Style="{DynamicResource windowBorder}" BorderThickness="1.5">
         <Grid>
             <!-- The real input -->
             <TextBox x:Name="PART_TextBox" Width="150"
@@ -17,8 +17,8 @@
                      VerticalContentAlignment="Center"
                      Text="{Binding SearchText, ElementName=root, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      TextChanged="PART_TextBox_TextChanged"/>
-            <fa:SvgAwesome Icon="Solid_MagnifyingGlass" Width="15" 
-                           PrimaryColor="{DynamicResource LightText}"
+            <fa:ImageAwesome Icon="Search" Width="15" 
+                           Foreground="{DynamicResource LightText}"
                            HorizontalAlignment="Left" Margin="5 0 0 0"/>
             <!-- Watermark (shows when empty + not focused) -->
             <TextBlock Margin="28,0,0,0" 
