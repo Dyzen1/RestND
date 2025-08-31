@@ -11,13 +11,13 @@ namespace RestND.MVVM.Model.Employees
     {
         None = 0,
         Inventory = 1,
-        OverView = 2,
+        Other = 2,
         Dishes = 4,
         Reports = 8,
         Orders = 16,
         Employees = 32,
         Tables = 64,
 
-        All = Inventory | OverView | Dishes | Reports | Orders | Employees | Tables
+        All = Inventory | Other | Dishes | Reports | Orders | Employees | Tables
     }
 }

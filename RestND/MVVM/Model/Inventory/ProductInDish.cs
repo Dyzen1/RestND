@@ -46,6 +46,16 @@
         }
         #endregion
 
+
+        #region Is_Active
+        private bool _Is_Active = true; 
+        public bool Is_Active
+        {
+            get { return _Is_Active; }
+            set { _Is_Active = value; }
+        }
+        #endregion
+
         #region Constructor
         public ProductInDish(string Product_ID, int Dish_ID, string Product_Name, double Amount_Usage)
         {
@@ -53,6 +63,7 @@
             this.Dish_ID = Dish_ID;
             this.Amount_Usage = Amount_Usage;
             this.Product_Name = Product_Name;
+            this.Is_Active = true;
         }
         #endregion
 

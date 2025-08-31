@@ -66,6 +66,13 @@ namespace RestND.MVVM.ViewModel
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
+
+                    if (action == "product-deleted")
+                    {
+                        LoadDishes(); 
+                        return;
+                    }
+
                     var match = Dishes.FirstOrDefault(d => d.Dish_ID == dish.Dish_ID);
 
                     switch (action)

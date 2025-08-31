@@ -36,16 +36,23 @@ namespace RestND.Data
         public List<ProductInDish> GetProductsInDish(int dishId)
         {
             var products = new List<ProductInDish>();
-            var query = "SELECT * FROM products_in_dish WHERE Dish_ID = @dishId";
+
+            // Only load active product links
+            var query = @"SELECT pid.Dish_ID, pid.Product_ID, pid.Amount_Usage, pid.Is_Active, i.Product_Name
+                  FROM products_in_dish pid
+                  JOIN inventory i ON i.Product_ID = pid.Product_ID
+                  WHERE pid.Dish_ID = @dishId AND pid.Is_Active = 1";
+
             var rows = _db.ExecuteReader(query, new MySqlParameter("@dishId", dishId));
             foreach (var row in rows)
             {
                 products.Add(new ProductInDish
                 {
-                    Product_ID = row["Product_ID"].ToString(),
-                    Product_Name = row["Product_Name"].ToString(),
-                    Amount_Usage = Convert.ToDouble(row["Amount_Usage"]),
-                    Dish_ID = Convert.ToInt32(row["Dish_ID"])
+                    Dish_ID = Convert.ToInt32(row["Dish_ID"]),
+                    Product_ID = Convert.ToString(row["Product_ID"]) ?? string.Empty,
+                    Product_Name = Convert.ToString(row["Product_Name"]) ?? string.Empty,
+                    Amount_Usage = row["Amount_Usage"] != DBNull.Value ? Convert.ToDouble(row["Amount_Usage"]) : 0.0,
+                    Is_Active = row["Is_Active"] != DBNull.Value && Convert.ToBoolean(row["Is_Active"])
                 });
             }
             return products;
@@ -87,6 +94,20 @@ namespace RestND.Data
             return affectedRows > 0;
         }
         #endregion
+
+
+        // soft delete product from db
+
+
+        #region soft delete product from product in dish
+
+        public int DeleteProductEverywhere(string productId)
+        {
+            var query = "UPDATE products_in_dish SET Is_Active = false WHERE Product_ID = @productId";
+            return _db.ExecuteNonQuery(query, new MySqlParameter("@productId", productId));
+        }
+        #endregion
+
 
         // Update a product usage in a dish
         #region Update Product in Dish
