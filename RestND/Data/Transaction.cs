@@ -95,12 +95,12 @@ public class Transaction
                 new MySqlParameter("@type", dish.Dish_Type?.DishType_Name ?? string.Empty),
                 new MySqlParameter("@id", dish.Dish_ID)
             );
-
+            //delete all existing product in dish for the update.
             string deleteQuery = "DELETE FROM products_in_dish WHERE Dish_ID = @id";
             _db.ExecuteNonQuery(deleteQuery, _db.Connection, transaction,
                 new MySqlParameter("@id", dish.Dish_ID)
             );
-
+            //insert all the product in dish from the updated (new products in dish).
             foreach (var usage in dish.ProductUsage)
             {
                 string insertQuery = "INSERT INTO products_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
