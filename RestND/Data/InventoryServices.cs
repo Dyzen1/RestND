@@ -7,6 +7,8 @@ namespace RestND.Data
 {
     public class ProductService() : BaseService<Inventory>(DatabaseOperations.Instance)
     {
+
+
         #region Get All Products
         public override List<Inventory> GetAll()
         {
@@ -95,11 +97,20 @@ namespace RestND.Data
         #region Delete Product (accepts int)
         public override bool Delete(Inventory d)
         {
+            var pdb = new ProductInDishService();
+            int PdAffectedRows = 0;
             d.Is_Active = false;
             string query = "UPDATE inventory SET Is_Active = @active WHERE Product_ID = @id";
-            return _db.ExecuteNonQuery(query,
+            int affectedRowsInProduct = _db.ExecuteNonQuery(query,
                 new MySqlParameter("@active", d.Is_Active),
-                new MySqlParameter("@id", d.Product_ID)) > 0;
+                new MySqlParameter("@id", d.Product_ID));
+
+            if (affectedRowsInProduct > 0)
+            {
+                PdAffectedRows = pdb.DeleteProductEverywhere(d.Product_ID);
+
+            }
+            return PdAffectedRows > 0;
         }
 
         #endregion

@@ -54,13 +54,13 @@
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10" VerticalAlignment="Top">
                         <Label Content="Role:" VerticalAlignment="Top"/>
                         <ListBox ItemsSource="{Binding Roles}"
-                             DisplayMemberPath="Role_Name"
-                             SelectedValuePath="Role_ID"
-                             SelectedValue="{Binding SelectedEmployee.Role_ID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="10 0 0 0"
-                             Width="260"
-                             Height="90"
-                             SelectionMode="Single"/>
+                        DisplayMemberPath="Role_Name"
+                        SelectedItem="{Binding SelectedEmployee.Employee_Role, Mode=TwoWay}"
+                         Margin="10 0 0 0"
+                         Width="260"
+                         Height="90"
+                         SelectionMode="Single"/>
+
                     </StackPanel>
 
                     <!-- Optional form error/info -->

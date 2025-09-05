@@ -197,6 +197,8 @@ namespace RestND.MVVM.ViewModel
             if (success)
             {
                 await _hub.SendAsync("NotifyInventoryUpdate", SelectedProduct, "delete");
+
+                await App.DishHub.SendAsync("NotifyDishUpdate", null, "product-deleted");
                 LoadProducts();
             }
         }

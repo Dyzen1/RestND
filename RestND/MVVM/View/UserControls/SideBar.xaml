@@ -1,12 +1,11 @@
 ﻿<UserControl x:Class="RestND.MVVM.View.UserControls.SideBar"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:RestND.MVVM.View.UserControls"
-             xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:vm="clr-namespace:RestND.MVVM.ViewModel.Navigation"
-             mc:Ignorable="d" 
+             xmlns:sec="clr-namespace:RestND.MVVM.Model.Security"
+             mc:Ignorable="d"
              Name="sideBar"
              d:DesignHeight="250" d:DesignWidth="100">
 
@@ -14,39 +13,54 @@
         <vm:NavigationViewModel/>
     </UserControl.DataContext>
 
+    <UserControl.Resources>
+        <!-- If you already have SideBarBtn defined globally, base on it -->
+        <Style x:Key="SideBarBtnWithFade" TargetType="Button" BasedOn="{StaticResource SideBarBtn}">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.4"/>
+                    <Setter Property="Cursor" Value="No"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
-        
-        <StackPanel Width="100"> <!-- the binding is so that the current window's btn will be blocked -->
-            <Button Style="{StaticResource SideBarBtn}"
+        <StackPanel Width="100">
+            <Button Style="{StaticResource SideBarBtnWithFade}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Inventory"
                     Content="Inventory"
-                    Tag="Truck"/>
+                    Tag="Truck"
+                    IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanInventory}"/>
 
-            <Button Style="{StaticResource SideBarBtn}"
+            <Button Style="{StaticResource SideBarBtnWithFade}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Employees"
                     Content="Employees"
-                    Tag="UserCircleOutline"/>
+                    Tag="UserCircleOutline"
+                    IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanEmployees}"/>
 
-            <Button Style="{DynamicResource SideBarBtn}"
+            <Button Style="{StaticResource SideBarBtnWithFade}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Dishes"
                     Content="Dishes"
-                    Tag="Cutlery"/>
+                    Tag="Cutlery"
+                    IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanDishes}"/>
 
-            <Button Style="{DynamicResource SideBarBtn}"
+            <Button Style="{StaticResource SideBarBtnWithFade}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Reports"
                     Content="Reports"
-                    Tag="FilePdfOutline"/>
+                    Tag="FilePdfOutline"
+                    IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanReports}"/>
 
-            <Button Style="{DynamicResource SideBarBtn}"
+            <Button Style="{StaticResource SideBarBtnWithFade}"
                     Command="{Binding NavigateCommand}"
-                    CommandParameter="OverView"
-                    Content="OverView"
-                    Tag="Check"/>
-        </StackPanel>   
-        
+                    CommandParameter="Other"
+                    Content="Other"
+                    Tag="Check"
+                    IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanOther}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

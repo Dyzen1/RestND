@@ -4,9 +4,9 @@ using System.Windows.Input;
 
 namespace RestND.MVVM.View.Windows
 {
-    public partial class OverView : Window
+    public partial class OtherWindow : Window
     {
-        public OverView()
+        public OtherWindow()
         {
             InitializeComponent();
             this.DataContext = new OrderViewModel();

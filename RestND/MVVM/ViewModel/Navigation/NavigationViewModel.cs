@@ -22,7 +22,7 @@ namespace RestND.MVVM.ViewModel.Navigation
             Window? next = destination switch
             {
                 "Inventory" => new ProductWindow(),
-                "OverView" => new OverView(),
+                "Other" => new OtherWindow(),
                 "Dishes" => new DishWindow(),
                 "Reports" => new ReportWindow(),
                 "Employees" => new EmployeesWindow(),

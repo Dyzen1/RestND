@@ -14,6 +14,7 @@
 
     <Window.Resources>
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <conv:StringToDecimalConverter x:Key="StringToDecimalConverter"/>
     </Window.Resources>
 
     <Grid>
@@ -29,7 +30,7 @@
 
                 <!-- Table number editing -->
                 <Label Content="New Table Number:" Width="150" HorizontalContentAlignment="Center"/>
-                <TextBox Text="{Binding EditedTableNumberText, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
+                <TextBox Text="{Binding EditedTableNumberText, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource StringToDecimalConverter}}" Width="150"/>
 
                 <!-- Validation error display -->
                 <TextBlock Text="{Binding TableErrorMessage}"
