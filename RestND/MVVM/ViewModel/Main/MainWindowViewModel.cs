@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
+using RestND.MVVM.Model.Employees;
+using RestND.MVVM.Model.Orders;
 using RestND.MVVM.Model.Security;
 using RestND.MVVM.Model.Tables;
 using RestND.Validations;
@@ -16,11 +18,12 @@ namespace RestND.MVVM.ViewModel.Main
     public partial class MainWindowViewModel : ObservableObject
     {
         #region Services and Fields
-
         private readonly TableServices _tableService = new();
         private readonly TableValidator _validator = new();
         private readonly HubConnection _hub = App.MainHub;
+        private readonly EmployeeServices _employeeServices = new();
         public Action? ClosePopupAction { get; set; }
+        public event Action<Table>? OpenEmpForOrder;
 
         #endregion
 
@@ -50,19 +53,35 @@ namespace RestND.MVVM.ViewModel.Main
         [ObservableProperty]
         private bool isLoggedIn;
 
+        //for employee names popup starting order:
+        [ObservableProperty]
+        private ObservableCollection<Employee> employees = new();
+        [ObservableProperty]
+        private Employee selectedEmployee;
+        [ObservableProperty]
+        private Table selectedTableForOrder;
+        #endregion
+
         public string LoginButtonText => IsLoggedIn ? "Logout" : "Login";
 
+        #region On Change
         partial void OnIsLoggedInChanged(bool oldValue, bool newValue)
         {
             OnPropertyChanged(nameof(LoginButtonText));
         }
-
+        partial void OnSelectedTableChanged(Table value)
+        {
+            AddTableCommand.NotifyCanExecuteChanged();
+            EditTableCommand.NotifyCanExecuteChanged();
+            DeleteTableCommand.NotifyCanExecuteChanged();
+        }
         #endregion
 
         #region Constructor
         public MainWindowViewModel()
         {
             LoadTables();
+            LoadEmployees();
 
             _hub.On<Table, string>("ReceiveTableUpdate", (table, action) =>
             {
@@ -94,15 +113,6 @@ namespace RestND.MVVM.ViewModel.Main
                     }
                 });
             });
-        }
-        #endregion
-
-        #region On Change
-        partial void OnSelectedTableChanged(Table value)
-        {
-            AddTableCommand.NotifyCanExecuteChanged();
-            EditTableCommand.NotifyCanExecuteChanged();
-            DeleteTableCommand.NotifyCanExecuteChanged();
         }
         #endregion
 
@@ -257,7 +267,7 @@ namespace RestND.MVVM.ViewModel.Main
         public async Task EditTable()
         {
             TableErrorMessage = string.Empty;
-
+            
             // 1. Validate user input is a number
             if (!int.TryParse(EditedTableNumberText, out int parsedNumber))
             {
@@ -303,28 +313,37 @@ namespace RestND.MVVM.ViewModel.Main
 
         #endregion
 
-        #region Table Click
-
+        #region Choose Employee for Order
+        // for combo box in popup    
+        public void LoadEmployees()
+        {
+            Employees.Clear();
+            var employeeNames = _employeeServices.GetAll();
+            foreach (var emp in employeeNames)
+            {
+                Employees.Add(emp);
+            }
+        }
+        // when table is clicked, open popup to choose employee
         [RelayCommand]
         private void TableClick(Table table)
         {
-            if (!_validator.CheckIfnull(table, out string msg))
+            SelectedTableForOrder = table;
+            OpenEmpForOrder?.Invoke(table);
+        }
+        // when employee is chosen and "Start Order" is clicked, create order
+        [RelayCommand]
+        private void CreateOrder()
+        {
+            var order = new Order
             {
-                TableErrorMessage = msg;
-                return;
-            }
+                assignedEmployee = SelectedEmployee,
+                Table = SelectedTableForOrder,
+            };
 
-            if (!table.Is_Active)
-            {
-                TableErrorMessage = "This table is inactive.";
-                return;
-            }
-
-            TableErrorMessage = string.Empty;
-
-            // TODO: Navigate to order screen
         }
 
         #endregion
+
     }
 }

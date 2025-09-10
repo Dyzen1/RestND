@@ -97,8 +97,6 @@ namespace RestND.Data
 
 
         // soft delete product from db
-
-
         #region soft delete product from product in dish
 
         public int DeleteProductEverywhere(string productId)

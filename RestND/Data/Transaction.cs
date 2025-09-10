@@ -220,7 +220,6 @@ public class Transaction
     }
     #endregion
 
-
     #region soft delete product from everywhere
 
 

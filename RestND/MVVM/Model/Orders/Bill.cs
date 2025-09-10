@@ -23,15 +23,6 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region Order Property
-        private Order _Order;
-        public Order Order
-        {
-            get { return _Order; }
-            set { _Order = value; }
-        }
-        #endregion
-
         #region Price
         private double _Price;
         public double Price
@@ -77,21 +68,10 @@ namespace RestND.MVVM.Model.Orders
             this.Bill_Date = DateTime.Now;
             this.Is_Paid = false;
             this.Is_Active = true;
+            this.Discount = null;
         }
 
 
-        #endregion
-
-        #region Constructor with Discount
-        public Bill(Order order, Discount discount,double price)
-        {
-            this.Order = order;
-            this.Price = price;
-            this.Discount = discount;
-            this.Bill_Date = DateTime.Now;
-            this.Is_Paid = false;
-            this.Is_Active = true;
-        }
         #endregion
 
         #region Default constructor

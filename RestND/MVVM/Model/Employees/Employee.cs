@@ -58,6 +58,7 @@ namespace RestND.MVVM.Model.Employees
             set { _Employee_Name = value; }
         }
         #endregion
+
         #region Employee last_Name
         private string? _Employee_LastName;
         public string? Employee_LastName
@@ -66,6 +67,7 @@ namespace RestND.MVVM.Model.Employees
             set { _Employee_LastName = value; }
         }
         #endregion
+
         #region Employee Role
         private Role? _Employee_Role;
         public Role? Employee_Role

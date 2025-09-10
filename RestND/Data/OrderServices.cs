@@ -53,11 +53,27 @@ namespace RestND.Data
         }
         #endregion
 
-        #region Add Order
+        #region Add Final Order 
         public override bool Add(Order item)
         {
             return _transaction.AddOrder(item);
         }
+        #endregion
+
+        #region Add Starting Order(no dishes)
+
+        public bool AddStartingOrder(Order o)
+        {
+            string query = "INSERT INTO orders (Employee_Name, Table_Number, Bill_Price, Is_Active) " +
+                           "VALUES (@name, @number, @price, @active)";
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@name", o.assignedEmployee.Employee_Name),
+                new MySqlParameter("@number", o.Table.Table_Number),
+                new MySqlParameter("@price", o.Bill.Price),
+                new MySqlParameter("@active", o.Is_Active)
+            ) > 0;
+        }
+
         #endregion
 
         #region Delete Order

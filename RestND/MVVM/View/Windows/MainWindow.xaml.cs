@@ -17,6 +17,20 @@ namespace RestND.MVVM.View.Windows
         {
             InitializeComponent();
             this.DataContext = App.SharedMainVM; // keep shared VM
+
+            App.SharedMainVM.OpenEmpForOrder += Vm_OpenEmpForOrder;
+        }
+
+        private void Vm_OpenEmpForOrder(Model.Tables.Table table)
+        {
+            var popup = new EmployeeForOrderPopup
+            {
+                Owner = this,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            this.Opacity = 0.4;
+            popup.ShowDialog();
+            this.Opacity = 1.0;
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

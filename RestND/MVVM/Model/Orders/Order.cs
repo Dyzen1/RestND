@@ -72,24 +72,13 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region Constructor with Dishes
-        public Order( Employee AssignedEmployee,  Table table, List<DishInOrder> DishInOrder, Bill Bill)
+        #region Constructor
+        public Order( Employee AssignedEmployee,  Table table)
         {
-            this.Bill = Bill;
+            this.Bill = new Bill();
             this.assignedEmployee = AssignedEmployee;
             this.Table = table;
-            this.DishInOrder = DishInOrder;
-            this.Is_Active = true;
-            _OrderCount++;
-        }
-        #endregion
-
-        #region Constructor without Dishes for begin order
-        public Order(Employee AssignedEmployee, Table table, Bill Bill)
-        {
-            this.Bill = Bill;
-            this.assignedEmployee = AssignedEmployee;
-            this.Table = table;
+            this.DishInOrder = null;
             this.Is_Active = true;
             _OrderCount++;
         }
