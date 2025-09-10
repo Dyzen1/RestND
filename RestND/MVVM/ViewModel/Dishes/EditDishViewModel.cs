@@ -84,7 +84,7 @@ namespace RestND.MVVM.ViewModel
 
         }
         #endregion
-        
+
         #region On change
         //partial void OnSelectedDishChanged(Dish value)
         //{
@@ -97,51 +97,38 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private async Task UpdateDish()
         {
-            // Build ProductUsage from the grid rows the user checked + filled
+            // 1) Validate entire form (Employee-style)
+            var existingDishes = _dishService.GetAll(); // for "exists by id" + name uniqueness (exclude current)
+            if (!_dishValidator.ValidateForUpdate(
+                    SelectedDish,
+                    existingDishes,
+                    AllergenOptions,
+                    ProductSelections,
+                    out var err))
+            {
+                DishErrorMessage = err;
+                return;
+            }
+
+            // 2) Build chosen products (only selected with positive amount)
             var chosen = ProductSelections
-                .Where(x => x.IsSelected)
+                .Where(x => x.IsSelected && x.AmountUsage > 0)
                 .Select(x => new ProductInDish
                 {
                     Product_ID = x.Product_ID,
                     Product_Name = x.Product_Name,
                     Amount_Usage = x.AmountUsage,
-                    Dish_ID = SelectedDish.Dish_ID // keep 0 if DB assigns
+                    Dish_ID = SelectedDish.Dish_ID
                 })
                 .ToList();
 
-            //validations:
-            // 1. verify at least one allergen was selected
-            if (AllergenOptions.Count == 0)
-            {
-                DishErrorMessage = "Please select at least one allergen note";
-                return;
-            }
-            // 2. check if inputs are empty
-            if (SelectedDish.Dish_Type == null || chosen == null || 
-                _dishValidator.IsEmptyField(SelectedDish.Dish_Name, out string err))
-            {
-                DishErrorMessage = "All fields must be populated";
-                return;
-            }
-            // 3. check if product usage is empty
-            if (chosen.Count == 0)
-            {
-                DishErrorMessage = "Please select at least one product with a positive amount";
-                return;
-            }
-            // 4. is price positive validation
-            if (!_dishValidator.CheckPosNum(SelectedDish.Dish_Price, out string priceErr))
-            {
-                DishErrorMessage = priceErr;
-                return;
-            }
-            // 5. validation passed
+            // 3) Passed validation — assemble & persist
             DishErrorMessage = string.Empty;
 
             SelectedDish.ProductUsage = chosen;
             SelectedDish.Allergen_Notes = string.Join(", ",
-            AllergenOptions.Where(a => a.IsSelected).Select(a => a.Value));// Allergens from checkboxes
-            SelectedDish.Is_Active = true; 
+                AllergenOptions.Where(a => a.IsSelected).Select(a => a.Value));
+            SelectedDish.Is_Active = true;
 
             bool success = _dishService.Update(SelectedDish);
             if (success)
@@ -149,6 +136,7 @@ namespace RestND.MVVM.ViewModel
                 await _hub.SendAsync("NotifyDishUpdate", SelectedDish, "update");
                 MessageBox.Show("Dish updated successfully.", "Success");
             }
+        
         }
 
         public void BuildAllergenOptions()

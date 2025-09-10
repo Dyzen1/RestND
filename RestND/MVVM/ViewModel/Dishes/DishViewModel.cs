@@ -171,7 +171,22 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand(CanExecute = nameof(CanAddDish))]
         private async Task AddDish()
         {
-            // Build ProductUsage from the grid rows the user checked + filled
+            // 1) Validate full form (Employee-style)
+            if (!_dishValidator.ValidateForAdd(
+                    NewDishNameInput,
+                    NewDishPriceInput,
+                    NewDishTypeInput,
+                    AllergenOptions,
+                    ProductSelections,
+                    Dishes,                    // existing dishes for uniqueness check
+                    out var parsedPrice,
+                    out var err))
+            {
+                DishErrorMessage = err;
+                return;
+            }
+
+            // 2) Build chosen products from grid
             var chosen = ProductSelections
                 .Where(x => x.IsSelected && x.AmountUsage > 0)
                 .Select(x => new ProductInDish
@@ -179,87 +194,48 @@ namespace RestND.MVVM.ViewModel
                     Product_ID = x.Product_ID,
                     Product_Name = x.Product_Name,
                     Amount_Usage = x.AmountUsage,
-                    Dish_ID = NewDish.Dish_ID // keep 0 if DB assigns
+                    Dish_ID = 0 // DB assigns on insert
                 })
                 .ToList();
 
-            //validations:
-            // 1. check allergens selection
-            if(SelectedAllergenNotes.Count == 0)
-            {
-                DishErrorMessage = "Please select at least one allergen note";
-                return;
-            }
-            // 2. check if inputs are empty
-            if (NewDishPriceInput == null || NewDishTypeInput == null || chosen == null)
-            {
-                DishErrorMessage = "All fields must be populated";
-                return;
-            }
-            // 3+4. check name input
-            if(!_dishValidator.IsEmptyField(NewDishNameInput, out string err))
-            {
-                DishErrorMessage = err;
-                return;
-            }
-            if (!_dishValidator.isNameValid(NewDishNameInput, out string erro))
-            {
-                DishErrorMessage = erro;
-                return;
-            }
-            // 5. check if product usage is empty
-            if (chosen.Count == 0)
-            {
-                DishErrorMessage = "Please select at least one product with a positive amount";
-                return;
-            }
-            // 6. dish name existance validation
-            if (!_dishValidator.CheckIfExists(NewDishNameInput, Dishes.ToList(), out string nameError))
-            {
-                DishErrorMessage = nameError;
-                return;
-            }
-            // 7. is price a number
-            if (!int.TryParse(NewDishPriceInput, out int parsedNumber))
-            {
-                DishErrorMessage = "Please enter a valid number";
-                return;
-            }
-            // 8. is price positive validation
-            if (!_dishValidator.CheckPosNum(parsedNumber, out string priceErr))
-            {
-                DishErrorMessage = priceErr;
-                return;
-            }
-            // 9. validation passed
+            // 3) Passed validation — assemble the new Dish
             DishErrorMessage = string.Empty;
 
             NewDish.ProductUsage = chosen;
-            NewDish.Dish_Name = NewDishNameInput;
-            NewDish.Dish_Price = parsedNumber;
+            NewDish.Dish_Name = (NewDishNameInput ?? string.Empty).Trim();
+            NewDish.Dish_Price = parsedPrice;
             NewDish.Dish_Type = NewDishTypeInput;
             NewDish.Is_Active = true;
-            NewDish.Allergen_Notes = string.Join(",", SelectedAllergenNotes);// Allergens from checkboxes
+            NewDish.Allergen_Notes = string.Join(", ",
+                AllergenOptions.Where(a => a.IsSelected).Select(a => a.Value));
 
+            // 4) Persist
             bool success = _dishService.Add(NewDish);
             if (success)
             {
-                await _hub.SendAsync("NotifyDishUpdate", NewDish, "add");
-                // reset the form
-                NewDish = new Dish();
-                // uncheck all allergens (and clear the backing collection)
-                foreach (var a in AllergenOptions)
-                    a.IsSelected = false;
+                await _hub?.SendAsync("NotifyDishUpdate", NewDish, "add");
 
-                SelectedAllergenNotes.Clear();
+                // 5) Reset form
+                NewDish = new Dish();
+
+                NewDishNameInput = string.Empty;
+                NewDishPriceInput = string.Empty;
+                NewDishTypeInput = null;
+
+                foreach (var a in AllergenOptions) a.IsSelected = false;
+                SelectedAllergenNotes?.Clear(); // keep if you still maintain this collection
 
                 foreach (var sp in ProductSelections)
                 {
                     sp.IsSelected = false;
                     sp.AmountUsage = 0;
                 }
+
+
             }
+       
         }
+
 
 
         [RelayCommand(CanExecute = nameof(CanModifyDish))]
