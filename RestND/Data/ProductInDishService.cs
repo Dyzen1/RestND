@@ -65,13 +65,14 @@ namespace RestND.Data
         {
             var affectedRows = 0;
 
-            var query = "INSERT INTO products_in_dish (Dish_ID, Product_ID, Amount_Usage) VALUES (@dishId, @productId, @amount)";
+            var query = "INSERT INTO products_in_dish (Dish_ID, Product_ID, Amount_Usage,Product_Name) VALUES (@dishId, @productId, @amount,@pName)";
             foreach (var usage in productUsages)
             {
                 affectedRows = _db.ExecuteNonQuery(query,
                     new MySqlParameter("@dishId", dishId),
                     new MySqlParameter("@productId", usage.Product_ID),
-                    new MySqlParameter("@amount", usage.Amount_Usage)
+                    new MySqlParameter("@amount", usage.Amount_Usage),
+                    new MySqlParameter("pName",usage.Product_Name)
                 );
 
             }

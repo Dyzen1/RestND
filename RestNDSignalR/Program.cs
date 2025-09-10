@@ -7,6 +7,7 @@ app.MapHub<InventoryHub>("/inventoryHub");
 app.MapHub<DishHub>("/dishHub");
 app.MapHub<TableHub>("/tableHub");
 app.MapHub<MainHub>("/mainHub");
+app.MapHub<EmployeeHub>("/employeeHub");
 
 
 app.Run();
