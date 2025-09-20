@@ -22,11 +22,11 @@ namespace RestND.MVVM.ViewModel.Navigation
             Window? next = destination switch
             {
                 "Inventory" => new ProductWindow(),
-                "Other" => new OtherWindow(),
+                "Others" => new OthersWindow(),
                 "Dishes" => new DishWindow(),
                 "Reports" => new ReportWindow(),
                 "Employees" => new EmployeesWindow(),
-                "Orders" => new OrderWindow(),
+                "Orders" => new OrdersHistory(),
                 "Main" => new MainWindow(), 
                 _ => null
             };

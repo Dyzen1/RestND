@@ -1,6 +1,7 @@
 ﻿
 using DocumentFormat.OpenXml.Drawing.Charts;
 using RestND.MVVM.View.Windows;
+using RestND.MVVM.ViewModel;
 using System;
 using System.ComponentModel;
 using System.Windows;
@@ -89,35 +90,11 @@ namespace RestND.MVVM.View
                 dlg.ShowDialog(); // modal
             }
         }
-        private void OpenRoles_Click(object sender, RoutedEventArgs e)
-        {
-            Overlay.Visibility = Visibility.Visible;
-            this.Opacity = 0.4;
 
-            var popup = new RolesWindow
-            {
-                Owner = this,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };
-
-            popup.Closed += (s, args) =>
-            {
-                Overlay.Visibility = Visibility.Collapsed;
-                this.Opacity = 1.0;
-
-                // Reload roles on close so the new role appears immediately in dropdowns etc.
-                if (DataContext is RestND.MVVM.ViewModel.EmployeeViewModel vm)
-                    vm.LoadRolesCommand.Execute(null);
-            };
-
-            popup.ShowDialog();
-        }
         private void EmployeeSearchBar_SearchTextChanged(object sender, string searchText)
         {
             ApplyEmployeeFilter(searchText);
         }
-
-
 
         private void ApplyEmployeeFilter(string searchText)
         {

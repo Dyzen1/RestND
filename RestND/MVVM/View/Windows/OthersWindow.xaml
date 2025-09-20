@@ -1,0 +1,254 @@
+﻿<Window x:Class="RestND.MVVM.View.Windows.OthersWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:RestND.MVVM.View.Windows" 
+      xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
+      xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
+      xmlns:conv="clr-namespace:RestND.Converters"
+      xmlns:mdl="clr-namespace:RestND.MVVM.Model.Employees"
+      mc:Ignorable="d"
+      xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
+      Style="{StaticResource windowStyle}"
+      MouseLeftButtonDown="Window_MouseLeftButtonDown">
+
+    <Window.Resources>
+        <conv:FlagCheckConverter x:Key="FlagCheck"/>
+    </Window.Resources>
+
+    <Border Style="{DynamicResource windowBorder}">
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="110"/>
+            </Grid.ColumnDefinitions>
+
+            <Expander Style="{DynamicResource sideBarExpander}"
+                    Grid.Row="1" Grid.Column="1">
+                <uc:SideBar/>
+            </Expander>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                          HorizontalAlignment="Center" Grid.Row="1">
+                <StackPanel Margin="12">
+
+                    <!-- Roles -->
+                    <Expander x:Name="RolesSection"
+                            Header="Manage roles &amp; set permissions"
+                            Expanded="Expander_Expanded" 
+                            Margin="0,0,0,8" Foreground="{DynamicResource LightText}">
+                        <WrapPanel Margin="8,6,0,10">
+                            <Grid Margin="12">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <GroupBox Header="Create New Role" Grid.Row="1" Margin="0,0,0,10">
+                                    <Grid Margin="8">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="110"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Label Grid.Row="0" Grid.Column="0" Content="Role Name:" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="0" Grid.Column="1"
+                                                 Text="{Binding NewRoleName, UpdateSourceTrigger=PropertyChanged}"
+                                                 HorizontalAlignment="Left"/>
+
+                                        <Label Grid.Row="1" Grid.Column="0" Content="Authorization:" Margin="0,6,0,0"/>
+                                        <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom">
+                                            <CheckBox Content="Inventory"  Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                                                      IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Inventory}}"
+                                                      Command="{Binding ToggleNewPermissionCommand}"
+                                                      CommandParameter="{x:Static mdl:AppPermission.Inventory}"/>
+                                            <CheckBox Content="OverView"   Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                                                      IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Other}}"
+                                                      Command="{Binding ToggleNewPermissionCommand}"
+                                                      CommandParameter="{x:Static mdl:AppPermission.Other}"/>
+                                            <CheckBox Content="Dishes"     Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                                                      IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Dishes}}"
+                                                      Command="{Binding ToggleNewPermissionCommand}"
+                                                      CommandParameter="{x:Static mdl:AppPermission.Dishes}"/>
+                                            <CheckBox Content="Reports"    Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                                                      IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Reports}}"
+                                                      Command="{Binding ToggleNewPermissionCommand}"
+                                                      CommandParameter="{x:Static mdl:AppPermission.Reports}"/>
+                                            <CheckBox Content="Orders"     Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                                                      IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Orders}}"
+                                                      Command="{Binding ToggleNewPermissionCommand}"
+                                                      CommandParameter="{x:Static mdl:AppPermission.Orders}"/>
+                                            <CheckBox Content="Employees"  Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                                                      IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Employees}}"
+                                                      Command="{Binding ToggleNewPermissionCommand}"
+                                                      CommandParameter="{x:Static mdl:AppPermission.Employees}"/>
+                                            <CheckBox Content="Tables" Foreground="{DynamicResource LightText}"
+                                                      IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Tables}}"
+                                                      Command="{Binding ToggleNewPermissionCommand}"
+                                                      CommandParameter="{x:Static mdl:AppPermission.Tables}"/>
+                                        </WrapPanel>
+
+                                        <Button Grid.Row="2" Grid.ColumnSpan="2"
+                                                Content="Create"
+                                                Margin="0,10,0,0"
+                                                HorizontalAlignment="Center"
+                                                Style="{DynamicResource SubmitBtn}"
+                                                Command="{Binding AddRoleCommand}"
+                                                IsDefault="True"/>
+
+                                        <TextBlock Grid.Row="3" Grid.ColumnSpan="2"
+                                                   Text="{Binding FormErrorMessage}"
+                                                   Margin="0,8,0,0"
+                                                   Foreground="{DynamicResource LightText}"
+                                                   Opacity="0.8"/>
+                                    </Grid>
+                                </GroupBox>
+
+                                <GroupBox Header="Existing Roles" Grid.Row="2">
+                                    <DataGrid ItemsSource="{Binding Roles}"
+                                              SelectedItem="{Binding SelectedRole, Mode=TwoWay}"
+                                              CellStyle="{DynamicResource cellStyle}"
+                                              RowStyle="{DynamicResource rowStyle}"
+                                              AutoGenerateColumns="False"
+                                              HeadersVisibility="Column"
+                                              ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
+                                              CanUserAddRows="False">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="Role Name"
+                                                                Binding="{Binding Role_Name, UpdateSourceTrigger=PropertyChanged}"
+                                                                Width="*"/>
+
+                                            <DataGridTemplateColumn Header="Authorization" Width="260">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Role_Authorization}"/>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                                <DataGridTemplateColumn.CellEditingTemplate>
+                                                    <DataTemplate>
+                                                        <WrapPanel>
+                                                            <CheckBox Content="Inv" Margin="0,0,6,0"
+                                                                      IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Inventory}}"
+                                                                      Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Expander}}"
+                                                                      CommandParameter="{x:Static mdl:AppPermission.Inventory}"/>
+                                                            <CheckBox Content="View"  Margin="0,0,6,0"
+                                                                      IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Other}}"
+                                                                      Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Expander}}"
+                                                                      CommandParameter="{x:Static mdl:AppPermission.Other}"/>
+                                                            <CheckBox Content="Dish"  Margin="0,0,6,0"
+                                                                      IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Dishes}}"
+                                                                      Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Expander}}"
+                                                                      CommandParameter="{x:Static mdl:AppPermission.Dishes}"/>
+                                                            <CheckBox Content="Rep"   Margin="0,0,6,0"
+                                                                      IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Reports}}"
+                                                                      Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Expander}}"
+                                                                      CommandParameter="{x:Static mdl:AppPermission.Reports}"/>
+                                                            <CheckBox Content="Ord"   Margin="0,0,6,0"
+                                                                      IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Orders}}"
+                                                                      Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Expander}}"
+                                                                      CommandParameter="{x:Static mdl:AppPermission.Orders}"/>
+                                                            <CheckBox Content="Emp"   Margin="0,0,6,0"
+                                                                      IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Employees}}"
+                                                                      Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Expander}}"
+                                                                      CommandParameter="{x:Static mdl:AppPermission.Employees}"/>
+                                                            <CheckBox Content="Tbl"
+                                                                      IsChecked="{Binding Permissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Tables}}"
+                                                                      Command="{Binding DataContext.ToggleSelectedPermissionCommand, RelativeSource={RelativeSource AncestorType=Expander}}"
+                                                                      CommandParameter="{x:Static mdl:AppPermission.Tables}"/>
+                                                        </WrapPanel>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellEditingTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </GroupBox>
+
+                                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3"
+                                            HorizontalAlignment="Center">
+                                    <Button Content="Delete"
+                                                Style="{DynamicResource SubmitBtn}"
+                                                Margin="0,0,8,0"
+                                                Command="{Binding DeleteRoleCommand}"/>
+                                    <Button Content="Update"
+                                                Style="{DynamicResource SubmitBtn}"
+                                                Margin="0,0,8,0"
+                                                Command="{Binding UpdateRoleCommand}"/>
+                                </StackPanel>
+                            </Grid>
+                        </WrapPanel>
+                    </Expander>
+
+                    <!-- VAT -->
+                    <!--<Expander x:Name="VatSection"
+                        Header="VAT — Set tax rate &amp; effective dates"
+                        Expanded="Expander_Expanded" 
+                        Margin="0,0,0,8" Foreground="{DynamicResource LightText}">
+                        <WrapPanel Margin="8,6,0,10">
+                            <Button Content="Open VAT Manager" Margin="0,0,8,8" Padding="12,6"
+                                Click="OpenVat_Click"/>
+                            <Button Content="Add New" Margin="0,0,8,8" Padding="12,6"
+                                Click="AddVat_Click"/>
+                            <Button Content="Edit Selected" Margin="0,0,8,8" Padding="12,6"
+                                Click="EditVat_Click"/>
+                            <Button Content="Delete" Margin="0,0,8,8" Padding="12,6"
+                                Click="DeleteVat_Click"/>
+                        </WrapPanel>
+                    </Expander>
+
+                    --><!-- Discounts --><!--
+                    <Expander x:Name="DiscountsSection"
+                        Header="Discounts — Campaigns, limits, validity"
+                        Expanded="Expander_Expanded" Margin="0,0,0,8" 
+                        DataContext="{Binding DiscountsVM, ElementName=Root}" 
+                        Foreground="{DynamicResource LightText}">
+                        <WrapPanel Margin="8,6,0,10">
+                            <Button Content="Add New" Margin="0,0,8,8" Padding="12,6"
+                                Click="AddDiscount_Click"/>
+                            <Button Content="Edit Selected" Margin="0,0,8,8" Padding="12,6"
+                                Click="EditDiscount_Click"/>
+                            <Button Content="Delete" Margin="0,0,8,8" Padding="12,6"
+                                Click="DeleteDiscount_Click"/>
+                        </WrapPanel>
+                    </Expander>
+
+                    --><!-- Dish Types -->
+                    <!--<Expander x:Name="DishTypesSection"
+                        Header="Dish Types — Categories for menu items"
+                        Expanded="Expander_Expanded" DataContext="{Binding DishTypesVM, ElementName=Root}"
+                        Foreground="{DynamicResource LightText}">
+                        <WrapPanel Margin="8,6,0,10">
+                            <Button Content="Add New" Margin="0,0,8,8" Padding="12,6"
+                                Click="AddDishType_Click"/>
+                            <Button Content="Edit Selected" Margin="0,0,8,8" Padding="12,6"
+                                Click="EditDishType_Click"/>
+                            <Button Content="Delete" Margin="0,0,8,8" Padding="12,6"
+                                Click="DeleteDishType_Click"/>
+                        </WrapPanel>
+                    </Expander>-->
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2"
+                        VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+            <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="2"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+
+        </Grid>
+    </Border>
+</Window>

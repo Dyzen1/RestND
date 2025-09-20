@@ -16,10 +16,10 @@ namespace RestND.MVVM.View.Windows
 
         private void RolesWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (e.OldValue is RestND.MVVM.ViewModel.RoleViewModel oldVm)
+            if (e.OldValue is RoleViewModel oldVm)
                 oldVm.RequestClose -= Vm_RequestClose;
 
-            if (e.NewValue is RestND.MVVM.ViewModel.RoleViewModel newVm)
+            if (e.NewValue is RoleViewModel newVm)
                 newVm.RequestClose += Vm_RequestClose;
         }
 
@@ -31,17 +31,11 @@ namespace RestND.MVVM.View.Windows
 
         private void CreateRole_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is RestND.MVVM.ViewModel.RoleViewModel vm)
+            if (DataContext is RoleViewModel vm)
             {
                 // Call the VM's AddRole command explicitly (click event as requested)
                 vm.AddRoleCommand.Execute(null);
             }
-        }
-
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            try { DialogResult = false; } catch { }
-            Close();
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

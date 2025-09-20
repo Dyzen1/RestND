@@ -176,9 +176,6 @@
                             Style="{DynamicResource SubmitBtn}"
                             Margin="0,0,8,0"
                             Command="{Binding UpdateRoleCommand}"/>
-                    <Button Content="Close"
-                            Style="{DynamicResource SubmitBtn}"
-                            Click="Cancel_Click"/>
                 </StackPanel>
             </Grid>
         </Grid>
