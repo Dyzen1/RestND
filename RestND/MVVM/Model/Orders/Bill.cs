@@ -63,7 +63,7 @@ namespace RestND.MVVM.Model.Orders
 
         public Bill(Order order,double price)
         {
-            this.Order = order;
+  
             this.Price = price;
             this.Bill_Date = DateTime.Now;
             this.Is_Paid = false;

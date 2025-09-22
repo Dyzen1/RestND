@@ -20,6 +20,7 @@ namespace RestND
         public static HubConnection TableHub { get; private set; }
         public static HubConnection MainHub { get; private set; }
         public static HubConnection EmployeeHub { get; private set; }
+        public static HubConnection DishTypeHub {  get; private set; }
 
         public static MainWindowViewModel SharedMainVM { get; private set; }
 
@@ -75,11 +76,18 @@ namespace RestND
                 .Build();
 
 
+            DishTypeHub = new HubConnectionBuilder()
+                .WithUrl("http://localhost:5027/dishtypeHub")
+                .WithAutomaticReconnect()
+                .Build();
+
+
             await InventoryHub.StartAsync();
             await DishHub.StartAsync();
             await TableHub.StartAsync();
             await MainHub.StartAsync();
             await EmployeeHub.StartAsync();
+            await DishTypeHub.StartAsync();
         }
     }
 }

@@ -13,18 +13,22 @@ public class Transaction
     #endregion
 
     #region Constructor
+
+
     public Transaction(DatabaseOperations db)
     {
         _db = db;
+        
     }
     #endregion
 
     #region Add Dish or Update Dish and Update Product in Dish
     public bool AddDish(Dish d)
     {
+
         _db.OpenConnection();
         using var transaction = _db.Connection.BeginTransaction();
-
+       
         try
         {
             string query = "INSERT INTO dishes (Dish_Name, Dish_Price, Allergen_Notes, DishType_Name, Is_Active) " +
@@ -41,32 +45,32 @@ public class Transaction
             if (!dishAdded)
             {
                 transaction.Rollback();
-                _db.CloseConnection();
                 return false;
             }
+      
 
             int newDishId = Convert.ToInt32(_db.ExecuteScalar("SELECT LAST_INSERT_ID();", _db.Connection, transaction));
 
             var productInDishService = new ProductInDishService();
-            bool productsAdded = productInDishService.AddProductsToDish(newDishId, d.ProductUsage);
+            bool productsAdded = productInDishService.AddProductsToDish(_db.Connection,transaction,newDishId, d.ProductUsage);
 
             if (!productsAdded)
             {
                 transaction.Rollback();
-                _db.CloseConnection();
                 return false;
             }
 
-            transaction.Commit();
-            _db.CloseConnection();
+            transaction.Commit(); 
             return true;
         }
         catch (Exception ex)
         {
-            transaction.Rollback();
-            _db.CloseConnection();
-            System.Windows.MessageBox.Show("Error adding dish: " + ex.Message, "Database Error");
+            MessageBox.Show("Error adding dish: " + ex.Message, "Database Error");
             return false;
+        }
+        finally
+        {
+            _db.Connection.Close();
         }
     }
 
@@ -112,15 +116,16 @@ public class Transaction
             }
 
             transaction.Commit();
-            _db.CloseConnection();
             return true;
         }
         catch (Exception ex)
         {
-            transaction.Rollback();
-            _db.CloseConnection();
             MessageBox.Show("Error updating dish: " + ex.Message, "Database Error");
             return false;
+        }
+        finally
+        {
+            _db.Connection.Close();
         }
     }
 
