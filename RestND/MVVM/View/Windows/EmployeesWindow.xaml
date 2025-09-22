@@ -64,13 +64,6 @@
                             <TextBlock Text="Delete"/>
                         </Button>
 
-                        <Button Style="{DynamicResource SubmitBtn}"
-                                Margin="10,0,8,0"
-                                Click="OpenRoles_Click"
-                                IsEnabled="{Binding Converter={StaticResource CanManageEmployees}}">
-                            <TextBlock Text="New Role"/>
-                        </Button>
-
                         <uc:SearchBar
                             x:Name="EmployeeSearchBar"
                             Placeholder="Search Employees"
