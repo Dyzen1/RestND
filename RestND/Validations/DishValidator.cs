@@ -154,10 +154,6 @@ namespace RestND.Validations
             return true;
         }
 
-        /// <summary>
-        /// Full validation for updating an existing dish (price already numeric on the model).
-        /// Ensures the dish exists and the new name is not taken by another dish.
-        /// </summary>
         public bool ValidateForUpdate(
             Dish dish,
             IEnumerable<Dish> existingDishes,

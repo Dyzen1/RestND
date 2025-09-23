@@ -10,27 +10,7 @@ namespace RestND.Data
     {
         private readonly DatabaseOperations _db = DatabaseOperations.Instance;
 
-        //#region Get All Products in Dish
-        //public List<ProductInDish> GetAll()
-        //{
-        //    var products = new List<ProductInDish>();
-        //    var query = "SELECT * FROM products_in_dish";
-        //    var rows = _db.ExecuteReader(query);
 
-        //    foreach (var row in rows)
-        //    {
-        //        products.Add(new ProductInDish
-        //        {
-        //            Product_ID = row["Product_ID"].ToString(),
-        //            Product_Name = row["Product_Name"].ToString(),
-        //            Amount_Usage = Convert.ToDouble(row["Amount_Usage"]),
-        //            Dish_ID = Convert.ToInt32(row["Dish_ID"])
-        //        });
-        //    }
-        //    return products;
-        //}
-
-        //#endregion
 
         #region Get Products in Dish by Dish ID
         public List<ProductInDish> GetProductsInDish(int dishId)
@@ -61,23 +41,22 @@ namespace RestND.Data
 
         // Add products to a dish
         #region Add Products to Dish
-        public bool AddProductsToDish(int dishId, List<ProductInDish> productUsages)
+        public bool AddProductsToDish(MySqlConnection conn, MySqlTransaction tx, int dishId, List<ProductInDish> productUsages)
         {
-            var affectedRows = 0;
-
-            var query = "INSERT INTO products_in_dish (Dish_ID, Product_ID, Amount_Usage,Product_Name) VALUES (@dishId, @productId, @amount,@pName)";
-            foreach (var usage in productUsages)
+            foreach (var u in productUsages)
             {
-                affectedRows = _db.ExecuteNonQuery(query,
-                    new MySqlParameter("@dishId", dishId),
-                    new MySqlParameter("@productId", usage.Product_ID),
-                    new MySqlParameter("@amount", usage.Amount_Usage),
-                    new MySqlParameter("pName",usage.Product_Name)
-                );
+                const string sql = @"INSERT INTO products_in_dish (Dish_ID, Product_ID, Amount_Usage,Product_Name)
+                                 VALUES (@dishId, @productId, @amount,@pName);";
+                // Use your DatabaseOperations here if accessible, but make sure it uses the SAME conn+tx
+                using var cmd = new MySqlCommand(sql, conn, tx);
+                cmd.Parameters.AddWithValue("@dishId", dishId);
+                cmd.Parameters.AddWithValue("@productId", u.Product_ID);
+                cmd.Parameters.AddWithValue("@amount", u.Amount_Usage);
+                cmd.Parameters.AddWithValue("@pName", u.Product_Name);
 
+                if (cmd.ExecuteNonQuery() <= 0) return false;
             }
-
-            return affectedRows > 0;
+            return true;
         }
         #endregion
 

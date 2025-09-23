@@ -82,7 +82,14 @@ namespace RestND.MVVM.ViewModel.Main
         {
             LoadTables();
             LoadEmployees();
+            intiSR();
 
+        }
+        #endregion
+
+        #region initalize SignalR
+        private void intiSR()
+        {
             _hub.On<Table, string>("ReceiveTableUpdate", (table, action) =>
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -113,7 +120,9 @@ namespace RestND.MVVM.ViewModel.Main
                     }
                 });
             });
+
         }
+
         #endregion
 
         #region Login Logout

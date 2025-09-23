@@ -54,14 +54,20 @@ namespace RestND.MVVM.ViewModel
             _dishService = new DishServices();
             _productService = new ProductService();
             _hub = App.DishHub;
-
-            DishTypes = new ObservableCollection<DishType>(_dishTypeService.GetAll());
             AvailableProducts = new ObservableCollection<Inventory>(_productService.GetAll());
-
+            LoadDishTypes();
             LoadDishes();
             RefreshProductSelections();
             LoadNotes();
+            initailizeSR();
+            //LoadDishes();
+        }
+        #endregion
 
+        #region Initialize SingalR
+
+        private void initailizeSR()
+        {
             _hub.On<Dish, string>("ReceiveDishUpdate", (dish, action) =>
             {
                 Application.Current.Dispatcher.Invoke(() =>
@@ -69,8 +75,14 @@ namespace RestND.MVVM.ViewModel
 
                     if (action == "product-deleted")
                     {
-                        LoadDishes(); 
+                        LoadDishes();
                         return;
+                    }
+
+                    if(action == "dishType-changed")
+                    {
+                        Application.Current.Dispatcher.Invoke(LoadDishTypes);
+
                     }
 
                     var match = Dishes.FirstOrDefault(d => d.Dish_ID == dish.Dish_ID);
@@ -83,7 +95,7 @@ namespace RestND.MVVM.ViewModel
                                 Dishes.Add(dish);
                                 LoadDishes();
                             }
-                                
+
                             break;
                         case "delete":
                             if (match != null)
@@ -92,8 +104,9 @@ namespace RestND.MVVM.ViewModel
                     }
                 });
             });
-            //LoadDishes();
+
         }
+
         #endregion
 
         #region On change
@@ -138,6 +151,14 @@ namespace RestND.MVVM.ViewModel
             var dbDishes = _dishService.GetAll();
             foreach (var dish in dbDishes)
                 Dishes.Add(dish);
+        }
+        [RelayCommand]
+        private void LoadDishTypes()
+        {
+            DishTypes.Clear();
+            var dbDishTypes = _dishTypeService.GetAll();
+            foreach (var dishType in dbDishTypes)
+                DishTypes.Add(dishType);
         }
 
         [RelayCommand]
