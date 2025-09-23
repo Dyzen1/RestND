@@ -37,7 +37,7 @@ public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instan
     #region Add Discount
     public override bool Add (Discount d)
     {
-        string query = "INSERT INTO discounst (Discount_Name, Discount_Percentage) VALUES (@name, @percentage)";
+        string query = "INSERT INTO discounts (Discount_Name, Discount_Percentage) VALUES (@name, @percentage)";
         
         return _db.ExecuteNonQuery(query,
             new MySqlParameter("@name", d.Discount_Name),

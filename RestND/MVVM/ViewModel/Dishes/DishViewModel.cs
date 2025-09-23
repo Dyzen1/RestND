@@ -236,8 +236,6 @@ namespace RestND.MVVM.ViewModel
        
         }
 
-
-
         [RelayCommand(CanExecute = nameof(CanModifyDish))]
         private async Task DeleteDish()
         {

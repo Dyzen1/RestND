@@ -24,6 +24,63 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.4"/>
+                <Setter Property="Cursor" Value="No"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- "others" toggle btn -->
+    <Style x:Key="SideBarBtnToggle" TargetType="ToggleButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Margin" Value="0,0,0,5"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <fa:ImageAwesome Icon="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                                Width="15"
+                                Foreground="{DynamicResource LightText}"/>
+                        <TextBlock Text="{TemplateBinding Content}"
+                                HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.4"/>
+                <Setter Property="Cursor" Value="No"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- the btns inside "others" -->
+    <Style x:Key="SideBarChildBtn" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="0,0,0,2"/>
+        <Setter Property="Background" Value="{DynamicResource secondaryHeaders}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <StackPanel Orientation="Horizontal" 
+                                HorizontalAlignment="Stretch"
+                                Background="{TemplateBinding Background}"
+                                Height="30">
+                        <fa:ImageAwesome Icon="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                            Width="10" Foreground="{DynamicResource LightText}" Margin="0 0 8 0"/>
+                        <TextBlock Text="{TemplateBinding Content}" FontSize="10"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style x:Key="SubmitBtn" TargetType="Button">
@@ -108,7 +165,6 @@
 
 
     <Style x:Key="deleteBtn" TargetType="Button">
-        <!--For Btns With Icon-->
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <Setter Property="Width" Value="25"/>

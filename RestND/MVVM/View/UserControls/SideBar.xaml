@@ -8,27 +8,20 @@
              mc:Ignorable="d"
              xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
              Name="sideBar"
-             d:DesignHeight="320" d:DesignWidth="120">
+             d:DesignHeight="320" d:DesignWidth="130">
 
     <UserControl.DataContext>
         <vm:NavigationViewModel/>
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <!-- If you already have SideBarBtn defined globally, base on it -->
-        <Style x:Key="SideBarBtnWithFade" TargetType="Button" BasedOn="{StaticResource SideBarBtn}">
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Opacity" Value="0.4"/>
-                    <Setter Property="Cursor" Value="No"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </UserControl.Resources>
+
 
     <Grid>
         <StackPanel>
-            <Button Style="{StaticResource SideBarBtnWithFade}"
+            <Button Style="{StaticResource SideBarBtn}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Inventory"
                     Content="Inventory"
@@ -36,7 +29,7 @@
                     ToolTip="Manage inventory"
                     IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanInventory}"/>
 
-            <Button Style="{StaticResource SideBarBtnWithFade}"
+            <Button Style="{StaticResource SideBarBtn}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Employees"
                     Content="Employees"
@@ -44,7 +37,7 @@
                     ToolTip="Manage employees"
                     IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanEmployees}"/>
 
-            <Button Style="{StaticResource SideBarBtnWithFade}"
+            <Button Style="{StaticResource SideBarBtn}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Dishes"
                     Content="Dishes &amp; Drinks"
@@ -52,7 +45,7 @@
                     ToolTip="Manage dishes &amp; drinks"
                     IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanDishes}"/>
 
-            <Button Style="{StaticResource SideBarBtnWithFade}"
+            <Button Style="{StaticResource SideBarBtn}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Orders"
                     Content="Orders"
@@ -60,7 +53,7 @@
                     ToolTip="View orders history"
                     IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanReports}"/>
 
-            <Button Style="{StaticResource SideBarBtnWithFade}"
+            <Button Style="{StaticResource SideBarBtn}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Reports"
                     Content="Reports"
@@ -68,21 +61,48 @@
                     ToolTip="Manage reports"
                     IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanReports}"/>
 
-            <Button Style="{StaticResource SideBarBtnWithFade}"
-                    Command="{Binding NavigateCommand}"
-                    CommandParameter="Others"
-                    Content="Others"
-                    Tag="Cog"
-                    ToolTip="Other settings"
-                    IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanOther}"/>
-
-            <Button Style="{StaticResource SideBarBtnWithFade}"
+            <Button Style="{StaticResource SideBarBtn}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Main"
                     Content="Home"
                     Tag="Home"
                     ToolTip="Return to main page"
                     IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanOther}"/>
+
+            <ToggleButton x:Name="OthersToggle"
+                          Style="{StaticResource SideBarBtnToggle}"
+                          Content="Others"
+                          Tag="Cog"
+                          ToolTip="Other settings"
+                          IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanOther}"/>
+
+            <!-- Sub menu - others: -->
+            <StackPanel Visibility="{Binding IsChecked, ElementName=OthersToggle, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Button Style="{StaticResource SideBarChildBtn}"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="ManageRoles"
+                        Content="Manage roles"
+                        Tag="AngleLeft"/>
+
+                <Button Style="{StaticResource SideBarChildBtn}"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="ManageDiscounts"
+                        Content="Manage discounts"
+                        Tag="AngleLeft"/>
+
+                <Button Style="{StaticResource SideBarChildBtn}"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="ManageVat"
+                        Content="Manage VAT"
+                        Tag="AngleLeft"/>
+
+                <Button Style="{StaticResource SideBarChildBtn}"
+                        Command="{Binding NavigateCommand}"
+                        CommandParameter="ManageDishTypes"
+                        Content="Manage dish types"
+                        Tag="AngleLeft"/>
+            </StackPanel>
+
         </StackPanel>
     </Grid>
 </UserControl>

@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel"
         xmlns:mdl="clr-namespace:RestND.MVVM.Model.Employees"
+        xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         xmlns:conv="clr-namespace:RestND.Converters"
         mc:Ignorable="d"
         Title="Roles"
-        Width="650" Height="460"
         WindowStartupLocation="CenterOwner"
-        Style="{StaticResource smallWindowStyle}"
+        Style="{StaticResource windowStyle}"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
     <Window.DataContext>
@@ -22,7 +22,7 @@
     </Window.Resources>
 
     <Border Style="{DynamicResource windowBorder}">
-        <Grid Margin="12">
+        <Grid Margin="15 10 15 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -33,11 +33,10 @@
             <TextBlock Text="Manage Roles"
                        Foreground="{DynamicResource LightText}"
                        FontWeight="Bold"
-                       FontSize="16"
-                       Margin="0,0,0,10"/>
+                       FontSize="16"/>
 
-            <GroupBox Header="Create New Role" Grid.Row="1" Margin="0,0,0,10">
-                <Grid Margin="8">
+            <GroupBox Header="Create New Role" Grid.Row="1">
+                <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
@@ -49,34 +48,34 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="0" Content="Role Name:" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="0" Grid.Column="1"
-                             Text="{Binding NewRoleName, UpdateSourceTrigger=PropertyChanged}"
-                             Width="260"/>
+                    <Label Grid.Row="0" Grid.Column="0" Content="Role Name:"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0 0 0 8"
+                             Text="{Binding NewRoleName, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <Label Grid.Row="1" Grid.Column="0" Content="Authorization:" VerticalAlignment="Top" Margin="0,6,0,0"/>
-                    <WrapPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0,2,0,0">
-                        <CheckBox Content="Inventory"  Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                    <Label Grid.Row="1" Grid.Column="0" Content="Authorization:"/>
+                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal"
+                                Margin="10 0 0 0" VerticalAlignment="Center">
+                        <CheckBox Content="Inventory" Margin="0,0,8,0" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Inventory}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Inventory}"/>
-                        <CheckBox Content="OverView"   Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                        <CheckBox Content="OverView" Margin="0,0,8,0" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Other}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Other}"/>
-                        <CheckBox Content="Dishes"     Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                        <CheckBox Content="Dishes" Margin="0,0,8,0" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Dishes}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Dishes}"/>
-                        <CheckBox Content="Reports"    Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                        <CheckBox Content="Reports" Margin="0,0,8,0" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Reports}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Reports}"/>
-                        <CheckBox Content="Orders"     Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                        <CheckBox Content="Orders" Margin="0,0,8,0" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Orders}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Orders}"/>
-                        <CheckBox Content="Employees"  Margin="0,0,8,6" Foreground="{DynamicResource LightText}"
+                        <CheckBox Content="Employees" Margin="0,0,8,0" Foreground="{DynamicResource LightText}"
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Employees}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Employees}"/>
@@ -84,21 +83,22 @@
                                   IsChecked="{Binding NewRolePermissions, Converter={StaticResource FlagCheck}, ConverterParameter={x:Static mdl:AppPermission.Tables}}"
                                   Command="{Binding ToggleNewPermissionCommand}"
                                   CommandParameter="{x:Static mdl:AppPermission.Tables}"/>
-                    </WrapPanel>
+                    </StackPanel>
 
-                    <Button Grid.Row="2" Grid.Column="1"
+                    <!-- error message -->
+                    <TextBlock Grid.Row="2" Grid.ColumnSpan="2"
+                               Text="{Binding FormErrorMessage}"
+                               Margin="0,8,0,0"
+                               Style="{DynamicResource errorMessage}"/>
+                    
+                    <Button Grid.Row="3" Grid.ColumnSpan="2"
                             Content="Create"
                             Margin="0,10,0,0"
-                            HorizontalAlignment="Left"
+                            HorizontalAlignment="Center"
                             Style="{DynamicResource SubmitBtn}"
                             Command="{Binding AddRoleCommand}"
                             IsDefault="True"/>
 
-                    <TextBlock Grid.Row="3" Grid.ColumnSpan="2"
-                               Text="{Binding FormErrorMessage}"
-                               Margin="0,8,0,0"
-                               Foreground="{DynamicResource LightText}"
-                               Opacity="0.8"/>
                 </Grid>
             </GroupBox>
 
@@ -161,23 +161,19 @@
                 </DataGrid>
             </GroupBox>
 
-            <Grid Grid.Row="3" Margin="0,10,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Right">
-                    <Button Content="Delete"
+            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="2" 
+                            HorizontalAlignment="Center" Margin="0 15 0 40">
+                <Button Content="Delete"
                             Style="{DynamicResource SubmitBtn}"
                             Margin="0,0,8,0"
                             Command="{Binding DeleteRoleCommand}"/>
-                    <Button Content="Update"
+                <Button Content="Update"
                             Style="{DynamicResource SubmitBtn}"
-                            Margin="0,0,8,0"
                             Command="{Binding UpdateRoleCommand}"/>
-                </StackPanel>
-            </Grid>
+            </StackPanel>
+
+            <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Grid.Row="3" Margin="0 0 0 12"/>
+            <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="3"/>
         </Grid>
     </Border>
 </Window>
