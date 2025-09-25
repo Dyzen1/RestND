@@ -29,7 +29,8 @@ namespace RestND.MVVM.ViewModel.Navigation
                 "Reports" => new ReportWindow(),
                 "Employees" => new EmployeesWindow(),
                 "Orders" => new OrdersHistory(),
-                "Main" => new MainWindow(), 
+                "Main" => new MainWindow(),
+                "SoftDrinks" => new SoftDrinkWindow(),
                 _ => null
             };
             if (next == null) return;

@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
              Name="sideBar"
-             d:DesignHeight="320" d:DesignWidth="130">
+             d:DesignHeight="370" d:DesignWidth="130">
 
     <UserControl.DataContext>
         <vm:NavigationViewModel/>
@@ -40,11 +40,19 @@
             <Button Style="{StaticResource SideBarBtn}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Dishes"
-                    Content="Dishes &amp; Drinks"
+                    Content="Menue Items"
                     Tag="Cutlery"
-                    ToolTip="Manage dishes &amp; drinks"
+                    ToolTip="Manage Menue items "
                     IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanDishes}"/>
-
+            
+            <Button Style="{StaticResource SideBarBtn}"
+          Command="{Binding NavigateCommand}"
+          CommandParameter="SoftDrinks"
+          Content="SoftDrinks"
+          Tag="Glass"
+          ToolTip="Add Soft Drinks"
+          IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanSoftDrinks}"/>
+            
             <Button Style="{StaticResource SideBarBtn}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Orders"

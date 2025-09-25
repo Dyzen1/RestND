@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
+
 using RestND.MVVM.Model.Employees;
+using RestND.utilities;
 using RestND.Validations;
 using System;
 using System.Collections.ObjectModel;
@@ -12,57 +15,51 @@ using System.Windows;
 
 namespace RestND.MVVM.ViewModel
 {
-    public partial class EmployeeViewModel : ObservableObject
+    public partial class EmployeeViewModel : ObservableObject, IDisposable
     {
         #region Services & Validators
-
         private readonly EmployeeServices _employeeService = new();
         private readonly RoleServices _roleService = new();
         private readonly EmployeeValidator _validator = new();
-
         #endregion
 
-        #region SignalR Hub
-
-        private readonly HubConnection _hub = App.EmployeeHub; // define App.EmployeeHub similar to App.DishHub/App.InventoryHub
-
+        #region SignalR Hub (employees only)
+        private readonly HubConnection _hub = App.EmployeeHub;
+        private IDisposable? _empHandler;
         #endregion
 
         #region Observable Properties
-
         [ObservableProperty] private ObservableCollection<Employee> employees = new();
         [ObservableProperty] private Employee newEmployee = new();
         [ObservableProperty] private Employee selectedEmployee;
         [ObservableProperty] private ObservableCollection<Role> roles = new();
         [ObservableProperty] private string formErrorMessage;
-
         #endregion
 
-        #region Events
-
-        // Raised to let the Window close itself (Edit/Add dialogs)
         public event Action? RequestClose;
 
-        #endregion
-
-        #region Constructor
-
+        #region ctors
         public EmployeeViewModel()
         {
-            // Listen for real-time updates from other clients
-            _hub.On<Employee, string>("ReceiveEmployeeUpdate", (employee, action) =>
+            LoadEmployees();
+            LoadRoles();
+            RegisterMessageHandlers(); // listen to role changes (in-process)
+        }
+        #endregion
+
+        #region SignalR
+        // Call once after hub is started
+        public void RegisterHubHandlers()
+        {
+            _empHandler = _hub.On<Employee, string>("ReceiveEmployeeUpdate", (employee, action) =>
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     var match = Employees.FirstOrDefault(e => e.Employee_ID == employee.Employee_ID);
-
                     switch (action)
                     {
                         case "add":
-                            if (match == null)
-                            {
-                                Employees.Add(employee);
-                            }
+                            if (match == null) Employees.Add(employee);
                             break;
 
                         case "update":
@@ -77,21 +74,68 @@ namespace RestND.MVVM.ViewModel
                             break;
 
                         case "delete":
-                            if (match != null)
-                                Employees.Remove(match);
+                            if (match != null) Employees.Remove(match);
                             break;
                     }
                 });
             });
-
-            LoadEmployees();
-            LoadRoles();
         }
 
+        public void UnregisterHubHandlers()
+        {
+            _empHandler?.Dispose();
+            _empHandler = null;
+        }
+
+        // Messenger subscription: reacts to role changes from RoleViewModel
+        private void RegisterMessageHandlers()
+        {
+            WeakReferenceMessenger.Default.Register<RoleChangedMessage>(this, (_, msg) =>
+            {
+                var (role, action) = msg.Value;
+
+                // Keep role picker fresh
+                var existing = Roles.FirstOrDefault(r => r.Role_ID == role.Role_ID);
+                switch (action)
+                {
+                    case "add":
+                        if (existing == null) Roles.Add(role);
+                        break;
+
+                    case "update":
+                        if (existing != null)
+                        {
+                            existing.Role_Name = role.Role_Name;
+                            existing.Permissions = role.Permissions;
+                            existing.Is_Active = role.Is_Active;
+                        }
+                        break;
+
+                    case "delete":
+                        if (existing != null) Roles.Remove(existing);
+                        break;
+                }
+
+                // Patch employees referencing this role (so UI refreshes immediately)
+                foreach (var emp in Employees.Where(e => e.Employee_Role?.Role_ID == role.Role_ID).ToList())
+                {
+                    emp.Employee_Role = new Role
+                    {
+                        Role_ID = role.Role_ID,
+                        Role_Name = role.Role_Name,
+                        Permissions = role.Permissions,
+                        Is_Active = role.Is_Active
+                    };
+                }
+
+                // OPTIONAL: if you keep a global auth context for the logged-in user,
+                // refresh permission-gated UI here.
+                // AuthContext.ApplyRoleUpdate(role);
+            });
+        }
         #endregion
 
-        #region Load Commands
-
+        #region Commands
         [RelayCommand]
         private void LoadEmployees()
         {
@@ -106,14 +150,9 @@ namespace RestND.MVVM.ViewModel
             Roles = new ObservableCollection<Role>(_roleService.GetAll());
         }
 
-        #endregion
-
-        #region Relay Commands
-
         [RelayCommand]
         private async Task AddEmployee(string password)
         {
-            // keep NewEmployee.Password in the model (validator expects it)
             NewEmployee.Password = password ?? string.Empty;
 
             if (!_validator.ValidateForAdd(NewEmployee, out var err))
@@ -124,16 +163,11 @@ namespace RestND.MVVM.ViewModel
 
             if (_employeeService.Add(NewEmployee))
             {
-                // Broadcast add to all clients
                 await _hub.SendAsync("NotifyEmployeeUpdate", NewEmployee, "add");
-
-
                 NewEmployee = new Employee();
                 FormErrorMessage = string.Empty;
-
                 RequestClose?.Invoke();
             }
-       
         }
 
         [RelayCommand]
@@ -153,13 +187,10 @@ namespace RestND.MVVM.ViewModel
 
             if (_employeeService.Update(SelectedEmployee))
             {
-                // Broadcast update to all clients
                 await _hub.SendAsync("NotifyEmployeeUpdate", SelectedEmployee, "update");
-
                 FormErrorMessage = string.Empty;
                 RequestClose?.Invoke();
             }
-        
         }
 
         [RelayCommand]
@@ -173,14 +204,12 @@ namespace RestND.MVVM.ViewModel
 
             if (_employeeService.Delete(SelectedEmployee))
             {
-                // Broadcast delete to all clients
                 await _hub.SendAsync("NotifyEmployeeUpdate", SelectedEmployee, "delete");
-
                 SelectedEmployee = null;
             }
-     
         }
 
+        public void Dispose() => UnregisterHubHandlers();
         #endregion
     }
 }

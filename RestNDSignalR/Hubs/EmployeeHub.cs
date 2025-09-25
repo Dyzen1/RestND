@@ -11,6 +11,9 @@ namespace RestNDSignalR.Hubs
             await Clients.All.SendAsync("ReceiveEmployeeUpdate", emp, action);
         }
 
+        public async Task NotifyRoleUpdate(Role role)
+     => await Clients.All.SendAsync("ReceiveRoleUpdate", role);
+
         #endregion
 
     }
