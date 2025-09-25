@@ -1,4 +1,4 @@
-﻿using RestND.MVVM.ViewModel;
+﻿using RestND.MVVM.ViewModel.VAT;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +15,12 @@ using System.Windows.Shapes;
 
 namespace RestND.MVVM.View.Windows
 {
-    public partial class EditProductWindow : Window
+    public partial class VatPopup : Window
     {
-        public EditProductWindow()
+        public VatPopup()
         {
             InitializeComponent();
-           
+            this.DataContext = new VatViewModel();
         }
     }
 }

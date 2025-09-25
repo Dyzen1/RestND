@@ -1,6 +1,8 @@
-﻿using RestND.MVVM.ViewModel;
+﻿using RestND.MVVM.Model.Employees;
+using RestND.MVVM.ViewModel;
 using System;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace RestND.MVVM.View.Windows
@@ -12,6 +14,40 @@ namespace RestND.MVVM.View.Windows
             InitializeComponent();
             this.DataContext = new RoleViewModel();
             DataContextChanged += RolesWindow_DataContextChanged;
+            // Hook roles search bar
+            RolesSearch.SearchTextChanged += (s, text) => ApplyProductFilter(text);
+            // Initial filter after the view is ready
+            Loaded += (_, __) =>
+            {
+                ApplyProductFilter(RolesSearch.SearchText ?? string.Empty);
+            };
+        }
+
+        //Search bar Filter: roles selections by Role_Name
+        private void ApplyProductFilter(string searchText)
+        {
+            var vm = DataContext as RoleViewModel;
+            var items = vm?.Roles;   // ObservableCollection<SelectableProduct>
+            if (items is null) return;
+
+            var view = CollectionViewSource.GetDefaultView(items);
+            if (view is null) return;
+
+            var q = (searchText ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(q))
+            {
+                view.Filter = null;
+                view.Refresh();
+                return;
+            }
+
+            view.Filter = o =>
+            {
+                var i = o as Role;
+                return !string.IsNullOrEmpty(i?.Role_Name)
+                    && i.Role_Name.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0;
+            };
+            view.Refresh();
         }
 
         private void RolesWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)

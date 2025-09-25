@@ -119,7 +119,7 @@ namespace RestND.Validations
             err = string.Empty;
 
             if (!CheckIfNull(d, out err)) return false;
-            if (!ExistsById(d.Discount_ID, existingDiscs, out err)) return false;
+            //if (!ExistsById(d.Discount_ID, existingDiscs, out err)) return false;
 
             // Name format + uniqueness (exclude the current discount ID)
             if (!ValidName(d.Discount_Name, out err, existingDiscs, checkExists: true, excludeId: d.Discount_ID))

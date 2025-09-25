@@ -17,7 +17,6 @@ namespace RestND.MVVM.ViewModel
         #region Services & Hub
 
         private readonly RoleServices _roleService = new();
-        private readonly HubConnection _hub = App.EmployeeHub;
 
         #endregion
 
@@ -38,6 +37,7 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private string newRoleName = string.Empty;
         [ObservableProperty] private AppPermission newRolePermissions = AppPermission.None;
         [ObservableProperty] private string formErrorMessage;
+        #endregion
 
         #endregion
 
@@ -55,6 +55,7 @@ namespace RestND.MVVM.ViewModel
             // If there are roles, pick the first; otherwise keep the placeholder
             SelectedRole = Roles.FirstOrDefault() ?? new Role();
         }
+        #endregion
 
         #endregion
 

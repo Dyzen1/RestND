@@ -92,15 +92,16 @@
                 <DataGrid ItemsSource="{Binding ProductSelections}" Grid.Row="1"
                           CanUserAddRows="False"
                           HeadersVisibility="Column"
-                          BorderThickness="0" BorderBrush="Transparent"
-                          HorizontalAlignment="Stretch" Margin="3"
+                          HorizontalAlignment="Stretch" 
+                          ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
                           RowStyle="{DynamicResource rowStyle}"
                           CellStyle="{DynamicResource cellStyle}">
                     <DataGrid.Columns>
                             <DataGridCheckBoxColumn Width="30"
                             Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <DataGridCheckBoxColumn.Header>
-                                <fa:ImageAwesome Icon="CheckSquare" Width="15" Height="15"/>
+                                <fa:ImageAwesome Icon="CheckSquare" Width="15" Height="15" 
+                                                 Foreground="{DynamicResource LightText}"/>
                             </DataGridCheckBoxColumn.Header>
                         </DataGridCheckBoxColumn>
 
@@ -145,7 +146,8 @@
                           SelectedItem="{Binding SelectedDish}" 
                           CellStyle="{DynamicResource cellStyle}"
                           AutoGenerateColumns="False" 
-                          RowDetailsVisibilityMode="VisibleWhenSelected">
+                          RowDetailsVisibilityMode="VisibleWhenSelected"
+                          ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}">
 
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Dish" Binding="{Binding Dish_Name}" Width="90"/>

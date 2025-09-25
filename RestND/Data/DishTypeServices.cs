@@ -34,10 +34,9 @@ namespace RestND.Data
         #region Add Dish Type
         public override bool Add(DishType d)
         {
-            string query = "INSERT INTO dish_types (DishType_ID, DishType_Name) VALUES (@id, @name)";
+            string query = "INSERT INTO dish_types (DishType_Name) VALUES (@name)";
 
             return _db.ExecuteNonQuery(query,
-                new MySqlParameter("@id", d.DishType_ID),
                 new MySqlParameter("@name", d.DishType_Name)) > 0;
 
         }
@@ -46,10 +45,9 @@ namespace RestND.Data
         #region Update DishType
         public override bool Update(DishType d)
         {
-            string query = "UPDATE dish_types SET DishType_Name = @name, DishType_ID = @id WHERE DishType_ID = @id";
+            string query = "UPDATE dish_types SET DishType_Name = @name WHERE DishType_ID = @id";
             return _db.ExecuteNonQuery(query,
-                new MySqlParameter("@name", d.DishType_Name),
-                new MySqlParameter("@id", d.DishType_ID)) > 0;
+                new MySqlParameter("@name", d.DishType_Name)) > 0;
 
         }
         #endregion

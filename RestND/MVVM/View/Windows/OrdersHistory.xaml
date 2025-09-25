@@ -4,9 +4,40 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
+        xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
+        xmlns:conv="clr-namespace:RestND.Converters"
         mc:Ignorable="d"
-        Title="OrdersHistory" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="OrdersHistory" Style="{DynamicResource windowStyle}">
+
+    <Border Style="{DynamicResource windowBorder}">
+        <Grid Margin="40 10 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="120"/>
+            </Grid.ColumnDefinitions>
+
+            <Expander Style="{DynamicResource sideBarExpander}"
+                    Grid.RowSpan="2" Grid.Column="1">
+                <uc:SideBar/>
+            </Expander>
+
+            <GroupBox Header="Orders History">
+                <DataGrid Grid.Row="0"
+                          ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
+                          Margin="3">
+                
+                </DataGrid>
+            </GroupBox>
+
+            <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Center" Grid.Row="1"/>
+            <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="1" 
+                       VerticalAlignment="Center" Margin="0"/>
+
+        </Grid>
+    </Border>
+    
 </Window>

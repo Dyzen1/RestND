@@ -6,7 +6,8 @@
              xmlns:vm="clr-namespace:RestND.MVVM.ViewModel.Navigation"
              xmlns:sec="clr-namespace:RestND.MVVM.Model.Security"
              mc:Ignorable="d"
-             xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
+             xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF" 
+             xmlns:conv="clr-namespace:RestND.Converters"
              Name="sideBar"
              d:DesignHeight="370" d:DesignWidth="130">
 
@@ -16,8 +17,7 @@
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-    </UserControl.Resources>
-
+    </UserControl.Resources> 
 
     <Grid>
         <StackPanel>

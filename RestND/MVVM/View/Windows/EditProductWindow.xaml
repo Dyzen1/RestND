@@ -12,6 +12,7 @@
     <Window.Resources>
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Window.Resources>
+    
     <Border Style="{DynamicResource windowBorder}">
         <Grid>
             <Grid.RowDefinitions>

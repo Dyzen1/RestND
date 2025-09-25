@@ -21,9 +21,5 @@ namespace RestND.MVVM.View.Windows
         //    this.Close();
         //}
 
-        private void return_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close(); 
-        }
     }
 }
