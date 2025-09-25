@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.SignalR.Client;
 using RestND;
 using RestND.Data;
 using RestND.MVVM.Model;
+using RestND.MVVM.Model.Orders;
+using RestND.Validations;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,16 +16,16 @@ public partial class DishTypeViewModel : ObservableObject
 {
     #region Services
     private readonly DishTypeServices _dishTypeService;
+    private readonly DishTypeValidator _validator = new();
     private readonly HubConnection _hub;
-    #endregion
-
-    #region Properties
-    public List<DishType> DishTypeList { get; set; }
     #endregion
 
     #region Observable Properties
     [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
+    [ObservableProperty] public DishType newType = new();
     [ObservableProperty] private DishType selectedDishType;
+    [ObservableProperty] private string errorMessage;
+    [ObservableProperty] private string newTypeInput;
     #endregion
 
     #region Constructors
@@ -32,27 +34,11 @@ public partial class DishTypeViewModel : ObservableObject
         _dishTypeService = new DishTypeServices();
         _hub = App.DishTypeHub;
 
-        InitializeHubSubscriptions();
         LoadDishTypes();
-
-        // If you still need the raw list:
-        DishTypeList = _dishTypeService.GetAll();
-    }
-
-    // DI-friendly overload
-    public DishTypeViewModel(DishTypeServices dishTypeService)
-    {
-        _dishTypeService = dishTypeService;
-        _hub = App.DishHub;
-
-        InitializeHubSubscriptions();
-        LoadDishTypes();
-
-        DishTypeList = _dishTypeService.GetAll();
     }
     #endregion
 
-    #region Hub
+    #region Initialize SignalR
     private void InitializeHubSubscriptions()
     {
         // Listen for dish type updates from other clients
@@ -92,6 +78,7 @@ public partial class DishTypeViewModel : ObservableObject
     {
         DeleteDishTypeCommand.NotifyCanExecuteChanged();
         UpdateDishTypeCommand.NotifyCanExecuteChanged();
+        AddDishTypeCommand.NotifyCanExecuteChanged();
     }
     #endregion
 
@@ -119,6 +106,7 @@ public partial class DishTypeViewModel : ObservableObject
             await _hub.SendAsync("NotifyDishTypeUpdate", SelectedDishType, "delete");
             await App.DishHub.SendAsync("NotifyDishUpdate", null, "dishType-changed");
             LoadDishTypes();
+            InitializeHubSubscriptions();
         }
     }
     #endregion
@@ -127,7 +115,19 @@ public partial class DishTypeViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanModifyDishType))]
     private async Task UpdateDishType()
     {
-        if (SelectedDishType == null) return;
+        // Validate entire form (Employee-style)
+        var existingTypes = _dishTypeService.GetAll(); // for "exists by id" + name uniqueness (exclude current)
+        if (!_validator.ValidateForUpdate(
+                SelectedDishType,
+                existingTypes,
+                out var err))
+        {
+            ErrorMessage = err;
+            return;
+        }
+        // passed validation:
+        ErrorMessage = string.Empty;
+        SelectedDishType.Is_Active = true;
 
         bool success = _dishTypeService.Update(SelectedDishType);
 
@@ -135,7 +135,8 @@ public partial class DishTypeViewModel : ObservableObject
         {
             await _hub.SendAsync("NotifyDishTypeUpdate", SelectedDishType, "update");
             await App.DishHub.SendAsync("NotifyDishUpdate", null, "dishType-changed");
-            LoadDishTypes(); 
+            LoadDishTypes();
+            InitializeHubSubscriptions();
         }
     }
     #endregion
@@ -144,17 +145,32 @@ public partial class DishTypeViewModel : ObservableObject
     [RelayCommand]
     private async Task AddDishType()
     {
-        // You were using SelectedDishType for Add; keeping that behavior.
-        if (SelectedDishType == null) return;
+        // 1) Validate full form (Employee-style)
+        if (!_validator.ValidateForAdd(
+                NewTypeInput,
+                DishTypes,
+                out var err))
+        {
+            ErrorMessage = err;
+            return;
+        }
 
-        bool success = _dishTypeService.Add(SelectedDishType);
+        var type = new DishType
+        {
+            DishType_Name = NewTypeInput.Trim(),
+            Is_Active = true
+        };
+
+        bool success = _dishTypeService.Add(type);
 
         if (success)
         {
             await _hub.SendAsync("NotifyDishTypeUpdate", SelectedDishType, "add");
             await App.DishHub.SendAsync("NotifyDishUpdate", null, "dishType-changed");
-            SelectedDishType = new DishType();
-             LoadDishTypes();
+            LoadDishTypes();
+            InitializeHubSubscriptions();
+            ErrorMessage = string.Empty;
+            NewTypeInput = string.Empty;
         }
     }
     #endregion

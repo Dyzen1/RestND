@@ -98,8 +98,9 @@
                           ItemsSource="{Binding Products}"
                           CellStyle="{DynamicResource cellStyle}"
                           SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
-                          HeadersVisibility="Column" BorderBrush="Transparent"
-                          AutoGenerateColumns="False">
+                          HeadersVisibility="Column" 
+                          AutoGenerateColumns="False"
+                          ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Serial Number" 
                                             Binding="{Binding Product_ID}" Width="*"

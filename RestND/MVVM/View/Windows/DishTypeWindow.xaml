@@ -1,4 +1,4 @@
-﻿<Window x:Class="RestND.MVVM.View.Windows.DiscountWindow"
+﻿<Window x:Class="RestND.MVVM.View.Windows.DishTypeWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,9 +7,7 @@
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         xmlns:conv="clr-namespace:RestND.Converters"
         mc:Ignorable="d"
-        Title="DiscountWindow"
-        WindowStartupLocation="CenterOwner"
-        Style="{StaticResource windowStyle}"
+        Title="DishTypeWindow" Style="{DynamicResource windowStyle}"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
     <Window.Resources>
@@ -20,56 +18,41 @@
         <Grid Margin="15 10 15 0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="150"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Manage Discounts" Grid.Row="0"
+            <TextBlock Text="Manage Dish Types" Grid.Row="0"
                        Foreground="{DynamicResource LightText}"
                        FontWeight="Bold"
                        FontSize="16"/>
 
-            <GroupBox Header="Create a new discount" Grid.Row="1">
+            <GroupBox Header="Create a new dish type" Grid.Row="1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel Orientation="Horizontal" Grid.Row="0"
-                                HorizontalAlignment="Center">
-                        <Label Content="Discount Name:"/>
-                        <TextBox Text="{Binding NewDiscountName, UpdateSourceTrigger=PropertyChanged}"/>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                                Grid.Row="0">
+                        <Label Content="Dish Type Name:" Width="120"/>
+                        <TextBox Text="{Binding NewTypeInput, UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1"
+                    <StackPanel Orientation="Vertical" Grid.Row="1"
                                 HorizontalAlignment="Center">
-                        <Label Content="Discount Percentage:" Width="150"/>
-                        <TextBox Text="{Binding NewDiscountPercentage, UpdateSourceTrigger=PropertyChanged}"
-                                 Width="50"/>
-                        <Label Content="%" FontSize="15"/>
-                    </StackPanel>
-
-                    <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="2">
                         <!-- error message -->
-                        <TextBlock Grid.ColumnSpan="2"
-                                   Text="{Binding FormErrorMessage}"
-                                   Margin="0,0,0,10"
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Margin="0,0,0,20"
                                    Style="{DynamicResource errorMessage}"/>
 
-                        <Button Grid.Row="1" Grid.ColumnSpan="2"
-                                Content="Create"
-                                HorizontalAlignment="Center"
+                        <Button Content="Create"
                                 Style="{DynamicResource SubmitBtn}"
-                                Command="{Binding AddDiscountCommand}"
+                                Command="{Binding AddDishTypeCommand}"
                                 IsDefault="True"/>
                     </StackPanel>
-                    
                 </Grid>
             </GroupBox>
 
@@ -80,13 +63,13 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
 
-                    <uc:SearchBar x:Name="DiscountsSearch" Grid.Row="0"
+                    <uc:SearchBar x:Name="DishTypeSearch" Grid.Row="0"
                                   HorizontalAlignment="Left" 
-                                  Placeholder="Search by Discount name"
+                                  Placeholder="Search by dish type name"
                                   Height="28"/>
 
-                    <DataGrid ItemsSource="{Binding Discounts}"
-                              SelectedItem="{Binding SelectedDiscount, Mode=TwoWay}"
+                    <DataGrid ItemsSource="{Binding DishTypes}"
+                              SelectedItem="{Binding SelectedDishType, Mode=TwoWay}"
                               CellStyle="{DynamicResource cellStyle}"
                               RowStyle="{DynamicResource rowStyle}"
                               RowDetailsVisibilityMode="VisibleWhenSelected"
@@ -96,12 +79,9 @@
                               CanUserAddRows="False"
                               Grid.Row="1">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Discount Name"
-                                                Binding="{Binding Discount_Name, UpdateSourceTrigger=PropertyChanged}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Discount Percentage"
-                                                Binding="{Binding Discount_Percentage, UpdateSourceTrigger=PropertyChanged}"
-                                                Width="*"/>
+                            <DataGridTextColumn Header="Dish Type Name"
+                                    Binding="{Binding DishType_Name, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -112,15 +92,15 @@
                 <Button Content="Delete"
                         Style="{DynamicResource SubmitBtn}"
                         Margin="0,0,8,0"
-                        Command="{Binding DeleteDiscountCommand}"/>
+                        Command="{Binding DeleteDishTypeCommand}"/>
                 <Button Content="Update"
                         Style="{DynamicResource SubmitBtn}"
-                        Command="{Binding UpdateDiscountCommand}"/>
+                        Command="{Binding UpdateDishTypeCommand}"/>
             </StackPanel>
 
             <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Grid.Row="3" Margin="0 0 0 12"/>
             <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="3" VerticalAlignment="Bottom"/>
-            
+
         </Grid>
     </Border>
 </Window>

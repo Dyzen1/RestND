@@ -19,17 +19,23 @@ namespace RestND.MVVM.ViewModel.Navigation
         [RelayCommand]
         private void Navigate(string destination)
         {
+            if (destination == "ManageVat")
+            {
+                OpenVatDialog();
+                return;
+            }
             Window? next = destination switch
             {
                 "Inventory" => new ProductWindow(),
                 // NEW: “Others” submenu routes
                 "ManageRoles" => new RolesWindow(),
                 "ManageDiscounts" => new DiscountWindow(),
+                "ManageDishTypes" => new DishTypeWindow(),
                 "Dishes" => new DishWindow(),
                 "Reports" => new ReportWindow(),
                 "Employees" => new EmployeesWindow(),
                 "Orders" => new OrdersHistory(),
-                "Main" => new MainWindow(), 
+                "Main" => new MainWindow(),
                 _ => null
             };
             if (next == null) return;
@@ -38,12 +44,27 @@ namespace RestND.MVVM.ViewModel.Navigation
             var old = app.MainWindow; // pointer to the prev main window to not create a new one each time.
 
             next.WindowState = WindowState.Maximized;
-
             app.MainWindow = next;
             next.Show();
-
-            // now closing the main window.
             old?.Hide();
         }
+        private void OpenVatDialog()
+        {
+            // Find the existing MainWindow instance (even if it’s hidden).
+            var rootMain = Application.Current.Windows
+                .OfType<MainWindow>()
+                .FirstOrDefault();
+
+            var dlg = new VatPopup
+            {
+                Owner = rootMain ?? Application.Current.MainWindow, // fallback if needed
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            };
+            if (dlg.Owner != null) dlg.Owner.Opacity = 0.4;
+            dlg.ShowDialog();
+            if (dlg.Owner != null) dlg.Owner.Opacity = 1.0;
+
+        }
+
     }
 }

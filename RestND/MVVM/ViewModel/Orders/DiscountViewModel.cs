@@ -38,8 +38,14 @@ public partial class DiscountViewModel : ObservableObject
 
     [ObservableProperty] private string formErrorMessage;
 
-    [ObservableProperty]
-    public Dictionary<string, List<string>> discountValidationErrors = new();
+    #endregion
+
+    #region Constructor
+    public DiscountViewModel()
+    {
+        _discountService = new DiscountService();
+        LoadDiscounts();
+    }
 
     #endregion
 
@@ -49,15 +55,6 @@ public partial class DiscountViewModel : ObservableObject
         DeleteDiscountCommand.NotifyCanExecuteChanged();
         UpdateDiscountCommand.NotifyCanExecuteChanged();
         AddDiscountCommand.NotifyCanExecuteChanged();
-    }
-
-    #endregion
-
-    #region Constructor
-    public DiscountViewModel()
-    {
-        _discountService = new DiscountService();
-        LoadDiscounts();
     }
 
     #endregion
@@ -106,7 +103,6 @@ public partial class DiscountViewModel : ObservableObject
         NewDiscountName = string.Empty;
         NewDiscountPercentage = string.Empty;
         FormErrorMessage = string.Empty;
-        //DiscountValidationErrors.Clear();
     }
 
     #endregion

@@ -1,5 +1,5 @@
-﻿using RestND.MVVM.Model.Employees;
-using RestND.MVVM.Model.Orders;
+﻿using RestND.MVVM.Model;
+using RestND.MVVM.Model.Employees;
 using RestND.MVVM.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -17,26 +17,26 @@ using System.Windows.Shapes;
 
 namespace RestND.MVVM.View.Windows
 {
-    public partial class DiscountWindow : Window
+    public partial class DishTypeWindow : Window
     {
-        public DiscountWindow()
+        public DishTypeWindow()
         {
             InitializeComponent();
-            this.DataContext = new DiscountViewModel();
-            // Hook roles search bar
-            DiscountsSearch.SearchTextChanged += (s, text) => ApplyProductFilter(text);
+            this.DataContext = new DishTypeViewModel();
+            // Hook dish types search bar
+            DishTypeSearch.SearchTextChanged += (s, text) => ApplyProductFilter(text);
             // Initial filter after the view is ready
             Loaded += (_, __) =>
             {
-                ApplyProductFilter(DiscountsSearch.SearchText ?? string.Empty);
+                ApplyProductFilter(DishTypeSearch.SearchText ?? string.Empty);
             };
         }
 
-        //Search bar Filter: discounts selections by Discount_Name
+        //Search bar Filter: dish types selections by Role_Name
         private void ApplyProductFilter(string searchText)
         {
-            var vm = DataContext as DiscountViewModel;
-            var items = vm?.Discounts;   // ObservableCollection<SelectableProduct>
+            var vm = DataContext as DishTypeViewModel;
+            var items = vm?.DishTypes;   // ObservableCollection<SelectableProduct>
             if (items is null) return;
 
             var view = CollectionViewSource.GetDefaultView(items);
@@ -52,9 +52,9 @@ namespace RestND.MVVM.View.Windows
 
             view.Filter = o =>
             {
-                var i = o as Discount;
-                return !string.IsNullOrEmpty(i?.Discount_Name)
-                    && i.Discount_Name.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0;
+                var i = o as DishType;
+                return !string.IsNullOrEmpty(i?.DishType_Name)
+                    && i.DishType_Name.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0;
             };
             view.Refresh();
         }

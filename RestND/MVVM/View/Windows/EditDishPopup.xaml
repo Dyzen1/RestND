@@ -78,8 +78,7 @@
                           AutoGenerateColumns="False"
                           CanUserAddRows="False"
                           HeadersVisibility="Column"
-                          BorderThickness="0"
-                          Width="420" Margin="3"
+                          ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
                           Grid.Row="1"
                           RowStyle="{DynamicResource rowStyle}"
                           CellStyle="{DynamicResource cellStyle}">
@@ -88,7 +87,8 @@
                         <DataGridCheckBoxColumn Width="30"
                             Binding="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <DataGridCheckBoxColumn.Header>
-                                    <fa:ImageAwesome Icon="Check" Width="15" Height="15"/>
+                                    <fa:ImageAwesome Icon="Check" Width="15" Height="15"
+                                                     Foreground="{DynamicResource LightText}"/>
                             </DataGridCheckBoxColumn.Header>
                         </DataGridCheckBoxColumn>
                             

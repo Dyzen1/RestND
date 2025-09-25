@@ -60,12 +60,10 @@ namespace RestND.MVVM.ViewModel
             RefreshProductSelections();
             LoadNotes();
             initailizeSR();
-            //LoadDishes();
         }
         #endregion
 
         #region Initialize SingalR
-
         private void initailizeSR()
         {
             _hub.On<Dish, string>("ReceiveDishUpdate", (dish, action) =>
@@ -199,7 +197,7 @@ namespace RestND.MVVM.ViewModel
                     NewDishTypeInput,
                     AllergenOptions,
                     ProductSelections,
-                    Dishes,                    // existing dishes for uniqueness check
+                    Dishes,
                     out var parsedPrice,
                     out var err))
             {
@@ -251,10 +249,7 @@ namespace RestND.MVVM.ViewModel
                     sp.IsSelected = false;
                     sp.AmountUsage = 0;
                 }
-
-
             }
-       
         }
 
         [RelayCommand(CanExecute = nameof(CanModifyDish))]

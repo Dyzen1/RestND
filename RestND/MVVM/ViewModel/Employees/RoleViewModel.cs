@@ -10,22 +10,29 @@ namespace RestND.MVVM.ViewModel
 {
     public partial class RoleViewModel : ObservableObject
     {
+        #region Services
         private readonly RoleServices _roleService = new();
+        #endregion
 
+        #region Observable Properties
         [ObservableProperty] private ObservableCollection<Role> roles = new();
         [ObservableProperty] private Role selectedRole;
         [ObservableProperty] private string newRoleName = string.Empty;
         [ObservableProperty] private AppPermission newRolePermissions = AppPermission.None;
         [ObservableProperty] private string formErrorMessage;
+        #endregion
 
         public event Action? RequestClose;
 
+        #region Constructor
         public RoleViewModel()
         {
             LoadRoles();
             SelectedRole = Roles.FirstOrDefault();
         }
+        #endregion
 
+        #region Relay Commands
         [RelayCommand]
         private void LoadRoles() =>
             Roles = new ObservableCollection<Role>(_roleService.GetAll());
@@ -80,8 +87,6 @@ namespace RestND.MVVM.ViewModel
             else FormErrorMessage = "Failed to delete role.";
         }
 
-        private bool CanModifyRole() => SelectedRole != null;
-
         // checkbox toggles
         [RelayCommand]
         private void ToggleNewPermission(AppPermission flag)
@@ -97,5 +102,10 @@ namespace RestND.MVVM.ViewModel
             if ((SelectedRole.Permissions & flag) == flag) SelectedRole.Permissions &= ~flag;
             else SelectedRole.Permissions |= flag;
         }
+        #endregion
+
+        #region CanExecute Methods
+        private bool CanModifyRole() => SelectedRole != null;
+        #endregion
     }
 }
