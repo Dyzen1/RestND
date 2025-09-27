@@ -9,7 +9,7 @@
              xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF" 
              xmlns:conv="clr-namespace:RestND.Converters"
              Name="sideBar"
-             d:DesignHeight="320" d:DesignWidth="130">
+             d:DesignHeight="320" d:DesignWidth="150">
 
     <UserControl.DataContext>
         <vm:NavigationViewModel/>

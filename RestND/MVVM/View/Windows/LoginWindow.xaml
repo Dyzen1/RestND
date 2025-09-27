@@ -9,7 +9,7 @@
         Style="{StaticResource popupStyle}"
         Title="Admin Login"
         Width="400" Height="300"
-        WindowStartupLocation="CenterOwner">
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:LoginViewModel/>
     </Window.DataContext>

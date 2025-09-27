@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RestND.MVVM.ViewModel.Orders;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace RestND.MVVM.View.Windows
         public OrderWindow()
         {
             InitializeComponent();
+            this.DataContext = new OrderViewModel();
         }
     }
 }

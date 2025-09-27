@@ -30,13 +30,13 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="140"/>
                     <ColumnDefinition/>
-                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" 
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" 
                             Grid.Row="0" Grid.Column="2">
                     <Button x:Name="MinimizeBtn" Content="_" Width="40" Height="25" 
-                            Background="Transparent" BorderBrush="Transparent"
+                            Background="Transparent" BorderBrush="Transparent" 
                             Click="MinimizeBtn_Click" Foreground="{DynamicResource LightText}"/>
                     <Button x:Name="MaximizeBtn" Content="🗖" Width="40" Height="25" 
                             Background="Transparent" BorderBrush="Transparent"

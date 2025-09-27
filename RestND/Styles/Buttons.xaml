@@ -2,8 +2,31 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF">
 
-<!--NOT ALL OF THE STYLES ARE BTNs, SOME ARE THE DESIGN INSIDE THE BTN-->
-    
+    <Style x:Key="PrintBillBtn" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="ToolTip" Value="Print Bill"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Image Source="/Styles/Assets/bill.png" Width="40"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PrintOrderBtn" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="ToolTip" Value="Ship Order"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Image Source="/Styles/Assets/printer.png" Width="40"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     
     <Style x:Key="SideBarBtn" TargetType="Button">
         <Setter Property="Background" Value="Transparent"/>
@@ -11,26 +34,42 @@
         <Setter Property="Height" Value="40"/>
         <Setter Property="Margin" Value="0,0,0,5"/>
         <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <fa:ImageAwesome Icon="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
-                                    Width="15"
-                                    Foreground="{DynamicResource LightText}"/>
-                        <TextBlock Text="{TemplateBinding Content}"
-                                    HorizontalAlignment="Center"/>
-                    </StackPanel>
+                    <Border Background="{TemplateBinding Background}" 
+                            CornerRadius="6"
+                            Padding="4">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <fa:ImageAwesome Icon="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                                             Width="15"
+                                             Foreground="{TemplateBinding Foreground}"/>
+                            <TextBlock Text="{TemplateBinding Content}"
+                                       HorizontalAlignment="Center"
+                                       Foreground="{TemplateBinding Foreground}"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource hoverColor}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4"/>
+                            <Setter Property="Cursor" Value="No"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Opacity" Value="0.4"/>
-                <Setter Property="Cursor" Value="No"/>
-            </Trigger>
-        </Style.Triggers>
     </Style>
+
 
     <!-- "others" toggle btn -->
     <Style x:Key="SideBarBtnToggle" TargetType="ToggleButton">
@@ -42,22 +81,34 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ToggleButton">
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <fa:ImageAwesome Icon="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
-                                Width="15"
-                                Foreground="{DynamicResource LightText}"/>
-                        <TextBlock Text="{TemplateBinding Content}"
-                                HorizontalAlignment="Center"/>
-                    </StackPanel>
+                    <Border Background="{TemplateBinding Background}" 
+                            CornerRadius="6"
+                            Padding="4">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <fa:ImageAwesome Icon="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                                    Width="15"
+                                    Foreground="{DynamicResource LightText}"/>
+                            <TextBlock Text="{TemplateBinding Content}"
+                                    HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource hoverColor}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4"/>
+                            <Setter Property="Cursor" Value="No"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Opacity" Value="0.4"/>
-                <Setter Property="Cursor" Value="No"/>
-            </Trigger>
-        </Style.Triggers>
     </Style>
 
     <!-- the btns inside "others" -->
@@ -69,15 +120,33 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <StackPanel Orientation="Horizontal" 
-                                HorizontalAlignment="Stretch"
-                                Background="{TemplateBinding Background}"
-                                Height="30">
-                        <fa:ImageAwesome Icon="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
-                            Width="10" Foreground="{DynamicResource LightText}" Margin="0 0 8 0"/>
-                        <TextBlock Text="{TemplateBinding Content}" FontSize="10"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
+                    <Border Background="{TemplateBinding Background}" 
+                            CornerRadius="6"
+                            Padding="4">
+                        <StackPanel Orientation="Horizontal" 
+                                    HorizontalAlignment="Stretch"
+                                    Background="{TemplateBinding Background}"
+                                    Height="30">
+                            <fa:ImageAwesome Icon="{Binding Tag, RelativeSource={RelativeSource TemplatedParent}}" 
+                                            Width="10" Foreground="{DynamicResource LightText}" Margin="0 0 8 0"/>
+                            <TextBlock Text="{TemplateBinding Content}" FontSize="10"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource hoverColor}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4"/>
+                            <Setter Property="Cursor" Value="No"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

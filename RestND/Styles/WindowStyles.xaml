@@ -64,6 +64,7 @@
         <Setter Property="Height" Value="23"/>
         <Setter Property="Width" Value="160"/>
         <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource LightText}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">

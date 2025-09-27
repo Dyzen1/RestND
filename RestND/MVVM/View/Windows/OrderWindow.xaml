@@ -68,6 +68,15 @@
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Border>
 
+            <StackPanel Grid.Row="2" Grid.Column="2" 
+                        Margin="0 0 8 0" Orientation="Horizontal" 
+                        HorizontalAlignment="Right">
+                <Button Style="{DynamicResource PrintOrderBtn}"
+                        Margin="0 0 15 0"/>
+                <Button Style="{DynamicResource PrintBillBtn}"
+                        Command="{Binding PrintBillCommand}"/> <!--not ready yet!-->
+            </StackPanel>
+            
             <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2"
                           VerticalAlignment="Bottom" Margin="15,0,0,15"/>
             <TextBlock Style="{StaticResource copyWrite}" 
