@@ -26,6 +26,7 @@ namespace RestND.MVVM.Model.Security
         public bool CanReports => AuthContext.Has(AppPermission.Reports);
         public bool CanOther => AuthContext.Has(AppPermission.Other);
         public bool CanTables => AuthContext.Has(AppPermission.Tables);
+        public bool CanSoftDrinks => AuthContext.Has(AppPermission.SoftDrinks);
 
         public event PropertyChangedEventHandler? PropertyChanged;
         private void Raise([CallerMemberName] string? n = null)
@@ -39,6 +40,7 @@ namespace RestND.MVVM.Model.Security
             Raise(nameof(CanReports));
             Raise(nameof(CanOther));
             Raise(nameof(CanTables));
+            Raise(nameof(CanSoftDrinks));
         }
     }
 }

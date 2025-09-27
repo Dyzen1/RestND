@@ -82,12 +82,15 @@ namespace RestND
                 .Build();
 
 
+
+
             await InventoryHub.StartAsync();
             await DishHub.StartAsync();
             await TableHub.StartAsync();
             await MainHub.StartAsync();
             await EmployeeHub.StartAsync();
             await DishTypeHub.StartAsync();
+
         }
     }
 }

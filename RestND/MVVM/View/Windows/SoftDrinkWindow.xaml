@@ -1,0 +1,122 @@
+﻿<Window x:Class="RestND.MVVM.View.Windows.SoftDrinkWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
+        xmlns:vm="clr-namespace:RestND.MVVM.ViewModel.Dishes"
+        mc:Ignorable="d"
+        Style="{StaticResource popupStyle}"
+        Title="Soft Drinks"
+        Width="600" Height="520"
+        WindowState="Normal"
+        ResizeMode="NoResize"
+        SizeToContent="Manual"
+        WindowStartupLocation="CenterOwner"
+        FocusManager.FocusedElement="{Binding ElementName=NameBox}">
+
+    <Window.DataContext>
+        <vm:SoftDrinkViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Border Style="{DynamicResource windowBorder}">
+        <Grid Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="260"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Title -->
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                       Text="Soft Drinks"
+                       Foreground="{DynamicResource LightText}"
+                       FontSize="15" FontWeight="Bold"
+                       Margin="0 0 0 8"
+                       HorizontalAlignment="Center"
+                       TextAlignment="Center" />
+
+            <!-- ========== Left: Existing soft drinks grid ========== -->
+            <GroupBox Grid.Row="1" Grid.Column="0" Header="Existing"
+                      Margin="0 0 12 0">
+                <DataGrid ItemsSource="{Binding SoftDrinks}"
+                          SelectedItem="{Binding SelectedSoftDrink, Mode=TwoWay}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          HeadersVisibility="Column"
+                          ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
+                          RowStyle="{DynamicResource rowStyle}"
+                          CellStyle="{DynamicResource cellStyle}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Drink_Name}" Width="*"/>
+                        <DataGridTextColumn Header="Price" Binding="{Binding Drink_Price, StringFormat={}{0:F2}}" Width="90"/>
+                        <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="60"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+
+            <!-- ========== Right: Editor form ========== -->
+            <GroupBox Grid.Row="1" Grid.Column="1" Header="Edit / Create">
+                <StackPanel Margin="10" Width="220">
+                    <Label Content="Drink Name:" Foreground="{DynamicResource LightText}"/>
+                    <TextBox x:Name="NameBox"
+                             Text="{Binding DrinkName, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,8"/>
+
+                    <Label Content="Price:" Foreground="{DynamicResource LightText}"/>
+                    <TextBox Text="{Binding DrinkPrice, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:F2}}"
+                             Margin="0,0,0,8"/>
+
+                    <Label Content="Quantity:" Foreground="{DynamicResource LightText}"/>
+                    <TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0,0,0,8"/>
+
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Style="{DynamicResource errorMessage}"
+                               TextWrapping="Wrap" Margin="0,6,0,0"/>
+
+                    <StackPanel HorizontalAlignment="Center" Margin="0,10,0,0">
+                        <!-- Row 1: Save + Update -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
+                            <Button Content="Create"
+                Command="{Binding SaveCommand}"
+                Style="{DynamicResource SubmitBtn}" Margin="0,0,6,0"/>
+                            <Button Content="Update"
+                Command="{Binding UpdateCommand}"
+                Style="{DynamicResource SubmitBtn}"/>
+                        </StackPanel>
+
+                        <!-- Row 2: Delete + Soft Delete -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Content="Delete"
+                Command="{Binding DeleteCommand}"
+                Style="{DynamicResource SubmitBtn}" Margin="0,0,6,0"/>
+
+                        </StackPanel>
+                    </StackPanel>
+
+                </StackPanel>
+            </GroupBox>
+
+            <!-- ========== Bottom bar ========== -->
+            <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="0,12,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <uc:ReturnBtn Grid.Column="0" VerticalAlignment="Bottom" Margin="0,0,8,0"/>
+                <TextBlock Grid.Column="1" Style="{DynamicResource copyWrite}"
+                           VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

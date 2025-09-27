@@ -17,7 +17,8 @@ namespace RestND.MVVM.Model.Employees
         Orders = 16,
         Employees = 32,
         Tables = 64,
+        SoftDrinks = 128,
 
-        All = Inventory | Other | Dishes | Reports | Orders | Employees | Tables
+        All = Inventory | Other | Dishes | Reports | Orders | Employees | Tables | SoftDrinks
     }
 }
