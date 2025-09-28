@@ -17,62 +17,48 @@ namespace RestND.MVVM.ViewModel.Main
 {
     public partial class MainWindowViewModel : ObservableObject
     {
-        #region Services and Fields
         private readonly TableServices _tableService = new();
         private readonly TableValidator _validator = new();
         private readonly HubConnection _hub = App.MainHub;
         private readonly EmployeeServices _employeeServices = new();
         public Action? ClosePopupAction { get; set; }
         public event Action<Table>? OpenEmpForOrder;
-        #endregion
 
-        #region Observable Properties
         [ObservableProperty] private ObservableCollection<Table> tables = new();
         [ObservableProperty] private ObservableCollection<Table> activeTables = new();
         [ObservableProperty] private Table newTable = new();
         [ObservableProperty] private Table selectedTable;
         [ObservableProperty] private string editedTableNumberText;
         [ObservableProperty] private string newTableNumberText;
-
-        // Max diners input for Add Table popup (ONE definition only)
-        [ObservableProperty] private string newTableMaxDinersText = "2";
-
+        [ObservableProperty] private string newTableMaxDinersText = "2";  // ONE definition only
         [ObservableProperty] private string tableErrorMessage;
         [ObservableProperty] private bool isLoggedIn;
 
-        // start-order popup
         [ObservableProperty] private ObservableCollection<Employee> employees = new();
         [ObservableProperty] private Employee selectedEmployee;
         [ObservableProperty] private Table selectedTableForOrder;
         [ObservableProperty] private int dinersCount = 1;
         [ObservableProperty] private string orderPopupError;
-        #endregion
 
         public string LoginButtonText => IsLoggedIn ? "Logout" : "Login";
 
-        #region On Change
-        partial void OnIsLoggedInChanged(bool oldValue, bool newValue)
-        {
+        partial void OnIsLoggedInChanged(bool oldValue, bool newValue) =>
             OnPropertyChanged(nameof(LoginButtonText));
-        }
+
         partial void OnSelectedTableChanged(Table value)
         {
             AddTableCommand.NotifyCanExecuteChanged();
             EditTableCommand.NotifyCanExecuteChanged();
             DeleteTableCommand.NotifyCanExecuteChanged();
         }
-        #endregion
 
-        #region Constructor
         public MainWindowViewModel()
         {
             LoadTables();
             LoadEmployees();
             intiSR();
         }
-        #endregion
 
-        #region initialize SignalR
         private void intiSR()
         {
             _hub.On<Table, string>("ReceiveTableUpdate", (table, action) =>
@@ -106,16 +92,13 @@ namespace RestND.MVVM.ViewModel.Main
                 });
             });
         }
-        #endregion
 
-        #region Login Logout
         [RelayCommand]
         private void LoginLogout()
         {
             if (!IsLoggedIn)
             {
                 var loginWindow = new View.Windows.LoginWindow();
-
                 if (loginWindow.DataContext is Employees.LoginViewModel loginVm)
                 {
                     loginVm.LoginSucceeded += () =>
@@ -124,7 +107,6 @@ namespace RestND.MVVM.ViewModel.Main
                         loginWindow.Close();
                     };
                 }
-
                 loginWindow.ShowDialog();
             }
             else
@@ -133,13 +115,10 @@ namespace RestND.MVVM.ViewModel.Main
                 IsLoggedIn = false;
             }
         }
-        #endregion
 
-        #region Load Tables
         public void LoadTables()
         {
             var result = _tableService.GetAll();
-
             Tables.Clear();
             ActiveTables.Clear();
 
@@ -161,52 +140,33 @@ namespace RestND.MVVM.ViewModel.Main
                     ActiveTables.Add(table);
             }
         }
-        #endregion
 
-        #region Add Table
         [RelayCommand]
         public async Task AddTable()
         {
-            // 1) empty?
             if (!_validator.IsEmptyField(NewTableNumberText, out string emptyErr))
             {
-                TableErrorMessage = emptyErr;
-                return;
+                TableErrorMessage = emptyErr; return;
             }
-
-            // 2) parse number
             if (!int.TryParse(NewTableNumberText, out int parsedNumber))
             {
-                TableErrorMessage = "Please enter a valid number.";
-                return;
+                TableErrorMessage = "Please enter a valid number."; return;
             }
-
-            // 3) positive?
             if (!_validator.CheckPosNum(parsedNumber, out string notPositiveErr))
             {
-                TableErrorMessage = notPositiveErr;
-                return;
+                TableErrorMessage = notPositiveErr; return;
             }
-
-            // 4) unique?
             if (!_validator.CheckIfExists(parsedNumber, out string existsErr))
             {
-                TableErrorMessage = existsErr;
-                return;
+                TableErrorMessage = existsErr; return;
             }
-
-            // 5) room?
             if (!_validator.isFull(out string fullErr))
             {
-                TableErrorMessage = fullErr;
-                return;
+                TableErrorMessage = fullErr; return;
             }
-
-            // 6) parse Max_Diners ONCE (use the generated public property)
             if (!int.TryParse(NewTableMaxDinersText, out int parsedMax) || parsedMax <= 0)
             {
-                TableErrorMessage = "Max diners must be a positive number.";
-                return;
+                TableErrorMessage = "Max diners must be a positive number."; return;
             }
 
             TableErrorMessage = string.Empty;
@@ -228,22 +188,15 @@ namespace RestND.MVVM.ViewModel.Main
                 NewTableNumberText = string.Empty;
                 NewTableMaxDinersText = "2";
                 LoadTables();
-                // ClosePopupAction?.Invoke();
             }
         }
-        #endregion
 
-        #region Delete Table
         [RelayCommand]
         public async Task DeleteTable()
         {
             TableErrorMessage = string.Empty;
-
             if (!_validator.CheckIfnull(SelectedTable, out string nullErr))
-            {
-                TableErrorMessage = nullErr;
-                return;
-            }
+            { TableErrorMessage = nullErr; return; }
 
             if (_tableService.Delete(SelectedTable))
             {
@@ -252,41 +205,27 @@ namespace RestND.MVVM.ViewModel.Main
                 ClosePopupAction?.Invoke();
             }
         }
-        #endregion
 
-        #region Edit Table
         [RelayCommand]
         public async Task EditTable()
         {
             TableErrorMessage = string.Empty;
 
             if (!int.TryParse(EditedTableNumberText, out int parsedNumber))
-            {
-                TableErrorMessage = "Please enter a valid number.";
-                return;
-            }
+            { TableErrorMessage = "Please enter a valid number."; return; }
 
             if (!_validator.CheckPosNum(parsedNumber, out string notPositiveErr))
-            {
-                TableErrorMessage = notPositiveErr;
-                return;
-            }
+            { TableErrorMessage = notPositiveErr; return; }
 
             var duplicate = Tables.FirstOrDefault(t =>
                 t.Table_ID != SelectedTable?.Table_ID &&
                 t.Table_Number == parsedNumber);
 
             if (duplicate != null)
-            {
-                TableErrorMessage = "Another table already has this number.";
-                return;
-            }
+            { TableErrorMessage = "Another table already has this number."; return; }
 
             if (!_validator.CheckIfnull(SelectedTable, out string nullErr))
-            {
-                TableErrorMessage = nullErr;
-                return;
-            }
+            { TableErrorMessage = nullErr; return; }
 
             SelectedTable.Table_Number = parsedNumber;
 
@@ -297,25 +236,20 @@ namespace RestND.MVVM.ViewModel.Main
                 ClosePopupAction?.Invoke();
             }
         }
-        #endregion
 
-        #region Choose Employee for Order
         public void LoadEmployees()
         {
             Employees.Clear();
             var waiters = _employeeServices.GetByRoleName("Waiter");
-            foreach (var emp in waiters)
-                Employees.Add(emp);
-
-            if (Employees.Count > 0)
-                SelectedEmployee = Employees[0];
+            foreach (var emp in waiters) Employees.Add(emp);
+            if (Employees.Count > 0) SelectedEmployee = Employees[0];
         }
 
         [RelayCommand]
         private void TableClick(Table table)
         {
             SelectedTableForOrder = table;
-            DinersCount = 1;                 // use property so UI updates
+            DinersCount = 1;
             OrderPopupError = string.Empty;
             OpenEmpForOrder?.Invoke(table);
         }
@@ -326,25 +260,13 @@ namespace RestND.MVVM.ViewModel.Main
             OrderPopupError = string.Empty;
 
             if (SelectedTableForOrder == null)
-            {
-                OrderPopupError = "No table selected.";
-                return;
-            }
+            { OrderPopupError = "No table selected."; return; }
             if (SelectedEmployee == null)
-            {
-                OrderPopupError = "Please choose a waiter.";
-                return;
-            }
+            { OrderPopupError = "Please choose a waiter."; return; }
             if (DinersCount <= 0)
-            {
-                OrderPopupError = "Number of diners must be positive.";
-                return;
-            }
+            { OrderPopupError = "Number of diners must be positive."; return; }
             if (SelectedTableForOrder.Max_Diners > 0 && DinersCount > SelectedTableForOrder.Max_Diners)
-            {
-                OrderPopupError = $"Table allows up to {SelectedTableForOrder.Max_Diners} diners.";
-                return;
-            }
+            { OrderPopupError = $"Table allows up to {SelectedTableForOrder.Max_Diners} diners."; return; }
 
             var order = new Order
             {
@@ -361,6 +283,5 @@ namespace RestND.MVVM.ViewModel.Main
 
             ClosePopupAction?.Invoke();
         }
-        #endregion
     }
 }
