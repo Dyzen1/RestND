@@ -133,59 +133,34 @@ public class Transaction
     #endregion
 
     #region Delete and Add Order
-    public bool DeleteOrder(int orderId)
-    {
-        _db.OpenConnection();
-        using var transaction = _db.Connection.BeginTransaction();
-
-        try
-        {
-            // 1. Delete from child table first
-            string deleteDishesQuery = "DELETE FROM dishes_in_order WHERE Order_ID = @id";
-            _db.ExecuteNonQuery(deleteDishesQuery, _db.Connection, transaction,
-                new MySqlParameter("@id", orderId)
-            );
-
-            // 2. Delete from parent table
-            string deleteOrderQuery = "DELETE FROM orders WHERE Order_ID = @id";
-            int rowsAffected = _db.ExecuteNonQuery(deleteOrderQuery, _db.Connection, transaction,
-                new MySqlParameter("@id", orderId)
-            );
-
-            if (rowsAffected == 0)
-            {
-                transaction.Rollback();
-                _db.CloseConnection();
-                return false;
-            }
-
-            transaction.Commit();
-            _db.CloseConnection();
-            return true;
-        }
-        catch (Exception)
-        {
-            transaction.Rollback();
-            _db.CloseConnection();
-            throw;
-        }
-    }
-
     public bool AddOrder(Order o)
     {
+        // ---- Guards (quick feedback before touching the DB) ----
+        if (o == null || o.Table == null || o.assignedEmployee == null)
+            throw new ArgumentException("Order, Table, and AssignedEmployee must be provided.");
+
+        if (o.People_Count <= 0)
+            throw new ArgumentException("People_Count must be a positive number.");
+
+        if (o.Table.Max_Diners > 0 && o.People_Count > o.Table.Max_Diners)
+            throw new ArgumentException($"People_Count ({o.People_Count}) exceeds table capacity ({o.Table.Max_Diners}).");
+
         _db.OpenConnection();
         using var transaction = _db.Connection.BeginTransaction();
 
         try
         {
-            // 1. Insert the Order
-            string query = "INSERT INTO orders (Employee_Name, Table_Number, Price) " +
-                           "VALUES (@name, @number, @price)";
+            // 1) Insert the Order (NOTE: using your existing column name 'Price')
+            string insertOrderSql =
+                "INSERT INTO orders (Employee_Name, Table_Number, People_Count, Price, Is_Active) " +
+                "VALUES (@name, @number, @people, @price, @active)";
 
-            bool orderAdded = _db.ExecuteNonQuery(query, _db.Connection, transaction,
+            bool orderAdded = _db.ExecuteNonQuery(insertOrderSql, _db.Connection, transaction,
                 new MySqlParameter("@name", o.assignedEmployee.Employee_Name),
                 new MySqlParameter("@number", o.Table.Table_Number),
-                new MySqlParameter("@price", o.Bill.Price)
+                new MySqlParameter("@people", o.People_Count),
+                new MySqlParameter("@price", o.Bill?.Price ?? 0.0),
+                new MySqlParameter("@active", o.Is_Active)
             ) > 0;
 
             if (!orderAdded)
@@ -195,34 +170,99 @@ public class Transaction
                 return false;
             }
 
-            // 2. Get the new Order ID
-            int newOrderId = Convert.ToInt32(_db.ExecuteScalar("SELECT LAST_INSERT_ID();", _db.Connection, transaction));
+            // 2) Get the new Order ID
+            int newOrderId = Convert.ToInt32(
+                _db.ExecuteScalar("SELECT LAST_INSERT_ID();", _db.Connection, transaction)
+            );
 
-            // 3. Insert Dishes 
-            var dishInOrderServices = new DishInOrderServices();
-            foreach(var dish in o.DishInOrder)
+            // 3) Insert Dishes for this order (inside the SAME transaction)
+            var dishInOrderServices = new DishInOrderServices(_db); // ensure this reuses the SAME _db
+
+            if (o.DishInOrder != null && o.DishInOrder.Count > 0)
             {
-                bool dishesAdded = dishInOrderServices.AddDishToOrder(newOrderId, dish);
-                if (!dishesAdded)
+                foreach (var dish in o.DishInOrder)
                 {
-                    transaction.Rollback();
-                    _db.CloseConnection();
-                    return false;
+                    // requires an overload that accepts the existing connection+transaction (see below)
+                    bool dishesAdded = dishInOrderServices.AddDishToOrder(newOrderId, dish, _db.Connection, transaction);
+                    if (!dishesAdded)
+                    {
+                        transaction.Rollback();
+                        _db.CloseConnection();
+                        return false;
+                    }
                 }
             }
 
-            // 4. Commit transaction if everything succeeded
+            // 4) Commit transaction if everything succeeded
             transaction.Commit();
             _db.CloseConnection();
             return true;
         }
-        catch (Exception)
+        catch
         {
             transaction.Rollback();
             _db.CloseConnection();
             throw;
         }
     }
+
+
+
+    public bool DeleteOrder(int orderId)
+    {
+        if (orderId <= 0) return false;
+
+        _db.OpenConnection();
+        try
+        {
+            // Safety check — if the order has dishes, do a soft delete instead
+            var hasDishes = Convert.ToInt32(_db.ExecuteScalar(
+                "SELECT COUNT(*) FROM dishes_in_order WHERE Order_ID = @id",
+                _db.Connection, null,
+                new MySqlParameter("@id", orderId)
+            )) > 0;
+
+            if (hasDishes)
+            {
+                // Soft delete (match your app-wide pattern)
+                const string softDelete = "UPDATE orders SET Is_Active = 0 WHERE Order_ID = @id";
+                return _db.ExecuteNonQuery(softDelete, _db.Connection, null,
+                    new MySqlParameter("@id", orderId)
+                ) > 0;
+            }
+
+            // No dishes ? do a hard delete in a single transaction
+            using var tx = _db.Connection.BeginTransaction();
+            try
+            {
+                const string deleteDishes = "DELETE FROM dishes_in_order WHERE Order_ID = @id";
+                _db.ExecuteNonQuery(deleteDishes, _db.Connection, tx, new MySqlParameter("@id", orderId));
+
+                const string deleteOrder = "DELETE FROM orders WHERE Order_ID = @id";
+                int rows = _db.ExecuteNonQuery(deleteOrder, _db.Connection, tx, new MySqlParameter("@id", orderId));
+
+                if (rows == 0)
+                {
+                    tx.Rollback();
+                    return false;
+                }
+
+                tx.Commit();
+                return true;
+            }
+            catch
+            {
+                // Attempt to roll back and rethrow
+                try { tx.Rollback(); } catch { /* ignore */ }
+                throw;
+            }
+        }
+        finally
+        {
+            _db.CloseConnection();
+        }
+    }
+
     #endregion
 
     #region soft delete product from everywhere

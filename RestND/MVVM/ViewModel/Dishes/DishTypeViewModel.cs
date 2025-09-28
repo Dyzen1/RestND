@@ -122,11 +122,11 @@ public partial class DishTypeViewModel : ObservableObject
                 existingTypes,
                 out var err))
         {
-            ErrorMessage = err;
+            errorMessage = err;
             return;
         }
         // passed validation:
-        ErrorMessage = string.Empty;
+        errorMessage = string.Empty;
         SelectedDishType.Is_Active = true;
 
         bool success = _dishTypeService.Update(SelectedDishType);
@@ -147,17 +147,17 @@ public partial class DishTypeViewModel : ObservableObject
     {
         // 1) Validate full form (Employee-style)
         if (!_validator.ValidateForAdd(
-                NewTypeInput,
+                newTypeInput,
                 DishTypes,
                 out var err))
         {
-            ErrorMessage = err;
+            errorMessage = err;
             return;
         }
 
         var type = new DishType
         {
-            DishType_Name = NewTypeInput.Trim(),
+            DishType_Name = newTypeInput.Trim(),
             Is_Active = true
         };
 
@@ -169,8 +169,8 @@ public partial class DishTypeViewModel : ObservableObject
             await App.DishHub.SendAsync("NotifyDishUpdate", null, "dishType-changed");
             LoadDishTypes();
             InitializeHubSubscriptions();
-            ErrorMessage = string.Empty;
-            NewTypeInput = string.Empty;
+            errorMessage = string.Empty;
+            newTypeInput = string.Empty;
         }
     }
     #endregion

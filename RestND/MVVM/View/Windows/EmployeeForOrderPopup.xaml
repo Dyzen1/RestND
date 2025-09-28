@@ -9,24 +9,50 @@
         Style="{StaticResource popupStyle}"
         Title="EmployeeForOrderPopup" Width="400" Height="300"
         WindowStartupLocation="CenterOwner">
+
     <Grid>
         <Border Style="{StaticResource windowBorder}">
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Width="250">
-                <!-- Table selection -->
-                <Label Content="Select An Employee:" Width="150"/>
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical"
+                        Width="250">
+
+                <!-- Employee selection -->
+                <Label Content="Select an employee:" Width="150"/>
                 <ComboBox ItemsSource="{Binding Employees}"
                           SelectedItem="{Binding SelectedEmployee}"
-                          DisplayMemberPath="Employee_Name"/>
+                          DisplayMemberPath="Employee_Name"
+                          Width="220"/>
+
+                <!-- Diners input -->
+                <Label Content="Number of diners:" Margin="0,12,0,4"  Width="130" />
+                <TextBox Text="{Binding DinersCount, UpdateSourceTrigger=PropertyChanged}"
+                         Width="220" HorizontalAlignment="Center"/>
+                <!-- Show max allowed from the selected table -->
+                <TextBlock HorizontalAlignment="Center" Margin="0,14,0,0">
+                    <Run Text="Max allowed:" Foreground="{DynamicResource LightText}" />
+                    <Run Text="{Binding SelectedTableForOrder.Max_Diners}" Foreground="White" FontWeight="SemiBold"/>
+
+                </TextBlock>
+
+
+                <!-- Validation error from VM (e.g., diners > max) -->
+                <TextBlock Text="{Binding OrderPopupError}"
+                           Foreground="Tomato"
+                           Margin="0,8,0,0"
+                           TextWrapping="Wrap"/>
+
                 <!-- Submit -->
                 <Button Content="Start Order"
                         Command="{Binding CreateOrderCommand}"
                         Style="{StaticResource SubmitBtn}"
-                        Margin="0 30 0 0"/>
+                        Margin="0 16 10 20"
+                        HorizontalAlignment="Center"/>
             </StackPanel>
         </Border>
 
+        <!-- Bottom controls you already had -->
         <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-        <TextBlock Style="{DynamicResource copyWrite}" />
-
+        <TextBlock Style="{DynamicResource copyWrite}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,15,15"/>
     </Grid>
 </Window>

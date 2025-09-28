@@ -1,29 +1,23 @@
-﻿using RestND.MVVM.ViewModel.Orders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RestND.MVVM.Model.Orders;
+using RestND.MVVM.ViewModel.Orders;
+using RestND.MVVM.Model.Orders;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RestND.MVVM.View.Windows
 {
-    /// <summary>
-    /// Interaction logic for OrderWindow.xaml
-    /// </summary>
     public partial class OrderWindow : Window
     {
+        // keep for XAML designer / old calls
         public OrderWindow()
         {
             InitializeComponent();
             this.DataContext = new OrderViewModel();
+        }
+
+        public OrderWindow(Order order)
+        { 
+            InitializeComponent();
+            this.DataContext = new OrderViewModel(order);
         }
     }
 }

@@ -6,7 +6,6 @@ using MySql.Data.MySqlClient;
 using RestND.MVVM.Model.Orders;
 using RestND.MVVM.Model.Tables;
 
-
 namespace RestND.Data
 {
     public class OrderServices : BaseService<Order>
@@ -31,21 +30,31 @@ namespace RestND.Data
             {
                 if (row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
                     continue; // Skip inactive orders
+
                 orders.Add(new Order
                 {
                     Order_ID = Convert.ToInt32(row["Order_ID"]),
+
                     assignedEmployee = new Employee
                     {
                         Employee_Name = row["Employee_Name"].ToString()
                     },
+
                     Table = new Table
                     {
                         Table_Number = Convert.ToInt32(row["Table_Number"])
                     },
+
+                    // Bill_Price is your column name:
                     Bill = new Bill
                     {
-                        Price = Convert.ToDouble(row["Price"] )
-                    }
+                        Price = Convert.ToDouble(row["Bill_Price"])
+                    },
+
+                    // NEW:
+                    People_Count = Convert.ToInt32(row["People_Count"]),
+
+                    Is_Active = Convert.ToBoolean(row["Is_Active"])
                 });
             }
 
@@ -53,57 +62,65 @@ namespace RestND.Data
         }
         #endregion
 
-        #region Add Final Order 
+        #region Add Final Order (via transaction)
         public override bool Add(Order item)
         {
+           
             return _transaction.AddOrder(item);
         }
         #endregion
 
-        #region Add Starting Order(no dishes)
-
+        #region Add Starting Order (no dishes)
         public bool AddStartingOrder(Order o)
         {
-            string query = "INSERT INTO orders (Employee_Name, Table_Number, Bill_Price, Is_Active) " +
-                           "VALUES (@name, @number, @price, @active)";
+            string query =
+                "INSERT INTO orders (Employee_Name, Table_Number, People_Count, Bill_Price, Is_Active) " +
+                "VALUES (@name, @number, @people, @price, @active)";
+
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@name", o.assignedEmployee.Employee_Name),
                 new MySqlParameter("@number", o.Table.Table_Number),
+                // NEW:
+                new MySqlParameter("@people", o.People_Count),
                 new MySqlParameter("@price", o.Bill.Price),
                 new MySqlParameter("@active", o.Is_Active)
             ) > 0;
         }
-
         #endregion
 
         #region Delete Order
         public override bool Delete(Order d)
         {
-            if(d.Order_ID <= 0)
+            if (d.Order_ID <= 0)
                 return false;
-            if(d.DishInOrder.Count > 0)
+
+            if (d.DishInOrder.Count > 0)
             {
                 d.Is_Active = false;
-                string query = "UPDATE orders SET Is_Active = @active WHERE Order_ID = @id";
-                return _db.ExecuteNonQuery(query,
+                string softDelete = "UPDATE orders SET Is_Active = @active WHERE Order_ID = @id";
+                return _db.ExecuteNonQuery(softDelete,
                     new MySqlParameter("@active", d.Is_Active),
                     new MySqlParameter("@id", d.Order_ID)) > 0;
             }
-            return _transaction.DeleteOrder(d.Order_ID);
 
+            return _transaction.DeleteOrder(d.Order_ID);
         }
         #endregion
 
         #region Update Order
         public override bool Update(Order o)
         {
-            string query = "UPDATE orders SET Order_ID = @id, Employee_Name = @name, Table_Number = @number, Bill_Price = @price" +
-                           "WHERE Dish_ID = @id";
+            string query =
+                "UPDATE orders " +
+                "SET Employee_Name = @name, Table_Number = @number, People_Count = @people, Bill_Price = @price " +
+                "WHERE Order_ID = @id"; 
 
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@id", o.Order_ID),
                 new MySqlParameter("@name", o.assignedEmployee.Employee_Name),
                 new MySqlParameter("@number", o.Table.Table_Number),
+                // NEW:
+                new MySqlParameter("@people", o.People_Count),
                 new MySqlParameter("@price", o.Bill.Price)
             ) > 0;
         }

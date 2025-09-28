@@ -11,7 +11,7 @@
         Style="{StaticResource popupStyle}"
         Title="TablePopupWindow" Width="400" Height="300"
         WindowStartupLocation="CenterOwner">
-    
+
     <Window.Resources>
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Window.Resources>
@@ -27,11 +27,17 @@
                 <!-- Table Number Input -->
                 <TextBox Text="{Binding NewTableNumberText, UpdateSourceTrigger=PropertyChanged}" Width="150"/>
 
+                <Label Content="Maximum Seats:" Width="150" Margin="0,12,0,4"/>
+
+                <TextBox Text="{Binding NewTableMaxDinersText, UpdateSourceTrigger=PropertyChanged}"
+                         Width="150"/>
 
                 <!-- Real-Time Error Display -->
                 <TextBlock Text="{Binding TableErrorMessage}"
                            Style="{DynamicResource errorMessage}"
                            Visibility="{Binding TableErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+
 
                 <!-- Save Table Button -->
                 <Button Content="Add Table"

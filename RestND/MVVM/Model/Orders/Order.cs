@@ -54,6 +54,15 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
+        #region People_Count (diners)
+        private int _People_Count;
+        public int People_Count
+        {
+            get { return _People_Count; }
+            set { _People_Count = value; }
+        }
+        #endregion
+
         #region Order Bill
         private Bill _Bill;
         public Bill Bill
@@ -80,6 +89,7 @@ namespace RestND.MVVM.Model.Orders
             this.Table = table;
             this.DishInOrder = null;
             this.Is_Active = true;
+            this.People_Count = 1;
             _OrderCount++;
         }
         #endregion
@@ -87,6 +97,7 @@ namespace RestND.MVVM.Model.Orders
         #region Default constructor
         public Order()
         {
+            this.People_Count = 1;
             _OrderCount++;
         }
         #endregion

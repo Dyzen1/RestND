@@ -54,6 +54,52 @@ namespace RestND.Data
 
             return employees;
         }
+
+        public List<Employee> GetByRoleName(string roleName)
+        {
+            var list = new List<Employee>();
+
+
+            string sql = @"
+        SELECT  e.Employee_ID,
+                e.Employee_Name,
+                e.Employee_Lastname,
+                e.Email,
+                e.Is_Active,
+                e.Role_ID,          -- if you want to carry the FK
+                r.Role_Name
+        FROM employees e
+        INNER JOIN roles r ON r.Role_ID = e.Role_ID
+        WHERE e.Is_Active = 1
+          AND r.Is_Active = 1
+          AND LOWER(r.Role_Name) = LOWER(@role)";
+
+            var rows = _db.ExecuteReader(sql, new MySqlParameter("@role", roleName));
+
+            foreach (var row in rows)
+            {
+                list.Add(new Employee
+                {
+                    Employee_ID = Convert.ToInt32(row["Employee_ID"]),
+                    Employee_Name = row["Employee_Name"]?.ToString(),
+                    // Model property is Employee_LastName (capital N). DB column is Employee_Lastname.
+                    Employee_LastName = row["Employee_Lastname"]?.ToString(),
+                    Email = row["Email"]?.ToString(),
+                    Is_Active = Convert.ToBoolean(row["Is_Active"]),
+
+                    // Fill the Role object
+                    Employee_Role = new Role
+                    {
+                        Role_ID = row["Role_ID"] is DBNull ? 0 : Convert.ToInt32(row["Role_ID"]),
+                        Role_Name = row["Role_Name"]?.ToString()
+                    }
+                });
+            }
+
+            return list;
+        }
+
+
         #endregion
 
         #region Add Employee

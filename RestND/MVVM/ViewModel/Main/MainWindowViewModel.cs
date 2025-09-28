@@ -47,6 +47,9 @@ namespace RestND.MVVM.ViewModel.Main
         [ObservableProperty]
         private string newTableNumberText;
 
+        [ObservableProperty] 
+        private string newTableMaxDinersText = "2"; 
+
         [ObservableProperty]
         private string tableErrorMessage;
 
@@ -60,6 +63,11 @@ namespace RestND.MVVM.ViewModel.Main
         private Employee selectedEmployee;
         [ObservableProperty]
         private Table selectedTableForOrder;
+        [ObservableProperty] 
+        private int dinersCount = 1;
+        [ObservableProperty]
+        private string orderPopupError;
+
         #endregion
 
         public string LoginButtonText => IsLoggedIn ? "Logout" : "Login";
@@ -192,36 +200,48 @@ namespace RestND.MVVM.ViewModel.Main
         [RelayCommand]
         public async Task AddTable()
         {
-            // 1. check if input is empty
+            // 1. empty?
             if (!_validator.IsEmptyField(NewTableNumberText, out string emptyErr))
             {
                 TableErrorMessage = emptyErr;
                 return;
             }
-            // 2. Parse input
+
+            // 2. parse table number
             if (!int.TryParse(NewTableNumberText, out int parsedNumber))
             {
                 TableErrorMessage = "Please enter a valid number.";
                 return;
             }
-            // 3. Validate it's positive
+
+            // 3. positive?
             if (!_validator.CheckPosNum(parsedNumber, out string notPositiveErr))
             {
                 TableErrorMessage = notPositiveErr;
                 return;
             }
-            // 4. Validate table number uniqueness
+
+            // 4. unique?
             if (!_validator.CheckIfExists(parsedNumber, out string existsErr))
             {
                 TableErrorMessage = existsErr;
                 return;
             }
-            // 5. Check if there’s room for a new table
+
+            // 5. room?
             if (!_validator.isFull(out string fullErr))
             {
                 TableErrorMessage = fullErr;
                 return;
             }
+
+            // ✅ Parse Max_Diners once (use the generated property name)
+            if (!int.TryParse(newTableMaxDinersText, out int parsedMax) || parsedMax <= 0)
+            {
+                TableErrorMessage = "Max diners must be a positive number.";
+                return;
+            }
+
             // 6. Validation passed
             TableErrorMessage = string.Empty;
 
@@ -233,17 +253,20 @@ namespace RestND.MVVM.ViewModel.Main
             NewTable.Table_Status = true;
             NewTable.C = slot.C;
             NewTable.R = slot.R;
+            NewTable.Max_Diners = parsedMax;   // ✅ reuse the single parsed value
 
             if (_tableService.Add(NewTable))
             {
                 await _hub.SendAsync("NotifyTableUpdate", NewTable, "add");
                 NewTable = new Table();
                 NewTableNumberText = string.Empty;
+                newTableMaxDinersText = "2";
                 LoadTables();
-                //ClosePopupAction?.Invoke();
+                // ClosePopupAction?.Invoke();
             }
         }
         #endregion
+
 
         #region Delete Table
 
@@ -323,33 +346,73 @@ namespace RestND.MVVM.ViewModel.Main
         #endregion
 
         #region Choose Employee for Order
-        // for combo box in popup    
+           
         public void LoadEmployees()
         {
             Employees.Clear();
-            var employeeNames = _employeeServices.GetAll();
-            foreach (var emp in employeeNames)
-            {
+            var waiters = _employeeServices.GetByRoleName("Waiter");
+
+            foreach (var emp in waiters)
                 Employees.Add(emp);
-            }
+
+            if (Employees.Count > 0)
+                SelectedEmployee = Employees[0];
         }
-        // when table is clicked, open popup to choose employee
+ 
         [RelayCommand]
         private void TableClick(Table table)
         {
             SelectedTableForOrder = table;
+            dinersCount = 1;             // reset default
+            orderPopupError = string.Empty;
             OpenEmpForOrder?.Invoke(table);
         }
         // when employee is chosen and "Start Order" is clicked, create order
         [RelayCommand]
         private void CreateOrder()
         {
+            orderPopupError = string.Empty;
+
+            if (SelectedTableForOrder == null)
+            {
+                orderPopupError = "No table selected.";
+                return;
+            }
+            if (SelectedEmployee == null)
+            {
+                orderPopupError = "Please choose a waiter.";
+                return;
+            }
+            if (dinersCount <= 0)
+            {
+                orderPopupError = "Number of diners must be positive.";
+                return;
+            }
+            // Enforce Max_Diners
+            if (SelectedTableForOrder.Max_Diners > 0 && dinersCount > SelectedTableForOrder.Max_Diners)
+            {
+                orderPopupError = $"Table allows up to {SelectedTableForOrder.Max_Diners} diners.";
+                return;
+            }
+
+            
             var order = new Order
             {
                 assignedEmployee = SelectedEmployee,
                 Table = SelectedTableForOrder,
+                People_Count = dinersCount
             };
 
+
+            new View.Windows.OrderWindow(order)
+            {
+                Owner = Application.Current.MainWindow,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            }.Show();
+
+
+
+            ClosePopupAction?.Invoke();
         }
 
         #endregion

@@ -22,6 +22,16 @@ namespace RestND.MVVM.Model.Tables
         }
         #endregion
 
+        #region Maximum table diners
+
+        private int _Max_Diners;
+        public int Max_Diners
+        {
+            get => _Max_Diners;
+            set => _Max_Diners = value;
+        }
+        #endregion
+
         #region Columns (C)
         private int _C;
         public int C
@@ -73,6 +83,7 @@ namespace RestND.MVVM.Model.Tables
             this.R = r;
             this.Table_Number = tableNumber;
             this.Table_Status = true;
+            this.Max_Diners = 2;
             this.Is_Active = false;
         }
         #endregion
@@ -80,6 +91,8 @@ namespace RestND.MVVM.Model.Tables
         #region Default Constructor
         public Table()
         {
+            this.Max_Diners = 2;
+            this.Is_Active = false;
         }
         #endregion
     }

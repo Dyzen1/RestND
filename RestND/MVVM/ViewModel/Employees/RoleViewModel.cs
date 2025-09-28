@@ -2,8 +2,10 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.AspNetCore.SignalR.Client;
+// using Mysqlx.Crud; // <- not used here; remove if unused elsewhere
 using RestND.Data;
 using RestND.MVVM.Model.Employees;
+using RestND.MVVM.Model.Security;
 using RestND.utilities;
 using System;
 using System.Collections.ObjectModel;
@@ -17,7 +19,8 @@ namespace RestND.MVVM.ViewModel
         #region Services & Hub
 
         private readonly RoleServices _roleService = new();
-        private readonly HubConnection _hub;
+
+        private readonly HubConnection _hub = App.EmployeeHub;
 
         #endregion
 
@@ -32,7 +35,7 @@ namespace RestND.MVVM.ViewModel
 
         [ObservableProperty] private ObservableCollection<Role> roles = new();
 
-        // ✅ Option B: never null — use a placeholder Role when there's no selection
+        // Never null — use a placeholder Role when there's no selection
         [ObservableProperty] private Role selectedRole = new();
 
         [ObservableProperty] private string newRoleName = string.Empty;
@@ -58,7 +61,7 @@ namespace RestND.MVVM.ViewModel
 
         #region Hub Registration
 
-        // Call this once after the hub is started
+        // Call this once after the hub is started (e.g., after App.EmployeeHub.StartAsync())
         public void RegisterHubHandlers()
         {
             // SignalR → local update + Messenger broadcast
@@ -127,10 +130,16 @@ namespace RestND.MVVM.ViewModel
         private async Task AddRole()
         {
             if (string.IsNullOrWhiteSpace(NewRoleName))
-            { FormErrorMessage = "Role name is required."; return; }
+            {
+                FormErrorMessage = "Role name is required.";
+                return;
+            }
 
             if (Roles.Any(r => string.Equals(r.Role_Name, NewRoleName.Trim(), StringComparison.OrdinalIgnoreCase)))
-            { FormErrorMessage = "Role name already exists."; return; }
+            {
+                FormErrorMessage = "Role name already exists.";
+                return;
+            }
 
             var role = new Role
             {
@@ -142,9 +151,12 @@ namespace RestND.MVVM.ViewModel
             if (_roleService.Add(role))
             {
                 LoadRoles();
+
                 // Fetch the created role (with its DB id)
                 var created = Roles.FirstOrDefault(r =>
                     r.Role_Name.Equals(role.Role_Name, StringComparison.OrdinalIgnoreCase)) ?? role;
+
+                AuthContext.ApplyRoleUpdate(created);
 
                 // Cross-client broadcast (SignalR)
                 await _hub.SendAsync("NotifyRoleUpdate", created, "add");
@@ -161,28 +173,40 @@ namespace RestND.MVVM.ViewModel
 
                 RequestClose?.Invoke();
             }
-            else FormErrorMessage = "Failed to create role.";
+            else
+            {
+                FormErrorMessage = "Failed to create role.";
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanModifyRole))]
         private async Task UpdateRole()
         {
-            // With Option B, SelectedRole is never null.
-            // Treat Role_ID == 0 as "placeholder/unsaved" → can't update.
+            // With placeholder pattern, SelectedRole is never null.
             if (SelectedRole.Role_ID == 0)
-            { FormErrorMessage = "Select an existing role to update."; return; }
+            {
+                FormErrorMessage = "Select an existing role to update.";
+                return;
+            }
 
             if (string.IsNullOrWhiteSpace(SelectedRole.Role_Name))
-            { FormErrorMessage = "Role name is required."; return; }
+            {
+                FormErrorMessage = "Role name is required.";
+                return;
+            }
 
             if (Roles.Any(r => r.Role_ID != SelectedRole.Role_ID &&
                                string.Equals(r.Role_Name, SelectedRole.Role_Name, StringComparison.OrdinalIgnoreCase)))
-            { FormErrorMessage = "Role name already exists."; return; }
+            {
+                FormErrorMessage = "Role name already exists.";
+                return;
+            }
 
             if (_roleService.Update(SelectedRole))
             {
                 LoadRoles();
                 var updated = Roles.FirstOrDefault(r => r.Role_ID == SelectedRole.Role_ID) ?? SelectedRole;
+                AuthContext.ApplyRoleUpdate(updated);
 
                 await _hub.SendAsync("NotifyRoleUpdate", updated, "update");
                 WeakReferenceMessenger.Default.Send(new RoleChangedMessage(updated, "update"));
@@ -192,27 +216,44 @@ namespace RestND.MVVM.ViewModel
 
                 FormErrorMessage = string.Empty;
             }
-            else FormErrorMessage = "Failed to update role.";
+            else
+            {
+                FormErrorMessage = "Failed to update role.";
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanModifyRole))]
         private async Task DeleteRole()
         {
             if (SelectedRole.Role_ID == 0)
-            { FormErrorMessage = "Select an existing role to delete."; return; }
+            {
+                FormErrorMessage = "Select an existing role to delete.";
+                return;
+            }
 
             var toDelete = SelectedRole;
 
             if (_roleService.Delete(toDelete))
             {
+                // If current user’s role was deleted, clear their role
+                AuthContext.ApplyRoleUpdate(new Role
+                {
+                    Role_ID = toDelete.Role_ID,
+                    Role_Name = toDelete.Role_Name,
+                    Permissions = AppPermission.None,
+                    Is_Active = false
+                });
+
                 await _hub.SendAsync("NotifyRoleUpdate", toDelete, "delete");
                 WeakReferenceMessenger.Default.Send(new RoleChangedMessage(toDelete, "delete"));
 
                 LoadRoles();
-                // ✅ Never leave selection null — fallback to first or placeholder
                 SelectedRole = Roles.FirstOrDefault() ?? new Role();
             }
-            else FormErrorMessage = "Failed to delete role.";
+            else
+            {
+                FormErrorMessage = "Failed to delete role.";
+            }
         }
 
         #endregion
@@ -221,7 +262,7 @@ namespace RestND.MVVM.ViewModel
 
         private bool CanModifyRole()
         {
-            // With Option B, always non-null; only allow modify when it's a persisted role
+            // With placeholder, always non-null; only allow modify when it's a persisted role
             return SelectedRole.Role_ID != 0;
         }
 

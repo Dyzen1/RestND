@@ -46,17 +46,27 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Waiter's name here" 
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Foreground="{DynamicResource LightText}"
-                           FontSize="13" Grid.Column="0"/>
-                
-                <TextBlock Text="Amount of diners here" 
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Foreground="{DynamicResource LightText}"
-                           FontSize="13" Grid.Column="1"/>
+                <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center">
+                    <TextBlock Text="Waiter's Name"
+               Foreground="{DynamicResource LightText}"
+               Opacity="0.7" FontSize="11" Margin="0,20,0,0"/>
+                    <TextBlock Text="{Binding DataContext.CurrentOrder.assignedEmployee.Employee_Name,
+                              RelativeSource={RelativeSource AncestorType=Window},
+                              TargetNullValue=—}"
+               Foreground="{DynamicResource LightText}"
+               FontSize="13"/>
+                </StackPanel>
+
+
+                <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
+                    <TextBlock Text="Dinner's"
+               Foreground="{DynamicResource LightText}"
+               Opacity="0.7" FontSize="11" Margin="0,20,0,4"/>
+                    <TextBlock Text="{Binding DataContext.CurrentOrder.People_Count,
+                              RelativeSource={RelativeSource AncestorType=Window}}"
+                               Foreground="{DynamicResource LightText}"
+                               FontSize="13"/>
+                </StackPanel>
 
                 <uc:SearchBar x:Name="DishSearch" Grid.Row="1" Grid.Column="2"
                               Placeholder="Search for a product" Height="32"/>

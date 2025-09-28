@@ -20,15 +20,25 @@ namespace RestND.MVVM.ViewModel.Orders
         [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
         [ObservableProperty] private DishType? selectedDishType;
         private ObservableCollection<Dish> allDishes = new();
+
+        [ObservableProperty] private Order currentOrder;
+
         [ObservableProperty] private ObservableCollection<Dish> availableDishes = new();
         #endregion
+
 
         #region Constructor
         public OrderViewModel()
         {
+          
+        }
+        public OrderViewModel(Order order)
+        {
+            CurrentOrder = order ?? new Order();
             LoadTypesAndDishes();
         }
         #endregion
+
 
         private void LoadTypesAndDishes()
         {
