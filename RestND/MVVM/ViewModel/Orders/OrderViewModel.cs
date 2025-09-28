@@ -1,20 +1,62 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
-using RestND.MVVM.Model.Orders;
 using RestND.Data;
 using RestND.MVVM.Model;
+using RestND.MVVM.Model.Orders;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace RestND.MVVM.ViewModel.Orders
 {
     public partial class OrderViewModel : ObservableObject
     {
         #region Services
-        private readonly OrderServices _orderService;
-        private readonly DishInOrderServices _dishInOrderServices;
-        private readonly DishServices _dishServices;
+        private readonly DishServices _dishSvc = new();
+        private readonly DishTypeServices _typeSvc = new();
         #endregion
+
+        #region Observable Properties
+        [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
+        [ObservableProperty] private DishType? selectedDishType;
+        private ObservableCollection<Dish> allDishes = new();
+        [ObservableProperty] private ObservableCollection<Dish> availableDishes = new();
+        #endregion
+
+        #region Constructor
+        public OrderViewModel()
+        {
+            LoadTypesAndDishes();
+        }
+        #endregion
+
+        private void LoadTypesAndDishes()
+        {
+            // 1) load types (you can prepend an “All” pseudo-type if you want)
+            var types = _typeSvc.GetAll(); // List<DishType>
+            DishTypes = new ObservableCollection<DishType>(types);
+
+            // 2) load all dishes once (cache)
+            var dishes = _dishSvc.GetAll(); // List<Dish>
+            allDishes = new ObservableCollection<Dish>(dishes);
+
+            // 3) initial view = all
+            AvailableDishes = new ObservableCollection<Dish>(allDishes);
+        }
+
+        [RelayCommand]
+        private void ApplyDishTypeFilter(DishType? type)
+        {
+            if (type is null)
+            {
+                // show all
+                AvailableDishes = new ObservableCollection<Dish>(allDishes);
+                return;
+            }
+
+            var filtered = allDishes.Where(d => d.Dish_Type?.DishType_ID == type.DishType_ID);
+            AvailableDishes = new ObservableCollection<Dish>(filtered);
+        }
 
         //[RelayCommand]
         //private void PrintBill()

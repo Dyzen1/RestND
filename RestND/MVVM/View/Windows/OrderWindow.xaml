@@ -28,6 +28,16 @@
             <Border Background="#22343f" BorderBrush="CadetBlue" BorderThickness="1"
                     Grid.ColumnSpan="3" Margin="8" CornerRadius="10"/>
 
+            <uc:DishTypesSideBar Grid.Column="0"
+                                 DishTypes="{Binding DishTypes}"
+                                 SelectedDishType="{Binding SelectedDishType, Mode=TwoWay}"
+                                 SelectCommand="{Binding ApplyDishTypeFilterCommand}"/>
+
+            <!-- RIGHT: dish cards grid that shows filtered results -->
+            <ItemsControl Grid.Column="2"
+                      ItemsSource="{Binding AvailableDishes}">
+            </ItemsControl>
+
             <Grid Grid.ColumnSpan="3">
 
                 <Grid.ColumnDefinitions>

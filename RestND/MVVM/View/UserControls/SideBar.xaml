@@ -9,7 +9,7 @@
              xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF" 
              xmlns:conv="clr-namespace:RestND.Converters"
              Name="sideBar"
-             d:DesignHeight="320" d:DesignWidth="150">
+             d:DesignHeight="380" d:DesignWidth="150">
 
     <UserControl.DataContext>
         <vm:NavigationViewModel/>
@@ -46,12 +46,12 @@
                     IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanDishes}"/>
             
             <Button Style="{StaticResource SideBarBtn}"
-          Command="{Binding NavigateCommand}"
-          CommandParameter="SoftDrinks"
-          Content="SoftDrinks"
-          Tag="Glass"
-          ToolTip="Add Soft Drinks"
-          IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanSoftDrinks}"/>
+                  Command="{Binding NavigateCommand}"
+                  CommandParameter="SoftDrinks"
+                  Content="Soft Drinks"
+                  Tag="Glass"
+                  ToolTip="Manage Soft Drinks"
+                  IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanSoftDrinks}"/>
             
             <Button Style="{StaticResource SideBarBtn}"
                     Command="{Binding NavigateCommand}"
@@ -110,7 +110,7 @@
                         Content="Manage dish types"
                         Tag="AngleLeft"/>
             </StackPanel>
-
+            
         </StackPanel>
     </Grid>
 </UserControl>

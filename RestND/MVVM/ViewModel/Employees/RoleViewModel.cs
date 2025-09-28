@@ -17,6 +17,7 @@ namespace RestND.MVVM.ViewModel
         #region Services & Hub
 
         private readonly RoleServices _roleService = new();
+        private readonly HubConnection _hub;
 
         #endregion
 
@@ -39,8 +40,6 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private string formErrorMessage;
         #endregion
 
-        #endregion
-
         #region Events
 
         public event Action? RequestClose;
@@ -55,8 +54,6 @@ namespace RestND.MVVM.ViewModel
             // If there are roles, pick the first; otherwise keep the placeholder
             SelectedRole = Roles.FirstOrDefault() ?? new Role();
         }
-        #endregion
-
         #endregion
 
         #region Hub Registration
