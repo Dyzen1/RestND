@@ -24,50 +24,28 @@ namespace RestND.MVVM.ViewModel.Main
         private readonly EmployeeServices _employeeServices = new();
         public Action? ClosePopupAction { get; set; }
         public event Action<Table>? OpenEmpForOrder;
-
         #endregion
 
         #region Observable Properties
+        [ObservableProperty] private ObservableCollection<Table> tables = new();
+        [ObservableProperty] private ObservableCollection<Table> activeTables = new();
+        [ObservableProperty] private Table newTable = new();
+        [ObservableProperty] private Table selectedTable;
+        [ObservableProperty] private string editedTableNumberText;
+        [ObservableProperty] private string newTableNumberText;
 
-        [ObservableProperty]
-        private ObservableCollection<Table> tables = new();
+        // Max diners input for Add Table popup (ONE definition only)
+        [ObservableProperty] private string newTableMaxDinersText = "2";
 
-        [ObservableProperty]
-        private ObservableCollection<Table> activeTables = new();
+        [ObservableProperty] private string tableErrorMessage;
+        [ObservableProperty] private bool isLoggedIn;
 
-        [ObservableProperty]
-        private Table newTable = new();
-
-        [ObservableProperty]
-        private Table selectedTable;
-
-        [ObservableProperty]
-        private string editedTableNumberText;
-
-        [ObservableProperty]
-        private string newTableNumberText;
-
-        [ObservableProperty] 
-        private string newTableMaxDinersText = "2"; 
-
-        [ObservableProperty]
-        private string tableErrorMessage;
-
-        [ObservableProperty]
-        private bool isLoggedIn;
-
-        //for employee names popup starting order:
-        [ObservableProperty]
-        private ObservableCollection<Employee> employees = new();
-        [ObservableProperty]
-        private Employee selectedEmployee;
-        [ObservableProperty]
-        private Table selectedTableForOrder;
-        [ObservableProperty] 
-        private int dinersCount = 1;
-        [ObservableProperty]
-        private string orderPopupError;
-
+        // start-order popup
+        [ObservableProperty] private ObservableCollection<Employee> employees = new();
+        [ObservableProperty] private Employee selectedEmployee;
+        [ObservableProperty] private Table selectedTableForOrder;
+        [ObservableProperty] private int dinersCount = 1;
+        [ObservableProperty] private string orderPopupError;
         #endregion
 
         public string LoginButtonText => IsLoggedIn ? "Logout" : "Login";
@@ -91,11 +69,10 @@ namespace RestND.MVVM.ViewModel.Main
             LoadTables();
             LoadEmployees();
             intiSR();
-
         }
         #endregion
 
-        #region initalize SignalR
+        #region initialize SignalR
         private void intiSR()
         {
             _hub.On<Table, string>("ReceiveTableUpdate", (table, action) =>
@@ -128,22 +105,17 @@ namespace RestND.MVVM.ViewModel.Main
                     }
                 });
             });
-
         }
-
         #endregion
 
         #region Login Logout
-
         [RelayCommand]
         private void LoginLogout()
         {
             if (!IsLoggedIn)
             {
-                // Show Login Window
                 var loginWindow = new View.Windows.LoginWindow();
 
-                // Setup ViewModel event to get login success callback
                 if (loginWindow.DataContext is Employees.LoginViewModel loginVm)
                 {
                     loginVm.LoginSucceeded += () =>
@@ -158,9 +130,7 @@ namespace RestND.MVVM.ViewModel.Main
             else
             {
                 AuthContext.SignOut();
-
                 IsLoggedIn = false;
-                // You can add any cleanup/reset here
             }
         }
         #endregion
@@ -188,61 +158,57 @@ namespace RestND.MVVM.ViewModel.Main
 
                 Tables.Add(table);
                 if (table.Is_Active)
-                {
                     ActiveTables.Add(table);
-                }
             }
         }
         #endregion
 
         #region Add Table
-
         [RelayCommand]
         public async Task AddTable()
         {
-            // 1. empty?
+            // 1) empty?
             if (!_validator.IsEmptyField(NewTableNumberText, out string emptyErr))
             {
                 TableErrorMessage = emptyErr;
                 return;
             }
 
-            // 2. parse table number
+            // 2) parse number
             if (!int.TryParse(NewTableNumberText, out int parsedNumber))
             {
                 TableErrorMessage = "Please enter a valid number.";
                 return;
             }
 
-            // 3. positive?
+            // 3) positive?
             if (!_validator.CheckPosNum(parsedNumber, out string notPositiveErr))
             {
                 TableErrorMessage = notPositiveErr;
                 return;
             }
 
-            // 4. unique?
+            // 4) unique?
             if (!_validator.CheckIfExists(parsedNumber, out string existsErr))
             {
                 TableErrorMessage = existsErr;
                 return;
             }
 
-            // 5. room?
+            // 5) room?
             if (!_validator.isFull(out string fullErr))
             {
                 TableErrorMessage = fullErr;
                 return;
             }
 
-            // ✅ Parse Max_Diners once (use the generated property name)
-            if (!int.TryParse(newTableMaxDinersText, out int parsedMax) || parsedMax <= 0)
+            // 6) parse Max_Diners ONCE (use the generated public property)
+            if (!int.TryParse(NewTableMaxDinersText, out int parsedMax) || parsedMax <= 0)
             {
                 TableErrorMessage = "Max diners must be a positive number.";
                 return;
             }
 
-            // 6. Validation passed
             TableErrorMessage = string.Empty;
 
             var slot = Tables.FirstOrDefault(t => !t.Is_Active);
@@ -253,68 +219,59 @@ namespace RestND.MVVM.ViewModel.Main
             NewTable.Table_Status = true;
             NewTable.C = slot.C;
             NewTable.R = slot.R;
-            NewTable.Max_Diners = parsedMax;   // ✅ reuse the single parsed value
+            NewTable.Max_Diners = parsedMax;
 
             if (_tableService.Add(NewTable))
             {
                 await _hub.SendAsync("NotifyTableUpdate", NewTable, "add");
                 NewTable = new Table();
                 NewTableNumberText = string.Empty;
-                newTableMaxDinersText = "2";
+                NewTableMaxDinersText = "2";
                 LoadTables();
                 // ClosePopupAction?.Invoke();
             }
         }
         #endregion
 
-
         #region Delete Table
-
         [RelayCommand]
         public async Task DeleteTable()
         {
             TableErrorMessage = string.Empty;
 
-            // 1. Validate that a table is selected
             if (!_validator.CheckIfnull(SelectedTable, out string nullErr))
             {
                 TableErrorMessage = nullErr;
                 return;
             }
 
-            // 2. Proceed with delete
             if (_tableService.Delete(SelectedTable))
             {
                 await _hub.SendAsync("NotifyTableUpdate", SelectedTable, "delete");
                 LoadTables();
-                ClosePopupAction?.Invoke(); // Optional: close popup
+                ClosePopupAction?.Invoke();
             }
         }
-
         #endregion
 
         #region Edit Table
-
         [RelayCommand]
         public async Task EditTable()
         {
             TableErrorMessage = string.Empty;
-            
-            // 1. Validate user input is a number
+
             if (!int.TryParse(EditedTableNumberText, out int parsedNumber))
             {
                 TableErrorMessage = "Please enter a valid number.";
                 return;
             }
 
-            // 2. Validate it's a positive number
             if (!_validator.CheckPosNum(parsedNumber, out string notPositiveErr))
             {
                 TableErrorMessage = notPositiveErr;
                 return;
             }
 
-            // 3. Check if another table has this number
             var duplicate = Tables.FirstOrDefault(t =>
                 t.Table_ID != SelectedTable?.Table_ID &&
                 t.Table_Number == parsedNumber);
@@ -325,84 +282,76 @@ namespace RestND.MVVM.ViewModel.Main
                 return;
             }
 
-            // 4. Check if a table is selected
             if (!_validator.CheckIfnull(SelectedTable, out string nullErr))
             {
                 TableErrorMessage = nullErr;
                 return;
             }
 
-            // 5. Apply and save
             SelectedTable.Table_Number = parsedNumber;
 
             if (_tableService.Update(SelectedTable))
             {
                 await _hub.SendAsync("NotifyTableUpdate", SelectedTable, "update");
                 LoadTables();
-                ClosePopupAction?.Invoke(); // Optional: close the popup after success
+                ClosePopupAction?.Invoke();
             }
         }
-
         #endregion
 
         #region Choose Employee for Order
-           
         public void LoadEmployees()
         {
             Employees.Clear();
             var waiters = _employeeServices.GetByRoleName("Waiter");
-
             foreach (var emp in waiters)
                 Employees.Add(emp);
 
             if (Employees.Count > 0)
                 SelectedEmployee = Employees[0];
         }
- 
+
         [RelayCommand]
         private void TableClick(Table table)
         {
             SelectedTableForOrder = table;
-            dinersCount = 1;             // reset default
-            orderPopupError = string.Empty;
+            DinersCount = 1;                 // use property so UI updates
+            OrderPopupError = string.Empty;
             OpenEmpForOrder?.Invoke(table);
         }
-        // when employee is chosen and "Start Order" is clicked, create order
+
         [RelayCommand]
         private void CreateOrder()
         {
-            orderPopupError = string.Empty;
+            OrderPopupError = string.Empty;
 
             if (SelectedTableForOrder == null)
             {
-                orderPopupError = "No table selected.";
+                OrderPopupError = "No table selected.";
                 return;
             }
             if (SelectedEmployee == null)
             {
-                orderPopupError = "Please choose a waiter.";
+                OrderPopupError = "Please choose a waiter.";
                 return;
             }
-            if (dinersCount <= 0)
+            if (DinersCount <= 0)
             {
-                orderPopupError = "Number of diners must be positive.";
+                OrderPopupError = "Number of diners must be positive.";
                 return;
             }
-            // Enforce Max_Diners
-            if (SelectedTableForOrder.Max_Diners > 0 && dinersCount > SelectedTableForOrder.Max_Diners)
+            if (SelectedTableForOrder.Max_Diners > 0 && DinersCount > SelectedTableForOrder.Max_Diners)
             {
-                orderPopupError = $"Table allows up to {SelectedTableForOrder.Max_Diners} diners.";
+                OrderPopupError = $"Table allows up to {SelectedTableForOrder.Max_Diners} diners.";
                 return;
             }
 
-            
             var order = new Order
             {
                 assignedEmployee = SelectedEmployee,
                 Table = SelectedTableForOrder,
-                People_Count = dinersCount
+                People_Count = DinersCount
             };
-
 
             new View.Windows.OrderWindow(order)
             {
@@ -410,12 +359,8 @@ namespace RestND.MVVM.ViewModel.Main
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
             }.Show();
 
-
-
             ClosePopupAction?.Invoke();
         }
-
         #endregion
-
     }
 }

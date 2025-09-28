@@ -22,16 +22,14 @@ namespace RestND.MVVM.Model.Tables
         }
         #endregion
 
-        #region Maximum table diners
-
+        #region Max Diners
         private int _Max_Diners;
         public int Max_Diners
         {
-            get => _Max_Diners;
-            set => _Max_Diners = value;
+            get { return _Max_Diners; }
+            set { _Max_Diners = value; }
         }
         #endregion
-
         #region Columns (C)
         private int _C;
         public int C
