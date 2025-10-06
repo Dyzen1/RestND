@@ -51,10 +51,9 @@ namespace RestND.MVVM.Model
         #endregion
 
         #region Default Constructor
-
         public DishType()
         {
-
+            this.Is_Active = true;
         }
 
         #endregion

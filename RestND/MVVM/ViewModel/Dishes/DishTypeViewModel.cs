@@ -33,7 +33,6 @@ public partial class DishTypeViewModel : ObservableObject
     {
         _dishTypeService = new DishTypeServices();
         _hub = App.DishTypeHub;
-
         LoadDishTypes();
     }
     #endregion

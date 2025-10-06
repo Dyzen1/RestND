@@ -18,8 +18,9 @@ namespace RestND.MVVM.View
 {
     public partial class DishWindow : Window
     {
-        //public event Action<string> ButtonClicked;
         private readonly DishValidator _dishValidator = new();
+
+        #region Constructor
         public DishWindow()
         {
             InitializeComponent();
@@ -36,8 +37,9 @@ namespace RestND.MVVM.View
                 ApplyProductFilter(ProductSearch.SearchText ?? string.Empty);
             };
         }
+        #endregion
 
-        // move the window around by clicking and dragging.
+        #region Minimize, Maximize, Close + Drag window Methods
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
@@ -46,7 +48,6 @@ namespace RestND.MVVM.View
             }
         }
 
-        //close + minimize + maximize window.
         private void MinimizeBtn_Click(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
@@ -63,10 +64,10 @@ namespace RestND.MVVM.View
         private void CloseBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
-            //Application.Current.Shutdown(); - if we want the app to totally close. 
         }
+        #endregion
 
-        // handles opening the update dish popup window.
+        #region Opening Update Dish Popup Method
         private void UpdateDishBtn_Click(object sender, RoutedEventArgs e)
         {
             var vm = DataContext as DishViewModel;
@@ -91,9 +92,9 @@ namespace RestND.MVVM.View
                 return;
             }
         }
+        #endregion
 
-
-        // method for collapsing back the products details row on the second click.
+        #region method for collapsing back the products details row on the second click.
         private void Row_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (sender is not DataGridRow row) return;
@@ -116,8 +117,9 @@ namespace RestND.MVVM.View
                 current = VisualTreeHelper.GetParent(current);
             return current as T;
         }
+        #endregion
 
-
+        #region Filtering Methods
         //Search bar Filter 1: Dishes by Dish_Name
         private void ApplyDishFilter(string searchText)
         {
@@ -171,7 +173,7 @@ namespace RestND.MVVM.View
             };
             view.Refresh();
         }
-
+        #endregion
 
     }
 }

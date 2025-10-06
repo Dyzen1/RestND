@@ -6,6 +6,7 @@ using RestND.MVVM.Model.Orders;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 
 namespace RestND.MVVM.ViewModel.Orders
 {
@@ -13,87 +14,133 @@ namespace RestND.MVVM.ViewModel.Orders
     {
         #region Services
         private readonly DishServices _dishSvc = new();
-        private readonly DishTypeServices _typeSvc = new();
+        private readonly DishTypeServices _dishTypeSvc = new();
         #endregion
 
-        #region Observable Properties
+        #region Properties
+        [ObservableProperty] private ObservableCollection<OrderLine> orderItems = new();
         [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
-        [ObservableProperty] private DishType? selectedDishType;
-        private ObservableCollection<Dish> allDishes = new();
-
-        [ObservableProperty] private Order currentOrder;
-
+        [ObservableProperty] private ObservableCollection<Dish> allDishes = new();
         [ObservableProperty] private ObservableCollection<Dish> availableDishes = new();
+        [ObservableProperty] private Order currentOrder = new();
+        [ObservableProperty] private Bill currentBill = new();
+        [ObservableProperty] private DishType? selectedDishType;
         #endregion
-
 
         #region Constructor
         public OrderViewModel()
         {
-          
+            LoadTypesAndDishes();
+            ApplyFilter();
         }
-        public OrderViewModel(Order order)
+
+        public OrderViewModel(Order order) : this()
         {
             CurrentOrder = order ?? new Order();
-            LoadTypesAndDishes();
         }
         #endregion
 
+        #region On Change
+        partial void OnSelectedDishTypeChanged(DishType? value)
+        {
+            ApplyFilter();
+        }
+        #endregion
 
+        #region Methods
         private void LoadTypesAndDishes()
         {
-            // 1) load types (you can prepend an “All” pseudo-type if you want)
-            var types = _typeSvc.GetAll(); // List<DishType>
+            var types = _dishTypeSvc.GetAll(); 
+            var dishes = _dishSvc.GetAll();
+
             DishTypes = new ObservableCollection<DishType>(types);
-
-            // 2) load all dishes once (cache)
-            var dishes = _dishSvc.GetAll(); // List<Dish>
-            allDishes = new ObservableCollection<Dish>(dishes);
-
-            // 3) initial view = all
-            AvailableDishes = new ObservableCollection<Dish>(allDishes);
+            AllDishes = new ObservableCollection<Dish>(dishes);
         }
 
-        [RelayCommand]
-        private void ApplyDishTypeFilter(DishType? type)
+        private void ApplyFilter()
         {
-            if (type is null)
+            if (SelectedDishType is null)
             {
-                // show all
-                AvailableDishes = new ObservableCollection<Dish>(allDishes);
+                ResetAvailable(AllDishes);
                 return;
             }
 
-            var filtered = allDishes.Where(d => d.Dish_Type?.DishType_ID == type.DishType_ID);
-            AvailableDishes = new ObservableCollection<Dish>(filtered);
+            var typeName = SelectedDishType.DishType_Name;
+            var filtered = AllDishes.Where(d => d.Dish_Type?.DishType_Name == typeName);
+            ResetAvailable(filtered);
         }
 
-        //[RelayCommand]
-        //private void PrintBill()
-        //{
-        //    // 1) Create/pull the finalized bill (already saved to DB ideally)
-        //    // var bill = _billing.CreateBill(CurrentOrder, SelectedDiscount?.Discount_ID);
+        // Replace contents in-place so the DataGrid updates reliably
+        private void ResetAvailable(IEnumerable<Dish> source)
+        {
+            AvailableDishes.Clear();
+            foreach (var d in source)
+                AvailableDishes.Add(d);
+        }
 
-        //    // If you already have a computed bill variable, use that instead:
-        //    var bill = CurrentBill; // <-- your existing bill object
+        public void Reload()
+        {
+            LoadTypesAndDishes();
+            ApplyFilter();
+        }
 
-        //    // 2) Configure (once; you can move this to App settings later)
-        //    var options = new BillPrinterOptions
-        //    {
-        //        PrinterName = null,          // default printer
-        //        MaxCharsPerLine = 42,        // 58mm: 42–48; 80mm: 56–64
-        //        VatPercent = (double)bill.VatPercent, // use snapshot from bill
-        //        RestaurantName = "RestND",
-        //        AddressLine = "רח' הדוגמה 123, חיפה",
-        //        PhoneLine = "04-1234567",
-        //        FontFamily = "Arial Unicode MS",
-        //        FooterLine = "תודה רבה ולהתראות!"
-        //    };
+        [RelayCommand]
+        private void AddDishToOrder(Dish dish)
+        {
+            if (dish is null) return;
 
-        //    // 3) Print
-        //    new BillPrinterService(CurrentOrder, bill, options).Print();
-        //}
+            var line = OrderItems.FirstOrDefault(l => l.Dish.Dish_ID == dish.Dish_ID);
+            if (line == null) OrderItems.Add(new OrderLine(dish, 1));
+            else line.Quantity += 1;
+        }
+
+        [RelayCommand]
+        private void IncrementLine(OrderLine line)
+        {
+            if (line == null) return;
+            line.Quantity += 1;
+        }
+
+        [RelayCommand]
+        private void DecrementLine(OrderLine line)
+        {
+            if (line == null) return;
+            if (line.Quantity > 1) line.Quantity -= 1;
+            else OrderItems.Remove(line);
+        }
+
+        [RelayCommand]
+        private void RemoveLine(OrderLine line)
+        {
+            if (line == null) return;
+            OrderItems.Remove(line);
+        }
 
 
+        [RelayCommand]
+        private void PrintBill()
+        {
+            // 1) Create/pull the finalized bill (already saved to DB ideally)
+            // var bill = _billing.CreateBill(CurrentOrder, SelectedDiscount?.Discount_ID);
+
+            // If you already have a computed bill variable, use that instead:
+            var bill = CurrentBill; // <-- your existing bill object
+
+            // 2) Configure (once; you can move this to App settings later)
+            var options = new BillPrinterOptions
+            {
+                PrinterName = null,          // default printer
+                MaxCharsPerLine = 42,        // 58mm: 42–48; 80mm: 56–64
+                RestaurantName = "RestND",
+                AddressLine = "רח' הדוגמה 123, חיפה",
+                PhoneLine = "04-1234567",
+                FontFamily = "Arial Unicode MS",
+                FooterLine = "תודה רבה ולהתראות!"
+            };
+
+            // 3) Print
+            new BillPrinterService(CurrentOrder, bill, options).Print();
+        }
+        #endregion
     }
 }
