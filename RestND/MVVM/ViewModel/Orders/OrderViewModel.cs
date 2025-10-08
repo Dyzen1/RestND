@@ -89,7 +89,7 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             if (dish is null) return;
 
-            var line = OrderItems.FirstOrDefault(l => l.Dish.Dish_ID == dish.Dish_ID);
+            var line = OrderItems.FirstOrDefault(l => l.dish.Dish_ID == dish.Dish_ID);
             if (line == null) OrderItems.Add(new OrderLine(dish, 1));
             else line.Quantity += 1;
         }
@@ -99,13 +99,18 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             if (line == null) return;
             line.Quantity += 1;
+            line.LineTotal += line.dish.Dish_Price;
         }
 
         [RelayCommand]
         private void DecrementLine(OrderLine line)
         {
             if (line == null) return;
-            if (line.Quantity > 1) line.Quantity -= 1;
+            if (line.Quantity > 1)
+            {
+                line.Quantity -= 1;
+                line.LineTotal -= line.dish.Dish_Price;
+            }
             else OrderItems.Remove(line);
         }
 

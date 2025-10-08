@@ -12,6 +12,5 @@
     <SolidColorBrush x:Key="AccentBrush" Color="#2D89EF"/>
     <SolidColorBrush x:Key="BorderBrush" Color="#40FFFFFF"/>
     <SolidColorBrush x:Key="CancelBtn" Color="#DC3545"/><!--for cancel buttons-->
-    <SolidColorBrush x:Key="hoverColor" Color="#2A2A2A"/>
 
 </ResourceDictionary>

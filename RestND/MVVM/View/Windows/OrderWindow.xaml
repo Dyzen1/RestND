@@ -44,24 +44,24 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center">
-                    <TextBlock Text="Waiter's Name"
-                   Foreground="{DynamicResource LightText}"
-                   Opacity="0.7" FontSize="11" Margin="0,20,0,0"/>
+                    <TextBlock Text="Waiter's Name:"
+                               Foreground="{DynamicResource LightText}"
+                               Opacity="0.7" FontSize="12" Margin="0,20,0,0"/>
                     <TextBlock Text="{Binding DataContext.CurrentOrder.assignedEmployee.Employee_Name,
-                  RelativeSource={RelativeSource AncestorType=Window},
-                  TargetNullValue=—}"
-                   Foreground="{DynamicResource LightText}"
-                   FontSize="13"/>
+                              RelativeSource={RelativeSource AncestorType=Window},
+                              TargetNullValue=—}"
+                               Foreground="{DynamicResource LightText}"
+                               FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
                     <TextBlock Text="Diners"
-                   Foreground="{DynamicResource LightText}"
-                   Opacity="0.7" FontSize="11" Margin="0,20,0,4"/>
+                               Foreground="{DynamicResource LightText}"
+                               Opacity="0.7" FontSize="12" Margin="0,20,0,4"/>
                     <TextBlock Text="{Binding DataContext.CurrentOrder.People_Count,
-                  RelativeSource={RelativeSource AncestorType=Window}}"
-                   Foreground="{DynamicResource LightText}"
-                   FontSize="13"/>
+                              RelativeSource={RelativeSource AncestorType=Window}}"
+                               Foreground="{DynamicResource LightText}"
+                               FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
 
                 <uc:SearchBar x:Name="DishSearch"
@@ -72,7 +72,7 @@
             </Grid>
 
             <!-- Dish types (left sidebar) -->
-            <ListBox Grid.Column="0" Grid.Row="1" VerticalAlignment="Top"
+            <ListBox Grid.Column="0" Grid.Row="1" Margin="10 0 10 0"
                      ItemsSource="{Binding DishTypes}"
                      SelectedItem="{Binding SelectedDishType, Mode=TwoWay}"
                      DisplayMemberPath="DishType_Name"
@@ -97,9 +97,8 @@
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter TargetName="bd" Property="Background" Value="{DynamicResource LightText}"/>
                                             <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource LightText}"/>
-                                            <Setter Property="Foreground" Value="{DynamicResource LightBG}"/>
+                                            <Setter TargetName="bd" Property="Background" Value="{DynamicResource secondaryBtns}"/>
                                         </Trigger>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource LightText}"/>
@@ -143,60 +142,24 @@
 
                 <ListView x:Name="OrderList"
                           ItemsSource="{Binding OrderItems}"
-                          BorderThickness="0"
+                          ItemContainerStyle="{StaticResource DishesListView}"
+                          ItemTemplate="{StaticResource DishChoice}"
+                          BorderBrush="Transparent"
                           Background="Transparent"
                           Foreground="{DynamicResource LightText}"
                           AllowDrop="True"
                           DragOver="OrderList_DragOver"
                           Drop="OrderList_Drop">
-                    <ListView.Resources>
-                        <Style TargetType="{x:Type GridViewColumnHeader}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Setter Property="Height" Value="0"/>
-                            <Setter Property="Padding" Value="0"/>
-                            <Setter Property="Margin" Value="0"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
-                                        <Border Height="0" />
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListView.Resources>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn DisplayMemberBinding="{Binding Dish.Dish_Name}" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Quantity}" />
-                            <GridViewColumn DisplayMemberBinding="{Binding LineTotal}" />
-                            <GridViewColumn>
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                            <Button Content="+" Padding="6,0" Margin="0,0,6,0" 
-                                                    BorderBrush="{DynamicResource LightText}"
-                                                    BorderThickness="1"
-                                                    Command="{Binding DataContext.IncrementLineCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                    CommandParameter="{Binding}" Foreground="{DynamicResource LightText}"
-                                                    Background="Transparent"/>
-                                            <Button Content="−" Padding="6,0" Margin="0,0,6,0"
-                                                    Command="{Binding DataContext.DecrementLineCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                    CommandParameter="{Binding}" Foreground="{DynamicResource LightText}"
-                                                    Background="Transparent"/>
-                                            <Button Content="✕" Padding="6,0"
-                                                    Command="{Binding DataContext.RemoveLineCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                    CommandParameter="{Binding}" Foreground="{DynamicResource LightText}"
-                                                    Background="Transparent"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+
                 </ListView>
             </Border>
 
-            <!-- Bottom actions -->
+            <!-- Printing btn's -->
             <StackPanel Grid.Row="2" Grid.Column="2" 
                         Margin="0 0 8 0" Orientation="Horizontal" 
                         HorizontalAlignment="Right">

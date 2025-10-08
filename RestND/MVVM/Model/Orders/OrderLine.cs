@@ -9,16 +9,16 @@ namespace RestND.MVVM.Model.Orders
 {
     public partial class OrderLine : ObservableObject
     {
-        public Dish Dish { get; }
+        public Dish dish { get; }
 
         [ObservableProperty] private int quantity;
-
-        public int LineTotal => (Dish?.Dish_Price ?? 0) * Quantity;
+        [ObservableProperty] private int lineTotal;
 
         public OrderLine(Dish dish, int qty = 1)
         {
-            Dish = dish;
-            Quantity = qty;
+            this.dish = dish;
+            this.Quantity = qty;
+            this.lineTotal = dish.Dish_Price;
         }
     }
 }
