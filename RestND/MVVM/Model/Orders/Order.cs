@@ -1,11 +1,13 @@
-﻿using RestND.MVVM.Model.Employees;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using RestND.MVVM.Model.Employees;
 using RestND.MVVM.Model.Tables;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 
 namespace RestND.MVVM.Model.Orders
 {
-    public class Order
+    public partial class Order : ObservableObject
     {
         #region Order ID
         private int _Order_ID;
@@ -26,23 +28,9 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
-        #region dishes in order
-        private List<DishInOrder> _DishInOrder = new();
-
-        public List<DishInOrder> DishInOrder 
-        {
-            get { return _DishInOrder; }
-            set { _DishInOrder = value; }
-        }
-        #endregion
-
-        #region Order count
-        private static int _OrderCount = 0;
-
-        public static int OrderCount
-        {
-            get { return _OrderCount; }
-        }
+        #region Dishes in order (Observable)
+        [ObservableProperty]
+        private ObservableCollection<DishInOrder> dishInOrder = new();
         #endregion
 
         #region Table 
@@ -87,18 +75,17 @@ namespace RestND.MVVM.Model.Orders
             this.Bill = new Bill();
             this.assignedEmployee = AssignedEmployee;
             this.Table = table;
-            this.DishInOrder = null;
+            this.DishInOrder = new ObservableCollection<DishInOrder>(); // ✅ not null
             this.Is_Active = true;
             this.People_Count = 1;
-            _OrderCount++;
         }
         #endregion
 
         #region Default constructor
         public Order()
         {
+            this.Is_Active = true;
             this.People_Count = 1;
-            _OrderCount++;
         }
         #endregion
     }

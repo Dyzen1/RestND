@@ -24,7 +24,6 @@ namespace RestND.Data
                     Table_Number = Convert.ToInt32(row["Table_Number"]),
                     C = Convert.ToInt32(row["C"]),
                     R = Convert.ToInt32(row["R"]),
-                    // NEW:
                     Max_Diners = Convert.ToInt32(row["Max_Diners"]),
                     Table_Status = Convert.ToBoolean(row["Table_Status"]),
                     Is_Active = Convert.ToBoolean(row["Is_Active"])
@@ -69,6 +68,21 @@ namespace RestND.Data
                 new MySqlParameter("@status", t.Table_Status),
                 new MySqlParameter("@active", t.Is_Active)) > 0;
         }
+        #endregion
+
+        #region Update Table (Only status)
+        public bool UpdateTableStatus(Table t)
+        {
+            string query =
+                "UPDATE `tables` " +
+                "SET Table_Status = @status " +
+                "WHERE Table_ID = @id";
+
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@status", t.Table_Status),
+                new MySqlParameter("@id", t.Table_ID)) > 0;
+        }
+
         #endregion
 
         #region Delete Table (Soft Delete)

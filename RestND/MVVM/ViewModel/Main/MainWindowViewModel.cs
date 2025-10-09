@@ -19,6 +19,7 @@ namespace RestND.MVVM.ViewModel.Main
     {
         private readonly TableServices _tableService = new();
         private readonly TableValidator _validator = new();
+        private readonly OrderServices _orderService = new();
         private readonly HubConnection _hub = App.MainHub;
         private readonly EmployeeServices _employeeServices = new();
         public Action? ClosePopupAction { get; set; }
@@ -275,11 +276,28 @@ namespace RestND.MVVM.ViewModel.Main
                 People_Count = DinersCount
             };
 
-            new View.Windows.OrderWindow(order)
+            int res = -1;
+            res = _orderService.AddStartingOrder(order);
+            if (res == -1)
             {
-                Owner = Application.Current.MainWindow,
-                WindowStartupLocation = WindowStartupLocation.CenterOwner
-            }.Show();
+                OrderPopupError = "Failed to create order. Please try again.";
+                return;
+            }
+
+            else
+            {
+                SelectedTableForOrder.Table_Status = false; // now occupied
+                _tableService.UpdateTableStatus(SelectedTableForOrder);
+                _hub.SendAsync("NotifyTableUpdate", SelectedTableForOrder, "update");
+                order.Order_ID = res; // set the new Order_ID
+            }
+
+
+            new View.Windows.OrderWindow(order)
+                {
+                    Owner = Application.Current.MainWindow,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                }.Show();
 
             ClosePopupAction?.Invoke();
         }

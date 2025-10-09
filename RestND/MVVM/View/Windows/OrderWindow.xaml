@@ -141,7 +141,7 @@
                     CornerRadius="0 10 10 0" Margin="0 2 8 0">
 
                 <ListView x:Name="OrderList"
-                          ItemsSource="{Binding OrderItems}"
+                          ItemsSource="{Binding CurrentOrder.DishInOrder}"
                           ItemContainerStyle="{StaticResource DishesListView}"
                           ItemTemplate="{StaticResource DishChoice}"
                           BorderBrush="Transparent"

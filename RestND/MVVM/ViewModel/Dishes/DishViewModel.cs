@@ -141,14 +141,15 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Relay commands
-
         [RelayCommand]
         private void LoadDishes()
         {
             Dishes.Clear();
             var dbDishes = _dishService.GetAll();
             foreach (var dish in dbDishes)
+            {
                 Dishes.Add(dish);
+            }
         }
         [RelayCommand]
         private void LoadDishTypes()
@@ -185,7 +186,6 @@ namespace RestND.MVVM.ViewModel
                 AllergenOptions.Add(item); 
             }
         }
-
 
         [RelayCommand(CanExecute = nameof(CanAddDish))]
         private async Task AddDish()

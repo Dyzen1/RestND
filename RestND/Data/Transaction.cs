@@ -13,12 +13,9 @@ public class Transaction
     #endregion
 
     #region Constructor
-
-
     public Transaction(DatabaseOperations db)
     {
         _db = db;
-        
     }
     #endregion
 

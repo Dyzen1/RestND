@@ -46,6 +46,15 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
+        #region In_Stock - a property for knowing wheather the dish can be made with the current stock of products
+        private bool _In_Stock;
+        public bool In_Stock
+        {
+            get => _In_Stock;
+            set => SetProperty(ref _In_Stock, value);
+        }
+        #endregion
+
         #region Allergen_Notes
         private string _Allergen_Notes;
 
@@ -85,8 +94,8 @@ namespace RestND.MVVM.Model
             this.ProductUsage = productUsage;
             this.Dish_Type = type;
             this.Is_Active = true;
+            this.In_Stock = true;
         }
-
         #endregion
 
         #region Constructor without allergen notes
@@ -97,8 +106,8 @@ namespace RestND.MVVM.Model
             this.ProductUsage = productUsage;
             this.Dish_Type = type;
             this.Is_Active = true;
+            this.In_Stock = true;
         }
-
         #endregion
 
         #region Default Constructor

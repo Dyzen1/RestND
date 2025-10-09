@@ -265,7 +265,7 @@
 
     <!-- the dishes inside the right list box -->
     <DataTemplate x:Key="DishChoice">
-        <Grid HorizontalAlignment="Stretch">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -278,33 +278,33 @@
 
             <!-- Dish name -->
             <TextBox Text="Dish Name" Background="Transparent"
-                     Grid.Column="0" Grid.Row="0"/>
+                     Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center"/>
             <TextBlock Grid.Row="1"
                     Grid.Column="0"
                    Margin="8,7,8,0"
                    Text="{Binding dish.Dish_Name}"
                    TextTrimming="CharacterEllipsis"
-                   HorizontalAlignment="Stretch"
+                   HorizontalAlignment="Center"
                    Foreground="{DynamicResource LightText}"
                    FontSize="12"/>
             <!-- Price -->
             <TextBox Text="Price" Background="Transparent"
-                     Grid.Column="1" Grid.Row="0"/>
+                     Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center"/>
             <TextBlock Grid.Row="1"
                 Grid.Column="1"
                    Margin="8,4,8,10"
-                   Text="{Binding LineTotal, StringFormat={}{0:N2}}"
-                   HorizontalAlignment="Stretch"
+                   Text="{Binding TotalDishPrice, StringFormat={}{0:N2}}"
+                   HorizontalAlignment="Center"
                    Foreground="{DynamicResource LightText}"
                    FontSize="12"/>
             <!-- Quantity -->
             <TextBox Text="Quantity" Background="Transparent"
-                     Grid.Column="2" Grid.Row="0"/>
-            <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal">
+                     Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center"/>
+            <StackPanel Grid.Column="2" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock Margin="8,7,8,0"
                            Text="{Binding Quantity}"
                            TextTrimming="CharacterEllipsis"
-                           HorizontalAlignment="Stretch"
+                           HorizontalAlignment="Center"
                            Foreground="{DynamicResource LightText}"
                            FontSize="12"/>
                 <Button Content="+" Padding="6,0" Margin="0,0,6,0"
@@ -314,13 +314,13 @@
                         Background="Transparent" ToolTip="More"/>
 
                 <Button Content="−" Padding="6,0" Margin="0,0,6,0"
-                        BorderBrush="Transparent"
+                        BorderBrush="Transparent" 
                         Command="{Binding DataContext.DecrementLineCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                         CommandParameter="{Binding}" Foreground="{DynamicResource LightText}"
                         Background="Transparent" ToolTip="Less"/>
 
                 <Button Content="✕" Padding="6,0"
-                        BorderBrush="Transparent"
+                        BorderBrush="Transparent" 
                         Command="{Binding DataContext.RemoveLineCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
                         CommandParameter="{Binding}" Foreground="{DynamicResource LightText}"
                         Background="Transparent" ToolTip="Remove Item"/>

@@ -15,15 +15,12 @@ namespace RestND.MVVM.ViewModel
     public partial class ProductViewModel : ObservableObject
     {
         #region Services
-
         private readonly ProductService _productService;
         private readonly InventoryValidator _validator = new();
         private readonly HubConnection _hub;
-
         #endregion
 
         #region Observable Properties
-
         [ObservableProperty] private ObservableCollection<Inventory> products = new();
         [ObservableProperty] private Inventory selectedProduct;
         [ObservableProperty] private Inventory newProduct = new();
@@ -33,11 +30,9 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private string newProductNameInput;
         [ObservableProperty] private string newQuantityInput;
         [ObservableProperty] private string newToleranceInput;
-
         #endregion
 
         #region Constructor
-
         public ProductViewModel()
         {
             _productService = new ProductService();
@@ -45,7 +40,6 @@ namespace RestND.MVVM.ViewModel
             InitializeSR();
             LoadProducts();
         }
-
         #endregion
 
         #region SignalR Method
@@ -83,18 +77,15 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region On Change
-
         partial void OnSelectedProductChanged(Inventory value)
         {
             UpdateProductCommand.NotifyCanExecuteChanged();
             DeleteProductCommand.NotifyCanExecuteChanged();
             AddProductCommand.NotifyCanExecuteChanged();
         }
-
         #endregion
 
         #region Load Products
-
         [RelayCommand]
         private void LoadProducts()
         {
@@ -102,10 +93,14 @@ namespace RestND.MVVM.ViewModel
             var dbProducts = _productService.GetAll();
             foreach (var product in dbProducts)
             {
+                if(product.Quantity_Available <= product.Tolerance)
+                {
+                    product.In_Stock = false;
+                    _productService.UpdateInStock(product.Product_ID, false);
+                }
                 Products.Add(product);
             }
         }
-
         #endregion
 
         #region Add Product
@@ -172,7 +167,6 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Update Product
-
         [RelayCommand]
         private async Task UpdateProduct()
         {
@@ -200,7 +194,6 @@ namespace RestND.MVVM.ViewModel
                 LoadProducts();
             }
         }
-
         #endregion
 
     }

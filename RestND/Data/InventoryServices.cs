@@ -7,8 +7,6 @@ namespace RestND.Data
 {
     public class ProductService() : BaseService<Inventory>(DatabaseOperations.Instance)
     {
-
-
         #region Get All Products
         public override List<Inventory> GetAll()
         {
@@ -29,10 +27,18 @@ namespace RestND.Data
                     Created_At = row["Created_At"].ToString().Split(' ')[0]
                 });
             }
-
             return products;
         }
+        #endregion
 
+        #region Update the boolean property In_Stock
+        public bool UpdateInStock(string productId, bool inStock)
+        {
+            string query = "UPDATE inventory SET In_Stock = @InStk WHERE Product_ID = @id";
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@InStk", inStock),
+                new MySqlParameter("@id", productId)) > 0;
+        }
         #endregion
 
         #region Add Product
@@ -45,29 +51,6 @@ namespace RestND.Data
                 new MySqlParameter("@tolerance", p.Tolerance),
                 new MySqlParameter("@active", p.Is_Active),
                 new MySqlParameter("@qty", p.Quantity_Available)) > 0;
-        }
-        #endregion
-
-        #region Create a dictionary of products where key is the product ID and value is the quantity
-        public Dictionary<string, double> GetProductDictionary()
-        {
-            var productDictionary = new Dictionary<string, double>();
-            string query = "SELECT Product_ID, Quantity_Available FROM inventory";
-            var rows = _db.ExecuteReader(query);
-
-            foreach (var row in rows)
-            {
-                string productId = row["Product_ID"].ToString();
-                double quantity = Convert.ToDouble(row["Quantity_Available"]);
-
-                if (!productDictionary.ContainsKey(productId))
-                {
-                    productDictionary.Add(productId, quantity);
-                }
-                
-            }
-
-            return productDictionary;
         }
         #endregion
 

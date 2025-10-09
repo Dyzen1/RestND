@@ -58,6 +58,15 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
+        #region In_Stock - a property for knowing if a product has enough quantity available or not
+        private bool _In_Stock;
+        public bool In_Stock
+        {
+            get => _In_Stock;
+            set => SetProperty(ref _In_Stock, value);
+        }
+        #endregion
+
         #region Quantity Available
         private int _Quantity_Available;
 
@@ -86,6 +95,7 @@ namespace RestND.MVVM.Model
             this.Tolerance = Tolerance;
             this.Created_At = date;
             this.Is_Active = true;
+            this.In_Stock = true;
         }
 
         #endregion
@@ -94,6 +104,7 @@ namespace RestND.MVVM.Model
         public Inventory()
         {
             this.Is_Active = true;
+            this.In_Stock = true;
         }
 
         #endregion

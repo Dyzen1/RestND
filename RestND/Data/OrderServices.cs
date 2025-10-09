@@ -10,7 +10,9 @@ namespace RestND.Data
 {
     public class OrderServices : BaseService<Order>
     {
+        #region Properties
         private readonly Transaction _transaction;
+        #endregion
 
         #region Constructor
         public OrderServices() : base(DatabaseOperations.Instance)
@@ -70,22 +72,40 @@ namespace RestND.Data
         }
         #endregion
 
-        #region Add Starting Order (no dishes)
-        public bool AddStartingOrder(Order o)
+        #region Add Starting Order (no dishes) returns the new Order_ID
+        public int AddStartingOrder(Order o)
         {
-            string query =
-                "INSERT INTO orders (Employee_Name, Table_Number, People_Count, Bill_Price, Is_Active) " +
-                "VALUES (@name, @number, @people, @price, @active)";
+            const string insertQuery = @"
+        INSERT INTO orders (Employee_ID, Table_Number, People_Count, Is_Active)
+        VALUES (@Id, @number, @people, @active);";
 
-            return _db.ExecuteNonQuery(query,
-                new MySqlParameter("@name", o.assignedEmployee.Employee_Name),
-                new MySqlParameter("@number", o.Table.Table_Number),
-                // NEW:
-                new MySqlParameter("@people", o.People_Count),
-                new MySqlParameter("@price", o.Bill.Price),
-                new MySqlParameter("@active", o.Is_Active)
-            ) > 0;
+            const string idQuery = "SELECT LAST_INSERT_ID();";
+
+            _db.OpenConnection();
+            using var tx = _db.Connection.BeginTransaction();
+
+            try
+            {
+                // 1️. Insert the order (use same connection + transaction)
+                _db.ExecuteNonQuery(insertQuery, _db.Connection, tx,
+                    new MySqlParameter("@Id", o.assignedEmployee.Employee_ID),
+                    new MySqlParameter("@number", o.Table.Table_Number),
+                    new MySqlParameter("@people", o.People_Count),
+                    new MySqlParameter("@active", o.Is_Active)
+                );
+
+                // 2️. Get the auto-incremented Order_ID safely (same connection + transaction)
+                object result = _db.ExecuteScalar(idQuery, _db.Connection, tx);
+                tx.Commit();
+                return Convert.ToInt32(result);
+            }
+            catch
+            {
+                tx.Rollback();
+                throw;
+            }
         }
+
         #endregion
 
         #region Delete Order
@@ -119,7 +139,6 @@ namespace RestND.Data
                 new MySqlParameter("@id", o.Order_ID),
                 new MySqlParameter("@name", o.assignedEmployee.Employee_Name),
                 new MySqlParameter("@number", o.Table.Table_Number),
-                // NEW:
                 new MySqlParameter("@people", o.People_Count),
                 new MySqlParameter("@price", o.Bill.Price)
             ) > 0;

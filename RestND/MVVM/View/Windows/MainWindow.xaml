@@ -12,8 +12,8 @@
         Title="MainWindow"
         MouseLeftButtonDown="Window_MouseLeftButtonDown"
         Style="{StaticResource windowStyle}">
-
     <Window.Resources>
+        <conv:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Window.Resources>
 
@@ -106,16 +106,17 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Background="Transparent" BorderThickness="0"
-                                Visibility="{Binding Table_Status, Converter={StaticResource BoolToVisibilityConverter}}"
-                                Command="{Binding DataContext.TableClickCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                CommandParameter="{Binding}">
+                        <Button Background="Transparent"
+            BorderThickness="0"
+            Visibility="{Binding Is_Active, Converter={StaticResource BoolToVisibilityConverter}}"
+            Opacity="{Binding Table_Status, Converter={StaticResource BoolToOpacityConverter}}"
+            Command="{Binding DataContext.TableClickCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+            CommandParameter="{Binding}">
                             <Grid>
                                 <Image Style="{DynamicResource tableBtn}"/>
                                 <TextBlock Text="{Binding Table_Number}" Style="{DynamicResource tableNumber}"/>
                             </Grid>
                         </Button>
-                        
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

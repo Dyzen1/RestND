@@ -25,9 +25,9 @@ namespace RestND.Data
 
             return _db.ExecuteNonQuery(sql, conn, tx,
                 new MySqlParameter("@orderId", orderId),
-                new MySqlParameter("@dishId", dish.Dish.Dish_ID),
+                new MySqlParameter("@dishId", dish.dish.Dish_ID),
                 new MySqlParameter("@qty", dish.Quantity),
-                new MySqlParameter("@price", dish.Dish.Dish_Price)
+                new MySqlParameter("@price", dish.dish.Dish_Price)
             ) > 0;
         }
 
@@ -35,14 +35,15 @@ namespace RestND.Data
         public bool AddDishToOrder(int orderId, DishInOrder dish)
         {
             const string sql =
-                "INSERT INTO dishes_in_order (Order_ID, Dish_ID, Quantity, Price) " +
-                "VALUES (@orderId, @dishId, @qty, @price)";
+                "INSERT INTO dishes_in_order (Order_ID, Dish_ID, Dish_Name, Quantity, Total_Dish_Price) " +
+                "VALUES (@orderId, @dishId, @dishName, @qty, @total)";
 
             return _db.ExecuteNonQuery(sql,
                 new MySqlParameter("@orderId", orderId),
-                new MySqlParameter("@dishId", dish.Dish.Dish_ID),
+                new MySqlParameter("@dishId", dish.dish.Dish_ID),
+                new MySqlParameter("@dishName", dish.dish.Dish_Name),
                 new MySqlParameter("@qty", dish.Quantity),
-                new MySqlParameter("@price", dish.Dish.Dish_Price)
+                new MySqlParameter("@total", dish.TotalDishPrice)
             ) > 0;
         }
 
@@ -55,14 +56,15 @@ namespace RestND.Data
             return affectedRows > 0;
         }
 
-        public bool UpdateProductInDish(int dishId, int orderId, int newDishAmount)
+        public bool UpdateDishInOrder(int orderId, DishInOrder d)
         {
             const string query =
-                "UPDATE dishes_in_order SET Quantity = @quantity WHERE Dish_ID = @dishId AND Order_ID = @orderId";
+                "UPDATE dishes_in_order SET Total_Dish_Price = @total, Quantity = @quantity WHERE Dish_ID = @dishId AND Order_ID = @orderId";
             var affectedRows = _db.ExecuteNonQuery(query,
-                new MySqlParameter("@quantity", newDishAmount),
-                new MySqlParameter("@dishId", dishId),
-                new MySqlParameter("@orderId", orderId));
+                new MySqlParameter("@quantity", d.Quantity),
+                new MySqlParameter("@dishId", d.dish.Dish_ID),
+                new MySqlParameter("@orderId", orderId),
+                new MySqlParameter("@total", d.TotalDishPrice));
             return affectedRows > 0;
         }
     }

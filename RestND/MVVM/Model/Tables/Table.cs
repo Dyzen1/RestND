@@ -30,6 +30,7 @@ namespace RestND.MVVM.Model.Tables
             set { _Max_Diners = value; }
         }
         #endregion
+
         #region Columns (C)
         private int _C;
         public int C

@@ -1,38 +1,24 @@
-﻿
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace RestND.MVVM.Model.Orders
 {
-    public class DishInOrder
+    public partial class DishInOrder : ObservableObject
     {
-        #region Dish
-        private Dish _Dish;
-        public Dish Dish
-        {
-            get { return _Dish; }
-            set
-            {
-                if (_Dish != null)
-                    _Dish = value;
-            }
-        }
-        #endregion
+        public Dish dish { get; }
 
-        #region Quantity Of Dish
-        private int _Quantity;
-        public int Quantity
-        {
-            get{return _Quantity; }
-            set 
-            { 
-                if(_Quantity> 0)
-                _Quantity = value;
-                else
-                {
-                    _Quantity = 0;
-                }
-            }
-        }
-        #endregion
+        [ObservableProperty] private int quantity;
+        [ObservableProperty] private int totalDishPrice;
 
+        public DishInOrder(Dish dish)
+        {
+            this.dish = dish;
+            this.Quantity = 1;
+            this.TotalDishPrice = dish.Dish_Price;
+        }
     }
 }
