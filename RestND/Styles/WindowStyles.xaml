@@ -1,9 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF">
+                    xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
+                    xmlns:conv="clr-namespace:RestND.Converters">
 
    
     <!--GLOBAL WINDOW STYLES-->
+
+    <conv:BoolToOpacityConverter x:Key="BoolToOpacityConverter" />
     
     <Style x:Key="windowStyle" TargetType="Window"> <!--The style inside the window tag itself-->
         <Setter Property="FontFamily" Value="Cascadia Mono"/>
@@ -231,7 +234,8 @@
     </Style>
     <!-- the dishes inside the left list box -->
     <DataTemplate x:Key="DishSquare">
-        <Grid Width="130" Height="110">
+        <Grid Width="130" Height="110"
+              Opacity="{Binding In_Stock, Converter={StaticResource BoolToOpacityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>

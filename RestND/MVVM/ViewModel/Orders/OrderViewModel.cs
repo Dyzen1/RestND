@@ -16,6 +16,8 @@ namespace RestND.MVVM.ViewModel.Orders
         private readonly DishServices _dishSvc = new();
         private readonly DishTypeServices _dishTypeSvc = new();
         private readonly DishInOrderServices _dishInOrderSvc = new();
+        private readonly ProductService _productSvc = new();
+        private readonly ProductInDishService _productInDishSvc = new();
         #endregion
 
         #region Properties
@@ -52,6 +54,9 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             var types = _dishTypeSvc.GetAll(); 
             var dishes = _dishSvc.GetAll();
+            var inventory = _productSvc.GetAll();
+
+            ApplyAvailabilityState(dishes, inventory);
 
             DishTypes = new ObservableCollection<DishType>(types);
             AllDishes = new ObservableCollection<Dish>(dishes);
@@ -87,7 +92,7 @@ namespace RestND.MVVM.ViewModel.Orders
         [RelayCommand]
         private void AddDishToOrder(Dish dish)
         {
-            if (dish is null) return;
+            if (dish is null || !dish.In_Stock) return;
             // checking the item doesnt exists yet in the order.
             var item = CurrentOrder.DishInOrder.FirstOrDefault(l => l.dish.Dish_ID == dish.Dish_ID);
             if (item == null)
@@ -157,6 +162,43 @@ namespace RestND.MVVM.ViewModel.Orders
         //    // 3) Print
         //    new BillPrinterService(CurrentOrder, bill, options).Print();
         //}
+        #endregion
+
+        #region Helpers
+        private void ApplyAvailabilityState(IEnumerable<Dish> dishes, IEnumerable<Inventory> inventory)
+        {
+            var stockById = (inventory ?? Enumerable.Empty<Inventory>())
+                .GroupBy(p => p.Product_ID)
+                .ToDictionary(g => g.Key, g => g.First(), System.StringComparer.OrdinalIgnoreCase);
+
+            foreach (var dish in dishes)
+            {
+                var usage = _productInDishSvc.GetProductsInDish(dish.Dish_ID) ?? new List<ProductInDish>();
+                dish.ProductUsage = usage;
+                dish.In_Stock = CanPrepareDish(usage, stockById);
+            }
+        }
+
+        private static bool CanPrepareDish(IEnumerable<ProductInDish> usage, IReadOnlyDictionary<string, Inventory> stockById)
+        {
+            if (usage == null)
+                return true;
+
+            foreach (var ingredient in usage.Where(u => u?.Is_Active != false))
+            {
+                if (string.IsNullOrWhiteSpace(ingredient.Product_ID))
+                    return false;
+
+                if (!stockById.TryGetValue(ingredient.Product_ID, out var product))
+                    return false;
+
+                var remaining = product.Quantity_Available - ingredient.Amount_Usage;
+                if (remaining < 0)
+                    return false;
+            }
+
+            return true;
+        }
         #endregion
     }
 }

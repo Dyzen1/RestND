@@ -116,7 +116,6 @@
                       Grid.Column="1" Grid.Row="1"
                       BorderBrush="Transparent"
                       ItemsSource="{Binding AvailableDishes}"
-                      ItemContainerStyle="{StaticResource DishesListView}"
                       ItemTemplate="{StaticResource DishSquare}"
                       Background="Transparent"
                       Foreground="{DynamicResource LightText}"
@@ -127,6 +126,11 @@
                         <WrapPanel IsItemsHost="True" Margin="8" />
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem" BasedOn="{StaticResource DishesListView}">
+                        <Setter Property="IsEnabled" Value="{Binding In_Stock}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
             </ListView>
 
             <Border Grid.Column="1" Grid.Row="1"
