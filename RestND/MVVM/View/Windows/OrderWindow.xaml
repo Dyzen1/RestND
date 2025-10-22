@@ -36,39 +36,64 @@
 
             <!-- Top info row -->
             <Grid Grid.ColumnSpan="3" Grid.Row="0">
-
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
+                <!-- Waiter -->
                 <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center">
                     <TextBlock Text="Waiter's Name:"
                                Foreground="{DynamicResource LightText}"
                                Opacity="0.7" FontSize="12" Margin="0,20,0,0"/>
                     <TextBlock Text="{Binding DataContext.CurrentOrder.assignedEmployee.Employee_Name,
-                              RelativeSource={RelativeSource AncestorType=Window},
-                              TargetNullValue=—}"
+                                      RelativeSource={RelativeSource AncestorType=Window},
+                                      TargetNullValue=—}"
                                Foreground="{DynamicResource LightText}"
                                FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
 
+                <!-- Diners -->
                 <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Center">
                     <TextBlock Text="Diners"
                                Foreground="{DynamicResource LightText}"
                                Opacity="0.7" FontSize="12" Margin="0,20,0,4"/>
                     <TextBlock Text="{Binding DataContext.CurrentOrder.People_Count,
-                              RelativeSource={RelativeSource AncestorType=Window}}"
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
                                Foreground="{DynamicResource LightText}"
                                FontSize="12" FontWeight="Bold" HorizontalAlignment="Center"/>
                 </StackPanel>
 
-                <uc:SearchBar x:Name="DishSearch"
-                              Grid.Column="2"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Placeholder="Search for a product" Height="32"/>
+                <!-- Total + Search -->
+                <Grid Grid.Column="2" VerticalAlignment="Center" Margin="0,0,12,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Total -->
+                    <StackPanel Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Right">
+                        <TextBlock Text="Total"
+                                   Foreground="{DynamicResource LightText}"
+                                   Opacity="0.7" FontSize="12" Margin="0,0,12,0"/>
+                        <TextBlock Text="{Binding DataContext.TotalPrice,
+                                                  RelativeSource={RelativeSource AncestorType=Window},
+                                                  StringFormat={}{0:N2} ₪}"
+                                   Foreground="{DynamicResource LightText}"
+                                   FontSize="12" FontWeight="Bold"
+                                   HorizontalAlignment="Right"/>
+                    </StackPanel>
+
+                    <!-- Search -->
+                    <uc:SearchBar x:Name="DishSearch"
+                                  Grid.Column="2"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Center"
+                                  Placeholder="Search for a product"
+                                  Height="32"/>
+                </Grid>
             </Grid>
 
             <!-- Dish types (left sidebar) -->
@@ -155,26 +180,24 @@
                             <StackPanel Orientation="Vertical"/>
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
-
                 </ListView>
             </Border>
 
-            <!-- Printing btn's -->
-            <StackPanel Grid.Row="2" Grid.Column="2" 
-                        Margin="0 0 8 0" Orientation="Horizontal" 
+            <!-- Printing buttons -->
+            <StackPanel Grid.Row="2" Grid.Column="2"
+                        Margin="0 0 8 0" Orientation="Horizontal"
                         HorizontalAlignment="Right">
                 <Button Style="{DynamicResource PrintOrderBtn}"/>
                 <Button Style="{DynamicResource PrintBillBtn}"
-                        Command="{Binding PrintBillCommand}"/> 
+                        Command="{Binding PrintBillCommand}"/>
             </StackPanel>
 
-            <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2"
-                          VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-            <TextBlock Style="{StaticResource copyWrite}" 
+            <uc:ReturnBtn x:Name="returnBtn"
+                          Grid.Row="2"
+                          VerticalAlignment="Bottom"
+                          Margin="15,0,0,15"/>
+            <TextBlock Style="{StaticResource copyWrite}"
                        Grid.ColumnSpan="3" Grid.Row="3"/>
-
         </Grid>
-
     </Border>
-
 </Window>

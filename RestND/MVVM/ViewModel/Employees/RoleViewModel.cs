@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.AspNetCore.SignalR.Client;
-// using Mysqlx.Crud; // <- not used here; remove if unused elsewhere
 using RestND.Data;
 using RestND.MVVM.Model.Employees;
 using RestND.MVVM.Model.Security;
@@ -19,7 +18,7 @@ namespace RestND.MVVM.ViewModel
         #region Services & Hub
 
         private readonly RoleServices _roleService = new();
-
+        // ✅ Define the hub so _hub exists
         private readonly HubConnection _hub = App.EmployeeHub;
 
         #endregion
@@ -40,8 +39,9 @@ namespace RestND.MVVM.ViewModel
 
         [ObservableProperty] private string newRoleName = string.Empty;
         [ObservableProperty] private AppPermission newRolePermissions = AppPermission.None;
-        [ObservableProperty] private string formErrorMessage;
-        #endregion
+        [ObservableProperty] private string formErrorMessage = string.Empty;
+
+        #endregion // <-- this was missing before
 
         #region Events
 
@@ -57,6 +57,7 @@ namespace RestND.MVVM.ViewModel
             // If there are roles, pick the first; otherwise keep the placeholder
             SelectedRole = Roles.FirstOrDefault() ?? new Role();
         }
+
         #endregion
 
         #region Hub Registration
