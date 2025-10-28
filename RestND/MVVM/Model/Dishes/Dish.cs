@@ -114,6 +114,7 @@ namespace RestND.MVVM.Model
         public Dish()
         {
             this.Is_Active = true;
+            this.In_Stock = true;
         }
         #endregion
     }

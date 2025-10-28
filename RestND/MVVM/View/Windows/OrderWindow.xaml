@@ -6,12 +6,26 @@
         xmlns:local="clr-namespace:RestND.MVVM.View.Windows"
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
+        xmlns:conv="clr-namespace:RestND.Converters"
         mc:Ignorable="d"
         Style="{StaticResource windowStyle}"
         Title="OrderWindow">
 
-    <Border Style="{StaticResource windowBorder}">
+    <!-- 🧩 Resources -->
+    <Window.Resources>
+        <conv:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
 
+        <!-- Combines base DishesListView style + dimming for unavailable dishes -->
+        <Style x:Key="OrderDishListItemStyle"
+               TargetType="ListViewItem"
+               BasedOn="{StaticResource DishesListView}">
+            <Setter Property="Opacity"
+                    Value="{Binding In_Stock, Converter={StaticResource BoolToOpacityConverter}}"/>
+            <Setter Property="IsEnabled" Value="{Binding In_Stock}"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Style="{StaticResource windowBorder}">
         <Grid>
 
             <Grid.ColumnDefinitions>
@@ -136,12 +150,12 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>
 
-            <!-- Available dishes (drag source) -->
+            <!-- ✅ Available dishes (drag source) -->
             <ListView x:Name="DishList"
                       Grid.Column="1" Grid.Row="1"
                       BorderBrush="Transparent"
                       ItemsSource="{Binding AvailableDishes}"
-                      ItemContainerStyle="{StaticResource DishesListView}"
+                      ItemContainerStyle="{StaticResource OrderDishListItemStyle}"
                       ItemTemplate="{StaticResource DishSquare}"
                       Background="Transparent"
                       Foreground="{DynamicResource LightText}"

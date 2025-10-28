@@ -15,15 +15,25 @@ namespace RestND.MVVM.ViewModel.Orders
     public partial class OrderViewModel : ObservableObject
     {
         #region Services
+        private readonly OrderServices _orderSvc = new();
         private readonly DishServices _dishSvc = new();
         private readonly DishTypeServices _dishTypeSvc = new();
         private readonly DishInOrderServices _dishInOrderSvc = new();
+
+        // ✅ Needed for stock/availability
+        private readonly ProductService _productService = new();
+        private readonly ProductInDishService _productInDishService = new();
         #endregion
 
         #region Properties
         [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
         [ObservableProperty] private ObservableCollection<Dish> allDishes = new();
+
+        // This is what your OrderWindow binds to (ItemSource="{Binding AvailableDishes}")
         [ObservableProperty] private ObservableCollection<Dish> availableDishes = new();
+
+        // ✅ Current inventory snapshot for availability calc
+        [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
 
         // NOTE: we subscribe to CurrentOrder.DishInOrder changes to keep TotalPrice live.
         [ObservableProperty] private Order currentOrder = new();
@@ -38,8 +48,12 @@ namespace RestND.MVVM.ViewModel.Orders
         #region Constructor
         public OrderViewModel()
         {
+            // prime inventory snapshot first (we need it for availability)
+            AvailableProducts = new ObservableCollection<Inventory>(_productService.GetAll());
+
             LoadTypesAndDishes();
-            ApplyFilter();
+            ApplyFilter();          // populates AvailableDishes (by type)
+            UpdateDishAvailability(); // compute In_Stock flags
 
             // ensure we’re hooked to the default order as well
             HookOrderItems(CurrentOrder);
@@ -54,7 +68,11 @@ namespace RestND.MVVM.ViewModel.Orders
 
         #region Change Hooks
         // When user selects a type, refresh the list
-        partial void OnSelectedDishTypeChanged(DishType? value) => ApplyFilter();
+        partial void OnSelectedDishTypeChanged(DishType? value)
+        {
+            ApplyFilter();
+            UpdateDishAvailability();
+        }
 
         // When CurrentOrder changes, rewire collection hooks and recompute total
         partial void OnCurrentOrderChanged(Order value)
@@ -65,7 +83,7 @@ namespace RestND.MVVM.ViewModel.Orders
         }
         #endregion
 
-        #region Methods - Dishes & Filtering
+        #region Methods - Dishes, Stock & Filtering
         private void LoadTypesAndDishes()
         {
             var types = _dishTypeSvc.GetAll();
@@ -96,10 +114,55 @@ namespace RestND.MVVM.ViewModel.Orders
                 AvailableDishes.Add(d);
         }
 
+        /// <summary>
+        /// Re-snapshot inventory and recompute each dish's In_Stock flag.
+        /// Call this after any stock-affecting operation.
+        /// </summary>
+        private void ReloadStockAndAvailability()
+        {
+            AvailableProducts = new ObservableCollection<Inventory>(_productService.GetAll());
+            UpdateDishAvailability();
+        }
+
+        /// <summary>
+        /// Local availability calc (OrderWindow-only dimming).
+        /// Sets Dish.In_Stock based on products_in_dish vs. products.Quantity_Available.
+        /// </summary>
+        private void UpdateDishAvailability()
+        {
+            var stockById = AvailableProducts.ToDictionary(p => p.Product_ID, p => p.Quantity_Available);
+
+            foreach (var dish in AvailableDishes)
+            {
+                // Ensure link rows present
+                var usage = dish.ProductUsage;
+                if (usage == null || usage.Count == 0)
+                {
+                    usage = _productInDishService.GetProductsInDish(dish.Dish_ID) ?? new List<ProductInDish>();
+                    // fill names if missing (nice-to-have)
+                    foreach (var r in usage)
+                    {
+                        if (string.IsNullOrWhiteSpace(r.Product_Name))
+                        {
+                            r.Product_Name = AvailableProducts
+                                .FirstOrDefault(p => p.Product_ID == r.Product_ID)?.Product_Name ?? r.Product_ID;
+                        }
+                    }
+                    dish.ProductUsage = usage;
+                }
+
+                dish.In_Stock = usage.All(link =>
+                    stockById.TryGetValue(link.Product_ID, out var have) && have >= link.Amount_Usage
+                );
+            }
+        }
+
         public void Reload()
         {
+            AvailableProducts = new ObservableCollection<Inventory>(_productService.GetAll());
             LoadTypesAndDishes();
             ApplyFilter();
+            UpdateDishAvailability();
         }
         #endregion
 
@@ -190,9 +253,17 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             if (dish is null) return;
 
-            // checking the item doesnt exists yet in the order.
-            var item = CurrentOrder.DishInOrder.FirstOrDefault(l => l.dish.Dish_ID == dish.Dish_ID);
-            if (item == null)
+            // 🚫 Block if not in stock for the Order window flow
+            if (!dish.In_Stock)
+            {
+                MessageBox.Show("This dish is unavailable (insufficient ingredients).",
+                                "Unavailable", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // If the item doesn't exist yet in the order — add it
+            var existing = CurrentOrder.DishInOrder.FirstOrDefault(l => l.dish.Dish_ID == dish.Dish_ID);
+            if (existing == null)
             {
                 var newItem = new DishInOrder(dish);
                 CurrentOrder.DishInOrder.Add(newItem);
@@ -200,11 +271,18 @@ namespace RestND.MVVM.ViewModel.Orders
             }
             else
             {
-                // optional: if already exists, increment instead of ignoring
-                item.Quantity += 1;
-                item.TotalDishPrice += dish.Dish_Price;
-                _dishInOrderSvc.UpdateDishInOrder(CurrentOrder.Order_ID, item);
+                // optional: increment if already exists
+                existing.Quantity += 1;
+                existing.TotalDishPrice += dish.Dish_Price;
+                _dishInOrderSvc.UpdateDishInOrder(CurrentOrder.Order_ID, existing);
             }
+
+            // 🧮 Deduct the used ingredients from stock
+            _orderSvc.DeductProductQuantities(dish.Dish_ID);     
+
+
+            // ♻️ Refresh product list and dish availability (for dimming)
+            ReloadStockAndAvailability();
 
             RecalculateTotal();
         }
@@ -214,12 +292,13 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             if (item == null) return;
 
-            var dishInOrder = CurrentOrder.DishInOrder.FirstOrDefault(l => l.dish.Dish_ID == item.dish.Dish_ID);
-            if (dishInOrder == null) return;
+            var line = CurrentOrder.DishInOrder.FirstOrDefault(l => l.dish.Dish_ID == item.dish.Dish_ID);
+            if (line == null) return;
 
-            dishInOrder.Quantity += 1;
-            dishInOrder.TotalDishPrice += item.dish.Dish_Price;
-            _dishInOrderSvc.UpdateDishInOrder(CurrentOrder.Order_ID, dishInOrder);
+            // Optional: check stock before incrementing (not shown)
+            line.Quantity += 1;
+            line.TotalDishPrice += item.dish.Dish_Price;
+            _dishInOrderSvc.UpdateDishInOrder(CurrentOrder.Order_ID, line);
 
             RecalculateTotal();
         }
@@ -229,14 +308,14 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             if (item == null) return;
 
-            var dishInOrder = CurrentOrder.DishInOrder.FirstOrDefault(l => l.dish.Dish_ID == item.dish.Dish_ID);
-            if (dishInOrder == null) return;
+            var line = CurrentOrder.DishInOrder.FirstOrDefault(l => l.dish.Dish_ID == item.dish.Dish_ID);
+            if (line == null) return;
 
-            if (dishInOrder.Quantity > 1)
+            if (line.Quantity > 1)
             {
-                dishInOrder.Quantity -= 1;
-                dishInOrder.TotalDishPrice -= item.dish.Dish_Price;
-                _dishInOrderSvc.UpdateDishInOrder(CurrentOrder.Order_ID, dishInOrder);
+                line.Quantity -= 1;
+                line.TotalDishPrice -= item.dish.Dish_Price;
+                _dishInOrderSvc.UpdateDishInOrder(CurrentOrder.Order_ID, line);
             }
             else
             {
