@@ -140,6 +140,37 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
+        #region Methods 
+        private void UpdateDishAvailability()
+        {
+            // Current inventory snapshot
+            var stockById = AvailableProducts
+                .ToDictionary(p => p.Product_ID, p => p.Quantity_Available);
+
+            foreach (var dish in Dishes)
+            {
+                // Ensure we have the usage rows
+                if (dish.ProductUsage == null || dish.ProductUsage.Count == 0)
+                {
+                    var rows = _productInDishService.GetProductsInDish(dish.Dish_ID) ?? new List<ProductInDish>();
+                    foreach (var r in rows)
+                    {
+                        if (string.IsNullOrWhiteSpace(r.Product_Name))
+                            r.Product_Name = AvailableProducts
+                                .FirstOrDefault(p => p.Product_ID == r.Product_ID)?.Product_Name ?? r.Product_ID;
+                    }
+                    dish.ProductUsage = rows;
+                }
+
+                // ✅ Available only if every ingredient has enough stock
+                dish.In_Stock = dish.ProductUsage.All(link =>
+                    stockById.TryGetValue(link.Product_ID, out var have) && have >= link.Amount_Usage
+                );
+            }
+        }
+
+        #endregion
+
         #region Relay commands
         [RelayCommand]
         private void LoadDishes()
@@ -150,6 +181,7 @@ namespace RestND.MVVM.ViewModel
             {
                 Dishes.Add(dish);
             }
+            UpdateDishAvailability();
         }
         [RelayCommand]
         private void LoadDishTypes()

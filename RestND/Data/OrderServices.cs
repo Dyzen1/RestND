@@ -143,5 +143,21 @@ namespace RestND.Data
             ) > 0;
         }
         #endregion
+
+
+        public void DeductProductQuantities(int dishId)
+        {
+            string query = @"
+        UPDATE inventory p
+        JOIN products_in_dish pid ON p.Product_ID = pid.Product_ID
+        SET p.Quantity_Available = p.Quantity_Available - pid.Amount_Usage
+        WHERE pid.Dish_ID = @dishId;
+    ";
+
+            _db.ExecuteNonQuery(query, new MySqlParameter[]
+            {
+              new MySqlParameter("@dishId", dishId)
+            });
+        }
     }
 }
