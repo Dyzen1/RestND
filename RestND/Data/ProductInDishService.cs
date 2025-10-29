@@ -10,8 +10,6 @@ namespace RestND.Data
     {
         private readonly DatabaseOperations _db = DatabaseOperations.Instance;
 
-
-
         #region Get Products in Dish by Dish ID
         public List<ProductInDish> GetProductsInDish(int dishId)
         {
@@ -75,17 +73,14 @@ namespace RestND.Data
         }
         #endregion
 
-
         // soft delete product from db
         #region soft delete product from product in dish
-
         public int DeleteProductEverywhere(string productId)
         {
             var query = "UPDATE products_in_dish SET Is_Active = false WHERE Product_ID = @productId";
             return _db.ExecuteNonQuery(query, new MySqlParameter("@productId", productId));
         }
         #endregion
-
 
         // Update a product usage in a dish
         #region Update Product in Dish

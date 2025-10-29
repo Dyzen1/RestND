@@ -7,6 +7,7 @@ namespace RestND.Data
     {
         private readonly DatabaseOperations _db;
 
+        #region Constructors
         // default: singleton DB instance
         public DishInOrderServices() : this(DatabaseOperations.Instance) { }
 
@@ -15,7 +16,9 @@ namespace RestND.Data
         {
             _db = db;
         }
+        #endregion
 
+        #region Add Dish to Order
         // Transactional insert (use SAME connection + transaction)
         public bool AddDishToOrder(int orderId, DishInOrder dish, MySqlConnection conn, MySqlTransaction tx)
         {
@@ -46,7 +49,9 @@ namespace RestND.Data
                 new MySqlParameter("@total", dish.TotalDishPrice)
             ) > 0;
         }
+        #endregion
 
+        #region Delete Dish from Order
         public bool DeleteDishFromOrder(int dishId, int orderId)
         {
             const string query = "DELETE FROM dishes_in_order WHERE Dish_ID = @dishId AND Order_ID = @orderId";
@@ -55,7 +60,9 @@ namespace RestND.Data
                 new MySqlParameter("@orderId", orderId));
             return affectedRows > 0;
         }
+        #endregion
 
+        #region Update Dish in Order
         public bool UpdateDishInOrder(int orderId, DishInOrder d)
         {
             const string query =
@@ -67,5 +74,6 @@ namespace RestND.Data
                 new MySqlParameter("@total", d.TotalDishPrice));
             return affectedRows > 0;
         }
+        #endregion
     }
 }

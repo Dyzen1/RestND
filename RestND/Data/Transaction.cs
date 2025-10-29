@@ -85,7 +85,8 @@ public class Transaction
             SET Dish_Name = @name, 
                 Dish_Price = @price, 
                 Allergen_Notes = @notes,
-                DishType_Name = @type
+                DishType_Name = @type,
+                Is_Active = @status
                 WHERE Dish_ID = @id";
 
             _db.ExecuteNonQuery(query, _db.Connection, transaction,

@@ -14,7 +14,7 @@ namespace RestND.Data
         #region Get current VAT rate
         private readonly DatabaseOperations _db = DatabaseOperations.Instance;
 
-        /// Returns the current VAT row (a single row).
+        /// Returns the current VAT (a single row).
         public Vat Get()
         {
             const string sql = "SELECT Vat_ID, Percentage FROM vat WHERE Vat_ID = 1 LIMIT 1";

@@ -105,8 +105,6 @@ namespace RestND.Data
         #region Add Employee
         public override bool Add(Employee e)
         {
-          
-
             // Hash password before insert
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(e.Password ?? string.Empty);
 
@@ -132,9 +130,6 @@ namespace RestND.Data
         #region Update Employee
         public override bool Update(Employee e)
         {
-          
-
-           
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(e.Password ?? string.Empty);
 
             const string query = @"

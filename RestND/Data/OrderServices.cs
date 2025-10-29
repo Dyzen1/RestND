@@ -67,7 +67,6 @@ namespace RestND.Data
         #region Add Final Order (via transaction)
         public override bool Add(Order item)
         {
-           
             return _transaction.AddOrder(item);
         }
         #endregion

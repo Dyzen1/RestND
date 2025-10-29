@@ -49,9 +49,9 @@
                 <TextBlock Text="{Binding ErrorMessage}"
                            Style="{DynamicResource errorMessage}"/>
 
-                <Button Content="Forgot password" Margin="0 0 0 20"
+                <!--<Button Content="Forgot password" Margin="0 0 0 20"
                         Click="ForgotPassword_Click"
-                        Style="{DynamicResource frGotPassword}"/>
+                        Style="{DynamicResource frGotPassword}"/>-->
             </StackPanel>
         </Border>
 
