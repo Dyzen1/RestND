@@ -12,6 +12,7 @@
         Style="{StaticResource windowStyle}"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
+    <!-- Used to show or hide UI elements based on whether a bound string is empty -->
     <Window.Resources>
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Window.Resources>
@@ -19,17 +20,18 @@
     <Border Style="{DynamicResource windowBorder}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="250"/>
-                <RowDefinition Height="90"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
+            <!-- search bar by dish name -->
             <uc:SearchBar x:Name="DishSearch" Grid.Row="0" Grid.Column="1" 
                           Margin="8 15 0 0" HorizontalAlignment="Left"
                           Placeholder="Search by dish name"/>
@@ -82,7 +84,7 @@
             <GroupBox Header="Products For New Dish" Grid.Row="2" Grid.Column="0">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     
@@ -201,7 +203,7 @@
 
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal"
                         HorizontalAlignment="Center" VerticalAlignment="Center"
-                        Margin="0 0 0 20">
+                        Margin="0 0 0 30">
                 <Button Content="Update Dish" 
                          Click="UpdateDishBtn_Click"
                          Style="{DynamicResource SubmitBtn}"/>
@@ -211,6 +213,7 @@
                         Margin="20,0,0,0" Style="{DynamicResource SubmitBtn}"/>
             </StackPanel>
 
+            <!-- Footer -->
             <uc:ReturnBtn x:Name="returnBtn" Grid.Row="3" Grid.Column="0"
                           VerticalAlignment="Bottom" Margin="15,0,0,15"/>
             <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="3" Grid.Column="1" 

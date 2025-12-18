@@ -59,4 +59,11 @@
         <Setter Property="Foreground" Value="{DynamicResource secondaryBtns}"/>
     </Style>
 
+    <Style x:Key="trash" TargetType="fa:ImageAwesome">
+        <Setter Property="Icon" Value="Trash"/>
+        <Setter Property="Height" Value="20"/>
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="Foreground" Value="{DynamicResource LightText}"/>
+    </Style>
+
 </ResourceDictionary>

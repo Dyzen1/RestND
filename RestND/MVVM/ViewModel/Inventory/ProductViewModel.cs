@@ -76,14 +76,14 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
-        #region On Change
-        partial void OnSelectedProductChanged(Inventory value)
-        {
-            UpdateProductCommand.NotifyCanExecuteChanged();
-            DeleteProductCommand.NotifyCanExecuteChanged();
-            AddProductCommand.NotifyCanExecuteChanged();
-        }
-        #endregion
+        //#region On Change
+        //partial void OnSelectedProductChanged(Inventory value)
+        //{
+        //    UpdateProductCommand.NotifyCanExecuteChanged();
+        //    DeleteProductCommand.NotifyCanExecuteChanged();
+        //    AddProductCommand.NotifyCanExecuteChanged();
+        //}
+        //#endregion
 
         #region Load Products
         [RelayCommand]
@@ -104,7 +104,6 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Add Product
-
         [RelayCommand]
         private async Task AddProduct()
         {
@@ -143,17 +142,16 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Delete Product
-
         [RelayCommand]
         private async Task DeleteProductAsync()
         {
-
+            // checking if a product had been selected
             if (SelectedProduct == null)
             {
                 ProductErrorMessage = "Please select a product to delete.";
                 return;
             }
-
+            // if a product had been selected, activate the Delete function
             bool success = _productService.Delete(SelectedProduct);
             if (success)
             {
@@ -170,6 +168,7 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand]
         private async Task UpdateProduct()
         {
+            // checking if a product had been selected
             if (SelectedProduct == null)
             {
                 ProductErrorMessage = "Please select a product to update.";

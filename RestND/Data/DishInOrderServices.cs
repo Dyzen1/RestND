@@ -5,7 +5,9 @@ namespace RestND.Data
 {
     public class DishInOrderServices
     {
+        #region DB property
         private readonly DatabaseOperations _db;
+        #endregion
 
         #region Constructors
         // default: singleton DB instance

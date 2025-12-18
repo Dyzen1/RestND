@@ -55,6 +55,7 @@ namespace RestND.MVVM.ViewModel
             _productService = new ProductService();
             _hub = App.DishHub;
             AvailableProducts = new ObservableCollection<Inventory>(_productService.GetAll());
+            // calling functions
             LoadDishTypes();
             LoadDishes();
             RefreshProductSelections();
@@ -110,6 +111,7 @@ namespace RestND.MVVM.ViewModel
         #region On change
         partial void OnSelectedDishChanged(Dish value)
         {
+            // ensures buttons enable/disable correctly when selection changes
             DeleteDishCommand.NotifyCanExecuteChanged();
             AddDishCommand.NotifyCanExecuteChanged();
 
@@ -140,7 +142,7 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
-        #region Methods 
+        #region Update dish availbility method
         private void UpdateDishAvailability()
         {
             // Current inventory snapshot
@@ -179,7 +181,7 @@ namespace RestND.MVVM.ViewModel
             var dbDishes = _dishService.GetAll();
             foreach (var dish in dbDishes)
             {
-                Dishes.Add(dish);
+                Dishes.Add(dish); //add to the observable collection "Dishes"
             }
             UpdateDishAvailability();
         }
@@ -189,7 +191,7 @@ namespace RestND.MVVM.ViewModel
             DishTypes.Clear();
             var dbDishTypes = _dishTypeService.GetAll();
             foreach (var dishType in dbDishTypes)
-                DishTypes.Add(dishType);
+                DishTypes.Add(dishType); //add to the observable collection "DishType"
         }
 
         [RelayCommand]
@@ -209,7 +211,7 @@ namespace RestND.MVVM.ViewModel
                     if (e.PropertyName == nameof(SelectableItem<string>.IsSelected))
                     {
                         if (item.IsSelected && !SelectedAllergenNotes.Contains(item.Value))
-                            SelectedAllergenNotes.Add(item.Value);
+                            SelectedAllergenNotes.Add(item.Value); //add to the observable collection "SelectedAllergenNotes"
                         else if (!item.IsSelected && SelectedAllergenNotes.Contains(item.Value))
                             SelectedAllergenNotes.Remove(item.Value);
                     }
@@ -287,6 +289,7 @@ namespace RestND.MVVM.ViewModel
         [RelayCommand(CanExecute = nameof(CanModifyDish))]
         private async Task DeleteDish()
         {
+            // if a dish had been chosen, proceed to delete
             if (SelectedDish != null)
             {
                 bool success = _dishService.Delete(SelectedDish);
@@ -300,7 +303,8 @@ namespace RestND.MVVM.ViewModel
         }
         #endregion
 
-        #region Can modify
+        #region Can modify 
+        // determines whether modification actions are allowed based on the current selection
         private bool CanModifyDish() => SelectedDish != null;
         private bool CanAddDish() => true;
         #endregion

@@ -34,6 +34,7 @@
                 <uc:SideBar/>
             </Expander>
 
+            <!-- left side of the window -->
             <GroupBox Header="New Product Details" Margin="20 0 18 8" Grid.Column="0" 
                       Grid.Row="1">
                 <Grid>
@@ -69,7 +70,7 @@
                         <TextBox Text="{Binding NewToleranceInput, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                     </StackPanel>
 
-                    <!-- Add Button -->
+                    <!-- Add Product Button -->
                     <Button Grid.Row="4" Command="{Binding AddProductCommand}"
                              Style="{DynamicResource addBtn}" VerticalAlignment="Center" 
                              HorizontalAlignment="Center" Margin="0 20 0 0">
@@ -82,16 +83,16 @@
                 </Grid>
             </GroupBox>
 
-            <!-- Validation error display -->
+            <!-- Validation error display message -->
             <TextBlock Text="{Binding ProductErrorMessage}" Grid.Row="2" 
                     Style="{DynamicResource errorMessage}"
                     Visibility="{Binding ProductErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
 
-            <!--search by product name-->
+            <!--search bar by product name-->
             <uc:SearchBar x:Name="ProductSearch" Grid.Row="0" Grid.Column="1" 
                           Margin="8 15 0 0" HorizontalAlignment="Left"
                           Placeholder="Search by product name"/>
-            <!-- DataGrid Section -->
+            <!-- DataGrid Section (right side of the window -->
             <Border Style="{DynamicResource windowBorder}"
                     Grid.Column="1" Grid.Row="1" Margin="8">
                 <DataGrid RowStyle="{DynamicResource rowStyle}"
@@ -101,6 +102,7 @@
                           HeadersVisibility="Column" 
                           AutoGenerateColumns="False"
                           ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}">
+                    <!-- columns -->
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Serial Number" 
                                             Binding="{Binding Product_ID}" Width="*"

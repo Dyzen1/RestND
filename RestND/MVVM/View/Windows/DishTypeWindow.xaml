@@ -27,7 +27,7 @@
                        Foreground="{DynamicResource LightText}"
                        FontWeight="Bold"
                        FontSize="16"/>
-
+            <!-- top section of the window -->
             <GroupBox Header="Create a new dish type" Grid.Row="1">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -55,14 +55,16 @@
                     </StackPanel>
                 </Grid>
             </GroupBox>
-
+            
+            <!-- bottom section of the window -->
             <GroupBox Header="Existing Discounts" Grid.Row="2">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-
+                    
+                    <!-- search bar by dish type name -->
                     <uc:SearchBar x:Name="DishTypeSearch" Grid.Row="0"
                                   HorizontalAlignment="Left" 
                                   Placeholder="Search by dish type name"

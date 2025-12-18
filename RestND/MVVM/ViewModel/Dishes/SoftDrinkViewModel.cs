@@ -11,35 +11,41 @@ namespace RestND.MVVM.ViewModel.Dishes
 {
     public partial class SoftDrinkViewModel : ObservableObject
     {
-        // ===== Form fields (bound to the right pane) =====
+        #region Services
+        private readonly SoftDrinkServices _service = new();
+        private readonly SoftDrinkValidator _validator = new();
+        #endregion
+
+        #region Observable Properties
         [ObservableProperty] private int drinkId;
         [ObservableProperty] private string? drinkName;
         [ObservableProperty] private double drinkPrice;
         [ObservableProperty] private int quantity;
         [ObservableProperty] private bool isActive = true;
 
-        // ===== UI state =====
         [ObservableProperty] private string? errorMessage;
 
-        // ===== Grid state (left pane) =====
         [ObservableProperty] private ObservableCollection<SoftDrink> softDrinks = new();
         [ObservableProperty] private SoftDrink? selectedSoftDrink;
+        #endregion
 
-        private readonly SoftDrinkServices _service = new();
-        private readonly SoftDrinkValidator _validator = new();
-
+        #region Ctor
         public SoftDrinkViewModel()
         {
             LoadSoftDrinks();
         }
+        #endregion
 
-        // When a row is selected in the grid, load it into the form
+        #region On Change
+        // When a row is selected in the grid, we load it into the form
         partial void OnSelectedSoftDrinkChanged(SoftDrink? value)
         {
             if (value is null) return;
             LoadFrom(value);
         }
+        #endregion
 
+        #region Load Method
         private void LoadFrom(SoftDrink d)
         {
             DrinkId = d.Drink_ID;
@@ -49,7 +55,9 @@ namespace RestND.MVVM.ViewModel.Dishes
             IsActive = d.Is_Active;
             ErrorMessage = null;
         }
+        #endregion
 
+        #region Clear form method
         private void ClearForm()
         {
             SelectedSoftDrink = null;
@@ -60,9 +68,9 @@ namespace RestND.MVVM.ViewModel.Dishes
             IsActive = true;
             ErrorMessage = null;
         }
+        #endregion
 
-        // ===== Commands =====
-
+        #region Relay commands
         [RelayCommand]
         private void LoadSoftDrinks()
         {
@@ -175,5 +183,6 @@ namespace RestND.MVVM.ViewModel.Dishes
             LoadSoftDrinks();
             ClearForm();
         }
+        #endregion
     }
 }

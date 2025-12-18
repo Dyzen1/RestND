@@ -12,7 +12,8 @@ using System;
             public SideBar()
             {
                 InitializeComponent();
-                this.DataContext = new NavigationViewModel();
+            // the side bar's vm is NavigationViewModel.
+            this.DataContext = new NavigationViewModel();
             }
 
         }

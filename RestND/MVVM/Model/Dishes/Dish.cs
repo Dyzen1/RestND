@@ -77,7 +77,6 @@ namespace RestND.MVVM.Model
 
         #region Dish_Type
         private DishType? _Dish_Type;
-
         public DishType? Dish_Type
         {
             get => _Dish_Type;

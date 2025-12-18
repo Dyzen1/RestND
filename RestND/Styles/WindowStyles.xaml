@@ -222,6 +222,7 @@
                             <Setter Property="Foreground" Value="{DynamicResource LightBG}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Background" Value="{DynamicResource secondaryHeaders}"/>
                             <Setter TargetName="bd" Property="Opacity" Value="0.6"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -319,11 +320,13 @@
                         CommandParameter="{Binding}" Foreground="{DynamicResource LightText}"
                         Background="Transparent" ToolTip="Less"/>
 
-                <Button Content="✕" Padding="6,0"
+                <Button Padding="6,0"
                         BorderBrush="Transparent" 
                         Command="{Binding DataContext.RemoveLineCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
-                        CommandParameter="{Binding}" Foreground="{DynamicResource LightText}"
-                        Background="Transparent" ToolTip="Remove Item"/>
+                        CommandParameter="{Binding}"
+                        Background="Transparent" ToolTip="Remove Item">
+                    <fa:ImageAwesome Style="{DynamicResource trash}"/>
+                </Button>
             </StackPanel>
         </Grid>
     </DataTemplate>
