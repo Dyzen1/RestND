@@ -41,22 +41,22 @@ namespace RestND.MVVM.Model
         }
         #endregion
 
-        #region Constructor
-        public DishType( string? dishType_Name)
-        {
-            this.DishType_Name = dishType_Name;
-            this.Is_Active = true; 
-        }
+            #region Constructor
+            public DishType( string? dishType_Name)
+            {
+                this.DishType_Name = dishType_Name;
+                this.Is_Active = true; 
+            }
 
-        #endregion
+            #endregion
 
-        #region Default Constructor
-        public DishType()
-        {
-            this.Is_Active = true;
-        }
+            #region Default Constructor
+            public DishType()
+            {
+                this.Is_Active = true;
+            }
 
-        #endregion
+            #endregion
 
     }
 }

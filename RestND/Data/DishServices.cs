@@ -103,5 +103,34 @@ namespace RestND.Data
         }
 
         #endregion
+
+
+        #region GetById (added)
+        public Dish? GetById(int id)
+        {
+            const string query = "SELECT * FROM dishes WHERE Dish_ID = @id LIMIT 1";
+            var rows = _db.ExecuteReader(query, new MySqlParameter("@id", id));
+            var row = rows.FirstOrDefault();
+            if (row == null) return null;
+
+            var dish = new Dish
+            {
+                Dish_ID = Convert.ToInt32(row["Dish_ID"]),
+                Dish_Name = row["Dish_Name"]?.ToString(),
+                Dish_Price = Convert.ToInt32(row["Dish_Price"]),
+                Dish_Type = new DishType { DishType_Name = row["DishType_Name"]?.ToString() }
+            };
+
+            if (row.TryGetValue("Allergen_Notes", out var allergenNotes) && allergenNotes != null)
+                dish.Allergen_Notes = allergenNotes.ToString();
+
+            if (row.TryGetValue("Is_Active", out var active) && active != null)
+                dish.Is_Active = Convert.ToBoolean(active);
+
+
+            return dish;
+        }
+        #endregion
+
     }
 }

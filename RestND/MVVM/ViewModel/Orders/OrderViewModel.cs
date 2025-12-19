@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RestND.Data;
 using RestND.MVVM.Model;
@@ -14,73 +15,73 @@ namespace RestND.MVVM.ViewModel.Orders
 {
     public partial class OrderViewModel : ObservableObject
     {
-        #region Services
-        private readonly OrderServices _orderSvc = new();
-        private readonly DishServices _dishSvc = new();
-        private readonly DishTypeServices _dishTypeSvc = new();
-        private readonly DishInOrderServices _dishInOrderSvc = new();
+            #region Services
+            private readonly OrderServices _orderSvc = new();
+            private readonly DishServices _dishSvc = new();
+            private readonly DishTypeServices _dishTypeSvc = new();
+            private readonly DishInOrderServices _dishInOrderSvc = new();
 
-        // ✅ Needed for stock/availability
-        private readonly ProductService _productService = new();
-        private readonly ProductInDishService _productInDishService = new();
-        #endregion
+            // ✅ Needed for stock/availability
+            private readonly ProductService _productService = new();
+            private readonly ProductInDishService _productInDishService = new();
+            #endregion
 
-        #region Properties
-        [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
-        [ObservableProperty] private ObservableCollection<Dish> allDishes = new();
+            #region Properties
+            [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
+            [ObservableProperty] private ObservableCollection<Dish> allDishes = new();
 
-        // This is what your OrderWindow binds to (ItemSource="{Binding AvailableDishes}")
-        [ObservableProperty] private ObservableCollection<Dish> availableDishes = new();
+            // This is what your OrderWindow binds to (ItemSource="{Binding AvailableDishes}")
+            [ObservableProperty] private ObservableCollection<Dish> availableDishes = new();
 
-        // ✅ Current inventory snapshot for availability calc
-        [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
+            // ✅ Current inventory snapshot for availability calc
+            [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
 
-        // NOTE: we subscribe to CurrentOrder.DishInOrder changes to keep TotalPrice live.
-        [ObservableProperty] private Order currentOrder = new();
+            // NOTE: we subscribe to CurrentOrder.DishInOrder changes to keep TotalPrice live.
+            [ObservableProperty] private Order currentOrder = new();
 
-        [ObservableProperty] private Bill currentBill = new();
-        [ObservableProperty] private DishType? selectedDishType;
+            [ObservableProperty] private Bill currentBill = new();
+            [ObservableProperty] private DishType? selectedDishType;
 
-        // NEW: live total (header)
-        [ObservableProperty] private double totalPrice;
-        #endregion
+            // NEW: live total (header)
+            [ObservableProperty] private double totalPrice;
+            #endregion
 
-        #region Constructor
-        public OrderViewModel()
-        {
-            // prime inventory snapshot first (we need it for availability)
-            AvailableProducts = new ObservableCollection<Inventory>(_productService.GetAll());
+            #region Constructor
+            public OrderViewModel()
+            {
+                // prime inventory snapshot first (we need it for availability)
+                AvailableProducts = new ObservableCollection<Inventory>(_productService.GetAll());
 
-            LoadTypesAndDishes();
-            ApplyFilter();          // populates AvailableDishes (by type)
-            UpdateDishAvailability(); // compute In_Stock flags
+                LoadTypesAndDishes();
+                ApplyFilter();          // populates AvailableDishes (by type)
+                UpdateDishAvailability(); // compute In_Stock flags
 
-            // ensure we’re hooked to the default order as well
-            HookOrderItems(CurrentOrder);
-            RecalculateTotal();
-        }
+                // ensure we’re hooked to the default order as well
+                HookOrderItems(CurrentOrder);
+                RecalculateTotal();
+            }
 
-        public OrderViewModel(Order order) : this()
-        {
-            CurrentOrder = order; // triggers OnCurrentOrderChanged -> rewire + recalc
-        }
-        #endregion
+            public OrderViewModel(Order order) : this()
+            {
+                CurrentOrder = order; // triggers OnCurrentOrderChanged -> rewire + recalc
+            }
+            #endregion
 
-        #region Change Hooks
-        // When user selects a type, refresh the list
-        partial void OnSelectedDishTypeChanged(DishType? value)
-        {
-            ApplyFilter();
-            UpdateDishAvailability();
-        }
+            #region Change Hooks
+            // When user selects a type, refresh the list
+            partial void OnSelectedDishTypeChanged(DishType? value)
+            {
+                ApplyFilter();
+                UpdateDishAvailability();
+            }
 
-        // When CurrentOrder changes, rewire collection hooks and recompute total
-        partial void OnCurrentOrderChanged(Order value)
-        {
-            UnhookOrderItems();
-            HookOrderItems(value);
-            RecalculateTotal();
-        }
+            // When CurrentOrder changes, rewire collection hooks and recompute total
+            partial void OnCurrentOrderChanged(Order value)
+            {
+                UnhookOrderItems();
+                HookOrderItems(value);
+                RecalculateTotal();
+            }
         #endregion
 
         #region Methods - Dishes, Stock & Filtering
@@ -337,5 +338,40 @@ namespace RestND.MVVM.ViewModel.Orders
             RecalculateTotal();
         }
         #endregion
+
+        [RelayCommand]
+        private void PrintBill()
+        {
+            try
+            {
+                if (CurrentOrder == null || CurrentOrder.DishInOrder == null || CurrentOrder.DishInOrder.Count == 0)
+                {
+                    MessageBox.Show("No items in the order to print.", "Print Bill",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                // If you already created a Bill object elsewhere, pass it. Otherwise, pass null and let the printer
+                // compute totals from the order (or compute a Bill here).
+                var printer = new BillPrinter(CurrentOrder, CurrentBill)
+                {
+                    RestaurantName = "RestND",
+                    Address = "123 Sample St.",
+                    Phone = "03-555-1234",
+                    VatPercent = 17,             // optional: will show a VAT line
+                    
+                };
+
+                printer.Print();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Printing failed: {ex.Message}", "Print Bill",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+
     }
 }
