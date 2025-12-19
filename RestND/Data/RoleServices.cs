@@ -34,8 +34,8 @@ namespace RestND.Data
         public override bool Add(Role r)
         {
             const string query = @"
-INSERT INTO roles (Role_Name, Permissions, Is_Active)
-VALUES (@Role_Name, @Permissions, @Is_Active);";
+                INSERT INTO roles (Role_Name, Permissions, Is_Active)
+                VALUES (@Role_Name, @Permissions, @Is_Active);";
 
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@Role_Name", (object?)r.Role_Name ?? DBNull.Value),
@@ -49,10 +49,10 @@ VALUES (@Role_Name, @Permissions, @Is_Active);";
         public override bool Update(Role r)
         {
             const string query = @"
-UPDATE roles
-SET Role_Name = @Role_Name,
-    Permissions = @Permissions
-WHERE Role_ID = @id;";
+                UPDATE roles
+                SET Role_Name = @Role_Name,
+                    Permissions = @Permissions
+                WHERE Role_ID = @id;";
 
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@id", r.Role_ID),

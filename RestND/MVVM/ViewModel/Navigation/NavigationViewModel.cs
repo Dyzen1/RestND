@@ -17,7 +17,7 @@ namespace RestND.MVVM.ViewModel.Navigation
 
         private readonly EventHandler _permHandler;
 
-        // 🔔 Subscribe to live permission changes so bound buttons update (IsEnabled/Visibility)
+        // Subscribe to live permission changes so bound buttons update (IsEnabled/Visibility)
         public NavigationViewModel()
         {
             _permHandler = (s, e) =>
@@ -54,7 +54,7 @@ namespace RestND.MVVM.ViewModel.Navigation
                 return;
             }
 
-            // 🔐 map destinations to required flags
+            // map destinations to required flags
             AppPermission required = destination switch
             {
                 "Inventory" => AppPermission.Inventory,
@@ -76,7 +76,7 @@ namespace RestND.MVVM.ViewModel.Navigation
                 return;
             }
 
-            // 🚪 open window as before
+            // open window as before
             Window? next = destination switch
             {
                 "Inventory" => new ProductWindow(),
@@ -118,7 +118,7 @@ namespace RestND.MVVM.ViewModel.Navigation
             if (dlg.Owner != null) dlg.Owner.Opacity = 1.0;
         }
 
-        
+        // functions for each authorization.
         public bool CanOpenInventory => AuthContext.Has(AppPermission.Inventory);
         public bool CanOpenManageRoles => AuthContext.Has(AppPermission.Employees);   // or Other
         public bool CanOpenManageDiscounts => AuthContext.Has(AppPermission.Other);

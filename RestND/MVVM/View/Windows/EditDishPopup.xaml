@@ -8,7 +8,7 @@
         xmlns:conv="clr-namespace:RestND.Converters"
         xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
         mc:Ignorable="d" Style="{StaticResource popupStyle}"
-        Title="Edit Dish" Width="450" Height="700"
+        Title="Edit Dish" Width="450" Height="750"
         WindowStartupLocation="CenterOwner">
 
     <Window.Resources>
@@ -23,7 +23,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="90"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <GroupBox Grid.Row="0" Header="Update Dish Details">
@@ -69,7 +70,7 @@
             <GroupBox Grid.Row="1" Header="Update Ingredients">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <uc:SearchBar x:Name="ProductSearch" Grid.Row="0"
@@ -81,7 +82,9 @@
                           ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
                           Grid.Row="1"
                           RowStyle="{DynamicResource rowStyle}"
-                          CellStyle="{DynamicResource cellStyle}">
+                          CellStyle="{DynamicResource cellStyle}"
+                          ScrollViewer.CanContentScroll="True"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto">
                     
                     <DataGrid.Columns>
                         <DataGridCheckBoxColumn Width="30"
@@ -114,17 +117,27 @@
             </GroupBox>
 
             <!-- Validation error display -->
-            <TextBlock Text="{Binding DishErrorMessage}" Grid.Row="3" 
-            Style="{DynamicResource errorMessage}"
-            Visibility="{Binding DishErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
+            <TextBlock Text="{Binding DishErrorMessage}" Grid.Row="2" 
+                        Style="{DynamicResource errorMessage}"
+                        Visibility="{Binding DishErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
 
-            <Button Content="Save" Grid.Row="2" 
-                    Command="{Binding UpdateDishCommand}"
-                    Style="{DynamicResource SubmitBtn}"
-                    Margin="5 0 0 0"/>
+            <Grid Grid.Row="3" Margin="0,6,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <uc:ReturnBtn x:Name="returnBtn" Grid.Row="2" VerticalAlignment="Bottom" Margin="15,0,0,15"/>
-            <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="2"/>
+                <Button Grid.Row="0"
+                        Content="Save"
+                        Command="{Binding UpdateDishCommand}"
+                        Style="{DynamicResource SubmitBtn}"
+                        Margin="0,0,8,0"/>
+                
+                <TextBlock Style="{DynamicResource copyWrite}" Grid.Row="1"
+                           VerticalAlignment="Center" Margin="0,10"/>
+                <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Center" 
+                              Margin="0,0,10,10" Grid.Row="1"/>
+            </Grid>
 
         </Grid>
     </Border>

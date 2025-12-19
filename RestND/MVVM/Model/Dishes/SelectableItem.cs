@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace RestND.MVVM.ViewModel.Dishes
 {
+    // A class that is used for multiple choise selections.
     public class SelectableItem<T> : ObservableObject
     {
         public T Value { get; }

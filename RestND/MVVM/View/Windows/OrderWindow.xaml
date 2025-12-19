@@ -195,6 +195,7 @@
                         </ItemsPanelTemplate>
                     </ListView.ItemsPanel>
                 </ListView>
+                
             </Border>
 
             <!-- Printing buttons -->

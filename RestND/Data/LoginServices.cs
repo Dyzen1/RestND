@@ -14,21 +14,21 @@ namespace RestND.Data
         public Employee? AuthenticateById(int employeeId, string plainPassword)
         {
             const string sql = @"
-SELECT 
-    e.Employee_ID,
-    e.Employee_Name,
-    e.Employee_Lastname,
-    e.Password,
-    e.Email,
-    e.Role_ID,
-    e.Is_Active AS EmpActive,
-    r.Role_Name,
-    r.Permissions,
-    r.Is_Active AS RoleActive
-FROM employees e
-LEFT JOIN roles r ON e.Role_ID = r.Role_ID
-WHERE e.Employee_ID = @id
-LIMIT 1;";
+                        SELECT 
+                            e.Employee_ID,
+                            e.Employee_Name,
+                            e.Employee_Lastname,
+                            e.Password,
+                            e.Email,
+                            e.Role_ID,
+                            e.Is_Active AS EmpActive,
+                            r.Role_Name,
+                            r.Permissions,
+                            r.Is_Active AS RoleActive
+                        FROM employees e
+                        LEFT JOIN roles r ON e.Role_ID = r.Role_ID
+                        WHERE e.Employee_ID = @id
+                        LIMIT 1;";
 
             var rows = _db.ExecuteReader(sql, new MySqlParameter("@id", employeeId));
             if (rows.Count == 0) return null;

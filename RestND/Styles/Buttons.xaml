@@ -71,7 +71,6 @@
         </Setter>
     </Style>
 
-
     <!-- "others" toggle btn -->
     <Style x:Key="SideBarBtnToggle" TargetType="ToggleButton">
         <Setter Property="Background" Value="Transparent"/>

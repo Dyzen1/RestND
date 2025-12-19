@@ -4,6 +4,7 @@ using System.ComponentModel;
 
 namespace RestND.MVVM.Model.Dishes
 {
+    // A class containing all common allergen notes for dishes hard coded as a list of strings.
     public class AllergenNotes
     {
         public  List<string> Allergens = new List<string>

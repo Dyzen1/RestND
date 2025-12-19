@@ -53,8 +53,13 @@ namespace RestND.MVVM.Model.Dishes
         }
         #endregion
 
-            #region Ctors
-            public SoftDrink() { }
+
+        #region Ctors
+        public SoftDrink() 
+        { 
+            Is_Active = true;
+        }
+
 
             public SoftDrink(int drink_ID, string? drink_Name, double drink_Price, int quantity, bool is_Active)
             {

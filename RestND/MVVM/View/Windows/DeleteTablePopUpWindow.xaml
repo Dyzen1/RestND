@@ -23,7 +23,8 @@
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical" Width="250">
 
                 <!-- Label -->
-                <Label Content="Select Table to Delete:" HorizontalAlignment="Center"/>
+                <Label Content="Select A Table To Delete:" HorizontalAlignment="Center"
+                       Width="190"/>
 
                 <!-- ComboBox to Select Table -->
                 <ComboBox ItemsSource="{Binding ActiveTables}"
