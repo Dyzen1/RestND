@@ -202,7 +202,8 @@
             <StackPanel Grid.Row="2" Grid.Column="2"
                         Margin="0 0 8 0" Orientation="Horizontal"
                         HorizontalAlignment="Right">
-                <Button Style="{DynamicResource PrintOrderBtn}"/>
+                <Button Style="{DynamicResource PrintOrderBtn}"
+                         Command="{Binding PrintTicketCommand}"/>
                 <Button Style="{DynamicResource PrintBillBtn}"
                         Command="{Binding PrintBillCommand}"/>
             </StackPanel>

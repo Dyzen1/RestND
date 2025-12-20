@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
 
 using RestND.MVVM.Model.Employees;
+using RestND.MVVM.Model.Orders;
 using RestND.utilities;
 using RestND.Validations;
 using System;
@@ -21,6 +22,14 @@ namespace RestND.MVVM.ViewModel
         private readonly EmployeeServices _employeeService = new();
         private readonly RoleServices _roleService = new();
         private readonly EmployeeValidator _validator = new();
+        private readonly OrderServices _orderSvc = new();
+
+
+        [ObservableProperty]
+        private ObservableCollection<Order> employeeOrdersInProgress = new();
+
+        [ObservableProperty]
+        private ObservableCollection<Order> employeeOrdersFinished = new();
         #endregion
 
         #region SignalR Hub (employees only)
@@ -208,7 +217,29 @@ namespace RestND.MVVM.ViewModel
                 SelectedEmployee = null;
             }
         }
+        partial void OnSelectedEmployeeChanged(Employee? value)
+        {
+            LoadEmployeeOrders();
+        }
 
+        private void LoadEmployeeOrders()
+        {
+            EmployeeOrdersInProgress.Clear();
+            EmployeeOrdersFinished.Clear();
+
+            if (SelectedEmployee == null)
+                return;
+
+            var orders = _orderSvc.GetOrdersByEmployeeId(SelectedEmployee.Employee_ID);
+
+            foreach (var order in orders)
+            {
+                if (order.Is_Active)
+                    EmployeeOrdersInProgress.Add(order);
+                else
+                    EmployeeOrdersFinished.Add(order);
+            }
+        }
         public void Dispose() => UnregisterHubHandlers();
         #endregion
     }

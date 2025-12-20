@@ -99,35 +99,65 @@
             <GroupBox Header="Employee Orders" Grid.Column="1" Grid.Row="0" Margin="8">
                 <TabControl>
                     <TabItem Header="In Progress">
-                        <DataGrid ItemsSource="{Binding EmployeeOrdersInProgress}" AutoGenerateColumns="False"
-                                  RowStyle="{DynamicResource rowStyle}"
-                                  HeadersVisibility="Column" ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
-                                  IsReadOnly="True"
-                                  
-                                  >
+                        <DataGrid ItemsSource="{Binding EmployeeOrdersInProgress}"
+              AutoGenerateColumns="False"
+              RowStyle="{DynamicResource rowStyle}"
+              HeadersVisibility="Column"
+              ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
+              IsReadOnly="True">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Employee" Binding="{Binding EmployeeName}" Width="*"/>
-                                <DataGridTextColumn Header="Order #" Binding="{Binding OrderId}" Width="100"/>
-                                <DataGridTextColumn Header="Table" Binding="{Binding TableNumber}" Width="90"/>
-                                <DataGridTextColumn Header="Started" Binding="{Binding StartedAt, StringFormat=\{0:dd/MM HH:mm\}}" Width="140"/>
-                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
+                                <DataGridTextColumn Header="Employee"
+                                Binding="{Binding assignedEmployee.Employee_Name}"
+                                Width="*"/>
+                                <DataGridTextColumn Header="Order #"
+                                Binding="{Binding Order_ID}"
+                                Width="100"/>
+                                <DataGridTextColumn Header="Table"
+                                Binding="{Binding Table.Table_Number}"
+                                Width="90"/>
+                                <DataGridTextColumn Header="Diners"
+                                Binding="{Binding People_Count}"
+                                Width="90"/>
+                                <DataGridTextColumn Header="Total"
+                                Binding="{Binding Bill.Price, StringFormat={}{0:N2} ₪}"
+                                Width="120"/>
+                                <DataGridTextColumn Header="Status"
+                                Binding="{Binding StatusText}"
+                                Width="120"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
 
                     <TabItem Header="Finished">
-                        <DataGrid ItemsSource="{Binding EmployeeOrdersFinished}" AutoGenerateColumns="False"
-                                  HeadersVisibility="Column" ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}">
+                        <DataGrid ItemsSource="{Binding EmployeeOrdersFinished}"
+              AutoGenerateColumns="False"
+              RowStyle="{DynamicResource rowStyle}"
+              HeadersVisibility="Column"
+              ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
+              IsReadOnly="True">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Employee" Binding="{Binding EmployeeName}" Width="*"/>
-                                <DataGridTextColumn Header="Order #" Binding="{Binding OrderId}" Width="100"/>
-                                <DataGridTextColumn Header="Table" Binding="{Binding TableNumber}" Width="90"/>
-                                <DataGridTextColumn Header="Started" Binding="{Binding StartedAt, StringFormat=\{0:dd/MM HH:mm\}}" Width="140"/>
-                                <DataGridTextColumn Header="Finished" Binding="{Binding FinishedAt, StringFormat=\{0:dd/MM HH:mm\}}" Width="140"/>
-                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
+                                <DataGridTextColumn Header="Employee"
+                                Binding="{Binding assignedEmployee.Employee_Name}"
+                                Width="*"/>
+                                <DataGridTextColumn Header="Order #"
+                                Binding="{Binding Order_ID}"
+                                Width="100"/>
+                                <DataGridTextColumn Header="Table"
+                                Binding="{Binding Table.Table_Number}"
+                                Width="90"/>
+                                <DataGridTextColumn Header="Diners"
+                                Binding="{Binding People_Count}"
+                                Width="90"/>
+                                <DataGridTextColumn Header="Total"
+                                Binding="{Binding Bill.Price, StringFormat={}{0:N2} ₪}"
+                                Width="120"/>
+                                <DataGridTextColumn Header="Status"
+                                Binding="{Binding StatusText}"
+                                Width="120"/>
                             </DataGrid.Columns>
                         </DataGrid>
                     </TabItem>
+
                 </TabControl>
             </GroupBox>
 
