@@ -4,9 +4,11 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.Globalization;
 using System.Linq;
+using RestND.MVVM.Model.VAT;
 
 public class BillPrinter
 {
+    #region Properties
     private readonly Order _order;
     private readonly Bill? _bill;
     private float yPos = 0;
@@ -15,16 +17,17 @@ public class BillPrinter
     private readonly Font font = new Font("Consolas", 10f);
     private readonly Font bold = new Font("Consolas", 10f, FontStyle.Bold);
     private readonly CultureInfo il = new CultureInfo("he-IL");
-
-    public double VatPercent { get; set; } = 17;
+    public Vat VatPercent { get; set; } = new Vat(18);
     public string RestaurantName { get; set; } = "RestND Restaurant";
-    public string Address { get; set; } = "123 Sample Street";
-    public string Phone { get; set; } = "03-555-1234";
+    public string Address { get; set; } = "3200003, Haifa";
+    public string Phone { get; set; } = "077-877-5555";
+    #endregion
 
     public BillPrinter(Order order, Bill? bill = null)
     {
         _order = order;
         _bill = bill;
+        VatPercent = VatPercent; // default 18%
     }
 
     public void Print()
@@ -72,7 +75,7 @@ public class BillPrinter
             x.TotalDishPrice > 0 ? (double)x.TotalDishPrice :
             (double)(x.dish?.Dish_Price ?? 0) * x.Quantity);
 
-        double vat = Math.Round(sub * (VatPercent / 100.0), 2);
+        double vat = Math.Round(sub * (VatPercent.Percentage / 100.0), 2);
         double totalSum = Math.Round(sub + vat, 2);
 
         DrawText(g, $"Subtotal: {sub.ToString("N2", il)} ₪", alignRight: true);

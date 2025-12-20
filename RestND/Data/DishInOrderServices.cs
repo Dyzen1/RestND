@@ -1,5 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using RestND.MVVM.Model.Orders;
+using System.Windows;
 
 namespace RestND.Data
 {
@@ -42,7 +43,7 @@ namespace RestND.Data
             const string sql =
                 "INSERT INTO dishes_in_order (Order_ID, Dish_ID, Dish_Name, Quantity, Total_Dish_Price) " +
                 "VALUES (@orderId, @dishId, @dishName, @qty, @total)";
-
+            MessageBox.Show(dish.TotalDishPrice.ToString());
             return _db.ExecuteNonQuery(sql,
                 new MySqlParameter("@orderId", orderId),
                 new MySqlParameter("@dishId", dish.dish.Dish_ID),

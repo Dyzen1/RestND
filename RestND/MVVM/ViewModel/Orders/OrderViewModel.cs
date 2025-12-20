@@ -15,7 +15,7 @@ namespace RestND.MVVM.ViewModel.Orders
 {
     public partial class OrderViewModel : ObservableObject
     {
-            #region Services
+        #region Services
             private readonly OrderServices _orderSvc = new();
             private readonly DishServices _dishSvc = new();
             private readonly DishTypeServices _dishTypeSvc = new();
@@ -26,7 +26,7 @@ namespace RestND.MVVM.ViewModel.Orders
             private readonly ProductInDishService _productInDishService = new();
             #endregion
 
-            #region Properties
+        #region Properties
             [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
             [ObservableProperty] private ObservableCollection<Dish> allDishes = new();
 
@@ -46,7 +46,7 @@ namespace RestND.MVVM.ViewModel.Orders
             [ObservableProperty] private double totalPrice;
             #endregion
 
-            #region Constructor
+        #region Constructor
             public OrderViewModel()
             {
                 // prime inventory snapshot first (we need it for availability)
@@ -67,7 +67,7 @@ namespace RestND.MVVM.ViewModel.Orders
             }
             #endregion
 
-            #region Change Hooks
+        #region Change Hooks
             // When user selects a type, refresh the list
             partial void OnSelectedDishTypeChanged(DishType? value)
             {
@@ -254,7 +254,7 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             if (dish is null) return;
 
-            // 🚫 Block if not in stock for the Order window flow
+            // Block if not in stock for the Order window flow
             if (!dish.In_Stock)
             {
                 MessageBox.Show("This dish is unavailable (insufficient ingredients).",
@@ -353,14 +353,7 @@ namespace RestND.MVVM.ViewModel.Orders
 
                 // If you already created a Bill object elsewhere, pass it. Otherwise, pass null and let the printer
                 // compute totals from the order (or compute a Bill here).
-                var printer = new BillPrinter(CurrentOrder, CurrentBill)
-                {
-                    RestaurantName = "RestND",
-                    Address = "123 Sample St.",
-                    Phone = "03-555-1234",
-                    VatPercent = 17,             // optional: will show a VAT line
-                    
-                };
+                var printer = new BillPrinter(CurrentOrder, CurrentBill);
 
                 printer.Print();
             }

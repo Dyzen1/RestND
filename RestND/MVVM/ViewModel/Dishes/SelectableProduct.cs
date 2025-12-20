@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace RestND.MVVM.ViewModel.Dishes
 {
+    // A class that is used for multiple choise selections.
     public partial class SelectableProduct : ObservableObject
     {
         public string Product_ID { get; }

@@ -77,7 +77,7 @@ namespace RestND.MVVM.ViewModel.Dishes
             SoftDrinks = new ObservableCollection<SoftDrink>(_service.GetAll());
         }
 
-        // Create new soft drink (used by your "Create" button)
+        // Create new soft drink
         [RelayCommand]
         private void Save()
         {
@@ -109,7 +109,7 @@ namespace RestND.MVVM.ViewModel.Dishes
                 return;
             }
 
-            // Refresh and select the newly created row (heuristic: max ID)
+            // Refresh and select the newly created row
             LoadSoftDrinks();
             var created = SoftDrinks.OrderByDescending(d => d.Drink_ID).FirstOrDefault();
             if (created is not null)
@@ -123,6 +123,7 @@ namespace RestND.MVVM.ViewModel.Dishes
             }
         }
 
+        // Update an existing soft drink
         [RelayCommand]
         private void Update()
         {

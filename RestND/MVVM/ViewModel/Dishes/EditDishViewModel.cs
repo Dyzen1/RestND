@@ -33,21 +33,7 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private ObservableCollection<SelectableItem<string>> allergenOptions = new();
 
         [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
-        private readonly List<string> _allPossibleAllergens = new()
-        {
-            "Contains Gluten/Wheat",
-            "Contains Peanuts",
-            "Contains Tree Nuts",
-            "Contains Milk Or Dairy Ingredients",
-            "Contains Eggs Or Egg-Derived Ingredients",
-            "Contains Soy Or Soy-Derived Ingredients",
-            "Contains Fish",
-            "Contains Shellfish",
-            "Contains Sesame",
-            "Contains Mustard",
-            "Contains Celery",
-            "Contains Sulfites"
-        };
+        private readonly AllergenNotes _allergenNotes = new();
 
         [ObservableProperty] private string dishErrorMessage;
         #endregion
@@ -93,7 +79,6 @@ namespace RestND.MVVM.ViewModel
         #endregion
 
         #region Relay commands
-
         [RelayCommand]
         private async Task UpdateDish()
         {
@@ -149,7 +134,7 @@ namespace RestND.MVVM.ViewModel
                 .Where(x => !string.IsNullOrEmpty(x))
                 .ToList();
 
-            foreach (var allergen in _allPossibleAllergens)
+            foreach (var allergen in _allergenNotes.Allergens)
             {
                 var item = new SelectableItem<string>(allergen)
                 {
