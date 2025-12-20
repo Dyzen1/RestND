@@ -30,8 +30,15 @@ namespace RestND.MVVM.ViewModel.Orders
             [ObservableProperty] private ObservableCollection<DishType> dishTypes = new();
             [ObservableProperty] private ObservableCollection<Dish> allDishes = new();
 
-            // This is what your OrderWindow binds to (ItemSource="{Binding AvailableDishes}")
-            [ObservableProperty] private ObservableCollection<Dish> availableDishes = new();
+
+        [ObservableProperty]
+        private ObservableCollection<Order> employeeOrdersInProgress = new();
+
+        [ObservableProperty]
+        private ObservableCollection<Order> employeeOrdersFinished = new();
+
+        // This is what your OrderWindow binds to (ItemSource="{Binding AvailableDishes}")
+        [ObservableProperty] private ObservableCollection<Dish> availableDishes = new();
 
             // ✅ Current inventory snapshot for availability calc
             [ObservableProperty] private ObservableCollection<Inventory> availableProducts = new();
@@ -166,6 +173,10 @@ namespace RestND.MVVM.ViewModel.Orders
             UpdateDishAvailability();
         }
         #endregion
+
+
+
+
 
         #region Methods - Order Live Total
         private void HookOrderItems(Order? order)
@@ -360,6 +371,42 @@ namespace RestND.MVVM.ViewModel.Orders
             catch (Exception ex)
             {
                 MessageBox.Show($"Printing failed: {ex.Message}", "Print Bill",
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+
+
+        [RelayCommand]
+        private void PrintTicket()
+        {
+            try
+            {
+                if (CurrentOrder == null || CurrentOrder.DishInOrder == null || CurrentOrder.DishInOrder.Count == 0)
+                {
+                    MessageBox.Show("No items in the order to print.", "Print Ticket",
+                        MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                var printer = new TicketPrinter(CurrentOrder)
+                {
+                    RestaurantName = "RestND",
+                    Address = "123 Sample St.",
+                    Phone = "03-555-1234",
+                    TicketTitle = "KITCHEN TICKET",
+
+                    // optional behavior (matches your printer class)
+                    ExcludeSoftDrinks = true,
+                    PrintAllergenNotes = true,
+                };
+
+                printer.Print();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Printing failed: {ex.Message}", "Print Ticket",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

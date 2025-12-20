@@ -69,6 +69,10 @@ namespace RestND.MVVM.Model.Orders
         }
         #endregion
 
+        #region Computed Status Text
+        public string StatusText => Is_Active ? "In Progress" : "Finished";
+        #endregion
+
         #region Constructor
         public Order( Employee AssignedEmployee,  Table table)
         {

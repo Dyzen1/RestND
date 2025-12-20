@@ -160,5 +160,61 @@ namespace RestND.Data
             });
         }
         #endregion
+
+        #region Get Orders By Employee (Active + Inactive)
+        public List<Order> GetOrdersByEmployeeId(int employeeId)
+        {
+            var orders = new List<Order>();
+
+            const string query = @"
+        SELECT 
+            o.Order_ID,
+            o.Employee_ID,
+            o.Table_Number,
+            o.People_Count,
+            o.Total_Price,
+            o.Is_Active,
+            e.Employee_Name
+        FROM orders o
+        LEFT JOIN employees e ON e.Employee_ID = o.Employee_ID
+        WHERE o.Employee_ID = @empId;
+    ";
+
+            var rows = _db.ExecuteReader(query, new MySqlParameter("@empId", employeeId));
+
+            foreach (var row in rows)
+            {
+                var empName = row.TryGetValue("Employee_Name", out var n) ? (n?.ToString() ?? "") : "";
+
+                orders.Add(new Order
+                {
+                    Order_ID = Convert.ToInt32(row["Order_ID"]),
+
+                    assignedEmployee = new Employee
+                    {
+                        Employee_ID = Convert.ToInt32(row["Employee_ID"]),
+                        Employee_Name = empName
+                    },
+
+                    Table = new Table
+                    {
+                        Table_Number = Convert.ToInt32(row["Table_Number"])
+                    },
+
+                    People_Count = Convert.ToInt32(row["People_Count"]),
+                    Is_Active = Convert.ToBoolean(row["Is_Active"]),
+
+                    // map Total_Price into your existing Bill.Price
+                    Bill = new Bill
+                    {
+                        Price = row["Total_Price"] == DBNull.Value ? 0 : Convert.ToDouble(row["Total_Price"])
+                    }
+                });
+            }
+
+            return orders;
+        }
+        #endregion
+
     }
 }
