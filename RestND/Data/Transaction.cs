@@ -44,7 +44,8 @@ public class Transaction
                 transaction.Rollback();
                 return false;
             }
-
+      
+             
             int newDishId = Convert.ToInt32(_db.ExecuteScalar("SELECT LAST_INSERT_ID();", _db.Connection, transaction));
 
             var productInDishService = new ProductInDishService();

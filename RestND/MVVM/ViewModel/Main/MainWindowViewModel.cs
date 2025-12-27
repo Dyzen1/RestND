@@ -22,8 +22,10 @@ namespace RestND.MVVM.ViewModel.Main
         private readonly OrderServices _orderService = new();
         private readonly HubConnection _hub = App.MainHub;
         private readonly EmployeeServices _employeeServices = new();
+
         public Action? ClosePopupAction { get; set; }
         public event Action<Table>? OpenEmpForOrder;
+        public event Action<Order>? OpenOrderForTable;
 
         [ObservableProperty] private ObservableCollection<Table> tables = new();
         [ObservableProperty] private ObservableCollection<Table> activeTables = new();
@@ -42,6 +44,7 @@ namespace RestND.MVVM.ViewModel.Main
         [ObservableProperty] private string orderPopupError;
 
         public string LoginButtonText => IsLoggedIn ? "Logout" : "Login";
+        
 
         partial void OnIsLoggedInChanged(bool oldValue, bool newValue) =>
             OnPropertyChanged(nameof(LoginButtonText));
@@ -66,22 +69,25 @@ namespace RestND.MVVM.ViewModel.Main
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    var existing = Tables.FirstOrDefault(t => t.Table_ID == table.Table_ID);
+                    // 🔑 MATCH BY TABLE_NUMBER
+                    var existing = Tables.FirstOrDefault(t => t.Table_Number == table.Table_Number);
+
                     switch (action)
                     {
                         case "add":
-                            if (existing == null) Tables.Add(table);
+                            if (existing == null)
+                                Tables.Add(table);
                             break;
+
                         case "update":
                             if (existing != null)
                             {
-                                existing.Table_Number = table.Table_Number;
-                                existing.C = table.C;
-                                existing.R = table.R;
                                 existing.Table_Status = table.Table_Status;
                                 existing.Is_Active = table.Is_Active;
+                                existing.Max_Diners = table.Max_Diners;
                             }
                             break;
+
                         case "delete":
                             if (existing != null)
                             {
@@ -189,6 +195,7 @@ namespace RestND.MVVM.ViewModel.Main
                 NewTableNumberText = string.Empty;
                 NewTableMaxDinersText = "2";
                 LoadTables();
+                ClosePopupAction?.Invoke();
             }
         }
 
@@ -249,55 +256,72 @@ namespace RestND.MVVM.ViewModel.Main
         [RelayCommand]
         private void TableClick(Table table)
         {
+            if (table == null) return;
+
+            OrderPopupError = string.Empty;
+
+            // ALWAYS check DB for active order
+            var activeOrder = _orderService.GetActiveOrderByTableNumber(table.Table_Number);
+            if (activeOrder != null)
+            {
+                new View.Windows.OrderWindow(activeOrder)
+                {
+                    Owner = Application.Current.MainWindow,
+                    WindowStartupLocation = WindowStartupLocation.CenterOwner
+                }.Show();
+                return;
+            }
+
+            // no active order → start new one
             SelectedTableForOrder = table;
             DinersCount = 1;
-            OrderPopupError = string.Empty;
             OpenEmpForOrder?.Invoke(table);
         }
 
+
         [RelayCommand]
-        private void CreateOrder()
+        private async Task CreateOrder()
         {
             OrderPopupError = string.Empty;
 
-            if (SelectedTableForOrder == null)
-            { OrderPopupError = "No table selected."; return; }
-            if (SelectedEmployee == null)
-            { OrderPopupError = "Please choose a waiter."; return; }
-            if (DinersCount <= 0)
-            { OrderPopupError = "Number of diners must be positive."; return; }
+            if (SelectedTableForOrder == null) { OrderPopupError = "No table selected."; return; }
+            if (SelectedEmployee == null) { OrderPopupError = "Please choose a waiter."; return; }
+            if (DinersCount <= 0) { OrderPopupError = "Invalid diners count."; return; }
             if (SelectedTableForOrder.Max_Diners > 0 && DinersCount > SelectedTableForOrder.Max_Diners)
-            { OrderPopupError = $"Table allows up to {SelectedTableForOrder.Max_Diners} diners."; return; }
+            {
+                OrderPopupError = $"Table allows up to {SelectedTableForOrder.Max_Diners} diners.";
+                return;
+            }
 
             var order = new Order
             {
                 assignedEmployee = SelectedEmployee,
                 Table = SelectedTableForOrder,
-                People_Count = DinersCount
+                People_Count = DinersCount,
+                Is_Active = true,
+                Bill = new Bill { Price = 0 }
             };
 
-            int res = -1;
-            res = _orderService.AddStartingOrder(order);
-            if (res == -1)
+            int orderId = _orderService.AddStartingOrder(order);
+            if (orderId <= 0)
             {
-                OrderPopupError = "Failed to create order. Please try again.";
+                OrderPopupError = "Failed to create order.";
                 return;
             }
 
-            else
-            {
-                SelectedTableForOrder.Table_Status = false; // now occupied
-                _tableService.UpdateTableStatus(SelectedTableForOrder);
-                _hub.SendAsync("NotifyTableUpdate", SelectedTableForOrder, "update");
-                order.Order_ID = res; // set the new Order_ID
-            }
+            order.Order_ID = orderId;
 
+            // mark table occupied
+            SelectedTableForOrder.Table_Status = true;
+            _tableService.UpdateTableStatus(SelectedTableForOrder);
+            await _hub.SendAsync("NotifyTableUpdate", SelectedTableForOrder, "update");
 
+            // open order window
             new View.Windows.OrderWindow(order)
-                {
-                    Owner = Application.Current.MainWindow,
-                    WindowStartupLocation = WindowStartupLocation.CenterOwner
-                }.Show();
+            {
+                Owner = Application.Current.MainWindow,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner
+            }.Show();
 
             ClosePopupAction?.Invoke();
         }

@@ -1,10 +1,11 @@
-﻿using RestND.MVVM.Model.Employees;
+﻿using MySql.Data.MySqlClient;
 using RestND.MVVM.Model;
-using System;
-using System.Collections.Generic;
-using MySql.Data.MySqlClient;
+using RestND.MVVM.Model.Employees;
 using RestND.MVVM.Model.Orders;
 using RestND.MVVM.Model.Tables;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace RestND.Data
 {
@@ -217,6 +218,73 @@ namespace RestND.Data
             return orders;
         }
         #endregion
+
+
+
+
+        #region Inventory adjust for dish (supports qty)
+        public void AdjustProductQuantities(int dishId, int multiplier)
+        {
+            // multiplier: +1 consume, -1 return, +N consume N times
+            string query = @"
+        UPDATE inventory p
+        JOIN products_in_dish pid ON p.Product_ID = pid.Product_ID
+        SET p.Quantity_Available = p.Quantity_Available - (pid.Amount_Usage * @mult)
+        WHERE pid.Dish_ID = @dishId;
+    ";
+
+            _db.ExecuteNonQuery(query, new MySqlParameter[]
+            {
+        new MySqlParameter("@dishId", dishId),
+        new MySqlParameter("@mult", multiplier)
+            });
+        }
+        #endregion
+
+
+        public Order? GetActiveOrderByTableNumber(int tableNumber)
+        {
+            const string query = @"
+        SELECT Order_ID, Employee_ID, Table_Number, People_Count, Is_Active
+        FROM orders
+        WHERE Table_Number = @num AND Is_Active = 1
+        ORDER BY Order_ID DESC
+        LIMIT 1;
+    ";
+
+            var rows = _db.ExecuteReader(query, new MySqlParameter("@num", tableNumber));
+            if (rows.Count == 0) return null;
+
+            var row = rows[0];
+
+            return new Order
+            {
+                Order_ID = Convert.ToInt32(row["Order_ID"]),
+                People_Count = Convert.ToInt32(row["People_Count"]),
+                Is_Active = Convert.ToBoolean(row["Is_Active"]),
+                Table = new Table { Table_Number = Convert.ToInt32(row["Table_Number"]) },
+                assignedEmployee = new Employee { Employee_ID = Convert.ToInt32(row["Employee_ID"]) },
+                DishInOrder = new ObservableCollection<DishInOrder>() // you’ll fill it when opening
+            };
+        }
+
+        public bool CloseOrder(int orderId, double totalPrice)
+        {
+            const string query = @"
+        UPDATE orders
+        SET Is_Active = 0,
+            Total_Price = @price
+        WHERE Order_ID = @id;
+    ";
+
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@id", orderId),
+                new MySqlParameter("@price", totalPrice)
+            ) > 0;
+        }
+
+
+
 
     }
 }

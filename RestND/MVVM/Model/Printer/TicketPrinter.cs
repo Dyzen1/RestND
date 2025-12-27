@@ -12,7 +12,7 @@ public class TicketPrinter
     private float yPos = 0;
     private readonly float leftMargin = 5;
     private readonly float pageWidth = 280; // ~72mm printable width
-
+    private readonly Font bigfont = new Font("Consolas", 25f);
     private readonly Font font = new Font("Consolas", 10f);
     private readonly Font bold = new Font("Consolas", 10f, FontStyle.Bold);
     private readonly Font bigBold = new Font("Consolas", 12f, FontStyle.Bold);
@@ -20,13 +20,10 @@ public class TicketPrinter
     private readonly CultureInfo il = new CultureInfo("he-IL");
 
     public string RestaurantName { get; set; } = "RestND Restaurant";
-    public string Address { get; set; } = "123 Sample Street";
-    public string Phone { get; set; } = "03-555-1234";
 
     // ticket behavior
     public bool ExcludeSoftDrinks { get; set; } = true;
-    public bool PrintAllergenNotes { get; set; } = true;
-    public string TicketTitle { get; set; } = "KITCHEN TICKET";
+    public string TicketTitle { get; set; } = "KITCHEN ";
 
     public TicketPrinter(Order order)
     {
@@ -48,16 +45,18 @@ public class TicketPrinter
 
         // Header
         DrawCentered(g, RestaurantName, bold, extra: 6);
-        DrawCentered(g, Address, font);
-        DrawCentered(g, $"Tel: {Phone}", font);
         yPos += 5;
-        DrawLine(g);
 
         // Meta
         string table = _order.Table != null ? _order.Table.Table_Number.ToString() : "-";
         string waiter = _order.assignedEmployee?.Employee_Name ?? "-";
 
+        // NEW: Order ID + People count
+        string orderId = GetIntPropAsString(_order, "Order_ID", "OrderId", "ID", "Id");
+        string people = GetIntPropAsString(_order, "PeopleCount", "People_Count", "Guests", "GuestsCount", "NumPeople", "NumberOfPeople");
+
         DrawText(g, $"Date: {DateTime.Now:dd/MM/yyyy HH:mm}");
+        DrawText(g, $"Order: {orderId}    People: {people}");
         DrawText(g, $"Table: {table}    Waiter: {waiter}");
         DrawLine(g);
 
@@ -89,20 +88,11 @@ public class TicketPrinter
 
             // Section header (Dish Type)
             DrawText(g, group.Key.ToUpperInvariant(), bold);
-            DrawText(g, new string('.', 42), font);
 
             foreach (var item in group)
             {
                 string name = item.dish?.Dish_Name ?? "(Unknown)";
                 DrawText(g, $"{item.Quantity}  x  {name}", bold);
-
-                if (PrintAllergenNotes)
-                {
-                    var notes = item.dish?.Allergen_Notes;
-                    if (!string.IsNullOrWhiteSpace(notes))
-                        DrawText(g, $"   Notes: {notes}", font);
-                }
-
                 yPos += 3;
             }
 
@@ -117,7 +107,37 @@ public class TicketPrinter
         }
 
         yPos += 8;
-        DrawCentered(g, "---- END ----", font);
+        DrawCentered(g, $" {DateTime.Now: HH:mm}", bigfont);
+    }
+
+    // ✅ Helper: tries multiple property names safely (no compile errors)
+    private string GetIntPropAsString(object obj, params string[] possibleNames)
+    {
+        if (obj == null) return "-";
+
+        var t = obj.GetType();
+
+        foreach (var name in possibleNames)
+        {
+            var prop = t.GetProperty(name);
+            if (prop == null) continue;
+
+            try
+            {
+                var value = prop.GetValue(obj);
+                if (value == null) continue;
+
+                // handle int/short/long/etc.
+                if (value is IConvertible)
+                    return Convert.ToInt32(value).ToString();
+            }
+            catch
+            {
+                // ignore and try next name
+            }
+        }
+
+        return "-";
     }
 
     private void DrawText(Graphics g, string text, Font? f = null, bool alignRight = false)

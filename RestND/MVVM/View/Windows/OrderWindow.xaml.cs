@@ -1,8 +1,9 @@
-﻿using RestND.MVVM.Model;
+﻿using RestND.Data;
+using RestND.MVVM.Model;
 using RestND.MVVM.Model.Orders;
-using RestND.MVVM.ViewModel;
 using RestND.MVVM.ViewModel.Orders;
 using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,44 +13,64 @@ namespace RestND.MVVM.View.Windows
 {
     public partial class OrderWindow : Window
     {
-
         private Point _dragStart;
 
-        #region Constructors
         public OrderWindow()
         {
             InitializeComponent();
-            this.DataContext = new OrderViewModel();
+
+            var vm = new OrderViewModel();
+            DataContext = vm;
+
+            HookSearch();
         }
 
         public OrderWindow(Order order)
-        { 
+        {
             InitializeComponent();
-            this.DataContext = new OrderViewModel(order);
-            // Search bar event hook
+
+            var vm = new OrderViewModel(order);
+
+            // ✅ Load ongoing order lines from DB (so you can come back to the order)
+            if (order != null && order.Order_ID > 0)
+            {
+                var lines = new DishInOrderServices().GetByOrderId(order.Order_ID);
+
+                // Replace with the saved lines
+                vm.CurrentOrder.DishInOrder = new ObservableCollection<DishInOrder>(lines);
+
+                // keep total correct
+                vm.Reload(); // refresh dishes/stock availability
+            }
+
+            DataContext = vm;
+
+            HookSearch();
+        }
+
+        private void HookSearch()
+        {
             DishSearch.SearchTextChanged += (s, text) => ApplyDishFilter(text);
-            // Initial filters
+
             Loaded += (_, __) =>
             {
                 ApplyDishFilter(DishSearch.SearchText ?? string.Empty);
             };
         }
-        #endregion
 
-        #region Dishes Filter Method For Search Bar
+        // ✅ Filter the correct list: AvailableDishes (not DishViewModel)
         private void ApplyDishFilter(string searchText)
         {
-            var vm = DataContext as DishViewModel;
-            var items = vm?.Dishes;
-            if (items is null) return;
+            if (DataContext is not OrderViewModel vm) return;
 
-            var view = CollectionViewSource.GetDefaultView(items);
+            var view = CollectionViewSource.GetDefaultView(vm.AvailableDishes);
             if (view is null) return;
 
             var q = (searchText ?? string.Empty).Trim();
+
             if (string.IsNullOrWhiteSpace(q))
             {
-                view.Filter = null;       // show all
+                view.Filter = null;
                 view.Refresh();
                 return;
             }
@@ -60,11 +81,11 @@ namespace RestND.MVVM.View.Windows
                 return !string.IsNullOrEmpty(d?.Dish_Name)
                     && d.Dish_Name.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0;
             };
+
             view.Refresh();
         }
-        #endregion
 
-        #region Drag and Drop Handlers
+        #region Drag and Drop
         private void DishList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _dragStart = e.GetPosition(null);
@@ -100,6 +121,5 @@ namespace RestND.MVVM.View.Windows
                 vm.AddDishToOrderCommand.Execute(dish);
         }
         #endregion
-
     }
 }

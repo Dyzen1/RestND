@@ -1,15 +1,17 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
 using RestND.MVVM.Model;
 using RestND.MVVM.Model.Orders;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace RestND.MVVM.ViewModel.Orders
 {
@@ -261,7 +263,7 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             if (dish is null) return;
 
-            // Block if not in stock for the Order window flow
+            // 🚫 Block if not in stock for the Order window flow
             if (!dish.In_Stock)
             {
                 MessageBox.Show("This dish is unavailable (insufficient ingredients).",
@@ -269,45 +271,64 @@ namespace RestND.MVVM.ViewModel.Orders
                 return;
             }
 
-            // If the item doesn't exist yet in the order — add it
+            EnsureOrderIsSaved();
+
             var existing = CurrentOrder.DishInOrder.FirstOrDefault(l => l.dish.Dish_ID == dish.Dish_ID);
+
             if (existing == null)
             {
                 var newItem = new DishInOrder(dish);
                 CurrentOrder.DishInOrder.Add(newItem);
+
                 _dishInOrderSvc.AddDishToOrder(CurrentOrder.Order_ID, newItem);
+
+                _orderSvc.AdjustProductQuantities(dish.Dish_ID, +1);
             }
             else
             {
-                // optional: increment if already exists
                 existing.Quantity += 1;
                 existing.TotalDishPrice += dish.Dish_Price;
+
                 _dishInOrderSvc.UpdateDishInOrder(CurrentOrder.Order_ID, existing);
+
+                _orderSvc.AdjustProductQuantities(dish.Dish_ID, +1);
             }
 
-            // 🧮 Deduct the used ingredients from stock
-            _orderSvc.DeductProductQuantities(dish.Dish_ID);     
+            // ✅ real-time: push inventory updates to everyone
+            BroadcastInventoryForDish(dish.Dish_ID);
 
-
-            // ♻️ Refresh product list and dish availability (for dimming)
             ReloadStockAndAvailability();
-
             RecalculateTotal();
         }
+
 
         [RelayCommand]
         private void IncrementLine(DishInOrder item)
         {
             if (item == null) return;
 
+            EnsureOrderIsSaved();
+
             var line = CurrentOrder.DishInOrder.FirstOrDefault(l => l.dish.Dish_ID == item.dish.Dish_ID);
             if (line == null) return;
 
-            // Optional: check stock before incrementing (not shown)
+            // optional: check stock before increment
+            ReloadStockAndAvailability();
+            if (!line.dish.In_Stock)
+            {
+                MessageBox.Show("Insufficient ingredients to add more of this dish.",
+                                "Unavailable", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             line.Quantity += 1;
             line.TotalDishPrice += item.dish.Dish_Price;
             _dishInOrderSvc.UpdateDishInOrder(CurrentOrder.Order_ID, line);
 
+            _orderSvc.AdjustProductQuantities(item.dish.Dish_ID, +1);
+
+            BroadcastInventoryForDish(item.dish.Dish_ID);
+            ReloadStockAndAvailability();
             RecalculateTotal();
         }
 
@@ -315,6 +336,8 @@ namespace RestND.MVVM.ViewModel.Orders
         private void DecrementLine(DishInOrder item)
         {
             if (item == null) return;
+
+            EnsureOrderIsSaved();
 
             var line = CurrentOrder.DishInOrder.FirstOrDefault(l => l.dish.Dish_ID == item.dish.Dish_ID);
             if (line == null) return;
@@ -324,13 +347,22 @@ namespace RestND.MVVM.ViewModel.Orders
                 line.Quantity -= 1;
                 line.TotalDishPrice -= item.dish.Dish_Price;
                 _dishInOrderSvc.UpdateDishInOrder(CurrentOrder.Order_ID, line);
+
+                // ✅ return ingredients for 1 dish
+                _orderSvc.AdjustProductQuantities(item.dish.Dish_ID, -1);
             }
             else
             {
                 CurrentOrder.DishInOrder.Remove(item);
                 _dishInOrderSvc.DeleteDishFromOrder(item.dish.Dish_ID, CurrentOrder.Order_ID);
+
+                // ✅ return ingredients for the last dish
+                _orderSvc.AdjustProductQuantities(item.dish.Dish_ID, -1);
             }
 
+            BroadcastInventoryForDish(item.dish.Dish_ID);
+
+            ReloadStockAndAvailability();
             RecalculateTotal();
         }
 
@@ -339,43 +371,63 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             if (item == null) return;
 
+            EnsureOrderIsSaved();
+
+            int qty = item.Quantity;
             CurrentOrder.DishInOrder.Remove(item);
             _dishInOrderSvc.DeleteDishFromOrder(item.dish.Dish_ID, CurrentOrder.Order_ID);
 
+            // ✅ return ingredients for qty dishes
+            _orderSvc.AdjustProductQuantities(item.dish.Dish_ID, -qty);
+
+            BroadcastInventoryForDish(item.dish.Dish_ID);
+
+            ReloadStockAndAvailability();
             RecalculateTotal();
         }
         #endregion
 
         #region Relay commands
         [RelayCommand]
-        private void PrintBill()
+        private async Task PrintBill()
         {
-            try
+            EnsureOrderIsSaved();
+
+            if (CurrentOrder == null) return;
+
+            if (CurrentOrder.DishInOrder == null || CurrentOrder.DishInOrder.Count == 0)
             {
-                if (CurrentOrder == null || CurrentOrder.DishInOrder == null || CurrentOrder.DishInOrder.Count == 0)
-                {
-                    MessageBox.Show("No items in the order to print.", "Print Bill",
-                        MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
+                MessageBox.Show("No items in the order to print.", "Print Bill",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
 
                 // If you already created a Bill object elsewhere, pass it. Otherwise, pass null and let the printer
                 // compute totals from the order (or compute a Bill here).
-                var printer = new BillPrinter(CurrentOrder, CurrentBill);
+                var printer = new BillPrinter(CurrentOrder, CurrentBill)
+                {
+                    RestaurantName = "RestND",
+                    Address = "123 Sample St.",
+                    Phone = "03-555-1234",
+                    VatPercent = 17,             // optional: will show a VAT line
+                    
+                };
 
-                printer.Print();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Printing failed: {ex.Message}", "Print Bill",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
+                bool ok = _tableSvc.UpdateTableStatusByNumber(tableNum, false);
+                if (ok)
+                {
+                    CurrentOrder.Table.Table_Status = false;
+                    await _mainHub.SendAsync("NotifyTableUpdate", CurrentOrder.Table, "update");
+                }
             }
         }
 
 
         [RelayCommand]
-        private void PrintTicket()
+        private async Task PrintTicket()
         {
+            EnsureOrderIsSaved();
+
             try
             {
                 if (CurrentOrder == null || CurrentOrder.DishInOrder == null || CurrentOrder.DishInOrder.Count == 0)
@@ -385,19 +437,21 @@ namespace RestND.MVVM.ViewModel.Orders
                     return;
                 }
 
-                var printer = new TicketPrinter(CurrentOrder)
-                {
-                    RestaurantName = "RestND",
-                    Address = "123 Sample St.",
-                    Phone = "03-555-1234",
-                    TicketTitle = "KITCHEN TICKET",
-
-                    // optional behavior (matches your printer class)
-                    ExcludeSoftDrinks = true,
-                    PrintAllergenNotes = true,
-                };
-
+                var printer = new TicketPrinter(CurrentOrder);
                 printer.Print();
+
+                // ✅ Mark table as occupied (unavailable)
+                if (CurrentOrder.Table != null)
+                {
+                    int tableNum = CurrentOrder.Table.Table_Number;
+
+                    bool ok = _tableSvc.UpdateTableStatusByNumber(tableNum, true);
+                    if (ok)
+                    {
+                        CurrentOrder.Table.Table_Status = true;
+                        _ = _mainHub.SendAsync("NotifyTableUpdate", CurrentOrder.Table, "update");
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -406,6 +460,7 @@ namespace RestND.MVVM.ViewModel.Orders
             }
         }
         #endregion
+
 
 
     }

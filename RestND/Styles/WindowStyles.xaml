@@ -206,7 +206,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="ListViewItem">
                     <Border x:Name="bd"
-                            CornerRadius="12"
+                            CornerRadius="12" 
                             Background="{DynamicResource secondaryHeaders}"
                             BorderThickness="1"
                             SnapsToDevicePixels="True">

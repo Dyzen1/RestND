@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using RestND.MVVM.Model.Tables;
 
 namespace RestNDSignalR.Hubs
 {
@@ -12,6 +13,13 @@ namespace RestNDSignalR.Hubs
         }
 
 
+        #endregion
+
+        #region Table Update ✅
+        public async Task NotifyTableUpdate(Table table, string action)
+        {
+            await Clients.All.SendAsync("ReceiveTableUpdate", table, action);
+        }
         #endregion
 
     }

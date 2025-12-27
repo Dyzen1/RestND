@@ -15,11 +15,14 @@ namespace RestND.MVVM.View.Windows
             _mainVM.ClosePopupAction = () => this.Close();
         }
 
-        //private async void AddTableBtn_Click(object sender, RoutedEventArgs e)
-        //{
-        //    await _mainVM.AddTable();
-        //    this.Close();
-        //}
+        private void AddTableBtn_Click(object sender, RoutedEventArgs e)
+        {
+            // close popup first (instant UI response)
+            Close();
+
+            // run AddTable without blocking the popup from closing
+            _ = _mainVM.AddTable();
+        }
 
     }
 }

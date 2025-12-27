@@ -93,5 +93,14 @@ namespace RestND.Data
             return _db.ExecuteNonQuery(query, new MySqlParameter("@id", table.Table_ID)) > 0;
         }
         #endregion
+
+        public bool UpdateTableStatusByNumber(int tableNumber, bool status)
+        {
+            const string query = "UPDATE `tables` SET Table_Status = @status WHERE Table_Number = @num AND Is_Active = true";
+            return _db.ExecuteNonQuery(query,
+                new MySqlParameter("@status", status),
+                new MySqlParameter("@num", tableNumber)
+            ) > 0;
+        }
     }
 }

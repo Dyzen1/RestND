@@ -22,6 +22,13 @@
             <Setter Property="Opacity"
                     Value="{Binding In_Stock, Converter={StaticResource BoolToOpacityConverter}}"/>
             <Setter Property="IsEnabled" Value="{Binding In_Stock}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="OrderListItemStyle"           TargetType="ListViewItem"           BasedOn="{StaticResource DishesListView}">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
     </Window.Resources>
 
