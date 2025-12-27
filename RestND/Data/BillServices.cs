@@ -26,14 +26,6 @@ namespace RestND.Data
                     Bill_ID = Convert.ToInt32(row["Bill_ID"]),
                     Price = Convert.ToDouble(row["Price"]),
                     Bill_Date = Convert.ToDateTime(row["Bill_Date"]),
-                    //Order = new Order
-                    //{
-                    //    Order_ID = Convert.ToInt32(row["Order_ID"]),
-                    //    assignedEmployee = new Employee
-                    //    {
-                    //        Employee_Name = row["Employee_Name"].ToString()
-                    //    }
-                    //},
                     Discount = new Discount
                     {
                         Discount_ID = Convert.ToInt32(row["Discount_ID"] ?? "")
@@ -51,12 +43,6 @@ namespace RestND.Data
             string query = "INSERT INTO bill (Order_ID, Price, Discount_ID, Bill_Date, Employee_Name) " +
                            "VALUES (@orderId, @price, @discountId, @billDate, @employeeName)";
 
-            //return _db.ExecuteNonQuery(query,
-            //    new MySqlParameter("@orderId", b.Order.Order_ID),
-            //    new MySqlParameter("@price", b.Price),
-            //    new MySqlParameter("@discountId", b.Discount?.Discount_ID ?? (object)DBNull.Value),
-            //    new MySqlParameter("@billDate", b.Bill_Date),
-            //    new MySqlParameter("@employeeName", b.Order.assignedEmployee.Employee_Name)) > 0;
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@price", b.Price),
                 new MySqlParameter("@discountId", b.Discount?.Discount_ID ?? (object)DBNull.Value),
@@ -72,8 +58,6 @@ namespace RestND.Data
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@price", b.Price),
                 new MySqlParameter("@discountId", b.Discount?.Discount_ID ?? (object)DBNull.Value),
-                //new MySqlParameter("@billDate", b.Bill_Date),
-                //new MySqlParameter("@employeeName", b.Order.assignedEmployee.Employee_Name),
                 new MySqlParameter("@billId", b.Bill_ID)) > 0;
         }
         #endregion

@@ -6,13 +6,9 @@
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         xmlns:vm="clr-namespace:RestND.MVVM.ViewModel.Dishes"
         mc:Ignorable="d"
-        Style="{StaticResource popupStyle}"
         Title="Soft Drinks"
-        Width="600" Height="520"
-        WindowState="Normal"
-        ResizeMode="NoResize"
-        SizeToContent="Manual"
-        WindowStartupLocation="CenterOwner"
+        Style="{StaticResource windowStyle}"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown"
         FocusManager.FocusedElement="{Binding ElementName=NameBox}">
 
     <Window.DataContext>
@@ -26,27 +22,29 @@
     <Border Style="{DynamicResource windowBorder}">
         <Grid Margin="12">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="260"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Title -->
-            <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
-                       Text="Soft Drinks"
-                       Foreground="{DynamicResource LightText}"
-                       FontSize="15" FontWeight="Bold"
-                       Margin="0 0 0 8"
-                       HorizontalAlignment="Center"
-                       TextAlignment="Center" />
+            <Expander Style="{DynamicResource sideBarExpander}"
+                    Grid.RowSpan="3" Grid.Column="2">
+                <uc:SideBar/>
+            </Expander>
 
-            <!-- ========== Left: Existing soft drinks grid ========== -->
-            <GroupBox Grid.Row="1" Grid.Column="0" Header="Existing"
-                      Margin="0 0 12 0">
+            <!-- search bar by drink name -->
+            <uc:SearchBar x:Name="DrinkSearch" Grid.Row="0" Grid.Column="1" 
+              Margin="8 15 0 0" HorizontalAlignment="Left"
+              Placeholder="Search by drink name"/>
+
+            <!-- ========== Right: Existing soft drinks grid ========== -->
+            <Border Grid.Column="1" Grid.Row="1" Margin="8"
+                    Style="{DynamicResource windowBorder}">
                 <DataGrid ItemsSource="{Binding SoftDrinks}"
                           SelectedItem="{Binding SelectedSoftDrink, Mode=TwoWay}"
                           AutoGenerateColumns="False"
@@ -61,11 +59,12 @@
                         <DataGridTextColumn Header="Qty" Binding="{Binding Quantity}" Width="60"/>
                     </DataGrid.Columns>
                 </DataGrid>
-            </GroupBox>
+            </Border>
 
-            <!-- ========== Right: Editor form ========== -->
-            <GroupBox Grid.Row="1" Grid.Column="1" Header="Edit / Create">
-                <StackPanel Margin="10" Width="220">
+            <!-- ========== Left: new drink form ========== -->
+            <GroupBox Grid.Row="1" Grid.Column="0" Header="New Drink Details"
+                      Margin="20 0 18 8">
+                <StackPanel Margin="10" >
                     <Label Content="Drink Name:" Foreground="{DynamicResource LightText}"/>
                     <TextBox x:Name="NameBox"
                              Text="{Binding DrinkName, UpdateSourceTrigger=PropertyChanged}"
@@ -83,40 +82,30 @@
                                Style="{DynamicResource errorMessage}"
                                TextWrapping="Wrap" Margin="0,6,0,0"/>
 
-                    <StackPanel HorizontalAlignment="Center" Margin="0,10,0,0">
-                        <!-- Row 1: Save + Update -->
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,6">
-                            <Button Content="Create"
-                Command="{Binding SaveCommand}"
-                Style="{DynamicResource SubmitBtn}" Margin="0,0,6,0"/>
-                            <Button Content="Update"
-                Command="{Binding UpdateCommand}"
-                Style="{DynamicResource SubmitBtn}"/>
-                        </StackPanel>
-
-                        <!-- Row 2: Delete + Soft Delete -->
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Content="Delete"
-                Command="{Binding DeleteCommand}"
-                Style="{DynamicResource SubmitBtn}" Margin="0,0,6,0"/>
-
-                        </StackPanel>
-                    </StackPanel>
-
+                    <!-- Add Drink Button -->
+                    <Button Content="Add Drink"
+                            Command="{Binding SaveCommand}"
+                            Style="{DynamicResource SubmitBtn}" Margin="0,0,6,0"/>
                 </StackPanel>
             </GroupBox>
 
-            <!-- ========== Bottom bar ========== -->
-            <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="0,12,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <uc:ReturnBtn Grid.Column="0" VerticalAlignment="Bottom" Margin="0,0,8,0"/>
-                <TextBlock Grid.Column="1" Style="{DynamicResource copyWrite}"
-                           VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
-            </Grid>
+            <!-- Footer -->
+            <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" 
+                        HorizontalAlignment="Center" 
+                        VerticalAlignment="Center" Margin="0 0 0 20">
+                <Button Content="Update Drink"
+                        Command="{Binding UpdateCommand}"
+                        Style="{DynamicResource SubmitBtn}"/>
+                <Button Content="Delete Drink"
+                        Command="{Binding DeleteCommand}"
+                        Style="{DynamicResource SubmitBtn}"
+                        Margin="20,0,0,0"/>
+            </StackPanel>
+            
+            <uc:ReturnBtn Grid.Column="0" VerticalAlignment="Bottom" Margin="0,0,0,15"
+                          Grid.Row="2"/>
+            <TextBlock Grid.Column="1" Grid.Row="2" Style="{DynamicResource copyWrite}"
+                       HorizontalAlignment="Center" Margin="0,0,0,15"/>
         </Grid>
     </Border>
 </Window>

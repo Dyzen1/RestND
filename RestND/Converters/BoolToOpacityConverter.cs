@@ -4,6 +4,7 @@ using System.Windows.Data;
 
 namespace RestND.Converters
 {
+    // helper class for adjusting windows opacity for popup bg exc...
     public class BoolToOpacityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

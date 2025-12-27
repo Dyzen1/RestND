@@ -19,7 +19,7 @@ public class Transaction
     }
     #endregion
 
-    #region Add Dish or Update Dish and Update Product in Dish
+    #region Add & Update Dish + Update Product in Dish
     public bool AddDish(Dish d)
     {
 
@@ -44,7 +44,6 @@ public class Transaction
                 transaction.Rollback();
                 return false;
             }
-      
 
             int newDishId = Convert.ToInt32(_db.ExecuteScalar("SELECT LAST_INSERT_ID();", _db.Connection, transaction));
 
@@ -70,8 +69,6 @@ public class Transaction
             _db.Connection.Close();
         }
     }
-
-
 
     public bool UpdateDish(Dish dish)
     {
@@ -130,7 +127,7 @@ public class Transaction
 
     #endregion
 
-    #region Delete and Add Order
+    #region Delete & Add Order
     public bool AddOrder(Order o)
     {
         // ---- Guards (quick feedback before touching the DB) ----
@@ -203,8 +200,6 @@ public class Transaction
             throw;
         }
     }
-
-
 
     public bool DeleteOrder(int orderId)
     {

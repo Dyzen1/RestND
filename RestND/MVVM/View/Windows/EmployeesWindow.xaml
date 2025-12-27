@@ -85,7 +85,6 @@
                             <DataGridTextColumn Header="First Name" Binding="{Binding Employee_Name}" Width="*"/>
                             <DataGridTextColumn Header="Last Name" Binding="{Binding Employee_LastName}" Width="*"/>
                             <DataGridTextColumn Header="Role" Binding="{Binding Employee_Role.Role_Name}" Width="160"/>
-                            <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="2*"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>
@@ -100,11 +99,11 @@
                 <TabControl>
                     <TabItem Header="In Progress">
                         <DataGrid ItemsSource="{Binding EmployeeOrdersInProgress}"
-              AutoGenerateColumns="False"
-              RowStyle="{DynamicResource rowStyle}"
-              HeadersVisibility="Column"
-              ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
-              IsReadOnly="True">
+                              AutoGenerateColumns="False"
+                              RowStyle="{DynamicResource rowStyle}"
+                              HeadersVisibility="Column"
+                              ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
+                              IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Employee"
                                 Binding="{Binding assignedEmployee.Employee_Name}"

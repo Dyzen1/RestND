@@ -10,7 +10,9 @@ namespace RestND.Data
 {
     public class DishServices : BaseService<Dish>
     {
+        #region Properties
         private readonly Transaction _transaction;
+        #endregion
 
         #region Constructor
         public DishServices() : base(DatabaseOperations.Instance)
@@ -28,9 +30,6 @@ namespace RestND.Data
 
             foreach (var row in rows)
             {
-                //if (row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)
-                //    continue; // Skip inactive dishes
-
                 var dish = new Dish
                 {
                     Dish_ID = Convert.ToInt32(row["Dish_ID"]),
@@ -42,7 +41,6 @@ namespace RestND.Data
                     }
                 };
 
-                // Handle Allergen_Notes if present and not null
                 if (row.TryGetValue("Allergen_Notes", out var allergenNotes) && allergenNotes != null)
                 {
                     dish.Allergen_Notes = allergenNotes.ToString();
@@ -64,7 +62,7 @@ namespace RestND.Data
 
         #endregion
 
-        #region Delete Dish (not really deleting, just marking as inactive)
+        #region Delete Dish (soft delete - not really deleting, just marking as inactive)
         public override bool Delete(Dish d)
         {
             d.Is_Active = false;
@@ -104,8 +102,8 @@ namespace RestND.Data
 
         #endregion
 
-
         #region GetById (added)
+        // Get a single Dish by its ID
         public Dish? GetById(int id)
         {
             const string query = "SELECT * FROM dishes WHERE Dish_ID = @id LIMIT 1";

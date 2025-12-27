@@ -16,7 +16,6 @@ public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instan
         string query = "SELECT * FROM discounts";
         var rows = _db.ExecuteReader(query);
 
-
         foreach (var row in rows)
         {
             if(row.TryGetValue("Is_Active", out var isActive) && Convert.ToBoolean(isActive) == false)

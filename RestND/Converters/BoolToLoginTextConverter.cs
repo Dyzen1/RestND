@@ -4,6 +4,7 @@ using System.Windows.Data;
 
 namespace RestND.Converters
 {
+    //helper class for adjusting login btn when logged in/out.
     public class BoolToLoginTextConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

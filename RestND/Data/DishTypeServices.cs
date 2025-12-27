@@ -51,7 +51,7 @@ namespace RestND.Data
         }
         #endregion
 
-        #region Delete DishType (not really deleting, just marking as inactive)
+        #region Delete DishType (soft delete - not really deleting, just marking as inactive)
         public override bool Delete(DishType d)
         {
             d.Is_Active = false;

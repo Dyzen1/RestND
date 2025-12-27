@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using RestND.MVVM.Model.Employees; // AppPermission
-using RestND.MVVM.Model.Security;  // AuthContext
+using RestND.MVVM.Model.Employees;
+using RestND.MVVM.Model.Security; 
 
 namespace RestND.Converters
 {
-    /// <summary>
-    /// Returns true if the current user has the required AppPermission.
-    /// Supports:
-    ///   1) Per-resource: <conv:PermissionToEnabledConverter x:Key="TablesPerm" Required="Tables"/>
-    ///   2) Shared + parameter: IsEnabled="{Binding AuthVersion, Converter={StaticResource PermToEnabled}, ConverterParameter=Tables}"
-    /// </summary>
+    // Returns true if the current user has the required AppPermission.
+    // Supports:
+    //   1) Per-resource: <conv:PermissionToEnabledConverter x:Key="TablesPerm" Required="Tables"/>
+    //   2) Shared + parameter: IsEnabled="{Binding AuthVersion, Converter={StaticResource PermToEnabled}, ConverterParameter=Tables}"
     public class PermissionToEnabledConverter : IValueConverter
     {
-        /// <summary>
-        /// Optional: set in XAML as enum name ("Tables") or number.
-        /// </summary>
         public string? Required { get; set; } // keep string so XAML can pass names
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

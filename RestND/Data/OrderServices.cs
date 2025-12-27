@@ -72,6 +72,7 @@ namespace RestND.Data
         #endregion
 
         #region Add Starting Order (no dishes) returns the new Order_ID
+        // used when first creating a new order.
         public int AddStartingOrder(Order o)
         {
             const string insertQuery = @"
@@ -107,7 +108,7 @@ namespace RestND.Data
 
         #endregion
 
-        #region Delete Order
+        #region Delete Order (soft delete if has dishes)
         public override bool Delete(Order d)
         {
             if (d.Order_ID <= 0)
@@ -145,6 +146,7 @@ namespace RestND.Data
         #endregion
 
         #region Deduct product quantityies
+        // method for deducting product quantities from inventory when a dish is added to an order.
         public void DeductProductQuantities(int dishId)
         {
             string query = @"
@@ -167,17 +169,17 @@ namespace RestND.Data
             var orders = new List<Order>();
 
             const string query = @"
-        SELECT 
-            o.Order_ID,
-            o.Employee_ID,
-            o.Table_Number,
-            o.People_Count,
-            o.Total_Price,
-            o.Is_Active,
-            e.Employee_Name
-        FROM orders o
-        LEFT JOIN employees e ON e.Employee_ID = o.Employee_ID
-        WHERE o.Employee_ID = @empId;
+            SELECT 
+                o.Order_ID,
+                o.Employee_ID,
+                o.Table_Number,
+                o.People_Count,
+                o.Total_Price,
+                o.Is_Active,
+                e.Employee_Name
+            FROM orders o
+            LEFT JOIN employees e ON e.Employee_ID = o.Employee_ID
+            WHERE o.Employee_ID = @empId;
     ";
 
             var rows = _db.ExecuteReader(query, new MySqlParameter("@empId", employeeId));

@@ -77,7 +77,6 @@ namespace RestND.MVVM.ViewModel
                                 match.Employee_Name = employee.Employee_Name;
                                 match.Employee_LastName = employee.Employee_LastName;
                                 match.Employee_Role = employee.Employee_Role;
-                                match.Email = employee.Email;
                                 match.Is_Active = employee.Is_Active;
                             }
                             break;

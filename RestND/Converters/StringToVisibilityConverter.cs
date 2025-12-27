@@ -6,6 +6,7 @@ using System.Windows.Data;
 
 namespace RestND.Converters
 {
+    // helper class to convert strings to be unvisible and back, used for error messages.
     public class StringToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

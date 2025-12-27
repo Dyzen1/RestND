@@ -8,9 +8,7 @@ namespace RestND.Data
     {
         private readonly DatabaseOperations _db = DatabaseOperations.Instance;
 
-        /// <summary>
-        /// Returns Employee with Role+Permissions if password is correct; otherwise null.
-        /// </summary>
+        #region Verify Login
         public Employee? AuthenticateById(int employeeId, string plainPassword)
         {
             const string sql = @"
@@ -19,7 +17,6 @@ namespace RestND.Data
                             e.Employee_Name,
                             e.Employee_Lastname,
                             e.Password,
-                            e.Email,
                             e.Role_ID,
                             e.Is_Active AS EmpActive,
                             r.Role_Name,
@@ -67,12 +64,12 @@ namespace RestND.Data
                 Employee_Name = Convert.ToString(row["Employee_Name"]),
                 Employee_LastName = Convert.ToString(row["Employee_Lastname"]),
                 Password = storedHash, // keep hash if your model has it
-                Email = Convert.ToString(row["Email"]),
                 Employee_Role = role,
                 Is_Active = empActive
             };
 
             return emp;
         }
+        #endregion
     }
 }

@@ -18,18 +18,6 @@ namespace RestND.MVVM.Model.Employees
         }
         #endregion
 
-        #region Email
-
-        private string? _Email;
-        public string? Email
-        {
-            get { return _Email; }
-            set { _Email = value; }
-        }
-
-
-        #endregion
-
         #region Password
         private string? _Password;
         public string? Password
@@ -77,7 +65,7 @@ namespace RestND.MVVM.Model.Employees
         }
         #endregion
 
-        #region Constructor without email and password
+        #region Constructor without password
         public Employee(int employeeId, string? employeeName, Role? employeeRole,string employeeLastName)
         {
             this.Employee_LastName = employeeLastName;
@@ -88,11 +76,10 @@ namespace RestND.MVVM.Model.Employees
         }
         #endregion
 
-        #region Constructor with email and password
-        public Employee(int employeeId, string? employeeName, Role? employeeRole, string email, string password,string employeeLastName)
+        #region Constructor with password
+        public Employee(int employeeId, string? employeeName, Role? employeeRole, string password,string employeeLastName)
         {
             this.Employee_LastName= employeeLastName;
-            this.Email = email;
             this.Password = password;
             this.Employee_ID = employeeId;
             this.Employee_Name = employeeName;

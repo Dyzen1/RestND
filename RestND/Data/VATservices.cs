@@ -35,7 +35,6 @@ namespace RestND.Data
         #endregion
 
         #region Update Vat rate
-
         // Update only the percentage on the single row.
         public bool UpdateRate(double newPercentage)
         {

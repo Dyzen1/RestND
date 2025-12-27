@@ -173,11 +173,7 @@ namespace RestND.MVVM.ViewModel.Orders
             UpdateDishAvailability();
         }
         #endregion
-
-
-
-
-
+        
         #region Methods - Order Live Total
         private void HookOrderItems(Order? order)
         {
@@ -350,6 +346,7 @@ namespace RestND.MVVM.ViewModel.Orders
         }
         #endregion
 
+        #region Relay commands
         [RelayCommand]
         private void PrintBill()
         {
@@ -374,8 +371,6 @@ namespace RestND.MVVM.ViewModel.Orders
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-
 
 
         [RelayCommand]
@@ -410,7 +405,7 @@ namespace RestND.MVVM.ViewModel.Orders
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        #endregion
 
 
     }

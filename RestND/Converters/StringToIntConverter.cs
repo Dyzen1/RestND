@@ -9,6 +9,7 @@ using System.Windows.Data;
 
 namespace RestND.Converters
 {
+    // helper to bind int properties to TextBoxes
     public class StringToIntConverter : IValueConverter
 
     {

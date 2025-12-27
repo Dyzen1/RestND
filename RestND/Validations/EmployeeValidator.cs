@@ -45,37 +45,6 @@ namespace RestND.Validations
 
             return true;
         }
-        public bool ValidEmail(string email, out string err, bool checkExists = true, int? excludeId = null)
-        {
-            err = string.Empty;
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                err = "Email is required!";
-                return false;
-            }
-
-            // Require domain extension with 2-4 letters (.com, .net, .org, .co, etc.)
-            if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[A-Za-z]{2,4}$"))
-            {
-                err = "Invalid email format!";
-                return false;
-            }
-
-            if (checkExists)
-            {
-                var exists = _employeeService.GetAll()
-                    .Any(e => e.Email.Equals(email, StringComparison.OrdinalIgnoreCase)
-                           && (!excludeId.HasValue || e.Employee_ID != excludeId.Value));
-
-                if (exists)
-                {
-                    err = "Employee with this email already exists!";
-                    return false;
-                }
-            }
-
-            return true;
-        }
 
         public bool ValidPassword(string password, out string err)
         {
@@ -148,14 +117,13 @@ namespace RestND.Validations
             return true;
         }
 
-        // Full-form helpers
+        #region Validation helpers
         public bool ValidateForAdd(Employee e, out string err)
         {
             if (!CheckIfNull(e, out err)) return false;
             if (!ValidNames(e.Employee_Name, e.Employee_LastName, out err)) return false;
             if (!ValidRole(e.Employee_Role, out err)) return false;
             if (!ValidId(e.Employee_ID, out err, checkExists: true)) return false;
-            if (!ValidEmail(e.Email, out err, checkExists: true)) return false;
             if (!ValidPassword(e.Password, out err)) return false;
 
             return true;
@@ -167,12 +135,10 @@ namespace RestND.Validations
             if (!ValidNames(e.Employee_Name, e.Employee_LastName, out err)) return false;
             if (!ValidRole(e.Employee_Role, out err)) return false;
             if (!ValidId(e.Employee_ID, out err, checkExists: false)) return false;
-            if (!ValidEmail(e.Email, out err, checkExists: true, excludeId: e.Employee_ID)) return false;
-
-   
 
             err = string.Empty;
             return true;
         }
+        #endregion
     }
 }

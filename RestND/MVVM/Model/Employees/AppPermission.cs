@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RestND.MVVM.Model.Employees
 {
-    [Flags]
+    [Flags] //-> indicates that this enum can be treated as a bit field; that is, a set of flags.
     public enum AppPermission
     {
         None = 0,

@@ -71,6 +71,7 @@ namespace RestND.Data
         #endregion
 
         #region Update Table (Only status)
+        // method used for blocking tables availability when occupied.
         public bool UpdateTableStatus(Table t)
         {
             string query =

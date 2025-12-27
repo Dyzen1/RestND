@@ -19,7 +19,6 @@ namespace RestND.Data
                     e.Employee_ID,
                     e.Employee_Name,
                     e.Employee_LastName,
-                    e.Email,
                     e.Password,
                     e.Is_Active,
                     e.Role_ID,
@@ -41,7 +40,6 @@ namespace RestND.Data
                     Employee_ID = Convert.ToInt32(row["Employee_ID"]),
                     Employee_Name = row["Employee_Name"]?.ToString(),
                     Employee_LastName = row["Employee_LastName"]?.ToString(),
-                    Email = row["Email"]?.ToString(),
                     Password = row["Password"]?.ToString(), // you may want to omit returning hashed pwd
                     Is_Active = true,
                     Employee_Role = new Role
@@ -61,18 +59,17 @@ namespace RestND.Data
 
 
             string sql = @"
-        SELECT  e.Employee_ID,
-                e.Employee_Name,
-                e.Employee_Lastname,
-                e.Email,
-                e.Is_Active,
-                e.Role_ID,          -- if you want to carry the FK
-                r.Role_Name
-        FROM employees e
-        INNER JOIN roles r ON r.Role_ID = e.Role_ID
-        WHERE e.Is_Active = 1
-          AND r.Is_Active = 1
-          AND LOWER(r.Role_Name) = LOWER(@role)";
+            SELECT  e.Employee_ID,
+                    e.Employee_Name,
+                    e.Employee_Lastname,
+                    e.Is_Active,
+                    e.Role_ID,          -- if you want to carry the FK
+                    r.Role_Name
+            FROM employees e
+            INNER JOIN roles r ON r.Role_ID = e.Role_ID
+            WHERE e.Is_Active = 1
+              AND r.Is_Active = 1
+              AND LOWER(r.Role_Name) = LOWER(@role)";
 
             var rows = _db.ExecuteReader(sql, new MySqlParameter("@role", roleName));
 
@@ -84,7 +81,6 @@ namespace RestND.Data
                     Employee_Name = row["Employee_Name"]?.ToString(),
                     // Model property is Employee_LastName (capital N). DB column is Employee_Lastname.
                     Employee_LastName = row["Employee_Lastname"]?.ToString(),
-                    Email = row["Email"]?.ToString(),
                     Is_Active = Convert.ToBoolean(row["Is_Active"]),
 
                     // Fill the Role object
@@ -98,8 +94,6 @@ namespace RestND.Data
 
             return list;
         }
-
-
         #endregion
 
         #region Add Employee
@@ -112,7 +106,7 @@ namespace RestND.Data
             // If it IS auto-increment, remove Employee_ID and @id parameter.
             const string query = @"
                 INSERT INTO employees
-                    (Employee_ID, Employee_Name, Employee_LastName, Role_ID, Password, Email, Is_Active)
+                    (Employee_ID, Employee_Name, Employee_LastName, Role_ID, Password, Is_Active)
                 VALUES
                     (@id, @name, @last, @roleId, @password, @mail, TRUE);";
 
@@ -121,8 +115,7 @@ namespace RestND.Data
                 new MySqlParameter("@name", (object?)e.Employee_Name ?? DBNull.Value),
                 new MySqlParameter("@last", (object?)e.Employee_LastName ?? DBNull.Value),
                 new MySqlParameter("@roleId", e.Employee_Role.Role_ID),         // <-- FK from object
-                new MySqlParameter("@password", hashedPassword),
-                new MySqlParameter("@mail", (object?)e.Email ?? DBNull.Value)
+                new MySqlParameter("@password", hashedPassword)
             ) > 0;
         }
         #endregion
@@ -138,7 +131,6 @@ namespace RestND.Data
                        Employee_LastName = @last,
                        Role_ID           = @roleId,      
                        Password          = @password,
-                       Email             = @mail
                  WHERE Employee_ID       = @id;";
 
             return _db.ExecuteNonQuery(query,
@@ -146,8 +138,7 @@ namespace RestND.Data
                 new MySqlParameter("@name", (object?)e.Employee_Name ?? DBNull.Value),
                 new MySqlParameter("@last", (object?)e.Employee_LastName ?? DBNull.Value),
                 new MySqlParameter("@roleId", e.Employee_Role.Role_ID),    // <-- FK from object
-                new MySqlParameter("@password", hashedPassword),
-                new MySqlParameter("@mail", (object?)e.Email ?? DBNull.Value)
+                new MySqlParameter("@password", hashedPassword)
             ) > 0;
         }
         #endregion

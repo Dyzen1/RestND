@@ -8,6 +8,7 @@ using System.Windows.Data;
 
 namespace RestND.Converters
 {
+    // helper to bind decimal properties to TextBoxes
     public class StringToDecimalConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
