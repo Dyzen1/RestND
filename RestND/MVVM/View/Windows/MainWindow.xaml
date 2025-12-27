@@ -107,11 +107,11 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button Background="Transparent"
-            BorderThickness="0"
-            Visibility="{Binding Is_Active, Converter={StaticResource BoolToVisibilityConverter}}"
-            Opacity="{Binding Table_Status, Converter={StaticResource BoolToOpacityConverter}}"
-            Command="{Binding DataContext.TableClickCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-            CommandParameter="{Binding}">
+                                BorderThickness="0"
+                                Visibility="{Binding Is_Active, Converter={StaticResource BoolToVisibilityConverter}}"
+                                Opacity="{Binding Table_Status, Converter={StaticResource BoolToOpacityConverter}, ConverterParameter=invert}"
+                                Command="{Binding DataContext.TableClickCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}">
                             <Grid>
                                 <Image Style="{DynamicResource tableBtn}"/>
                                 <TextBlock Text="{Binding Table_Number}" Style="{DynamicResource tableNumber}"/>

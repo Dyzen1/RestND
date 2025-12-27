@@ -13,41 +13,37 @@ namespace RestND.MVVM.View.Windows
 {
     public partial class OrderWindow : Window
     {
-        private Point _dragStart;
+        private Point _dragStart; // initial position for drag-and-drop
 
+        #region Constructors
         public OrderWindow()
         {
             InitializeComponent();
 
             var vm = new OrderViewModel();
             DataContext = vm;
-
             HookSearch();
         }
 
         public OrderWindow(Order order)
         {
             InitializeComponent();
-
             var vm = new OrderViewModel(order);
 
-            // ✅ Load ongoing order lines from DB (so you can come back to the order)
+            // Load ongoing order lines from DB
             if (order != null && order.Order_ID > 0)
             {
                 var lines = new DishInOrderServices().GetByOrderId(order.Order_ID);
-
-                // Replace with the saved lines
                 vm.CurrentOrder.DishInOrder = new ObservableCollection<DishInOrder>(lines);
-
-                // keep total correct
                 vm.Reload(); // refresh dishes/stock availability
             }
-
+            vm.RequestClose += Close;
             DataContext = vm;
-
             HookSearch();
         }
+        #endregion
 
+        #region Dishes search methods
         private void HookSearch()
         {
             DishSearch.SearchTextChanged += (s, text) => ApplyDishFilter(text);
@@ -58,7 +54,6 @@ namespace RestND.MVVM.View.Windows
             };
         }
 
-        // ✅ Filter the correct list: AvailableDishes (not DishViewModel)
         private void ApplyDishFilter(string searchText)
         {
             if (DataContext is not OrderViewModel vm) return;
@@ -84,6 +79,7 @@ namespace RestND.MVVM.View.Windows
 
             view.Refresh();
         }
+        #endregion
 
         #region Drag and Drop
         private void DishList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

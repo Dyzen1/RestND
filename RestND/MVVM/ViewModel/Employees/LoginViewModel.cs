@@ -52,10 +52,7 @@ namespace RestND.MVVM.ViewModel.Employees
             }
 
             Employee = emp;
-
-            // 🔐 Set global auth state (fires AuthContext.SignedIn)
             AuthContext.SignIn(emp);
-
             Success = true; // triggers LoginSucceeded
         }
     }

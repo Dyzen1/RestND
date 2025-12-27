@@ -47,11 +47,6 @@ namespace RestND.MVVM.ViewModel.Orders
         #region Helpers
         private double ResolveUnitPrice(DishInOrder line)
         {
-            // If your line class stores its own price field, prefer it:
-            // return line.UnitPrice;
-            // return line.Dish_Price;
-
-            // Otherwise, resolve by Dish_ID via DishServices
             var dish = _dishServices.GetById(line.dish.Dish_ID);
             return dish?.Dish_Price ?? 0.0;
         }

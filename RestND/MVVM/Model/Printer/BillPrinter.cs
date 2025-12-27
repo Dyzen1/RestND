@@ -79,7 +79,7 @@ public class BillPrinter
         double totalSum = Math.Round(sub + vat, 2);
 
         DrawText(g, $"Subtotal: {sub.ToString("N2", il)} ₪", alignRight: true);
-        DrawText(g, $"VAT {VatPercent:0.#}%: {vat.ToString("N2", il)} ₪", alignRight: true);
+        DrawText(g, $"VAT {VatPercent.Percentage:0.#}%: {vat.ToString("N2", il)} ₪", alignRight: true);
         DrawText(g, $"Total: {totalSum.ToString("N2", il)} ₪", bold, alignRight: true);
 
         yPos += 10;

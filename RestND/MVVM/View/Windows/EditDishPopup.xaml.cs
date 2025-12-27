@@ -12,7 +12,10 @@ namespace RestND.MVVM.View.Windows
         public EditDishPopup(Dish dishToEdit)
         {
             InitializeComponent();
-            DataContext = new EditDishViewModel(dishToEdit);
+
+            var vm = new EditDishViewModel(dishToEdit);
+            vm.RequestClose += Close;
+            DataContext = vm;
         }
     }
 }

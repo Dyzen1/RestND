@@ -26,11 +26,43 @@
             </Expander>
 
             <GroupBox Header="Orders History">
-                <DataGrid Grid.Row="0"
-                          ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
-                          Margin="3">
-                
-                </DataGrid>
+                <Border Style="{DynamicResource windowBorder}" Margin="8">
+                    <DataGrid RowStyle="{DynamicResource rowStyle}"
+          ItemsSource="{Binding AllOrders}"
+          CellStyle="{DynamicResource cellStyle}"
+          HeadersVisibility="Column"
+          AutoGenerateColumns="False"
+          ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
+          IsReadOnly="True"
+          CanUserAddRows="False">
+
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="Order ID"
+                            Binding="{Binding Order_ID}"
+                            Width="Auto"/>
+
+                            <DataGridTextColumn Header="Waiter"
+                            Binding="{Binding assignedEmployee.Employee_Name}"
+                            Width="Auto"/>
+
+                            <DataGridTextColumn Header="Table"
+                            Binding="{Binding Table.Table_Number}"
+                            Width="Auto"/>
+
+                            <DataGridTextColumn Header="Status"
+                            Binding="{Binding StatusText}"
+                            Width="Auto"/>
+
+                            <!-- Optional: how many items/dishes in the order -->
+                            <DataGridTextColumn Header="Items"
+                            Binding="{Binding DishInOrder.Count}"
+                            Width="Auto"/>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                </Border>
             </GroupBox>
 
             <uc:ReturnBtn x:Name="returnBtn" VerticalAlignment="Center" Grid.Row="1"/>

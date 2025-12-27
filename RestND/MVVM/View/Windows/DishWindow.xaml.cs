@@ -76,11 +76,9 @@ namespace RestND.MVVM.View
                 var editWindow = new EditDishPopup(vm.SelectedDish)
                 {
                     Owner = this,
-                    DataContext = new EditDishViewModel(vm.SelectedDish)
                 };
 
                 this.Opacity = 0.4;
-                editWindow.Owner = this;
                 editWindow.ShowDialog();
                 this.Opacity = 1.0;
 

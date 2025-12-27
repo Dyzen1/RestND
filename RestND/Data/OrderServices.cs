@@ -219,9 +219,6 @@ namespace RestND.Data
         }
         #endregion
 
-
-
-
         #region Inventory adjust for dish (supports qty)
         public void AdjustProductQuantities(int dishId, int multiplier)
         {
@@ -245,12 +242,19 @@ namespace RestND.Data
         public Order? GetActiveOrderByTableNumber(int tableNumber)
         {
             const string query = @"
-        SELECT Order_ID, Employee_ID, Table_Number, People_Count, Is_Active
-        FROM orders
-        WHERE Table_Number = @num AND Is_Active = 1
-        ORDER BY Order_ID DESC
-        LIMIT 1;
-    ";
+            SELECT 
+                o.Order_ID,
+                o.Employee_ID,
+                e.Employee_Name,
+                o.Table_Number,
+                o.People_Count,
+                o.Is_Active
+            FROM orders o
+            LEFT JOIN employees e ON e.Employee_ID = o.Employee_ID
+            WHERE o.Table_Number = @num AND o.Is_Active = 1
+            ORDER BY o.Order_ID DESC
+            LIMIT 1;
+            ";
 
             var rows = _db.ExecuteReader(query, new MySqlParameter("@num", tableNumber));
             if (rows.Count == 0) return null;
@@ -262,20 +266,30 @@ namespace RestND.Data
                 Order_ID = Convert.ToInt32(row["Order_ID"]),
                 People_Count = Convert.ToInt32(row["People_Count"]),
                 Is_Active = Convert.ToBoolean(row["Is_Active"]),
-                Table = new Table { Table_Number = Convert.ToInt32(row["Table_Number"]) },
-                assignedEmployee = new Employee { Employee_ID = Convert.ToInt32(row["Employee_ID"]) },
-                DishInOrder = new ObservableCollection<DishInOrder>() // you’ll fill it when opening
+
+                Table = new Table
+                {
+                    Table_Number = Convert.ToInt32(row["Table_Number"])
+                },
+
+                assignedEmployee = new Employee
+                {
+                    Employee_ID = Convert.ToInt32(row["Employee_ID"]),
+                    Employee_Name = row["Employee_Name"]?.ToString() ?? string.Empty
+                },
+
+                DishInOrder = new ObservableCollection<DishInOrder>()
             };
         }
 
         public bool CloseOrder(int orderId, double totalPrice)
         {
             const string query = @"
-        UPDATE orders
-        SET Is_Active = 0,
-            Total_Price = @price
-        WHERE Order_ID = @id;
-    ";
+            UPDATE orders
+            SET Is_Active = 0,
+                Total_Price = @price
+            WHERE Order_ID = @id;
+            ";
 
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@id", orderId),

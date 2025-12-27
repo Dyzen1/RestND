@@ -117,9 +117,6 @@
                                 <DataGridTextColumn Header="Diners"
                                 Binding="{Binding People_Count}"
                                 Width="90"/>
-                                <DataGridTextColumn Header="Total"
-                                Binding="{Binding Bill.Price, StringFormat={}{0:N2} ₪}"
-                                Width="120"/>
                                 <DataGridTextColumn Header="Status"
                                 Binding="{Binding StatusText}"
                                 Width="120"/>
@@ -129,11 +126,11 @@
 
                     <TabItem Header="Finished">
                         <DataGrid ItemsSource="{Binding EmployeeOrdersFinished}"
-              AutoGenerateColumns="False"
-              RowStyle="{DynamicResource rowStyle}"
-              HeadersVisibility="Column"
-              ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
-              IsReadOnly="True">
+                                  AutoGenerateColumns="False"
+                                  RowStyle="{DynamicResource rowStyle}"
+                                  HeadersVisibility="Column"
+                                  ColumnHeaderStyle="{StaticResource dataGridHeaderStyle}"
+                                  IsReadOnly="True">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Employee"
                                 Binding="{Binding assignedEmployee.Employee_Name}"

@@ -1,6 +1,8 @@
 ﻿// RestND.MVVM.Model.Security.AuthContext
 using RestND.MVVM.Model.Employees;
 using System;
+using System.Diagnostics;
+using System.Windows;
 
 namespace RestND.MVVM.Model.Security
 {
@@ -29,9 +31,9 @@ namespace RestND.MVVM.Model.Security
         {
             CurrentUser = null;
             CurrentPermissions = AppPermission.None;
-
             SignedOut?.Invoke();
             PermissionsChanged?.Invoke(null, EventArgs.Empty);
+            MessageBox.Show("User signed out");
         }
 
         // If you want to set explicit flags (rare, but keep it for compatibility)

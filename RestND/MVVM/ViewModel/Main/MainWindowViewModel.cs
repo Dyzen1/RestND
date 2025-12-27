@@ -17,16 +17,21 @@ namespace RestND.MVVM.ViewModel.Main
 {
     public partial class MainWindowViewModel : ObservableObject
     {
+        #region Service Properties
         private readonly TableServices _tableService = new();
         private readonly TableValidator _validator = new();
         private readonly OrderServices _orderService = new();
         private readonly HubConnection _hub = App.MainHub;
         private readonly EmployeeServices _employeeServices = new();
+        #endregion
 
+        #region Actions
         public Action? ClosePopupAction { get; set; }
         public event Action<Table>? OpenEmpForOrder;
         public event Action<Order>? OpenOrderForTable;
+        #endregion
 
+        #region Observable Properties
         [ObservableProperty] private ObservableCollection<Table> tables = new();
         [ObservableProperty] private ObservableCollection<Table> activeTables = new();
         [ObservableProperty] private Table newTable = new();
@@ -42,9 +47,10 @@ namespace RestND.MVVM.ViewModel.Main
         [ObservableProperty] private Table selectedTableForOrder;
         [ObservableProperty] private int dinersCount = 1;
         [ObservableProperty] private string orderPopupError;
+        #endregion
 
+        #region On Change
         public string LoginButtonText => IsLoggedIn ? "Logout" : "Login";
-        
 
         partial void OnIsLoggedInChanged(bool oldValue, bool newValue) =>
             OnPropertyChanged(nameof(LoginButtonText));
@@ -55,21 +61,24 @@ namespace RestND.MVVM.ViewModel.Main
             EditTableCommand.NotifyCanExecuteChanged();
             DeleteTableCommand.NotifyCanExecuteChanged();
         }
+        #endregion
 
+        #region Constructor
         public MainWindowViewModel()
         {
             LoadTables();
             LoadEmployees();
             intiSR();
         }
+        #endregion
 
+        #region SignalR
         private void intiSR()
         {
             _hub.On<Table, string>("ReceiveTableUpdate", (table, action) =>
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    // 🔑 MATCH BY TABLE_NUMBER
                     var existing = Tables.FirstOrDefault(t => t.Table_Number == table.Table_Number);
 
                     switch (action)
@@ -83,8 +92,8 @@ namespace RestND.MVVM.ViewModel.Main
                             if (existing != null)
                             {
                                 existing.Table_Status = table.Table_Status;
-                                existing.Is_Active = table.Is_Active;
-                                existing.Max_Diners = table.Max_Diners;
+                                if (table.Max_Diners > 0) existing.Max_Diners = table.Max_Diners;
+                                if (table.Table_ID > 0) existing.Table_ID = table.Table_ID;
                             }
                             break;
 
@@ -99,13 +108,19 @@ namespace RestND.MVVM.ViewModel.Main
                 });
             });
         }
+        #endregion
 
+        #region Methods
         [RelayCommand]
         private void LoginLogout()
         {
             if (!IsLoggedIn)
             {
-                var loginWindow = new View.Windows.LoginWindow();
+                var loginWindow = new View.Windows.LoginWindow
+                {
+                    Owner = Application.Current.MainWindow
+                };
+
                 if (loginWindow.DataContext is Employees.LoginViewModel loginVm)
                 {
                     loginVm.LoginSucceeded += () =>
@@ -120,8 +135,11 @@ namespace RestND.MVVM.ViewModel.Main
             {
                 AuthContext.SignOut();
                 IsLoggedIn = false;
+                SelectedEmployee = null;
+                SelectedTable = null;
             }
         }
+
 
         public void LoadTables()
         {
@@ -138,7 +156,6 @@ namespace RestND.MVVM.ViewModel.Main
                     Table_Number = 0,
                     C = i % 5,
                     R = i / 5,
-                    Table_Status = false,
                     Is_Active = false
                 };
 
@@ -151,6 +168,7 @@ namespace RestND.MVVM.ViewModel.Main
         [RelayCommand]
         public async Task AddTable()
         {
+            // Validations
             if (!_validator.IsEmptyField(NewTableNumberText, out string emptyErr))
             {
                 TableErrorMessage = emptyErr; return;
@@ -325,5 +343,6 @@ namespace RestND.MVVM.ViewModel.Main
 
             ClosePopupAction?.Invoke();
         }
+        #endregion
     }
 }

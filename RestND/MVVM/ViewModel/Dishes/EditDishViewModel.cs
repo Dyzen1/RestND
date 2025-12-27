@@ -6,11 +6,13 @@ using RestND.MVVM.Model;
 using RestND.MVVM.Model.Dishes;
 using RestND.MVVM.ViewModel.Dishes;
 using RestND.Validations;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace RestND.MVVM.ViewModel
 {
@@ -23,6 +25,10 @@ namespace RestND.MVVM.ViewModel
         private readonly ProductService _productService = new();
         private readonly ProductInDishService _productInDishService= new();
         private readonly HubConnection _hub;
+        #endregion
+
+        #region Actions
+        public event Action? RequestClose;
         #endregion
 
         #region Observable properties
@@ -71,14 +77,7 @@ namespace RestND.MVVM.ViewModel
         }
         #endregion
 
-        #region On change
-        //partial void OnSelectedDishChanged(Dish value)
-        //{
-        //    UpdateDishCommand.NotifyCanExecuteChanged();
-        //}
-        #endregion
-
-        #region Relay commands
+        #region Methods
         [RelayCommand]
         private async Task UpdateDish()
         {
@@ -118,8 +117,8 @@ namespace RestND.MVVM.ViewModel
             bool success = _dishService.Update(SelectedDish);
             if (success)
             {
+                RequestClose?.Invoke();
                 await _hub.SendAsync("NotifyDishUpdate", SelectedDish, "update");
-                MessageBox.Show("Dish updated successfully.", "Success");
             }
         
         }
