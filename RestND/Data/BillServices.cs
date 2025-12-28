@@ -9,7 +9,6 @@ namespace RestND.Data
 {
     public class BillServices() : BaseService<Bill>(DatabaseOperations.Instance)
     {
-
         #region Get All Bills
         public override List<Bill> GetAll()
         {

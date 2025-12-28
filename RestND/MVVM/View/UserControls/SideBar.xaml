@@ -9,7 +9,7 @@
              xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF" 
              xmlns:conv="clr-namespace:RestND.Converters"
              Name="sideBar"
-             d:DesignHeight="380" d:DesignWidth="150">
+             d:DesignHeight="350" d:DesignWidth="150">
 
     <UserControl.DataContext>
         <vm:NavigationViewModel/>
@@ -53,13 +53,13 @@
                   ToolTip="Manage Soft Drinks"
                   IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanSoftDrinks}"/>
             
-            <Button Style="{StaticResource SideBarBtn}"
+            <!--<Button Style="{StaticResource SideBarBtn}"
                     Command="{Binding NavigateCommand}"
                     CommandParameter="Orders"
                     Content="Orders"
                     Tag="History"
                     ToolTip="View orders history"
-                    IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanOrders}"/>
+                    IsEnabled="{Binding Source={x:Static sec:PermissionProxy.Instance}, Path=CanOrders}"/>-->
 
             <Button Style="{StaticResource SideBarBtn}"
                     Command="{Binding NavigateCommand}"

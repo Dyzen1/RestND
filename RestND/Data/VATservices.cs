@@ -11,10 +11,11 @@ namespace RestND.Data
 {
     public class VATservices()
     {
-        #region Get current VAT rate
+        #region db property
         private readonly DatabaseOperations _db = DatabaseOperations.Instance;
+        #endregion
 
-        /// Returns the current VAT (a single row).
+        #region Get current VAT rate
         public Vat Get()
         {
             const string sql = "SELECT Vat_ID, Percentage FROM vat WHERE Vat_ID = 1 LIMIT 1";
@@ -35,7 +36,7 @@ namespace RestND.Data
         #endregion
 
         #region Update Vat rate
-        // Update only the percentage on the single row.
+        // Update only the percentage.
         public bool UpdateRate(double newPercentage)
         {
             const string sql = "UPDATE vat SET Percentage = @p WHERE Vat_ID = 1";

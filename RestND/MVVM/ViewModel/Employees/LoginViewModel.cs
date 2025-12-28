@@ -9,17 +9,24 @@ namespace RestND.MVVM.ViewModel.Employees
 {
     public partial class LoginViewModel : ObservableObject
     {
+        #region Services
         private readonly LoginServices _loginServices = new();
+        #endregion
 
+        #region Evenets
         public event Action? LoginSucceeded;
         public event Action<string>? LoginFailed;
+        #endregion
 
+        #region Observable Properties
         [ObservableProperty] private int employeeId;
         [ObservableProperty] private string password = string.Empty;
         [ObservableProperty] private string? errorMessage;
         [ObservableProperty] private Employee? employee;
         [ObservableProperty] private bool success;
+        #endregion
 
+        #region On Change
         partial void OnSuccessChanged(bool value)
         {
             if (value)
@@ -28,7 +35,9 @@ namespace RestND.MVVM.ViewModel.Employees
                 LoginSucceeded?.Invoke();
             }
         }
+        #endregion
 
+        #region Login method
         [RelayCommand]
         public void Login()
         {
@@ -55,5 +64,6 @@ namespace RestND.MVVM.ViewModel.Employees
             AuthContext.SignIn(emp);
             Success = true; // triggers LoginSucceeded
         }
+        #endregion
     }
 }

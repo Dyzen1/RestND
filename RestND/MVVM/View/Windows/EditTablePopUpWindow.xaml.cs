@@ -1,32 +1,32 @@
 ﻿using RestND.MVVM.ViewModel.Main;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace RestND.MVVM.View.Windows
 {
-    /// <summary>
-    /// Interaction logic for EditTablePopUpWindow.xaml
-    /// </summary>
     public partial class EditTablePopUpWindow : Window
     {
         private readonly MainWindowViewModel _mainVM;
+
+        public EditTablePopUpWindow(MainWindowViewModel mainVM)
+        {
+            InitializeComponent();
+
+            _mainVM = mainVM;
+
+            // Make sure ActiveTables is up to date
+            _mainVM.LoadTables();
+
+            // Hook close action (you already use ClosePopupAction in VM)
+            _mainVM.ClosePopupAction = Close;
+            DataContext = _mainVM;
+        }
+
+        // Optional: block wrong usage so this bug never comes back
         public EditTablePopUpWindow()
         {
             InitializeComponent();
- 
+            throw new InvalidOperationException("Use EditTablePopUpWindow(MainWindowViewModel mainVM)");
         }
-
-
     }
 }

@@ -22,7 +22,6 @@ public class Transaction
     #region Add & Update Dish + Update Product in Dish
     public bool AddDish(Dish d)
     {
-
         _db.OpenConnection();
         using var transaction = _db.Connection.BeginTransaction();
        
@@ -131,7 +130,6 @@ public class Transaction
     #region Delete & Add Order
     public bool AddOrder(Order o)
     {
-        // ---- Guards (quick feedback before touching the DB) ----
         if (o == null || o.Table == null || o.assignedEmployee == null)
             throw new ArgumentException("Order, Table, and AssignedEmployee must be provided.");
 
@@ -146,7 +144,7 @@ public class Transaction
 
         try
         {
-            // 1) Insert the Order (NOTE: using your existing column name 'Price')
+            // 1) insert the Order
             string insertOrderSql =
                 "INSERT INTO orders (Employee_Name, Table_Number, People_Count, Price, Is_Active) " +
                 "VALUES (@name, @number, @people, @price, @active)";
@@ -166,19 +164,18 @@ public class Transaction
                 return false;
             }
 
-            // 2) Get the new Order ID
+            // 2) get the new Order ID
             int newOrderId = Convert.ToInt32(
                 _db.ExecuteScalar("SELECT LAST_INSERT_ID();", _db.Connection, transaction)
             );
 
-            // 3) Insert Dishes for this order (inside the SAME transaction)
-            var dishInOrderServices = new DishInOrderServices(_db); // ensure this reuses the SAME _db
+            // 3) insert Dishes for this order
+            var dishInOrderServices = new DishInOrderServices(_db); // ensure this reuses the same db
 
             if (o.DishInOrder != null && o.DishInOrder.Count > 0)
             {
                 foreach (var dish in o.DishInOrder)
                 {
-                    // requires an overload that accepts the existing connection+transaction (see below)
                     bool dishesAdded = dishInOrderServices.AddDishToOrder(newOrderId, dish, _db.Connection, transaction);
                     if (!dishesAdded)
                     {
@@ -189,7 +186,7 @@ public class Transaction
                 }
             }
 
-            // 4) Commit transaction if everything succeeded
+            // 4) commit transaction if everything succeeded
             transaction.Commit();
             _db.CloseConnection();
             return true;
@@ -218,14 +215,14 @@ public class Transaction
 
             if (hasDishes)
             {
-                // Soft delete (match your app-wide pattern)
+                // Soft delete
                 const string softDelete = "UPDATE orders SET Is_Active = 0 WHERE Order_ID = @id";
                 return _db.ExecuteNonQuery(softDelete, _db.Connection, null,
                     new MySqlParameter("@id", orderId)
                 ) > 0;
             }
 
-            // No dishes ? do a hard delete in a single transaction
+            // if no dishes, hard delete in a single transaction
             using var tx = _db.Connection.BeginTransaction();
             try
             {
@@ -246,8 +243,7 @@ public class Transaction
             }
             catch
             {
-                // Attempt to roll back and rethrow
-                try { tx.Rollback(); } catch { /* ignore */ }
+                try { tx.Rollback(); } catch { }
                 throw;
             }
         }
@@ -256,11 +252,6 @@ public class Transaction
             _db.CloseConnection();
         }
     }
-
-    #endregion
-
-    #region soft delete product from everywhere
-
 
     #endregion
 }

@@ -21,7 +21,7 @@ namespace RestND.MVVM.ViewModel.Main
         private readonly TableServices _tableService = new();
         private readonly TableValidator _validator = new();
         private readonly OrderServices _orderService = new();
-        private readonly HubConnection _hub = App.MainHub;
+        private readonly HubConnection _hub = App.TableHub;
         private readonly EmployeeServices _employeeServices = new();
         #endregion
 
@@ -38,7 +38,7 @@ namespace RestND.MVVM.ViewModel.Main
         [ObservableProperty] private Table selectedTable;
         [ObservableProperty] private string editedTableNumberText;
         [ObservableProperty] private string newTableNumberText;
-        [ObservableProperty] private string newTableMaxDinersText = "2";  // ONE definition only
+        [ObservableProperty] private string newTableMaxDinersText = "2";
         [ObservableProperty] private string tableErrorMessage;
         [ObservableProperty] private bool isLoggedIn;
 
@@ -75,32 +75,72 @@ namespace RestND.MVVM.ViewModel.Main
         #region SignalR
         private void intiSR()
         {
+
+            
             _hub.On<Table, string>("ReceiveTableUpdate", (table, action) =>
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
-                    var existing = Tables.FirstOrDefault(t => t.Table_Number == table.Table_Number);
+                    Table existing = null;
+
+                    if (table.Table_ID > 0)
+                        existing = Tables.FirstOrDefault(t => t.Table_ID == table.Table_ID);
+
+                    if (existing == null)
+                        existing = Tables.FirstOrDefault(t => t.C == table.C && t.R == table.R);
+
+                    if (existing == null && table.Table_Number > 0)
+                        existing = Tables.FirstOrDefault(t => t.Table_Number == table.Table_Number);
 
                     switch (action)
                     {
                         case "add":
-                            if (existing == null)
-                                Tables.Add(table);
+                            if (existing != null)
+                            {
+                                existing.Table_ID = table.Table_ID;
+                                existing.Table_Number = table.Table_Number;
+                                existing.Max_Diners = table.Max_Diners;
+                                existing.Table_Status = table.Table_Status;
+                                existing.Is_Active = table.Is_Active;
+
+                                if (existing.Is_Active && !ActiveTables.Contains(existing))
+                                    ActiveTables.Add(existing);
+                               
+                            }
                             break;
 
                         case "update":
                             if (existing != null)
                             {
-                                existing.Table_Status = table.Table_Status;
-                                if (table.Max_Diners > 0) existing.Max_Diners = table.Max_Diners;
+                                // update everything that can change (including number!)
                                 if (table.Table_ID > 0) existing.Table_ID = table.Table_ID;
+                                existing.Table_Number = table.Table_Number;
+                                if (table.Max_Diners > 0) existing.Max_Diners = table.Max_Diners;
+                                existing.Table_Status = table.Table_Status;
+                                existing.Is_Active = table.Is_Active;
+
+                                if (existing.Is_Active)
+                                {
+                                    if (!ActiveTables.Contains(existing))
+                                        ActiveTables.Add(existing);
+                                }
+                                else
+                                {
+                                    ActiveTables.Remove(existing);
+                                }
                             }
                             break;
 
                         case "delete":
                             if (existing != null)
                             {
-                                Tables.Remove(existing);
+                                // reset slot (keep 25 items)
+                                existing.Table_ID = -1;
+                                existing.Table_Number = 0;
+                                existing.Max_Diners = 0;
+                                existing.Table_Status = false;
+                                existing.Is_Active = false;
+
                                 ActiveTables.Remove(existing);
                             }
                             break;
@@ -140,7 +180,6 @@ namespace RestND.MVVM.ViewModel.Main
             }
         }
 
-
         public void LoadTables()
         {
             var result = _tableService.GetAll();
@@ -156,7 +195,8 @@ namespace RestND.MVVM.ViewModel.Main
                     Table_Number = 0,
                     C = i % 5,
                     R = i / 5,
-                    Is_Active = false
+                    Is_Active = false,
+                    Table_Status = false
                 };
 
                 Tables.Add(table);
@@ -168,31 +208,23 @@ namespace RestND.MVVM.ViewModel.Main
         [RelayCommand]
         public async Task AddTable()
         {
-            // Validations
             if (!_validator.IsEmptyField(NewTableNumberText, out string emptyErr))
-            {
-                TableErrorMessage = emptyErr; return;
-            }
+            { TableErrorMessage = emptyErr; return; }
+
             if (!int.TryParse(NewTableNumberText, out int parsedNumber))
-            {
-                TableErrorMessage = "Please enter a valid number."; return;
-            }
+            { TableErrorMessage = "Please enter a valid number."; return; }
+
             if (!_validator.CheckPosNum(parsedNumber, out string notPositiveErr))
-            {
-                TableErrorMessage = notPositiveErr; return;
-            }
+            { TableErrorMessage = notPositiveErr; return; }
+
             if (!_validator.CheckIfExists(parsedNumber, out string existsErr))
-            {
-                TableErrorMessage = existsErr; return;
-            }
+            { TableErrorMessage = existsErr; return; }
+
             if (!_validator.isFull(out string fullErr))
-            {
-                TableErrorMessage = fullErr; return;
-            }
+            { TableErrorMessage = fullErr; return; }
+
             if (!int.TryParse(NewTableMaxDinersText, out int parsedMax) || parsedMax <= 0)
-            {
-                TableErrorMessage = "Max diners must be a positive number."; return;
-            }
+            { TableErrorMessage = "Max diners must be a positive number."; return; }
 
             TableErrorMessage = string.Empty;
 
@@ -201,7 +233,7 @@ namespace RestND.MVVM.ViewModel.Main
 
             NewTable.Table_Number = parsedNumber;
             NewTable.Is_Active = true;
-            NewTable.Table_Status = true;
+            NewTable.Table_Status = false;
             NewTable.C = slot.C;
             NewTable.R = slot.R;
             NewTable.Max_Diners = parsedMax;
@@ -274,11 +306,11 @@ namespace RestND.MVVM.ViewModel.Main
         [RelayCommand]
         private void TableClick(Table table)
         {
+            LoadEmployees();
             if (table == null) return;
 
             OrderPopupError = string.Empty;
 
-            // ALWAYS check DB for active order
             var activeOrder = _orderService.GetActiveOrderByTableNumber(table.Table_Number);
             if (activeOrder != null)
             {
@@ -290,12 +322,10 @@ namespace RestND.MVVM.ViewModel.Main
                 return;
             }
 
-            // no active order → start new one
             SelectedTableForOrder = table;
             DinersCount = 1;
             OpenEmpForOrder?.Invoke(table);
         }
-
 
         [RelayCommand]
         private async Task CreateOrder()
@@ -332,9 +362,10 @@ namespace RestND.MVVM.ViewModel.Main
             // mark table occupied
             SelectedTableForOrder.Table_Status = true;
             _tableService.UpdateTableStatus(SelectedTableForOrder);
-            await _hub.SendAsync("NotifyTableUpdate", SelectedTableForOrder, "update");
 
-            // open order window
+            // broadcast via table hub
+            await _hub.SendAsync("NotifyTableUpdate", SelectedTableForOrder, "update");
+            LoadTables();
             new View.Windows.OrderWindow(order)
             {
                 Owner = Application.Current.MainWindow,
@@ -342,6 +373,13 @@ namespace RestND.MVVM.ViewModel.Main
             }.Show();
 
             ClosePopupAction?.Invoke();
+        }
+
+        public void SetTableStatus(int tableNumber, bool status)
+        {
+            var t = Tables.FirstOrDefault(x => x.Table_Number == tableNumber);
+            if (t != null)
+                t.Table_Status = status;
         }
         #endregion
     }

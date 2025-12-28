@@ -39,7 +39,6 @@ namespace RestND.Data
             if (!BCrypt.Net.BCrypt.Verify(plainPassword, storedHash))
                 return null;
 
-            // Optional: you can block inactive accounts/roles here
             var empActive = Convert.ToBoolean(row["EmpActive"]);
             if (!empActive) return null;
 

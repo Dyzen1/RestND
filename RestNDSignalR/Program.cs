@@ -1,3 +1,4 @@
+using RestND.MVVM.Model.Orders;
 using RestNDSignalR.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ app.MapHub<TableHub>("/tableHub");
 app.MapHub<MainHub>("/mainHub");
 app.MapHub<EmployeeHub>("/employeeHub");
 app.MapHub<DishTypeHub>("/dishtypeHub");
+
 
 
 

@@ -12,7 +12,7 @@ namespace RestND.Data
 {
     public class BillPrinterOptions
     {
-        public int MaxCharsPerLine { get; set; } = 42; // 58mm
+        public int MaxCharsPerLine { get; set; } = 42;
         public int LeftPaddingPx { get; set; } = 10;
         public int TopPaddingPx { get; set; } = 10;
         public int LineHeightPx { get; set; } = 18;
@@ -83,7 +83,6 @@ namespace RestND.Data
                 DrawCentered(e, _opt.PhoneLine!, _font);
             DrawRule(e);
 
-            // Meta
             var now = DateTime.Now;
             var empName = _order?.assignedEmployee?.Employee_Name ?? "-";
             var tableNo = _order?.Table?.Table_Number.ToString() ?? "-";
@@ -117,7 +116,6 @@ namespace RestND.Data
             string? discountName = _bill?.Discount?.Discount_Name;
             if (_opt.ShowDiscountLine && _bill?.Discount != null && _bill.Discount.Discount_Percentage > 0)
             {
-                // discount shown as pre-VAT for transparency (adjust to your policy)
                 discountAmount = subtotal * (_bill.Discount.Discount_Percentage / 100.0);
             }
             var afterDiscount = subtotal - discountAmount;
@@ -150,28 +148,17 @@ namespace RestND.Data
             _fontHeader?.Dispose();
         }
 
-        // ------- helpers (no line.Dish access) -------
-
         private double ResolveUnitPrice(DishInOrder line)
         {
-            // If your line stores a unit price, prefer it:
-            // return line.UnitPrice;
-            // return line.Dish_Price;
-
             var dish = _dishServices.GetById(line.dish.Dish_ID);
             return dish?.Dish_Price ?? 0.0;
         }
 
         private string ResolveDishName(DishInOrder line)
         {
-            // If your line stores a name:
-            // return line.Dish_Name;
-
             var dish = _dishServices.GetById(line.dish.Dish_ID);
             return dish?.Dish_Name ?? "(item)";
         }
-
-        // ------- drawing utils -------
 
         private void DrawLine(PrintPageEventArgs e, string text, Font? f = null)
         {

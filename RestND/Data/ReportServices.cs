@@ -7,8 +7,11 @@ namespace RestND.Services
 {
     public class ReportServices
     {
+        #region db property
         private readonly DatabaseOperations _db = DatabaseOperations.Instance;
+        #endregion
 
+        #region get dishes sales between given dates
         public List<(string DishName, int QuantitySold)> GetDishSales(DateTime fromDate, DateTime toDate)
         {
             string query = @"
@@ -32,5 +35,6 @@ namespace RestND.Services
 
             return results;
         }
+        #endregion
     }
 }

@@ -15,7 +15,7 @@ namespace RestND.Data
         {
             var products = new List<ProductInDish>();
 
-            // Only load active product links
+            // Only load active products
             var query = @"SELECT pid.Dish_ID, pid.Product_ID, pid.Amount_Usage, pid.Is_Active, i.Product_Name
                   FROM products_in_dish pid
                   JOIN inventory i ON i.Product_ID = pid.Product_ID
@@ -37,7 +37,6 @@ namespace RestND.Data
         }
         #endregion
 
-        // Add products to a dish
         #region Add Products to Dish
         public bool AddProductsToDish(MySqlConnection conn, MySqlTransaction tx, int dishId, List<ProductInDish> productUsages)
         {
@@ -45,7 +44,6 @@ namespace RestND.Data
             {
                 const string sql = @"INSERT INTO products_in_dish (Dish_ID, Product_ID, Amount_Usage,Product_Name)
                                  VALUES (@dishId, @productId, @amount,@pName);";
-                // Use your DatabaseOperations here if accessible, but make sure it uses the SAME conn+tx
                 using var cmd = new MySqlCommand(sql, conn, tx);
                 cmd.Parameters.AddWithValue("@dishId", dishId);
                 cmd.Parameters.AddWithValue("@productId", u.Product_ID);
@@ -73,7 +71,6 @@ namespace RestND.Data
         }
         #endregion
 
-        // soft delete product from db
         #region soft delete product from product in dish
         public int DeleteProductEverywhere(string productId)
         {

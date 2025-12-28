@@ -13,10 +13,9 @@ namespace RestND.Data
         #endregion
 
         #region Constructors
-        // default: singleton DB instance
+        // default singleton DB instance
         public DishInOrderServices() : this(DatabaseOperations.Instance) { }
 
-        // injected
         public DishInOrderServices(DatabaseOperations db)
         {
             _db = db;
@@ -24,8 +23,7 @@ namespace RestND.Data
         #endregion
 
         #region Add Dish to Order
-
-        // ✅ Transactional insert (same connection + transaction)
+        // transactional insert (same connection + transaction)
         public bool AddDishToOrder(int orderId, DishInOrder dish, MySqlConnection conn, MySqlTransaction tx)
         {
             const string sql =
@@ -41,7 +39,7 @@ namespace RestND.Data
             ) > 0;
         }
 
-        // ✅ Non-transactional insert
+        // non transactional insert
         public bool AddDishToOrder(int orderId, DishInOrder dish)
         {
             const string sql =
@@ -56,7 +54,6 @@ namespace RestND.Data
                 new MySqlParameter("@total", (int)dish.TotalDishPrice)
             ) > 0;
         }
-
         #endregion
 
         #region Delete Dish from Order

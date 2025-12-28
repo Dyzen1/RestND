@@ -38,38 +38,38 @@ public partial class DishTypeViewModel : ObservableObject
     #endregion
 
     #region Initialize SignalR
-    private void InitializeHubSubscriptions()
-    {
-        // Listen for dish type updates from other clients
-        _hub.On<DishType, string>("ReceiveDishTypeUpdate", (dishType, action) =>
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                var match = DishTypes.FirstOrDefault(dt => dt.DishType_ID == dishType.DishType_ID);
+    //private void InitializeHubSubscriptions()
+    //{
+    //    // Listen for dish type updates from other clients
+    //    _hub.On<DishType, string>("ReceiveDishTypeUpdate", (dishType, action) =>
+    //    {
+    //        Application.Current.Dispatcher.Invoke(() =>
+    //        {
+    //            var match = DishTypes.FirstOrDefault(dt => dt.DishType_ID == dishType.DishType_ID);
 
-                switch (action)
-                {
-                    case "add":
-                        if (match == null)
-                            DishTypes.Add(dishType);
-                        break;
+    //            switch (action)
+    //            {
+    //                case "add":
+    //                    if (match == null)
+    //                        DishTypes.Add(dishType);
+    //                    break;
 
-                    case "update":
-                        if (match != null)
-                        {
-                            match.DishType_Name = dishType.DishType_Name;
-                            match.Is_Active = dishType.Is_Active;
-                        }
-                        break;
+    //                case "update":
+    //                    if (match != null)
+    //                    {
+    //                        match.DishType_Name = dishType.DishType_Name;
+    //                        match.Is_Active = dishType.Is_Active;
+    //                    }
+    //                    break;
 
-                    case "delete":
-                        if (match != null)
-                            DishTypes.Remove(match);
-                        break;
-                }
-            });
-        });
-    }
+    //                case "delete":
+    //                    if (match != null)
+    //                        DishTypes.Remove(match);
+    //                    break;
+    //            }
+    //        });
+    //    });
+    //}
     #endregion
 
     #region On change
@@ -102,10 +102,10 @@ public partial class DishTypeViewModel : ObservableObject
 
         if (success)
         {
-            await _hub.SendAsync("NotifyDishTypeUpdate", SelectedDishType, "delete");
-            await App.DishHub.SendAsync("NotifyDishUpdate", null, "dishType-changed");
+        //    await _hub.SendAsync("NotifyDishTypeUpdate", SelectedDishType, "delete");
+        //    await App.DishHub.SendAsync("NotifyDishUpdate", null, "dishType-changed");
             LoadDishTypes();
-            InitializeHubSubscriptions();
+            //InitializeHubSubscriptions();
         }
     }
     #endregion
@@ -115,7 +115,7 @@ public partial class DishTypeViewModel : ObservableObject
     private async Task UpdateDishType()
     {
         // Validate entire form (Employee-style)
-        var existingTypes = _dishTypeService.GetAll(); // for "exists by id" + name uniqueness (exclude current)
+        var existingTypes = _dishTypeService.GetAll();
         if (!_validator.ValidateForUpdate(
                 SelectedDishType,
                 existingTypes,
@@ -132,10 +132,10 @@ public partial class DishTypeViewModel : ObservableObject
 
         if (success)
         {
-            await _hub.SendAsync("NotifyDishTypeUpdate", SelectedDishType, "update");
-            await App.DishHub.SendAsync("NotifyDishUpdate", null, "dishType-changed");
+            //await _hub.SendAsync("NotifyDishTypeUpdate", SelectedDishType, "update");
+            //await App.DishHub.SendAsync("NotifyDishUpdate", null, "dishType-changed");
             LoadDishTypes();
-            InitializeHubSubscriptions();
+            //InitializeHubSubscriptions();
         }
     }
     #endregion
@@ -164,10 +164,10 @@ public partial class DishTypeViewModel : ObservableObject
 
         if (success)
         {
-            await _hub.SendAsync("NotifyDishTypeUpdate", SelectedDishType, "add");
-            await App.DishHub.SendAsync("NotifyDishUpdate", null, "dishType-changed");
+            //await _hub.SendAsync("NotifyDishTypeUpdate", SelectedDishType, "add");
+            //await App.DishHub.SendAsync("NotifyDishUpdate", null, "dishType-changed");
             LoadDishTypes();
-            InitializeHubSubscriptions();
+            //InitializeHubSubscriptions();
             errorMessage = string.Empty;
             newTypeInput = string.Empty;
         }

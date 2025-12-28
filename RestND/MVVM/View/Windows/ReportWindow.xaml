@@ -8,98 +8,191 @@
         xmlns:uc="clr-namespace:RestND.MVVM.View.UserControls"
         xmlns:fa="clr-namespace:FontAwesome.WPF;assembly=FontAwesome.WPF"
         mc:Ignorable="d"
-        Style="{StaticResource windowStyle}"
-        >
+        Style="{StaticResource windowStyle}">
 
-    <!-- Outer window border/theme -->
     <Border Style="{DynamicResource windowBorder}">
-        <Grid>
-            <!-- Layout: header, content, footer -->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="100"/>
-            </Grid.RowDefinitions>
-
-            <!-- Columns: content + sidebar + side expander rail -->
+        <Grid Margin="16">
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="110"/>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Sidebar -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- sideBar -->
             <Expander Style="{DynamicResource sideBarExpander}"
-                      Grid.RowSpan="3" Grid.Column="2">
+                      Grid.Row="0"
+                      Grid.RowSpan="3"
+                      Grid.Column="1"
+                      Margin="12,0,0,0">
                 <uc:SideBar/>
             </Expander>
 
-            <!-- ===== Header: Filters + Actions ===== -->
-            <StackPanel Orientation="Horizontal"
-                        Grid.Row="0" Grid.Column="0"
-                        Margin="20,10,0,0" HorizontalAlignment="Left">
-                <Label Content="From:" Margin="0,0,10,0" VerticalAlignment="Center"
-                       Foreground="{DynamicResource LightText}"/>
-                <DatePicker SelectedDate="{Binding FromDate}" Margin="0,0,10,0"/>
+            <!-- top section -->
+            <Border Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,12,12"
+                    Padding="14"
+                    CornerRadius="12"
+                    Background="{DynamicResource CardBG}"
+                    BorderBrush="{DynamicResource LightBG}"
+                    BorderThickness="1">
 
-                <Label Content="To:" Margin="10,0,10,0" VerticalAlignment="Center"
-                       Foreground="{DynamicResource LightText}"/>
-                <DatePicker SelectedDate="{Binding ToDate}" Margin="0,0,15,0"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <ComboBox Width="150"
-                          ItemsSource="{Binding FilterOptions}"
-                          SelectedItem="{Binding SelectedFilter}"
-                          Margin="0,0,15,0"/>
+                    <!-- Filters -->
+                    <WrapPanel Grid.Column="0"
+                               VerticalAlignment="Center"
+                               ItemHeight="30">
 
-                <Button Content="Load Report"
-                        Command="{Binding LoadChartDataCommand}"
-                        Style="{DynamicResource loginBtn}"/>
+                        <TextBlock Text="From"
+                                   Margin="0,0,6,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource LightText}"/>
 
-                <Button Content="Download CSV"
-                        Margin="10,0,0,0"
-                        Command="{Binding ExportCsvCommand}"
-                        Style="{DynamicResource loginBtn}"/>
+                        <DatePicker SelectedDate="{Binding FromDate}"
+                                    Width="140"
+                                    Margin="0,0,14,0"/>
 
-                <Button Content="Download PNG"
-                        Margin="10,0,0,0"
-                        Click="DownloadPng_Click"
-                        Style="{DynamicResource loginBtn}"/>
-            </StackPanel>
+                        <TextBlock Text="To"
+                                   Margin="0,0,6,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource LightText}"/>
 
-            <!-- ===== Content: Chart ===== -->
-            <Border Style="{DynamicResource windowBorder}"
-                    Grid.Row="1" Grid.Column="0" Margin="20,8,8,8">
-                <lvc:CartesianChart x:Name="ReportChart"
-                                    Series="{Binding SeriesCollection}"
-                                    LegendLocation="Right">
-                    <lvc:CartesianChart.AxisX>
-                        <lvc:Axis Title="Dishes"
-                                  Labels="{Binding Labels}"
-                                  Foreground="{DynamicResource LightText}"/>
-                    </lvc:CartesianChart.AxisX>
-                    <lvc:CartesianChart.AxisY>
-                        <lvc:Axis Title="Quantity Sold"
-                                  MinValue="0"
-                                  Foreground="{DynamicResource LightText}"
-                                  LabelFormatter="{Binding YFormatter}">
-                            <lvc:Axis.Separator>
-                                <lvc:Separator Step="1"/>
-                            </lvc:Axis.Separator>
-                        </lvc:Axis>
-                    </lvc:CartesianChart.AxisY>
-                </lvc:CartesianChart>
+                        <DatePicker SelectedDate="{Binding ToDate}"
+                                    Width="140"
+                                    Margin="0,0,14,0"/>
+
+                        <TextBlock Text="Filter"
+                                   Margin="0,0,6,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource LightText}"/>
+
+                        <ComboBox Width="170"
+                                  ItemsSource="{Binding FilterOptions}"
+                                  SelectedItem="{Binding SelectedFilter}"
+                                  Margin="0,0,14,0"/>
+                    </WrapPanel>
+
+                    <!-- Action Buttons -->
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right">
+
+                        <Button Command="{Binding LoadChartDataCommand}"
+                                Style="{DynamicResource loginBtn}"
+                                Margin="0,0,10,0"
+                                Padding="14,6"
+                                Content="Load Report"/>
+
+                        <Button Command="{Binding ExportCsvCommand}"
+                                Style="{DynamicResource loginBtn}"
+                                Margin="0,0,10,0"
+                                Padding="14,6"
+                                Content="Download CSV"/>
+
+                        <Button Click="DownloadPng_Click"
+                                Style="{DynamicResource loginBtn}"
+                                Padding="14,6"
+                                Content="Download PNG"/>
+                    </StackPanel>
+                </Grid>
             </Border>
 
-            <!-- ===== Footer: Return + Copywrite ===== -->
-            <uc:ReturnBtn x:Name="returnBtn"
-                          Grid.Row="2" Grid.Column="0"
-                          VerticalAlignment="Bottom" Margin="15,0,0,15"/>
+            <!-- graph section -->
+            <Border Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="0,0,12,12"
+                    Padding="14"
+                    CornerRadius="12"
+                    Background="{DynamicResource CardBG}"
+                    BorderBrush="{DynamicResource LightBG}"
+                    BorderThickness="1">
 
-            <TextBlock Style="{DynamicResource copyWrite}"
-                       Grid.Row="2" Grid.Column="0"
-                       VerticalAlignment="Bottom"
-                       HorizontalAlignment="Center"
-                       Margin="0,0,0,15"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0" LastChildFill="False" Margin="0,0,0,10">
+                        <TextBlock Text="Sales Report"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource LightText}"
+                                   DockPanel.Dock="Left"/>
+
+                        <!-- optional small hint -->
+                        <TextBlock Text="{Binding SelectedFilter}"
+                                   Foreground="{DynamicResource secondaryHeaders}"
+                                   VerticalAlignment="Bottom"
+                                   Margin="10,0,0,0"
+                                   DockPanel.Dock="Left"/>
+                    </DockPanel>
+
+                    <!-- Chart -->
+                    <lvc:CartesianChart x:Name="ReportChart"
+                                        Grid.Row="1"
+                                        Series="{Binding SeriesCollection}"
+                                        LegendLocation="Right"
+                                        Foreground="{DynamicResource LightText}">
+
+                        <lvc:CartesianChart.AxisX>
+                            <lvc:Axis Title="Dishes"
+                                      Labels="{Binding Labels}"
+                                      Foreground="{DynamicResource LightText}">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisX>
+
+                        <lvc:CartesianChart.AxisY>
+                            <lvc:Axis Title="Quantity Sold"
+                                      MinValue="0"
+                                      Foreground="{DynamicResource LightText}"
+                                      LabelFormatter="{Binding YFormatter}">
+                                <lvc:Axis.Separator>
+                                    <lvc:Separator Step="1"/>
+                                </lvc:Axis.Separator>
+                            </lvc:Axis>
+                        </lvc:CartesianChart.AxisY>
+
+                    </lvc:CartesianChart>
+                </Grid>
+            </Border>
+
+            <!-- footer -->
+            <Grid Grid.Row="2"
+                  Grid.Column="0"
+                  Margin="0,0,12,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <uc:ReturnBtn x:Name="returnBtn"
+                              Grid.Column="0"
+                              VerticalAlignment="Bottom"
+                              Margin="0,0,12,0"/>
+
+                <TextBlock Grid.Column="1"
+                           Style="{DynamicResource copyWrite}"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,0"/>
+            </Grid>
+
         </Grid>
     </Border>
 </Window>

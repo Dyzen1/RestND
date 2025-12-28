@@ -15,6 +15,17 @@
     <!-- Used to show or hide UI elements based on whether a bound string is empty -->
     <Window.Resources>
         <conv:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <Style x:Key="DishWindowDataGridStyle" TargetType="DataGrid">
+            <!-- override global style behavior locally -->
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="Background" Value="{DynamicResource CardBG}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
     </Window.Resources>
 
     <Border Style="{DynamicResource windowBorder}">
@@ -41,9 +52,14 @@
                       <uc:SideBar/>
             </Expander>
 
+            <Grid Grid.Row="1" Grid.Column="0" Margin="0,8,8,8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
             <!-- Add New Dish Section -->
-            <GroupBox Header="New Dish Details" Grid.RowSpan="2" Grid.Column="0">
-                <StackPanel Orientation="Vertical" Margin="15 0 0 0" HorizontalAlignment="Left">
+            <GroupBox Header="New Dish Details" Grid.Row="0">
+                <StackPanel Orientation="Vertical" Margin="15 0 15 10">
 
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 10">
                         <Label Content="Dish Name:"/>
@@ -84,8 +100,7 @@
 
                 </StackPanel>
             </GroupBox>
-
-
+            
             <GroupBox Header="Products For New Dish" Grid.Row="2" Grid.Column="0">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -130,6 +145,7 @@
                 </DataGrid>
                 </Grid>
             </GroupBox>
+            </Grid>
 
             <!-- Validation error display -->
             <TextBlock Text="{Binding DishErrorMessage}" Grid.Row="3" 

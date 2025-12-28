@@ -77,7 +77,7 @@ public class TicketPrinter
         }
 
         var grouped = items
-            .GroupBy(x => x.dish?.Dish_Type?.DishType_Name ?? "Other")
+            .GroupBy(x => x.dish?.Dish_Type?.DishType_Name ?? " ")
             .OrderBy(gp => gp.Key);
 
         bool printedAny = false;
@@ -85,8 +85,6 @@ public class TicketPrinter
         foreach (var group in grouped)
         {
             printedAny = true;
-
-            // Section header (Dish Type)
             DrawText(g, group.Key.ToUpperInvariant(), bold);
 
             foreach (var item in group)
@@ -110,7 +108,7 @@ public class TicketPrinter
         DrawCentered(g, $" {DateTime.Now: HH:mm}", bigfont);
     }
 
-    // ✅ Helper: tries multiple property names safely (no compile errors)
+    // Helper: tries multiple property names safely (no compile errors)
     private string GetIntPropAsString(object obj, params string[] possibleNames)
     {
         if (obj == null) return "-";

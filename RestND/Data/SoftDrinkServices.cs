@@ -7,15 +7,12 @@ using System.Collections.Generic;
 
 namespace RestND.Data
 {
-    // Keep your primary-constructor style to match the project
     class SoftDrinkServices() : BaseService<SoftDrink>(DatabaseOperations.Instance)
     {
         #region Get all SoftDrinks
         public override List<SoftDrink> GetAll()
         {
             var drinks = new List<SoftDrink>();
-
-            // Read DishType and filter to active + SoftDrinks just to be safe
             const string query = @"
                 SELECT Drink_ID, Drink_Name, Drink_Price, Quantity, Is_Active, DishType
                 FROM soft_drinks
@@ -41,10 +38,10 @@ namespace RestND.Data
         public override bool Add(SoftDrink d)
         {
             const string query = @"
-        INSERT INTO soft_drinks
-            (Drink_Name, Drink_Price, Quantity, Is_Active, DishType)
-        VALUES
-            (@name, @price, @qty, @active, @dishType);";
+            INSERT INTO soft_drinks
+                (Drink_Name, Drink_Price, Quantity, Is_Active, DishType)
+            VALUES
+                (@name, @price, @qty, @active, @dishType);";
 
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@name", (object?)d.Drink_Name ?? DBNull.Value),
@@ -60,12 +57,12 @@ namespace RestND.Data
         public override bool Update(SoftDrink d)
         {
             const string query = @"
-        UPDATE soft_drinks
-        SET Drink_Name = @name,
-            Drink_Price = @price,
-            Quantity    = @qty,
-            DishType    = @dishType
-        WHERE Drink_ID = @id;";
+            UPDATE soft_drinks
+            SET Drink_Name = @name,
+                Drink_Price = @price,
+                Quantity    = @qty,
+                DishType    = @dishType
+            WHERE Drink_ID = @id;";
 
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@id", d.Drink_ID),
@@ -77,10 +74,9 @@ namespace RestND.Data
         }
         #endregion
 
-        #region Soft Delete
+        #region Soft Delete (flip Is_Active to false)
         public override bool Delete(SoftDrink d)
         {
-            // Soft delete: just flip Is_Active to false
             d.Is_Active = false;
 
             const string query = "UPDATE soft_drinks SET Is_Active = @active WHERE Drink_ID = @id;";

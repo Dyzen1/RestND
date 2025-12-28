@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.AspNetCore.SignalR.Client;
 using RestND.Data;
-
 using RestND.MVVM.Model.Employees;
 using RestND.MVVM.Model.Orders;
 using RestND.utilities;
@@ -23,13 +22,6 @@ namespace RestND.MVVM.ViewModel
         private readonly RoleServices _roleService = new();
         private readonly EmployeeValidator _validator = new();
         private readonly OrderServices _orderSvc = new();
-
-
-        [ObservableProperty]
-        private ObservableCollection<Order> employeeOrdersInProgress = new();
-
-        [ObservableProperty]
-        private ObservableCollection<Order> employeeOrdersFinished = new();
         #endregion
 
         #region SignalR Hub (employees only)
@@ -43,21 +35,28 @@ namespace RestND.MVVM.ViewModel
         [ObservableProperty] private Employee selectedEmployee;
         [ObservableProperty] private ObservableCollection<Role> roles = new();
         [ObservableProperty] private string formErrorMessage;
+
+        [ObservableProperty]
+        private ObservableCollection<Order> employeeOrdersInProgress = new();
+        [ObservableProperty]
+        private ObservableCollection<Order> employeeOrdersFinished = new();
         #endregion
 
+        #region Events
         public event Action? RequestClose;
+        #endregion
 
         #region ctors
         public EmployeeViewModel()
         {
             LoadEmployees();
             LoadRoles();
+            RegisterHubHandlers();
             RegisterMessageHandlers(); // listen to role changes (in-process)
         }
         #endregion
 
         #region SignalR
-        // Call once after hub is started
         public void RegisterHubHandlers()
         {
             _empHandler = _hub.On<Employee, string>("ReceiveEmployeeUpdate", (employee, action) =>
@@ -95,14 +94,13 @@ namespace RestND.MVVM.ViewModel
             _empHandler = null;
         }
 
-        // Messenger subscription: reacts to role changes from RoleViewModel
         private void RegisterMessageHandlers()
         {
             WeakReferenceMessenger.Default.Register<RoleChangedMessage>(this, (_, msg) =>
             {
                 var (role, action) = msg.Value;
 
-                // Keep role picker fresh
+                // keeping role picker fresh
                 var existing = Roles.FirstOrDefault(r => r.Role_ID == role.Role_ID);
                 switch (action)
                 {
@@ -135,10 +133,6 @@ namespace RestND.MVVM.ViewModel
                         Is_Active = role.Is_Active
                     };
                 }
-
-                // OPTIONAL: if you keep a global auth context for the logged-in user,
-                // refresh permission-gated UI here.
-                // AuthContext.ApplyRoleUpdate(role);
             });
         }
         #endregion
@@ -216,6 +210,7 @@ namespace RestND.MVVM.ViewModel
                 SelectedEmployee = null;
             }
         }
+
         partial void OnSelectedEmployeeChanged(Employee? value)
         {
             LoadEmployeeOrders();

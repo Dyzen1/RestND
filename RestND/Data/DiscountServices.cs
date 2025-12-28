@@ -8,7 +8,6 @@ using System.Collections.Generic;
 
 public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instance)
 {
-
     #region Get All Discounts
     public override List <Discount> GetAll()
     {
@@ -67,6 +66,4 @@ public class DiscountService() : BaseService<Discount>(DatabaseOperations.Instan
     }
 
     #endregion
-
-
 }

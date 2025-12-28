@@ -99,7 +99,7 @@ namespace RestND.Data
         #region Add Employee
         public override bool Add(Employee e)
         {
-            // Hash password before insert
+            // hash password before insert
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(e.Password ?? string.Empty);
 
             // If Employee_ID is NOT auto-increment in your schema, keep it in the insert.
@@ -108,7 +108,7 @@ namespace RestND.Data
                 INSERT INTO employees
                     (Employee_ID, Employee_Name, Employee_LastName, Role_ID, Password, Is_Active)
                 VALUES
-                    (@id, @name, @last, @roleId, @password, @mail, TRUE);";
+                    (@id, @name, @last, @roleId, @password, TRUE);";
 
             return _db.ExecuteNonQuery(query,
                 new MySqlParameter("@id", e.Employee_ID),                    // remove if auto-increment

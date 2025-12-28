@@ -91,6 +91,7 @@ namespace RestND.MVVM.Model.Tables
         public Table()
         {
             this.Max_Diners = 2;
+            this.Table_Status = false;
             this.Is_Active = false;
         }
         #endregion

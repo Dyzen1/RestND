@@ -83,18 +83,23 @@ namespace RestND.MVVM.View.Windows
 
         private void EditTable_Click(object sender, RoutedEventArgs e)
         {
-            // NEW: gate by Tables permission
             if (!AuthContext.Has(AppPermission.Tables))
             {
                 MessageBox.Show("You don't have permission to edit tables.");
                 return;
             }
 
-            var popup = new EditTablePopUpWindow
+            if (DataContext is not MainWindowViewModel vm)
+                return;
+
+            // make sure latest active tables are loaded
+            vm.LoadTables();
+
+            var popup = new EditTablePopUpWindow(vm)
             {
                 Owner = this,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
-            };  
+            };
 
             this.Opacity = 0.4;
             Overlay.Visibility = Visibility.Visible;
@@ -107,6 +112,7 @@ namespace RestND.MVVM.View.Windows
 
             popup.ShowDialog();
         }
+
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {

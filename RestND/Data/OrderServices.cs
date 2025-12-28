@@ -48,13 +48,11 @@ namespace RestND.Data
                         Table_Number = Convert.ToInt32(row["Table_Number"])
                     },
 
-                    // Bill_Price is your column name:
                     Bill = new Bill
                     {
                         Price = Convert.ToDouble(row["Bill_Price"])
                     },
 
-                    // NEW:
                     People_Count = Convert.ToInt32(row["People_Count"]),
 
                     Is_Active = Convert.ToBoolean(row["Is_Active"])
@@ -78,7 +76,7 @@ namespace RestND.Data
         {
             const string insertQuery = @"
         INSERT INTO orders (Employee_ID, Table_Number, People_Count, Is_Active)
-        VALUES (@Id, @number, @people, @active);";
+        VALUES (@Id, @number, @people, @active );";
 
             const string idQuery = "SELECT LAST_INSERT_ID();";
 
@@ -87,15 +85,14 @@ namespace RestND.Data
 
             try
             {
-                // 1️. Insert the order (use same connection + transaction)
                 _db.ExecuteNonQuery(insertQuery, _db.Connection, tx,
                     new MySqlParameter("@Id", o.assignedEmployee.Employee_ID),
                     new MySqlParameter("@number", o.Table.Table_Number),
                     new MySqlParameter("@people", o.People_Count),
                     new MySqlParameter("@active", o.Is_Active)
+                    
                 );
 
-                // 2️. Get the auto-incremented Order_ID safely (same connection + transaction)
                 object result = _db.ExecuteScalar(idQuery, _db.Connection, tx);
                 tx.Commit();
                 return Convert.ToInt32(result);
@@ -106,6 +103,7 @@ namespace RestND.Data
                 throw;
             }
         }
+
 
         #endregion
 
@@ -238,7 +236,7 @@ namespace RestND.Data
         }
         #endregion
 
-
+        #region get active order by table number
         public Order? GetActiveOrderByTableNumber(int tableNumber)
         {
             const string query = @"
@@ -281,7 +279,9 @@ namespace RestND.Data
                 DishInOrder = new ObservableCollection<DishInOrder>()
             };
         }
+        #endregion
 
+        #region end order (set is_active = 0 and set total price)
         public bool CloseOrder(int orderId, double totalPrice)
         {
             const string query = @"
@@ -296,9 +296,6 @@ namespace RestND.Data
                 new MySqlParameter("@price", totalPrice)
             ) > 0;
         }
-
-
-
-
+        #endregion
     }
 }

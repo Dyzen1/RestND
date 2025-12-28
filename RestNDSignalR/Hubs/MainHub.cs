@@ -15,7 +15,7 @@ namespace RestNDSignalR.Hubs
 
         #endregion
 
-        #region Table Update ✅
+        #region Table Update 
         public async Task NotifyTableUpdate(Table table, string action)
         {
             await Clients.All.SendAsync("ReceiveTableUpdate", table, action);

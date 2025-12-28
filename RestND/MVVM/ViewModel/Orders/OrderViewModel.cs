@@ -19,19 +19,17 @@ namespace RestND.MVVM.ViewModel.Orders
     {
         #region Services
         private readonly TableServices _tableSvc = new();
-        private readonly HubConnection _mainHub = App.MainHub;
+        private readonly HubConnection _tableHub = App.TableHub;
         private readonly HubConnection _inventoryHub = App.InventoryHub;
-
         private readonly OrderServices _orderSvc = new();
         private readonly DishServices _dishSvc = new();
         private readonly DishTypeServices _dishTypeSvc = new();
         private readonly DishInOrderServices _dishInOrderSvc = new();
-
         private readonly ProductService _productService = new();
         private readonly ProductInDishService _productInDishService = new();
         #endregion
 
-        #region Actions
+        #region Events
         public event Action? RequestClose;
         #endregion
 
@@ -88,9 +86,9 @@ namespace RestND.MVVM.ViewModel.Orders
         {
             DishTypes = new ObservableCollection<DishType>(_dishTypeSvc.GetAll());
             AllDishes = new ObservableCollection<Dish>(_dishSvc.GetAll());
-            AllOrders = new ObservableCollection<Order>(_orderSvc.GetAll());
+            //AllOrders = new ObservableCollection<Order>(_orderSvc.GetAll());
         }
-        
+
         private void ApplyFilter()
         {
             if (SelectedDishType is null)
@@ -221,10 +219,10 @@ namespace RestND.MVVM.ViewModel.Orders
             int newId = _orderSvc.AddStartingOrder(CurrentOrder);
             CurrentOrder.Order_ID = newId;
 
-            // make table occupied immediately (so you can reopen it later)
+            // ✅ make table occupied immediately (TABLE HUB)
             _tableSvc.UpdateTableStatusByNumber(CurrentOrder.Table.Table_Number, true);
             CurrentOrder.Table.Table_Status = true;
-            _ = _mainHub.SendAsync("NotifyTableUpdate", CurrentOrder.Table, "update");
+            _ = _tableHub.SendAsync("NotifyTableUpdate", CurrentOrder.Table, "update");
         }
 
         private void BroadcastInventoryForDish(int dishId)
@@ -380,14 +378,14 @@ namespace RestND.MVVM.ViewModel.Orders
             var printer = new TicketPrinter(CurrentOrder);
             printer.Print();
 
-            // occupy table
+            // ✅ occupy table (TABLE HUB)
             int tableNum = CurrentOrder.Table.Table_Number;
 
             bool ok = _tableSvc.UpdateTableStatusByNumber(tableNum, true);
             if (ok)
             {
                 CurrentOrder.Table.Table_Status = true;
-                await _mainHub.SendAsync("NotifyTableUpdate", CurrentOrder.Table, "update");
+                await _tableHub.SendAsync("NotifyTableUpdate", CurrentOrder.Table, "update");
             }
         }
 
@@ -411,42 +409,35 @@ namespace RestND.MVVM.ViewModel.Orders
             CurrentOrder.Bill.Price = TotalPrice;
 
             var printer = new BillPrinter(CurrentOrder, CurrentBill);
-
             printer.Print();
 
             // close order in DB + save total
             _orderSvc.CloseOrder(CurrentOrder.Order_ID, TotalPrice);
 
-            // free table
+            // ✅ FREE THE TABLE (opposite of CreateOrder)
             int tableNum = CurrentOrder.Table.Table_Number;
 
             bool ok = _tableSvc.UpdateTableStatusByNumber(tableNum, false);
             if (ok)
             {
                 CurrentOrder.Table.Table_Status = false;
+
+                
+                await _tableHub.SendAsync("NotifyTableUpdate", CurrentOrder.Table, "update");
+
+                
                 RequestClose?.Invoke();
-                await _mainHub.SendAsync("NotifyTableUpdate", CurrentOrder.Table, "update");
             }
         }
         #endregion
 
         public void Reload()
         {
-            // reload inventory snapshot
             AvailableProducts = new ObservableCollection<Inventory>(_productService.GetAll());
-
-            // reload dishes & types
             LoadTypesAndDishes();
-
-            // re-apply filters
             ApplyFilter();
-
-            // recompute stock availability
             UpdateDishAvailability();
-
-            // recompute order total
             RecalculateTotal();
         }
-
     }
 }

@@ -8,8 +8,10 @@ namespace RestND.MVVM.ViewModel.Orders
 {
     public partial class BillViewModel
     {
+        #region Services
         private readonly BillServices _billServices = new();
         private readonly DishServices _dishServices = new();
+        #endregion
 
         #region Generate Bill From Order
         public Bill GenerateBillForOrder(Order order, Discount? discount = null)
@@ -22,12 +24,11 @@ namespace RestND.MVVM.ViewModel.Orders
             foreach (var line in items)
             {
                 if (line == null) continue;
-                var unitPrice = ResolveUnitPrice(line); // no line.Dish usage
+                var unitPrice = ResolveUnitPrice(line);
                 var qty = Math.Max(1, line.Quantity);
                 subtotal += unitPrice * qty;
             }
 
-            // VAT: support either 0.17 (rate) or 1.17 (multiplier)
             double vat = _billServices.Vat;
             double totalWithVat = (vat >= 1.0) ? subtotal * vat : subtotal * (1.0 + vat);
 

@@ -76,15 +76,6 @@ namespace RestND.MVVM.ViewModel
 
         #endregion
 
-        //#region On Change
-        //partial void OnSelectedProductChanged(Inventory value)
-        //{
-        //    UpdateProductCommand.NotifyCanExecuteChanged();
-        //    DeleteProductCommand.NotifyCanExecuteChanged();
-        //    AddProductCommand.NotifyCanExecuteChanged();
-        //}
-        //#endregion
-
         #region Load Products
         [RelayCommand]
         private void LoadProducts()
@@ -96,7 +87,7 @@ namespace RestND.MVVM.ViewModel
                 if(product.Quantity_Available <= product.Tolerance)
                 {
                     product.In_Stock = false;
-                    _productService.UpdateInStock(product.Product_ID, false);
+                    //_productService.UpdateInStock(product.Product_ID, false);
                 }
                 Products.Add(product);
             }
